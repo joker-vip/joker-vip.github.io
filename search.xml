@@ -17,9 +17,12 @@
       </tags>
   </entry>
   <entry>
-    <title>App安全测试学习笔记</title>
+    <title>APP安全测试学习笔记</title>
     <url>/2020/07/10/App%E5%AE%89%E5%85%A8%E6%B5%8B%E8%AF%95%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</url>
-    <content><![CDATA[<h1 id="APP安全测试学习笔记"><a href="#APP安全测试学习笔记" class="headerlink" title="APP安全测试学习笔记"></a>APP安全测试学习笔记</h1><p>​    通过辉哥发的 “APP安全检测指南–作者：panda” 跟进学习app渗透测试。</p>
+    <content><![CDATA[<p>​    通过辉哥发的 “APP安全检测指南–作者：panda” 跟进学习app渗透测试。</p>
+<p><img src="https://image.3001.net/images/20200710/15943664048203.png" alt="image-20200710153320829"></p>
+<a id="more"></a>
+
 <h2 id="1-客户端程序安全"><a href="#1-客户端程序安全" class="headerlink" title="1.客户端程序安全"></a>1.客户端程序安全</h2><h3 id="1-1安装包签名"><a href="#1-1安装包签名" class="headerlink" title="1.1安装包签名"></a>1.1安装包签名</h3><p>​    用JDK的jarsigner.exe检查安全包的签名，命令：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">jarsigner.exe -verify APK文件路径 -verbose -certs</span><br></pre></td></tr></table></figure>
 
@@ -148,6 +151,12 @@
 <h3 id="7-5暴力破解"><a href="#7-5暴力破解" class="headerlink" title="7.5暴力破解"></a>7.5暴力破解</h3><p>​    主要是测试业务中查询、登录等功能，尝试使用暴力枚举的方式进行破解。</p>
 <h3 id="7-6注入-XSS-CSRF"><a href="#7-6注入-XSS-CSRF" class="headerlink" title="7.6注入/XSS/CSRF"></a>7.6注入/XSS/CSRF</h3><p>​    和WEB测试类似，主要测试站点存在的常见的web漏洞。</p>
 ]]></content>
+      <categories>
+        <category>APP渗透</category>
+      </categories>
+      <tags>
+        <tag>APP渗透</tag>
+      </tags>
   </entry>
   <entry>
     <title>腾讯T-Star高校挑战赛writeup --by白给</title>

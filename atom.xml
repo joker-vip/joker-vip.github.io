@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://joker-vip.github.io/"/>
-  <updated>2020-07-10T07:24:40.937Z</updated>
+  <updated>2020-07-10T07:33:39.625Z</updated>
   <id>http://joker-vip.github.io/</id>
   
   <author>
@@ -17,25 +17,24 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>App安全测试学习笔记</title>
+    <title>APP安全测试学习笔记</title>
     <link href="http://joker-vip.github.io/2020/07/10/App%E5%AE%89%E5%85%A8%E6%B5%8B%E8%AF%95%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
     <id>http://joker-vip.github.io/2020/07/10/App%E5%AE%89%E5%85%A8%E6%B5%8B%E8%AF%95%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</id>
-    <published>2020-07-10T07:21:49.886Z</published>
-    <updated>2020-07-10T07:24:40.937Z</updated>
+    <published>2020-07-10T07:27:47.000Z</published>
+    <updated>2020-07-10T07:33:39.625Z</updated>
     
     <summary type="html">
     
-      
-      
-        
-        
-          &lt;h1 id=&quot;APP安全测试学习笔记&quot;&gt;&lt;a href=&quot;#APP安全测试学习笔记&quot; class=&quot;headerlink&quot; title=&quot;APP安全测试学习笔记&quot;&gt;&lt;/a&gt;APP安全测试学习笔记&lt;/h1&gt;&lt;p&gt;​    通过辉哥发的 “APP安全检测指南–作者：panda”
-        
-      
+      &lt;p&gt;​    通过辉哥发的 “APP安全检测指南–作者：panda” 跟进学习app渗透测试。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://image.3001.net/images/20200710/15943664048203.png&quot; alt=&quot;image-20200710153320829&quot;&gt;&lt;/p&gt;
     
     </summary>
     
     
+      <category term="APP渗透" scheme="http://joker-vip.github.io/categories/APP%E6%B8%97%E9%80%8F/"/>
+    
+    
+      <category term="APP渗透" scheme="http://joker-vip.github.io/tags/APP%E6%B8%97%E9%80%8F/"/>
     
   </entry>
   
