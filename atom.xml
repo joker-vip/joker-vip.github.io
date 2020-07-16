@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://joker-vip.github.io/"/>
-  <updated>2020-07-10T07:33:39.625Z</updated>
+  <updated>2020-07-16T14:54:12.785Z</updated>
   <id>http://joker-vip.github.io/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>HTTP请求走私</title>
+    <link href="http://joker-vip.github.io/2020/07/16/http%E8%AF%B7%E6%B1%82%E8%B5%B0%E7%A7%81/"/>
+    <id>http://joker-vip.github.io/2020/07/16/http%E8%AF%B7%E6%B1%82%E8%B5%B0%E7%A7%81/</id>
+    <published>2020-07-16T14:45:25.000Z</published>
+    <updated>2020-07-16T14:54:12.785Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;​    在这个网络环境下，前端服务器负责安全控制，只有被允许的请求才能转发给后端服务器，而后端服务器无条件的相信前端服务器转发过来的全部请求，并对每一个请求都进行响应。在这种情况下可以利用HTTP请求走私，将无法访问的请求走私给后端服务器以获得响应。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://image.3001.net/images/20200716/15949110707602.png&quot; alt=&quot;image-20200714170553642&quot;&gt;&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="HTTP请求走私" scheme="http://joker-vip.github.io/categories/HTTP%E8%AF%B7%E6%B1%82%E8%B5%B0%E7%A7%81/"/>
+    
+    
+      <category term="web" scheme="http://joker-vip.github.io/tags/web/"/>
+    
+      <category term="HTTP请求走私" scheme="http://joker-vip.github.io/tags/HTTP%E8%AF%B7%E6%B1%82%E8%B5%B0%E7%A7%81/"/>
+    
+  </entry>
   
   <entry>
     <title>APP安全测试学习笔记</title>
