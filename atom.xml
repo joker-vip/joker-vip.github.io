@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://joker-vip.github.io/"/>
-  <updated>2020-08-16T14:33:28.288Z</updated>
+  <updated>2020-08-16T14:35:03.013Z</updated>
   <id>http://joker-vip.github.io/</id>
   
   <author>
@@ -17,20 +17,26 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>SSTI</title>
-    <link href="http://joker-vip.github.io/2020/08/15/SSTI/"/>
-    <id>http://joker-vip.github.io/2020/08/15/SSTI/</id>
-    <published>2020-08-15T11:12:49.972Z</published>
-    <updated>2020-08-16T14:33:28.288Z</updated>
+    <title>服务器端模板注入（SSTI）</title>
+    <link href="http://joker-vip.github.io/2020/08/16/SSTI/"/>
+    <id>http://joker-vip.github.io/2020/08/16/SSTI/</id>
+    <published>2020-08-16T15:34:19.000Z</published>
+    <updated>2020-08-16T14:35:03.013Z</updated>
     
     <summary type="html">
     
-      &lt;h1 id=&quot;服务器端模板注入（SSTI）&quot;&gt;&lt;a href=&quot;#服务器端模板注入（SSTI）&quot; class=&quot;headerlink&quot; title=&quot;服务器端模板注入（SSTI）&quot;&gt;&lt;/a&gt;服务器端模板注入（SSTI）&lt;/h1&gt;&lt;p&gt;​    最近做ctf时遇到一个模板注入的题，才想到以前都是直接在网上找payload，并没有仔细研究过ssti。本文从几个方面来细说ssti并应用实例来加深理解。&lt;/p&gt;
+      &lt;p&gt;​    最近做ctf时遇到一个模板注入的题，才想到以前都是直接在网上找payload，并没有仔细研究过ssti。本文从几个方面来细说ssti并应用实例来加深理解。&lt;/p&gt;
 &lt;p&gt;&lt;img src=&quot;https://image.3001.net/images/20200815/15974899849103.png&quot; alt=&quot;image-20200728151739501&quot;&gt;&lt;/p&gt;
     
     </summary>
     
     
+      <category term="web" scheme="http://joker-vip.github.io/categories/web/"/>
+    
+    
+      <category term="web" scheme="http://joker-vip.github.io/tags/web/"/>
+    
+      <category term="SSTI" scheme="http://joker-vip.github.io/tags/SSTI/"/>
     
   </entry>
   
