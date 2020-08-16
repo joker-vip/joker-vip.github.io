@@ -17,6 +17,19 @@
       </tags>
   </entry>
   <entry>
+    <title>SSTI</title>
+    <url>/2020/08/15/SSTI/</url>
+    <content><![CDATA[<h1 id="服务器端模板注入（SSTI）"><a href="#服务器端模板注入（SSTI）" class="headerlink" title="服务器端模板注入（SSTI）"></a>服务器端模板注入（SSTI）</h1><p>​    最近做ctf时遇到一个模板注入的题，才想到以前都是直接在网上找payload，并没有仔细研究过ssti。本文从几个方面来细说ssti并应用实例来加深理解。</p>
+<p><img src="https://image.3001.net/images/20200815/15974899849103.png" alt="image-20200728151739501"></p>
+<a id="more"></a>    
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;&#123; &#125;&#125;</span><br><span class="line">&#123;% %&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​    由于Markdown 文档中的上述标签与 nunjucks 模板引擎的标签发生了冲突。上述标签等这些标签都是模板引擎的占位标签，如果 MarkDown 文档中包含这些标签，那么解析时就会把 MD 文档中的标签动态解析了，于是导致 MD 文档解析时报错。</p>
+<p>文章发表在freebuf上，url：<a href="https://www.freebuf.com/articles/web/246832.html" target="_blank" rel="noopener">https://www.freebuf.com/articles/web/246832.html</a></p>
+]]></content>
+  </entry>
+  <entry>
     <title>不安全的序列化</title>
     <url>/2020/07/21/%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/</url>
     <content><![CDATA[<p>​    该漏洞的原因出自于如果应用对不可信的数据，例如恶意构造的用户输入进行反序列化，从而产生非预期的对象，从而有可能产生远程代码执行。</p>

@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://joker-vip.github.io/"/>
-  <updated>2020-07-28T03:48:11.422Z</updated>
+  <updated>2020-08-16T14:33:28.288Z</updated>
   <id>http://joker-vip.github.io/</id>
   
   <author>
@@ -15,6 +15,24 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>SSTI</title>
+    <link href="http://joker-vip.github.io/2020/08/15/SSTI/"/>
+    <id>http://joker-vip.github.io/2020/08/15/SSTI/</id>
+    <published>2020-08-15T11:12:49.972Z</published>
+    <updated>2020-08-16T14:33:28.288Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;服务器端模板注入（SSTI）&quot;&gt;&lt;a href=&quot;#服务器端模板注入（SSTI）&quot; class=&quot;headerlink&quot; title=&quot;服务器端模板注入（SSTI）&quot;&gt;&lt;/a&gt;服务器端模板注入（SSTI）&lt;/h1&gt;&lt;p&gt;​    最近做ctf时遇到一个模板注入的题，才想到以前都是直接在网上找payload，并没有仔细研究过ssti。本文从几个方面来细说ssti并应用实例来加深理解。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://image.3001.net/images/20200815/15974899849103.png&quot; alt=&quot;image-20200728151739501&quot;&gt;&lt;/p&gt;
+    
+    </summary>
+    
+    
+    
+  </entry>
   
   <entry>
     <title>不安全的序列化</title>
