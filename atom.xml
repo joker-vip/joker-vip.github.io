@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://joker-vip.github.io/"/>
-  <updated>2020-10-17T15:22:08.076Z</updated>
+  <updated>2020-10-18T12:51:07.147Z</updated>
   <id>http://joker-vip.github.io/</id>
   
   <author>
@@ -21,17 +21,13 @@
     <link href="http://joker-vip.github.io/2020/10/18/WebSockets%E5%AE%89%E5%85%A8%E6%BC%8F%E6%B4%9E/"/>
     <id>http://joker-vip.github.io/2020/10/18/WebSockets%E5%AE%89%E5%85%A8%E6%BC%8F%E6%B4%9E/</id>
     <published>2020-10-18T12:46:19.577Z</published>
-    <updated>2020-10-17T15:22:08.076Z</updated>
+    <updated>2020-10-18T12:51:07.147Z</updated>
     
     <summary type="html">
     
-      
-      
-        
-        
-          &lt;h1 id=&quot;WebSockets安全漏洞&quot;&gt;&lt;a href=&quot;#WebSockets安全漏洞&quot; class=&quot;headerlink&quot; title=&quot;WebSockets安全漏洞&quot;&gt;&lt;/a&gt;WebSockets安全漏洞&lt;/h1&gt;&lt;h2 id=&quot;1-WebSockets&quot;&gt;&lt;a
-        
-      
+      &lt;h1 id=&quot;WebSockets安全漏洞&quot;&gt;&lt;a href=&quot;#WebSockets安全漏洞&quot; class=&quot;headerlink&quot; title=&quot;WebSockets安全漏洞&quot;&gt;&lt;/a&gt;WebSockets安全漏洞&lt;/h1&gt;&lt;h2 id=&quot;1-WebSockets&quot;&gt;&lt;a href=&quot;#1-WebSockets&quot; class=&quot;headerlink&quot; title=&quot;1. WebSockets&quot;&gt;&lt;/a&gt;1. WebSockets&lt;/h2&gt;&lt;p&gt;WebSockets广泛用于现代Web应用程序中。它们通过HTTP发起，并通过双向双向通信提供长期连接。&lt;/p&gt;
+&lt;p&gt;WebSocket用于各种目的，包括执行用户操作和传输敏感信息。几乎与常规HTTP一起出现的任何Web安全漏洞也可能与WebSockets通信有关。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://image.3001.net/images/20201018/16030254226387.png&quot; alt=&quot;image-20201016085345616&quot;&gt;&lt;/p&gt;
     
     </summary>
     

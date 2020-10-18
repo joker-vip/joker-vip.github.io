@@ -21,7 +21,9 @@
     <url>/2020/10/18/WebSockets%E5%AE%89%E5%85%A8%E6%BC%8F%E6%B4%9E/</url>
     <content><![CDATA[<h1 id="WebSockets安全漏洞"><a href="#WebSockets安全漏洞" class="headerlink" title="WebSockets安全漏洞"></a>WebSockets安全漏洞</h1><h2 id="1-WebSockets"><a href="#1-WebSockets" class="headerlink" title="1. WebSockets"></a>1. WebSockets</h2><p>WebSockets广泛用于现代Web应用程序中。它们通过HTTP发起，并通过双向双向通信提供长期连接。</p>
 <p>WebSocket用于各种目的，包括执行用户操作和传输敏感信息。几乎与常规HTTP一起出现的任何Web安全漏洞也可能与WebSockets通信有关。</p>
-<p><img src="WebSockets%E5%AE%89%E5%85%A8%E6%BC%8F%E6%B4%9E/image-20201016085345616.png" alt="image-20201016085345616"></p>
+<p><img src="https://image.3001.net/images/20201018/16030254226387.png" alt="image-20201016085345616"></p>
+<a id="more"></a>
+
 <h2 id="2-HTTP和WebSockets有什么区别？"><a href="#2-HTTP和WebSockets有什么区别？" class="headerlink" title="2. HTTP和WebSockets有什么区别？"></a>2. HTTP和WebSockets有什么区别？</h2><p>Web浏览器和网站之间的大多数通信使用HTTP。使用HTTP，客户端发送请求，服务器返回响应。通常，响应立即发生，并且事务完成。即使网络连接保持打开状态，这也将用于请求和响应的单独事务。</p>
 <p>一些现代网站使用WebSockets。WebSocket连接是通过HTTP发起的，通常是长期存在的。消息可以随时向任一方向发送，并且本质上不是事务性的。在客户端或服务器准备发送消息之前，连接通常将保持打开和空闲状态。</p>
 <p>WebSocket在需要低延迟或服务器启动消息的情况下（例如财务数据的实时提要）特别有用。</p>
@@ -76,13 +78,13 @@
 <p>靶场url：<a href="https://portswigger.net/web-security/websockets/lab-manipulating-messages-to-exploit-vulnerabilities" target="_blank" rel="noopener">https://portswigger.net/web-security/websockets/lab-manipulating-messages-to-exploit-vulnerabilities</a></p>
 <p>复现详情：</p>
 <p>首页存在实时聊天功能，对话框直接插入xss，抓包修改：</p>
-<p><img src="WebSockets%E5%AE%89%E5%85%A8%E6%BC%8F%E6%B4%9E/image-20201016234300384.png" alt="image-20201016234300384"></p>
+<p><img src="https://image.3001.net/images/20201018/16030254489930.png" alt="image-20201016234300384"></p>
 <p>修改为：</p>
-<p><img src="WebSockets%E5%AE%89%E5%85%A8%E6%BC%8F%E6%B4%9E/image-20201016234321766.png" alt="image-20201016234321766"></p>
+<p><img src="https://image.3001.net/images/20201018/16030254508473.png" alt="image-20201016234321766"></p>
 <p>可以看到payload已成功插入：</p>
-<p><img src="WebSockets%E5%AE%89%E5%85%A8%E6%BC%8F%E6%B4%9E/image-20201016234448709.png" alt="image-20201016234448709"></p>
+<p><img src="https://image.3001.net/images/20201018/16030254533623.png" alt="image-20201016234448709"></p>
 <p>成功弹窗：</p>
-<p><img src="WebSockets%E5%AE%89%E5%85%A8%E6%BC%8F%E6%B4%9E/image-20201016234509914.png" alt="image-20201016234509914"></p>
+<p><img src="https://image.3001.net/images/20201018/16030254567741.png" alt="image-20201016234509914"></p>
 <h3 id="5-2-操纵WebSocket握手以利用漏洞"><a href="#5-2-操纵WebSocket握手以利用漏洞" class="headerlink" title="5.2 操纵WebSocket握手以利用漏洞"></a>5.2 操纵WebSocket握手以利用漏洞</h3><p>只能通过操纵WebSocket握手来发现和利用某些WebSocket漏洞。这些漏洞往往涉及设计缺陷，例如：</p>
 <ul>
 <li>在HTTP标头中放错位置的信任以执行安全性决策，例如<code>X-Forwarded-For</code>标头。</li>
@@ -92,13 +94,13 @@
 <p>靶机url：<a href="https://portswigger.net/web-security/websockets/lab-manipulating-handshake-to-exploit-vulnerabilities" target="_blank" rel="noopener">https://portswigger.net/web-security/websockets/lab-manipulating-handshake-to-exploit-vulnerabilities</a></p>
 <p>复现详情：</p>
 <p>同理，直接在实时聊天的对话框中插入xss，观察到攻击已被阻止，并且WebSocket连接已终止。重新加载后，观察到连接尝试失败，因为IP地址已被禁止。</p>
-<p><img src="WebSockets%E5%AE%89%E5%85%A8%E6%BC%8F%E6%B4%9E/image-20201017004507988.png" alt="image-20201017004507988"></p>
+<p><img src="https://image.3001.net/images/20201018/16030254588558.png" alt="image-20201017004507988"></p>
 <p>重新请求并抓包，修改请求头，添加xff：</p>
-<p><img src="WebSockets%E5%AE%89%E5%85%A8%E6%BC%8F%E6%B4%9E/image-20201017004656270.png" alt="image-20201017004656270"></p>
+<p><img src="https://image.3001.net/images/20201018/16030254604511.png" alt="image-20201017004656270"></p>
 <p>可以重新连接WebSocket，并尝试有效的xss：</p>
-<p><img src="WebSockets%E5%AE%89%E5%85%A8%E6%BC%8F%E6%B4%9E/image-20201017004657000.png" alt="image-20201017010007974"></p>
+<p><img src="https://image.3001.net/images/20201018/16030254625868.png" alt="image-20201017010007974"></p>
 <p>成功弹窗：</p>
-<p><img src="WebSockets%E5%AE%89%E5%85%A8%E6%BC%8F%E6%B4%9E/image-20201017005721299.png" alt="image-20201017005721299"></p>
+<p><img src="https://image.3001.net/images/20201018/16030254654499.png" alt="image-20201017005721299"></p>
 <h3 id="5-3-使用跨站点WebSocket利用漏洞"><a href="#5-3-使用跨站点WebSocket利用漏洞" class="headerlink" title="5.3 使用跨站点WebSocket利用漏洞"></a>5.3 使用跨站点WebSocket利用漏洞</h3><p>当攻击者从攻击者控制的网站建立跨域WebSocket连接时，会出现一些WebSockets安全漏洞。这称为跨站点WebSocket劫持攻击，它涉及利用WebSocket握手上的跨站点请求伪造（CSRF）漏洞。攻击通常会产生严重的影响，使攻击者可以代表受害者用户执行特权操作或捕获受害者用户可以访问的敏感数据。</p>
 <h4 id="5-3-1-什么是跨站点WebSocket劫持？"><a href="#5-3-1-什么是跨站点WebSocket劫持？" class="headerlink" title="5.3.1 什么是跨站点WebSocket劫持？"></a>5.3.1 什么是跨站点WebSocket劫持？</h4><p>跨站点WebSocket劫持（也称为跨域WebSocket劫持）涉及WebSocket握手上的跨站点请求伪造（CSRF）漏洞。当WebSocket握手请求仅依靠HTTP cookie进行会话处理并且不包含任何CSRF令牌或其他不可预测的值时，就会出现这种情况。</p>
 <p>攻击者可以在自己的域上创建恶意网页，从而建立与易受攻击的应用程序的跨站点WebSocket连接。该应用程序将在受害用户与该应用程序的会话的上下文中处理连接。</p>
