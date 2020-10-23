@@ -2,9 +2,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://joker-vip.github.io/2020/10/18/WebSockets%E5%AE%89%E5%85%A8%E6%BC%8F%E6%B4%9E/</loc>
+    <loc>http://joker-vip.github.io/2020/10/23/nginx%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E9%92%93%E9%B1%BC/</loc>
     
-    <lastmod>2020-10-18T12:51:07.147Z</lastmod>
+    <lastmod>2020-10-23T23:37:28.146Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://joker-vip.github.io/2020/10/20/WebSockets%E5%AE%89%E5%85%A8%E6%BC%8F%E6%B4%9E/</loc>
+    
+    <lastmod>2020-10-20T19:32:46.491Z</lastmod>
     
   </url>
   
