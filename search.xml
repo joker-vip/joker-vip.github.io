@@ -1731,6 +1731,8 @@
     <url>/2021/04/28/ActiveMQ%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E5%86%99%E5%85%A5%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2016-3088%EF%BC%89/</url>
     <content><![CDATA[<h1 id="ActiveMQ任意文件写入漏洞（CVE-2016-3088）"><a href="#ActiveMQ任意文件写入漏洞（CVE-2016-3088）" class="headerlink" title="ActiveMQ任意文件写入漏洞（CVE-2016-3088）"></a>ActiveMQ任意文件写入漏洞（CVE-2016-3088）</h1><p>环境侦听端口61616和端口8161，其中8161是Web控制台端口。此漏洞显示在Web控制台中。</p>
 <p>请访问<code>http://192.168.44.132:8161/</code>以查看该网页，指示该环境已成功运行。</p>
+<a id="more"></a>
+
 <h2 id="背景简介"><a href="#背景简介" class="headerlink" title="背景简介"></a>背景简介</h2><p>ActiveMQ Web控制台分为三个应用程序：admin，api和文件服务器，其中admin是管理员页面，api是界面，fileserver是用于存储文件的界面；admin和api需要先登录才能使用，fileserver不需要登录。</p>
 <p>文件服务器是RESTful API接口。我们可以通过HTTP请求（例如GET，PUT和DELETE）读写存储在其中的文件。设计目的是为了弥补消息队列操作无法传输和存储二进制文件但后来发现的缺陷：</p>
 <ol>

