@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://joker-vip.github.io/"/>
-  <updated>2021-04-25T09:38:53.182Z</updated>
+  <updated>2021-04-28T07:15:16.879Z</updated>
   <id>http://joker-vip.github.io/</id>
   
   <author>
@@ -15,6 +15,79 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>ActiveMQ任意文件写入漏洞（CVE-2016-3088）</title>
+    <link href="http://joker-vip.github.io/2021/04/28/ActiveMQ%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E5%86%99%E5%85%A5%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2016-3088%EF%BC%89/"/>
+    <id>http://joker-vip.github.io/2021/04/28/ActiveMQ%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E5%86%99%E5%85%A5%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2016-3088%EF%BC%89/</id>
+    <published>2021-04-28T05:16:23.000Z</published>
+    <updated>2021-04-28T07:15:16.879Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h1 id=&quot;ActiveMQ任意文件写入漏洞（CVE-2016-3088）&quot;&gt;&lt;a href=&quot;#ActiveMQ任意文件写入漏洞（CVE-2016-3088）&quot; class=&quot;headerlink&quot;
+        
+      
+    
+    </summary>
+    
+    
+      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
+    
+    
+      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
+    
+      <category term="ActiveMQ" scheme="http://joker-vip.github.io/tags/ActiveMQ/"/>
+    
+      <category term="CVE-2016-3088" scheme="http://joker-vip.github.io/tags/CVE-2016-3088/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>java双版本同时安装</title>
+    <link href="http://joker-vip.github.io/2021/04/28/java%E5%8F%8C%E7%89%88%E6%9C%AC%E5%90%8C%E6%97%B6%E5%AE%89%E8%A3%85/"/>
+    <id>http://joker-vip.github.io/2021/04/28/java%E5%8F%8C%E7%89%88%E6%9C%AC%E5%90%8C%E6%97%B6%E5%AE%89%E8%A3%85/</id>
+    <published>2021-04-27T23:30:25.000Z</published>
+    <updated>2021-04-28T07:12:46.322Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;java双版本同时安装&quot;&gt;&lt;a href=&quot;#java双版本同时安装&quot; class=&quot;headerlink&quot; title=&quot;java双版本同时安装&quot;&gt;&lt;/a&gt;java双版本同时安装&lt;/h1&gt;&lt;p&gt;因为工具需要用到java13，平时主要用java1.8，对网上的方法进行查看后，研究出一套自己认为比较方便的java双版本安装配置方法。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="环境" scheme="http://joker-vip.github.io/categories/%E7%8E%AF%E5%A2%83/"/>
+    
+    
+      <category term="java" scheme="http://joker-vip.github.io/tags/java/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>python2和python3同时安装</title>
+    <link href="http://joker-vip.github.io/2021/04/28/python2%E5%92%8Cpython3%E5%90%8C%E6%97%B6%E5%AE%89%E8%A3%85/"/>
+    <id>http://joker-vip.github.io/2021/04/28/python2%E5%92%8Cpython3%E5%90%8C%E6%97%B6%E5%AE%89%E8%A3%85/</id>
+    <published>2021-04-27T23:30:25.000Z</published>
+    <updated>2021-04-28T07:13:09.958Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;python2和python3同时安装&quot;&gt;&lt;a href=&quot;#python2和python3同时安装&quot; class=&quot;headerlink&quot; title=&quot;python2和python3同时安装&quot;&gt;&lt;/a&gt;python2和python3同时安装&lt;/h1&gt;&lt;p&gt;在用到某些工具时，部分需要Python2的运行环境，部分需要Python3的运行环境。考虑到切换虚拟机比较麻烦，就可以通过在本机同时安装双版本的Python2与Python3来进行切换使用。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="环境" scheme="http://joker-vip.github.io/categories/%E7%8E%AF%E5%A2%83/"/>
+    
+    
+      <category term="python" scheme="http://joker-vip.github.io/tags/python/"/>
+    
+  </entry>
   
   <entry>
     <title>云函数代理池</title>
@@ -71,7 +144,7 @@
     <link href="http://joker-vip.github.io/2021/04/21/Apache%20HTTPD%20%E5%A4%9A%E5%90%8E%E7%BC%80%E8%A7%A3%E6%9E%90%E6%BC%8F%E6%B4%9E/"/>
     <id>http://joker-vip.github.io/2021/04/21/Apache%20HTTPD%20%E5%A4%9A%E5%90%8E%E7%BC%80%E8%A7%A3%E6%9E%90%E6%BC%8F%E6%B4%9E/</id>
     <published>2021-04-21T01:01:30.000Z</published>
-    <updated>2021-04-19T23:56:42.301Z</updated>
+    <updated>2021-04-27T01:36:08.672Z</updated>
     
     <summary type="html">
     
@@ -80,7 +153,7 @@
     </summary>
     
     
-      <category term="Vulhub复现" scheme="http://joker-vip.github.io/categories/Vulhub%E5%A4%8D%E7%8E%B0/"/>
+      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
     
     
       <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
@@ -94,7 +167,7 @@
     <link href="http://joker-vip.github.io/2021/04/20/Apache%20HTTPD%20%E6%8D%A2%E8%A1%8C%E8%A7%A3%E6%9E%90%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2017-15715%EF%BC%89/"/>
     <id>http://joker-vip.github.io/2021/04/20/Apache%20HTTPD%20%E6%8D%A2%E8%A1%8C%E8%A7%A3%E6%9E%90%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2017-15715%EF%BC%89/</id>
     <published>2021-04-19T20:21:03.000Z</published>
-    <updated>2021-04-19T23:56:17.772Z</updated>
+    <updated>2021-04-27T01:36:15.376Z</updated>
     
     <summary type="html">
     
@@ -103,7 +176,7 @@
     </summary>
     
     
-      <category term="Vulhub复现" scheme="http://joker-vip.github.io/categories/Vulhub%E5%A4%8D%E7%8E%B0/"/>
+      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
     
     
       <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
@@ -119,7 +192,7 @@
     <link href="http://joker-vip.github.io/2021/04/15/ActiveMQ%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2015-5254%EF%BC%89/"/>
     <id>http://joker-vip.github.io/2021/04/15/ActiveMQ%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2015-5254%EF%BC%89/</id>
     <published>2021-04-14T23:16:23.000Z</published>
-    <updated>2021-04-19T23:56:53.341Z</updated>
+    <updated>2021-04-27T01:36:01.131Z</updated>
     
     <summary type="html">
     
@@ -129,7 +202,7 @@
     </summary>
     
     
-      <category term="Vulhub复现" scheme="http://joker-vip.github.io/categories/Vulhub%E5%A4%8D%E7%8E%B0/"/>
+      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
     
     
       <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
@@ -145,7 +218,7 @@
     <link href="http://joker-vip.github.io/2021/04/13/Apache%20SSI%20%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/"/>
     <id>http://joker-vip.github.io/2021/04/13/Apache%20SSI%20%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/</id>
     <published>2021-04-13T04:12:41.000Z</published>
-    <updated>2021-04-19T23:56:12.429Z</updated>
+    <updated>2021-04-27T01:36:21.428Z</updated>
     
     <summary type="html">
     
@@ -154,7 +227,7 @@
     </summary>
     
     
-      <category term="Vulhub复现" scheme="http://joker-vip.github.io/categories/Vulhub%E5%A4%8D%E7%8E%B0/"/>
+      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
     
     
       <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
