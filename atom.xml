@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://joker-vip.github.io/"/>
-  <updated>2021-07-19T12:03:41.200Z</updated>
+  <updated>2021-08-03T02:09:39.453Z</updated>
   <id>http://joker-vip.github.io/</id>
   
   <author>
@@ -15,6 +15,224 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>GhostScript 沙箱绕过（命令执行）漏洞（CVE-2019-6116）</title>
+    <link href="http://joker-vip.github.io/2021/08/03/GhostScript%20%E6%B2%99%E7%AE%B1%E7%BB%95%E8%BF%87%EF%BC%88%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%EF%BC%89%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2019-6116%EF%BC%89/"/>
+    <id>http://joker-vip.github.io/2021/08/03/GhostScript%20%E6%B2%99%E7%AE%B1%E7%BB%95%E8%BF%87%EF%BC%88%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%EF%BC%89%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2019-6116%EF%BC%89/</id>
+    <published>2021-08-03T06:30:35.000Z</published>
+    <updated>2021-08-03T02:09:39.453Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;GhostScript-沙箱绕过（命令执行）漏洞（CVE-2019-6116）&quot;&gt;&lt;a href=&quot;#GhostScript-沙箱绕过（命令执行）漏洞（CVE-2019-6116）&quot; class=&quot;headerlink&quot; title=&quot;GhostScript 沙箱绕过（命令执行）漏洞（CVE-2019-6116）&quot;&gt;&lt;/a&gt;GhostScript 沙箱绕过（命令执行）漏洞（CVE-2019-6116）&lt;/h1&gt;&lt;p&gt;2019年1月23日晚，Artifex官方在ghostscriptf的master分支上提交合并了多达6处的修复。旨在修复 CVE-2019-6116 漏洞，该漏洞由 Google 安全研究员 Tavis 于2018年12月3日提交。该漏洞可以直接绕过 ghostscript 的安全沙箱，导致攻击者可以执行任意命令/读取任意文件。&lt;/p&gt;
+&lt;p&gt;GhostScript 被许多图片处理库所使用，如 ImageMagick、Python PIL 等，默认情况下这些库会根据图片的内容将其分发给不同的处理方法，其中就包括 GhostScript。&lt;/p&gt;
+&lt;p&gt;参考链接：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://bugs.chromium.org/p/project-zero/issues/detail?id=1729&amp;amp;desc=2&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://bugs.chromium.org/p/project-zero/issues/detail?id=1729&amp;amp;desc=2&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.anquanke.com/post/id/170255&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://www.anquanke.com/post/id/170255&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+    
+    </summary>
+    
+    
+      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
+    
+    
+      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
+    
+      <category term="GhostScript" scheme="http://joker-vip.github.io/tags/GhostScript/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>GhostScript 沙箱绕过（命令执行）漏洞（CVE-2018-19475）</title>
+    <link href="http://joker-vip.github.io/2021/08/03/GhostScript%20%E6%B2%99%E7%AE%B1%E7%BB%95%E8%BF%87%EF%BC%88%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%EF%BC%89%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2018-19475%EF%BC%89/"/>
+    <id>http://joker-vip.github.io/2021/08/03/GhostScript%20%E6%B2%99%E7%AE%B1%E7%BB%95%E8%BF%87%EF%BC%88%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%EF%BC%89%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2018-19475%EF%BC%89/</id>
+    <published>2021-08-03T05:30:35.000Z</published>
+    <updated>2021-08-03T02:09:14.969Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;GhostScript-沙箱绕过（命令执行）漏洞（CVE-2018-19475）&quot;&gt;&lt;a href=&quot;#GhostScript-沙箱绕过（命令执行）漏洞（CVE-2018-19475）&quot; class=&quot;headerlink&quot; title=&quot;GhostScript 沙箱绕过（命令执行）漏洞（CVE-2018-19475）&quot;&gt;&lt;/a&gt;GhostScript 沙箱绕过（命令执行）漏洞（CVE-2018-19475）&lt;/h1&gt;&lt;p&gt;2018年底来自Semmle Security Research Team的Man Yue Mo发表了CVE-2018-16509漏洞的变体CVE-2018-19475，可以通过一个恶意图片绕过GhostScript的沙盒，进而在9.26以前版本的gs中执行任意命令。&lt;/p&gt;
+&lt;p&gt;参考链接：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://blog.semmle.com/ghostscript-CVE-2018-19475/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://blog.semmle.com/ghostscript-CVE-2018-19475/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://bugs.ghostscript.com/show_bug.cgi?id=700153&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://bugs.ghostscript.com/show_bug.cgi?id=700153&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+    
+    </summary>
+    
+    
+      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
+    
+    
+      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
+    
+      <category term="GhostScript" scheme="http://joker-vip.github.io/tags/GhostScript/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>GhostScript 沙箱绕过（命令执行）漏洞（CVE-2018-16509）</title>
+    <link href="http://joker-vip.github.io/2021/08/03/GhostScript%20%E6%B2%99%E7%AE%B1%E7%BB%95%E8%BF%87%EF%BC%88%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%EF%BC%89%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2018-16509%EF%BC%89/"/>
+    <id>http://joker-vip.github.io/2021/08/03/GhostScript%20%E6%B2%99%E7%AE%B1%E7%BB%95%E8%BF%87%EF%BC%88%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%EF%BC%89%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2018-16509%EF%BC%89/</id>
+    <published>2021-08-03T04:30:35.000Z</published>
+    <updated>2021-08-03T02:04:40.948Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;GhostScript-沙箱绕过（命令执行）漏洞（CVE-2018-16509）&quot;&gt;&lt;a href=&quot;#GhostScript-沙箱绕过（命令执行）漏洞（CVE-2018-16509）&quot; class=&quot;headerlink&quot; title=&quot;GhostScript 沙箱绕过（命令执行）漏洞（CVE-2018-16509）&quot;&gt;&lt;/a&gt;GhostScript 沙箱绕过（命令执行）漏洞（CVE-2018-16509）&lt;/h1&gt;&lt;p&gt;8 月 21 号，Tavis Ormandy 通过公开邮件列表，再次指出 GhostScript 的安全沙箱可以被绕过，通过构造恶意的图片内容，将可以造成命令执行、文件读取、文件删除等漏洞：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://seclists.org/oss-sec/2018/q3/142&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;http://seclists.org/oss-sec/2018/q3/142&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://bugs.chromium.org/p/project-zero/issues/detail?id=1640&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://bugs.chromium.org/p/project-zero/issues/detail?id=1640&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;GhostScript 被许多图片处理库所使用，如 ImageMagick、Python PIL 等，默认情况下这些库会根据图片的内容将其分发给不同的处理方法，其中就包括 GhostScript。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
+    
+    
+      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
+    
+      <category term="GhostScript" scheme="http://joker-vip.github.io/tags/GhostScript/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Apache Flink `jobmanager/logs` 路径遍历 (CVE-2020-17519)</title>
+    <link href="http://joker-vip.github.io/2021/08/02/Apache%20Flink%20jobmanager-logs%E8%B7%AF%E5%BE%84%E9%81%8D%E5%8E%86%20(CVE-2020-17519)/"/>
+    <id>http://joker-vip.github.io/2021/08/02/Apache%20Flink%20jobmanager-logs%E8%B7%AF%E5%BE%84%E9%81%8D%E5%8E%86%20(CVE-2020-17519)/</id>
+    <published>2021-08-02T07:30:35.000Z</published>
+    <updated>2021-08-03T02:04:06.657Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;Apache-Flink-jobmanager-logs-路径遍历-CVE-2020-17519&quot;&gt;&lt;a href=&quot;#Apache-Flink-jobmanager-logs-路径遍历-CVE-2020-17519&quot; class=&quot;headerlink&quot; title=&quot;Apache Flink jobmanager/logs 路径遍历 (CVE-2020-17519)&quot;&gt;&lt;/a&gt;Apache Flink &lt;code&gt;jobmanager/logs&lt;/code&gt; 路径遍历 (CVE-2020-17519)&lt;/h1&gt;&lt;p&gt;Apache Flink 是一个开源的流处理框架，具有强大的流处理和批处理能力。&lt;/p&gt;
+&lt;p&gt;Apache Flink 1.11.0 中引入的更改（以及在 1.11.1 和 1.11.2 中发布）允许攻击者通过 JobManager 进程的 REST 接口读取 JobManager 本地文件系统上的任何文件。&lt;/p&gt;
+&lt;p&gt;参考：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/apache/flink/commit/b561010b0ee741543c3953306037f00d7a9f0801&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://github.com/apache/flink/commit/b561010b0ee741543c3953306037f00d7a9f0801&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://nvd.nist.gov/vuln/detail/CVE-2020-17519&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://nvd.nist.gov/vuln/detail/CVE-2020-17519&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+    
+    </summary>
+    
+    
+      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
+    
+    
+      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
+    
+      <category term="Apache Flink" scheme="http://joker-vip.github.io/tags/Apache-Flink/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Apache Flink 上传路径遍历 (CVE-2020-17518)</title>
+    <link href="http://joker-vip.github.io/2021/08/02/Apache%20Flink%20%E4%B8%8A%E4%BC%A0%E8%B7%AF%E5%BE%84%E9%81%8D%E5%8E%86%20(CVE-2020-17518)/"/>
+    <id>http://joker-vip.github.io/2021/08/02/Apache%20Flink%20%E4%B8%8A%E4%BC%A0%E8%B7%AF%E5%BE%84%E9%81%8D%E5%8E%86%20(CVE-2020-17518)/</id>
+    <published>2021-08-02T06:30:35.000Z</published>
+    <updated>2021-08-02T07:37:43.901Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;Apache-Flink-上传路径遍历-CVE-2020-17518&quot;&gt;&lt;a href=&quot;#Apache-Flink-上传路径遍历-CVE-2020-17518&quot; class=&quot;headerlink&quot; title=&quot;Apache Flink 上传路径遍历 (CVE-2020-17518)&quot;&gt;&lt;/a&gt;Apache Flink 上传路径遍历 (CVE-2020-17518)&lt;/h1&gt;&lt;p&gt;Apache Flink 是一个开源的流处理框架，具有强大的流处理和批处理能力。&lt;/p&gt;
+&lt;p&gt;Apache Flink 1.5.1 引入了 REST 处理程序，允许您通过恶意修改的 HTTP HEADER 将上传的文件写入本地文件系统上的任意位置。&lt;/p&gt;
+&lt;p&gt;参考：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/apache/flink/commit/a5264a6f41524afe8ceadf1d8ddc8c80f323ebc4&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://github.com/apache/flink/commit/a5264a6f41524afe8ceadf1d8ddc8c80f323ebc4&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://nvd.nist.gov/vuln/detail/CVE-2020-17518&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://nvd.nist.gov/vuln/detail/CVE-2020-17518&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+    
+    </summary>
+    
+    
+      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
+    
+    
+      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
+    
+      <category term="Apache Flink" scheme="http://joker-vip.github.io/tags/Apache-Flink/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Flask（Jinja2） 服务端模板注入漏洞</title>
+    <link href="http://joker-vip.github.io/2021/07/22/Flask%EF%BC%88Jinja2%EF%BC%89%20%E6%9C%8D%E5%8A%A1%E7%AB%AF%E6%A8%A1%E6%9D%BF%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E/"/>
+    <id>http://joker-vip.github.io/2021/07/22/Flask%EF%BC%88Jinja2%EF%BC%89%20%E6%9C%8D%E5%8A%A1%E7%AB%AF%E6%A8%A1%E6%9D%BF%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E/</id>
+    <published>2021-07-22T06:30:35.000Z</published>
+    <updated>2021-08-03T02:30:05.128Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h1 id=&quot;Flask（Jinja2）-服务端模板注入漏洞&quot;&gt;&lt;a href=&quot;#Flask（Jinja2）-服务端模板注入漏洞&quot; class=&quot;headerlink&quot; title=&quot;Flask（Jinja2） 服务端模板注入漏洞&quot;&gt;&lt;/a&gt;Flask（Jinja2）
+        
+      
+    
+    </summary>
+    
+    
+      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
+    
+    
+      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
+    
+      <category term="jinja2" scheme="http://joker-vip.github.io/tags/jinja2/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>fastjson 1.2.24 反序列化导致任意命令执行漏洞</title>
+    <link href="http://joker-vip.github.io/2021/07/21/fastjson%201.2.24%20%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%AF%BC%E8%87%B4%E4%BB%BB%E6%84%8F%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/"/>
+    <id>http://joker-vip.github.io/2021/07/21/fastjson%201.2.24%20%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%AF%BC%E8%87%B4%E4%BB%BB%E6%84%8F%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/</id>
+    <published>2021-07-21T06:30:35.000Z</published>
+    <updated>2021-07-21T06:12:58.375Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;fastjson-1-2-24-反序列化导致任意命令执行漏洞&quot;&gt;&lt;a href=&quot;#fastjson-1-2-24-反序列化导致任意命令执行漏洞&quot; class=&quot;headerlink&quot; title=&quot;fastjson 1.2.24 反序列化导致任意命令执行漏洞&quot;&gt;&lt;/a&gt;fastjson 1.2.24 反序列化导致任意命令执行漏洞&lt;/h1&gt;&lt;p&gt;fastjson在解析json的过程中，支持使用autoType来实例化某一个具体的类，并调用该类的set/get方法来访问属性。通过查找代码中相关的方法，即可构造出一些恶意利用链。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
+    
+    
+      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
+    
+      <category term="Fastjson" scheme="http://joker-vip.github.io/tags/Fastjson/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Fastjson 1.2.47 远程命令执行漏洞</title>
+    <link href="http://joker-vip.github.io/2021/07/21/Fastjson%201.2.47%20%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/"/>
+    <id>http://joker-vip.github.io/2021/07/21/Fastjson%201.2.47%20%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/</id>
+    <published>2021-07-21T05:30:35.000Z</published>
+    <updated>2021-07-21T06:11:39.327Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;Fastjson-1-2-47-远程命令执行漏洞&quot;&gt;&lt;a href=&quot;#Fastjson-1-2-47-远程命令执行漏洞&quot; class=&quot;headerlink&quot; title=&quot;Fastjson 1.2.47 远程命令执行漏洞&quot;&gt;&lt;/a&gt;Fastjson 1.2.47 远程命令执行漏洞&lt;/h1&gt;&lt;p&gt;Fastjson是阿里巴巴公司开源的一款json解析器，其性能优越，被广泛应用于各大厂商的Java项目中。fastjson于1.2.24版本后增加了反序列化白名单，而在1.2.48以前的版本中，攻击者可以利用特殊构造的json字符串绕过白名单检测，成功执行任意命令。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
+    
+    
+      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
+    
+      <category term="Fastjson" scheme="http://joker-vip.github.io/tags/Fastjson/"/>
+    
+  </entry>
   
   <entry>
     <title>Elasticsearch写入webshell漏洞（WooYun-2015-110216）</title>
@@ -93,15 +311,15 @@
   </entry>
   
   <entry>
-    <title>ElasticSearch 目录穿越漏洞（CVE-2015-3337）</title>
+    <title>ElasticSearch 插件目录穿越漏洞（CVE-2015-3337）</title>
     <link href="http://joker-vip.github.io/2021/07/16/ElasticSearch%20%E6%8F%92%E4%BB%B6%E7%9B%AE%E5%BD%95%E7%A9%BF%E8%B6%8A%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2015-3337%EF%BC%89/"/>
     <id>http://joker-vip.github.io/2021/07/16/ElasticSearch%20%E6%8F%92%E4%BB%B6%E7%9B%AE%E5%BD%95%E7%A9%BF%E8%B6%8A%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2015-3337%EF%BC%89/</id>
     <published>2021-07-16T07:30:35.000Z</published>
-    <updated>2021-07-19T12:01:37.022Z</updated>
+    <updated>2021-07-26T07:26:05.654Z</updated>
     
     <summary type="html">
     
-      &lt;h1 id=&quot;ElasticSearch-目录穿越漏洞（CVE-2015-3337）&quot;&gt;&lt;a href=&quot;#ElasticSearch-目录穿越漏洞（CVE-2015-3337）&quot; class=&quot;headerlink&quot; title=&quot;ElasticSearch 目录穿越漏洞（CVE-2015-3337）&quot;&gt;&lt;/a&gt;ElasticSearch 目录穿越漏洞（CVE-2015-3337）&lt;/h1&gt;&lt;p&gt;jre版本：openjdk:8-jre&lt;/p&gt;
+      &lt;h1 id=&quot;ElasticSearch-插件目录穿越漏洞（CVE-2015-3337）&quot;&gt;&lt;a href=&quot;#ElasticSearch-插件目录穿越漏洞（CVE-2015-3337）&quot; class=&quot;headerlink&quot; title=&quot;ElasticSearch 插件目录穿越漏洞（CVE-2015-3337）&quot;&gt;&lt;/a&gt;ElasticSearch 插件目录穿越漏洞（CVE-2015-3337）&lt;/h1&gt;&lt;p&gt;jre版本：openjdk:8-jre&lt;/p&gt;
 &lt;p&gt;elasticsearch版本：v1.4.4&lt;/p&gt;
 &lt;p&gt;影响版本：1.4.5以下/1.5.2以下&lt;/p&gt;
 &lt;p&gt;在安装了具有“site”功能的插件以后，插件目录使用&lt;code&gt;../&lt;/code&gt;即可向上跳转，导致目录穿越漏洞，可读取任意文件。没有安装任意插件的elasticsearch不受影响。&lt;/p&gt;
@@ -321,189 +539,6 @@
       <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
     
       <category term="Drupal" scheme="http://joker-vip.github.io/tags/Drupal/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>DNS 区域传输 (AXFR)</title>
-    <link href="http://joker-vip.github.io/2021/07/13/DNS%20%E5%8C%BA%E5%9F%9F%E4%BC%A0%E8%BE%93%20(AXFR)/"/>
-    <id>http://joker-vip.github.io/2021/07/13/DNS%20%E5%8C%BA%E5%9F%9F%E4%BC%A0%E8%BE%93%20(AXFR)/</id>
-    <published>2021-07-13T02:30:35.000Z</published>
-    <updated>2021-07-14T02:33:37.625Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;DNS-区域传输-AXFR&quot;&gt;&lt;a href=&quot;#DNS-区域传输-AXFR&quot; class=&quot;headerlink&quot; title=&quot;DNS 区域传输 (AXFR)&quot;&gt;&lt;/a&gt;DNS 区域传输 (AXFR)&lt;/h1&gt;&lt;p&gt;使用 AXFR 协议的 DNS 区域传输是跨 DNS 服务器复制 DNS 记录的最简单机制。为避免在多个 DNS 服务器上编辑信息的需要，您可以在一台服务器上编辑信息并使用 AXFR 将信息复制到其他服务器。但是，如果您不保护您的服务器，恶意方可能会使用 AXFR 来获取有关您所有主机的信息。&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    
-    
-      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
-    
-      <category term="DNS" scheme="http://joker-vip.github.io/tags/DNS/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Django GIS 函数和聚合上的Oracle SQL 注入漏洞 (CVE-2020-9402)</title>
-    <link href="http://joker-vip.github.io/2021/07/12/Django%20GIS%20%E5%87%BD%E6%95%B0%E5%92%8C%E8%81%9A%E5%90%88%E4%B8%8A%E7%9A%84Oracle%20SQL%20%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E%20(CVE-2020-9402)/"/>
-    <id>http://joker-vip.github.io/2021/07/12/Django%20GIS%20%E5%87%BD%E6%95%B0%E5%92%8C%E8%81%9A%E5%90%88%E4%B8%8A%E7%9A%84Oracle%20SQL%20%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E%20(CVE-2020-9402)/</id>
-    <published>2021-07-12T09:30:35.000Z</published>
-    <updated>2021-07-12T14:08:10.858Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;Django-GIS-函数和聚合上的Oracle-SQL-注入漏洞-CVE-2020-9402&quot;&gt;&lt;a href=&quot;#Django-GIS-函数和聚合上的Oracle-SQL-注入漏洞-CVE-2020-9402&quot; class=&quot;headerlink&quot; title=&quot;Django GIS 函数和聚合上的Oracle SQL 注入漏洞 (CVE-2020-9402)&quot;&gt;&lt;/a&gt;Django GIS 函数和聚合上的Oracle SQL 注入漏洞 (CVE-2020-9402)&lt;/h1&gt;&lt;p&gt;Django 于 2020 年 3 月 4 日发布了安全更新，修复了 GIS 函数和聚合中的 SQL 注入漏洞。&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    
-    
-      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
-    
-      <category term="Django" scheme="http://joker-vip.github.io/tags/Django/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Django JSONField/HStoreField SQL 注入漏洞 (CVE-2019-14234)</title>
-    <link href="http://joker-vip.github.io/2021/07/12/Django%20JSONField%E3%80%81HStoreField%20SQL%20%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E%20(CVE-2019-14234)/"/>
-    <id>http://joker-vip.github.io/2021/07/12/Django%20JSONField%E3%80%81HStoreField%20SQL%20%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E%20(CVE-2019-14234)/</id>
-    <published>2021-07-12T08:30:35.000Z</published>
-    <updated>2021-07-12T14:07:07.328Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;Django-JSONField-HStoreField-SQL-注入漏洞-CVE-2019-14234&quot;&gt;&lt;a href=&quot;#Django-JSONField-HStoreField-SQL-注入漏洞-CVE-2019-14234&quot; class=&quot;headerlink&quot; title=&quot;Django JSONField/HStoreField SQL 注入漏洞 (CVE-2019-14234)&quot;&gt;&lt;/a&gt;Django JSONField/HStoreField SQL 注入漏洞 (CVE-2019-14234)&lt;/h1&gt;&lt;p&gt;Django 于 2019 年 8 月 1 日发布了安全更新，修复了 JSONField 和 HStoreField 两个模型字段中的 SQL 注入漏洞。&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    
-    
-      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
-    
-      <category term="Django" scheme="http://joker-vip.github.io/tags/Django/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Django &lt; 2.0.8 在 CommonMiddleware 中打开重定向可能性 (CVE-2018-14574)</title>
-    <link href="http://joker-vip.github.io/2021/07/12/Django%E3%80%8A2.0.8%20%E5%9C%A8%20CommonMiddleware%20%E4%B8%AD%E6%89%93%E5%BC%80%E9%87%8D%E5%AE%9A%E5%90%91%E5%8F%AF%E8%83%BD%E6%80%A7%20(CVE-2018-14574)/"/>
-    <id>http://joker-vip.github.io/2021/07/12/Django%E3%80%8A2.0.8%20%E5%9C%A8%20CommonMiddleware%20%E4%B8%AD%E6%89%93%E5%BC%80%E9%87%8D%E5%AE%9A%E5%90%91%E5%8F%AF%E8%83%BD%E6%80%A7%20(CVE-2018-14574)/</id>
-    <published>2021-07-12T08:30:35.000Z</published>
-    <updated>2021-07-12T09:44:27.748Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;Django-lt-2-0-8-在-CommonMiddleware-中打开重定向可能性-CVE-2018-14574&quot;&gt;&lt;a href=&quot;#Django-lt-2-0-8-在-CommonMiddleware-中打开重定向可能性-CVE-2018-14574&quot; class=&quot;headerlink&quot; title=&quot;Django &amp;lt; 2.0.8 在 CommonMiddleware 中打开重定向可能性 (CVE-2018-14574)&quot;&gt;&lt;/a&gt;Django &amp;lt; 2.0.8 在 CommonMiddleware 中打开重定向可能性 (CVE-2018-14574)&lt;/h1&gt;&lt;p&gt;如果&lt;code&gt;django.middleware.common.CommonMiddleware&lt;/code&gt;和&lt;code&gt;APPEND_SLASH&lt;/code&gt;设置都已启用，并且项目的 URL 模式接受以斜杠结尾的任何路径，则对该站点的恶意制作的 URL 的请求可能会导致重定向到另一个站点，从而启用网络钓鱼和其他攻击。&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    
-    
-      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
-    
-      <category term="Django" scheme="http://joker-vip.github.io/tags/Django/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Django debug page XSS漏洞（CVE-2017-12794）分析</title>
-    <link href="http://joker-vip.github.io/2021/07/12/Django%20debug%20page%20XSS%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2017-12794%EF%BC%89%E5%88%86%E6%9E%90/"/>
-    <id>http://joker-vip.github.io/2021/07/12/Django%20debug%20page%20XSS%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2017-12794%EF%BC%89%E5%88%86%E6%9E%90/</id>
-    <published>2021-07-12T07:30:35.000Z</published>
-    <updated>2021-07-12T09:44:13.050Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;Django-debug-page-XSS漏洞（CVE-2017-12794）&quot;&gt;&lt;a href=&quot;#Django-debug-page-XSS漏洞（CVE-2017-12794）&quot; class=&quot;headerlink&quot; title=&quot;Django debug page XSS漏洞（CVE-2017-12794）&quot;&gt;&lt;/a&gt;Django debug page XSS漏洞（CVE-2017-12794）&lt;/h1&gt;
-    
-    </summary>
-    
-    
-      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    
-    
-      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
-    
-      <category term="Django" scheme="http://joker-vip.github.io/tags/Django/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Discuz!X ≤3.4 任意文件删除漏洞</title>
-    <link href="http://joker-vip.github.io/2021/07/12/Discuz!X%20%E2%89%A43.4%20%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E5%88%A0%E9%99%A4%E6%BC%8F%E6%B4%9E/"/>
-    <id>http://joker-vip.github.io/2021/07/12/Discuz!X%20%E2%89%A43.4%20%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E5%88%A0%E9%99%A4%E6%BC%8F%E6%B4%9E/</id>
-    <published>2021-07-12T03:30:35.000Z</published>
-    <updated>2021-07-12T04:59:55.377Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;Discuz-X-≤3-4-任意文件删除漏洞&quot;&gt;&lt;a href=&quot;#Discuz-X-≤3-4-任意文件删除漏洞&quot; class=&quot;headerlink&quot; title=&quot;Discuz!X ≤3.4 任意文件删除漏洞&quot;&gt;&lt;/a&gt;Discuz!X ≤3.4 任意文件删除漏洞&lt;/h1&gt;&lt;p&gt;影响版本：Discuz!X ≤3.4&lt;/p&gt;
-&lt;p&gt;漏洞详情：&lt;a href=&quot;https://lorexxar.cn/2017/09/30/dz-delete/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://lorexxar.cn/2017/09/30/dz-delete/&lt;/a&gt;&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    
-    
-      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
-    
-      <category term="Discuz" scheme="http://joker-vip.github.io/tags/Discuz/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Discuz 7.x/6.x 全局变量防御绕过导致代码执行</title>
-    <link href="http://joker-vip.github.io/2021/07/12/Discuz%207.x6.x%20%E5%85%A8%E5%B1%80%E5%8F%98%E9%87%8F%E9%98%B2%E5%BE%A1%E7%BB%95%E8%BF%87%E5%AF%BC%E8%87%B4%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C/"/>
-    <id>http://joker-vip.github.io/2021/07/12/Discuz%207.x6.x%20%E5%85%A8%E5%B1%80%E5%8F%98%E9%87%8F%E9%98%B2%E5%BE%A1%E7%BB%95%E8%BF%87%E5%AF%BC%E8%87%B4%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C/</id>
-    <published>2021-07-12T03:01:35.000Z</published>
-    <updated>2021-07-12T04:58:09.612Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;Discuz-7-x-6-x-全局变量防御绕过导致代码执行&quot;&gt;&lt;a href=&quot;#Discuz-7-x-6-x-全局变量防御绕过导致代码执行&quot; class=&quot;headerlink&quot; title=&quot;Discuz 7.x/6.x 全局变量防御绕过导致代码执行&quot;&gt;&lt;/a&gt;Discuz 7.x/6.x 全局变量防御绕过导致代码执行&lt;/h1&gt;&lt;p&gt;由于php5.3.x版本里php.ini的设置里&lt;code&gt;request_order&lt;/code&gt;默认值为GP，导致&lt;code&gt;$_REQUEST&lt;/code&gt;中不再包含&lt;code&gt;$_COOKIE&lt;/code&gt;，我们通过在Cookie中传入&lt;code&gt;$GLOBALS&lt;/code&gt;来覆盖全局变量，造成代码执行漏洞。&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    
-    
-      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
-    
-      <category term="Discuz" scheme="http://joker-vip.github.io/tags/Discuz/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>代码审计方法论</title>
-    <link href="http://joker-vip.github.io/2021/07/05/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E6%96%B9%E6%B3%95%E8%AE%BA/"/>
-    <id>http://joker-vip.github.io/2021/07/05/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E6%96%B9%E6%B3%95%E8%AE%BA/</id>
-    <published>2021-07-04T21:01:35.000Z</published>
-    <updated>2021-07-08T14:55:51.606Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;代码审计方法论&quot;&gt;&lt;a href=&quot;#代码审计方法论&quot; class=&quot;headerlink&quot; title=&quot;代码审计方法论&quot;&gt;&lt;/a&gt;代码审计方法论&lt;/h2&gt;
-    
-    </summary>
-    
-    
-      <category term="代码审计" scheme="http://joker-vip.github.io/categories/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/"/>
-    
-    
-      <category term="代码审计" scheme="http://joker-vip.github.io/tags/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/"/>
     
   </entry>
   

