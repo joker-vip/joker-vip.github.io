@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://joker-vip.github.io/"/>
-  <updated>2021-08-24T11:03:05.970Z</updated>
+  <updated>2021-11-15T05:30:25.162Z</updated>
   <id>http://joker-vip.github.io/</id>
   
   <author>
@@ -15,6 +15,347 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>ntopng 身份验证绕过 (CVE-2021-28073)</title>
+    <link href="http://joker-vip.github.io/2021/11/11/ntopng%20%E8%BA%AB%E4%BB%BD%E9%AA%8C%E8%AF%81%E7%BB%95%E8%BF%87%20(CVE-2021-28073)/"/>
+    <id>http://joker-vip.github.io/2021/11/11/ntopng%20%E8%BA%AB%E4%BB%BD%E9%AA%8C%E8%AF%81%E7%BB%95%E8%BF%87%20(CVE-2021-28073)/</id>
+    <published>2021-11-11T06:30:35.000Z</published>
+    <updated>2021-11-15T05:30:25.162Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;ntopng-身份验证绕过-CVE-2021-28073&quot;&gt;&lt;a href=&quot;#ntopng-身份验证绕过-CVE-2021-28073&quot; class=&quot;headerlink&quot; title=&quot;ntopng 身份验证绕过 (CVE-2021-28073)&quot;&gt;&lt;/a&gt;ntopng 身份验证绕过 (CVE-2021-28073)&lt;/h1&gt;&lt;p&gt;Ntopng 是一个被动的网络监控工具，专注于可以从服务器捕获的流量中获取的流量和统计信息。&lt;/p&gt;
+&lt;p&gt;ntopng 4.2 及之前的版本中存在身份验证绕过漏洞。&lt;/p&gt;
+&lt;p&gt;参考链接：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://noahblog.360.cn/ntopng-multiple-vulnerabilities/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;http://noahblog.360.cn/ntopng-multiple-vulnerabilities/&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+    
+    </summary>
+    
+    
+      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
+    
+    
+      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
+    
+      <category term="ntopng" scheme="http://joker-vip.github.io/tags/ntopng/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>node-postgres 代码执行漏洞（CVE-2017-16082）</title>
+    <link href="http://joker-vip.github.io/2021/11/11/node-postgres%20%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2017-16082%EF%BC%89/"/>
+    <id>http://joker-vip.github.io/2021/11/11/node-postgres%20%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2017-16082%EF%BC%89/</id>
+    <published>2021-11-11T05:30:35.000Z</published>
+    <updated>2021-11-15T05:14:44.001Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;node-postgres-代码执行漏洞（CVE-2017-16082）&quot;&gt;&lt;a href=&quot;#node-postgres-代码执行漏洞（CVE-2017-16082）&quot; class=&quot;headerlink&quot; title=&quot;node-postgres 代码执行漏洞（CVE-2017-16082）&quot;&gt;&lt;/a&gt;node-postgres 代码执行漏洞（CVE-2017-16082）&lt;/h1&gt;&lt;h2 id=&quot;漏洞原理&quot;&gt;&lt;a href=&quot;#漏洞原理&quot; class=&quot;headerlink&quot; title=&quot;漏洞原理&quot;&gt;&lt;/a&gt;漏洞原理&lt;/h2&gt;&lt;p&gt;node-postgres在处理类型为&lt;code&gt;Row Description&lt;/code&gt;的postgres返回包时，将字段名拼接到代码中。由于没有进行合理转义，导致一个特殊构造的字段名可逃逸出代码单引号限制，造成代码执行漏洞。&lt;/p&gt;
+&lt;p&gt;参考链接：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.leavesongs.com/PENETRATION/node-postgres-code-execution-vulnerability.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://www.leavesongs.com/PENETRATION/node-postgres-code-execution-vulnerability.html&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://node-postgres.com/announcements#2017-08-12-code-execution-vulnerability&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://node-postgres.com/announcements#2017-08-12-code-execution-vulnerability&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://zhuanlan.zhihu.com/p/28575189&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://zhuanlan.zhihu.com/p/28575189&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+    
+    </summary>
+    
+    
+      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
+    
+    
+      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
+    
+      <category term="Node.js" scheme="http://joker-vip.github.io/tags/Node-js/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Node.js 目录穿越漏洞（CVE-2017-14849）</title>
+    <link href="http://joker-vip.github.io/2021/11/11/Node.js%20%E7%9B%AE%E5%BD%95%E7%A9%BF%E8%B6%8A%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2017-14849%EF%BC%89/"/>
+    <id>http://joker-vip.github.io/2021/11/11/Node.js%20%E7%9B%AE%E5%BD%95%E7%A9%BF%E8%B6%8A%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2017-14849%EF%BC%89/</id>
+    <published>2021-11-11T04:30:35.000Z</published>
+    <updated>2021-11-15T05:13:59.333Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;Node-js-目录穿越漏洞（CVE-2017-14849）&quot;&gt;&lt;a href=&quot;#Node-js-目录穿越漏洞（CVE-2017-14849）&quot; class=&quot;headerlink&quot; title=&quot;Node.js 目录穿越漏洞（CVE-2017-14849）&quot;&gt;&lt;/a&gt;Node.js 目录穿越漏洞（CVE-2017-14849）&lt;/h1&gt;&lt;h2 id=&quot;漏洞原理&quot;&gt;&lt;a href=&quot;#漏洞原理&quot; class=&quot;headerlink&quot; title=&quot;漏洞原理&quot;&gt;&lt;/a&gt;漏洞原理&lt;/h2&gt;&lt;p&gt;参考文档：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://nodejs.org/en/blog/vulnerability/september-2017-path-validation/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://nodejs.org/en/blog/vulnerability/september-2017-path-validation/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://security.tencent.com/index.php/blog/msg/121&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://security.tencent.com/index.php/blog/msg/121&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;原因是 Node.js 8.5.0 对目录进行&lt;code&gt;normalize&lt;/code&gt;操作时出现了逻辑错误，导致向上层跳跃的时候（如&lt;code&gt;../../../../../../etc/passwd&lt;/code&gt;），在中间位置增加&lt;code&gt;foo/../&lt;/code&gt;（如&lt;code&gt;../../../foo/../../../../etc/passwd&lt;/code&gt;），即可使&lt;code&gt;normalize&lt;/code&gt;返回&lt;code&gt;/etc/passwd&lt;/code&gt;，但实际上正确结果应该是&lt;code&gt;../../../../../../etc/passwd&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;express这类web框架，通常会提供了静态文件服务器的功能，这些功能依赖于&lt;code&gt;normalize&lt;/code&gt;函数。比如，express在判断path是否超出静态目录范围时，就用到了&lt;code&gt;normalize&lt;/code&gt;函数，上述BUG导致&lt;code&gt;normalize&lt;/code&gt;函数返回错误结果导致绕过了检查，造成任意文件读取漏洞。&lt;/p&gt;
+&lt;p&gt;当然，&lt;code&gt;normalize&lt;/code&gt;的BUG可以影响的绝非仅有express，更有待深入挖掘。不过因为这个BUG是node 8.5.0 中引入的，在 8.6 中就进行了修复，所以影响范围有限。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
+    
+    
+      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
+    
+      <category term="Node.js" scheme="http://joker-vip.github.io/tags/Node-js/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Nginx 解析漏洞复现</title>
+    <link href="http://joker-vip.github.io/2021/11/10/Nginx%20%E8%A7%A3%E6%9E%90%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
+    <id>http://joker-vip.github.io/2021/11/10/Nginx%20%E8%A7%A3%E6%9E%90%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/</id>
+    <published>2021-11-10T07:30:35.000Z</published>
+    <updated>2021-11-15T01:29:17.453Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;Nginx-解析漏洞复现&quot;&gt;&lt;a href=&quot;#Nginx-解析漏洞复现&quot; class=&quot;headerlink&quot; title=&quot;Nginx 解析漏洞复现&quot;&gt;&lt;/a&gt;Nginx 解析漏洞复现&lt;/h1&gt;&lt;p&gt;Nginx解析漏洞复现。&lt;/p&gt;
+&lt;p&gt;版本信息：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Nginx 1.x 最新版&lt;/li&gt;
+&lt;li&gt;PHP 7.x最新版&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;由此可知，该漏洞与Nginx、php版本无关，属于用户配置不当造成的解析漏洞。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
+    
+    
+      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
+    
+      <category term="Nginx" scheme="http://joker-vip.github.io/tags/Nginx/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Nginx 配置错误导致漏洞</title>
+    <link href="http://joker-vip.github.io/2021/11/10/Nginx%20%E9%85%8D%E7%BD%AE%E9%94%99%E8%AF%AF%E5%AF%BC%E8%87%B4%E6%BC%8F%E6%B4%9E/"/>
+    <id>http://joker-vip.github.io/2021/11/10/Nginx%20%E9%85%8D%E7%BD%AE%E9%94%99%E8%AF%AF%E5%AF%BC%E8%87%B4%E6%BC%8F%E6%B4%9E/</id>
+    <published>2021-11-10T06:30:35.000Z</published>
+    <updated>2021-11-15T01:28:09.502Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;Nginx-配置错误导致漏洞&quot;&gt;&lt;a href=&quot;#Nginx-配置错误导致漏洞&quot; class=&quot;headerlink&quot; title=&quot;Nginx 配置错误导致漏洞&quot;&gt;&lt;/a&gt;Nginx 配置错误导致漏洞&lt;/h1&gt;&lt;p&gt;运行成功后，Nginx将会监听8080/8081/8082三个端口，分别对应三种漏洞。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
+    
+    
+      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
+    
+      <category term="Nginx" scheme="http://joker-vip.github.io/tags/Nginx/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Nginx越界读取缓存漏洞（CVE-2017-7529）</title>
+    <link href="http://joker-vip.github.io/2021/11/10/Nginx%E8%B6%8A%E7%95%8C%E8%AF%BB%E5%8F%96%E7%BC%93%E5%AD%98%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2017-7529%EF%BC%89/"/>
+    <id>http://joker-vip.github.io/2021/11/10/Nginx%E8%B6%8A%E7%95%8C%E8%AF%BB%E5%8F%96%E7%BC%93%E5%AD%98%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2017-7529%EF%BC%89/</id>
+    <published>2021-11-10T05:30:35.000Z</published>
+    <updated>2021-11-15T01:27:12.546Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;Nginx越界读取缓存漏洞（CVE-2017-7529）&quot;&gt;&lt;a href=&quot;#Nginx越界读取缓存漏洞（CVE-2017-7529）&quot; class=&quot;headerlink&quot; title=&quot;Nginx越界读取缓存漏洞（CVE-2017-7529）&quot;&gt;&lt;/a&gt;Nginx越界读取缓存漏洞（CVE-2017-7529）&lt;/h1&gt;&lt;h2 id=&quot;漏洞原理&quot;&gt;&lt;a href=&quot;#漏洞原理&quot; class=&quot;headerlink&quot; title=&quot;漏洞原理&quot;&gt;&lt;/a&gt;漏洞原理&lt;/h2&gt;&lt;p&gt;参考阅读：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://cert.360.cn/detailnews.html?id=b879782fbad4a7f773b6c18490d67ac7&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://cert.360.cn/detailnews.html?id=b879782fbad4a7f773b6c18490d67ac7&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://galaxylab.org/cve-2017-7529-nginx整数溢出漏洞分析/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;http://galaxylab.org/cve-2017-7529-nginx%E6%95%B4%E6%95%B0%E6%BA%A2%E5%87%BA%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+    
+    </summary>
+    
+    
+      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
+    
+    
+      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
+    
+      <category term="Nginx" scheme="http://joker-vip.github.io/tags/Nginx/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Nginx 文件名逻辑漏洞（CVE-2013-4547）</title>
+    <link href="http://joker-vip.github.io/2021/11/10/Nginx%20%E6%96%87%E4%BB%B6%E5%90%8D%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2013-4547%EF%BC%89/"/>
+    <id>http://joker-vip.github.io/2021/11/10/Nginx%20%E6%96%87%E4%BB%B6%E5%90%8D%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2013-4547%EF%BC%89/</id>
+    <published>2021-11-10T04:30:35.000Z</published>
+    <updated>2021-11-15T01:26:18.083Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;Nginx-文件名逻辑漏洞（CVE-2013-4547）&quot;&gt;&lt;a href=&quot;#Nginx-文件名逻辑漏洞（CVE-2013-4547）&quot; class=&quot;headerlink&quot; title=&quot;Nginx 文件名逻辑漏洞（CVE-2013-4547）&quot;&gt;&lt;/a&gt;Nginx 文件名逻辑漏洞（CVE-2013-4547）&lt;/h1&gt;&lt;p&gt;影响版本：Nginx 0.8.41 ~ 1.4.3 / 1.5.0 ~ 1.5.7&lt;/p&gt;
+&lt;p&gt;参考链接：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2013-4547&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2013-4547&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://blog.werner.wiki/file-resolution-vulnerability-nginx/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://blog.werner.wiki/file-resolution-vulnerability-nginx/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://www.91ri.org/9064.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;http://www.91ri.org/9064.html&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+    
+    </summary>
+    
+    
+      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
+    
+    
+      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
+    
+      <category term="Nginx" scheme="http://joker-vip.github.io/tags/Nginx/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Mysql 身份认证绕过漏洞（CVE-2012-2122）</title>
+    <link href="http://joker-vip.github.io/2021/11/01/Mysql%20%E8%BA%AB%E4%BB%BD%E8%AE%A4%E8%AF%81%E7%BB%95%E8%BF%87%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2012-2122%EF%BC%89/"/>
+    <id>http://joker-vip.github.io/2021/11/01/Mysql%20%E8%BA%AB%E4%BB%BD%E8%AE%A4%E8%AF%81%E7%BB%95%E8%BF%87%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2012-2122%EF%BC%89/</id>
+    <published>2021-11-01T07:30:35.000Z</published>
+    <updated>2021-11-01T06:53:29.429Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;Mysql-身份认证绕过漏洞（CVE-2012-2122）&quot;&gt;&lt;a href=&quot;#Mysql-身份认证绕过漏洞（CVE-2012-2122）&quot; class=&quot;headerlink&quot; title=&quot;Mysql 身份认证绕过漏洞（CVE-2012-2122）&quot;&gt;&lt;/a&gt;Mysql 身份认证绕过漏洞（CVE-2012-2122）&lt;/h1&gt;&lt;p&gt;当连接MariaDB/MySQL时，输入的密码会与期望的正确密码比较，由于不正确的处理，会导致即便是memcmp()返回一个非零值，也会使MySQL认为两个密码是相同的。也就是说只要知道用户名，不断尝试就能够直接登入SQL数据库。&lt;/p&gt;
+&lt;p&gt;受影响版本：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;来自 5.1.62、5.2.12、5.3.6、5.5.23 的 MariaDB 版本不是。&lt;/li&gt;
+&lt;li&gt;5.1.63、5.5.24、5.6.6 的 MySQL 版本不是。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;参考链接：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://www.freebuf.com/vuls/3815.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;http://www.freebuf.com/vuls/3815.html&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://blog.rapid7.com/2012/06/11/cve-2012-2122-a-tragically-comedic-security-flaw-in-mysql/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://blog.rapid7.com/2012/06/11/cve-2012-2122-a-tragically-comedic-security-flaw-in-mysql/&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+    
+    </summary>
+    
+    
+      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
+    
+    
+      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
+    
+      <category term="Mysql" scheme="http://joker-vip.github.io/tags/Mysql/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>libssh 身份验证绕过漏洞(CVE-2018-10933)</title>
+    <link href="http://joker-vip.github.io/2021/11/01/libssh%20%E8%BA%AB%E4%BB%BD%E9%AA%8C%E8%AF%81%E7%BB%95%E8%BF%87%E6%BC%8F%E6%B4%9E(CVE-2018-10933)/"/>
+    <id>http://joker-vip.github.io/2021/11/01/libssh%20%E8%BA%AB%E4%BB%BD%E9%AA%8C%E8%AF%81%E7%BB%95%E8%BF%87%E6%BC%8F%E6%B4%9E(CVE-2018-10933)/</id>
+    <published>2021-11-01T06:30:35.000Z</published>
+    <updated>2021-11-01T06:50:50.520Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;libssh-身份验证绕过漏洞-CVE-2018-10933&quot;&gt;&lt;a href=&quot;#libssh-身份验证绕过漏洞-CVE-2018-10933&quot; class=&quot;headerlink&quot; title=&quot;libssh 身份验证绕过漏洞(CVE-2018-10933)&quot;&gt;&lt;/a&gt;libssh 身份验证绕过漏洞(CVE-2018-10933)&lt;/h1&gt;&lt;p&gt;libssh 是一个在客户端和服务器端实现 SSHv2 协议的多平台 C 库。在 libssh 的服务器端状态机中发现了一个逻辑漏洞。攻击者可以&lt;code&gt;MSG_USERAUTH_SUCCESS&lt;/code&gt;在认证成功之前发送消息。这可以绕过身份验证并访问目标 SSH 服务器。&lt;/p&gt;
+&lt;p&gt;参考：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.libssh.org/security/advisories/CVE-2018-10933.txt&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://www.libssh.org/security/advisories/CVE-2018-10933.txt&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.seebug.org/vuldb/ssvid-97614&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://www.seebug.org/vuldb/ssvid-97614&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+    
+    </summary>
+    
+    
+      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
+    
+    
+      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
+    
+      <category term="libssh" scheme="http://joker-vip.github.io/tags/libssh/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Laravel Ignition 2.5.1 代码执行漏洞（CVE-2021-3129）</title>
+    <link href="http://joker-vip.github.io/2021/11/01/Laravel%20Ignition%202.5.1%20%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2021-3129%EF%BC%89/"/>
+    <id>http://joker-vip.github.io/2021/11/01/Laravel%20Ignition%202.5.1%20%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2021-3129%EF%BC%89/</id>
+    <published>2021-11-01T05:30:35.000Z</published>
+    <updated>2021-11-01T06:49:20.296Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;Laravel-Ignition-2-5-1-代码执行漏洞（CVE-2021-3129）&quot;&gt;&lt;a href=&quot;#Laravel-Ignition-2-5-1-代码执行漏洞（CVE-2021-3129）&quot; class=&quot;headerlink&quot; title=&quot;Laravel Ignition 2.5.1 代码执行漏洞（CVE-2021-3129）&quot;&gt;&lt;/a&gt;Laravel Ignition 2.5.1 代码执行漏洞（CVE-2021-3129）&lt;/h1&gt;&lt;p&gt;Laravel是一个由Taylor Otwell所创建，免费的开源 PHP Web 框架。在开发模式下，Laravel使用了Ignition提供的错误页面，在Ignition 2.5.1及之前的版本中，有类似这样的代码：&lt;/p&gt;
+&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;$contents &amp;#x3D; file_get_contents($parameters[&amp;#39;viewFile&amp;#39;]);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;file_put_contents($parameters[&amp;#39;viewFile&amp;#39;], $contents);&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+
+&lt;p&gt;攻击者可以通过phar://协议来执行反序列化操作，进而执行任意代码。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
+    
+    
+      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
+    
+      <category term="Laravel" scheme="http://joker-vip.github.io/tags/Laravel/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Kibana 原型污染导致远程代码执行 (CVE-2019-7609)</title>
+    <link href="http://joker-vip.github.io/2021/10/28/Kibana%20%E5%8E%9F%E5%9E%8B%E6%B1%A1%E6%9F%93%E5%AF%BC%E8%87%B4%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%20(CVE-2019-7609)/"/>
+    <id>http://joker-vip.github.io/2021/10/28/Kibana%20%E5%8E%9F%E5%9E%8B%E6%B1%A1%E6%9F%93%E5%AF%BC%E8%87%B4%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%20(CVE-2019-7609)/</id>
+    <published>2021-10-28T05:30:35.000Z</published>
+    <updated>2021-10-28T05:57:04.497Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;Kibana-原型污染导致远程代码执行-CVE-2019-7609&quot;&gt;&lt;a href=&quot;#Kibana-原型污染导致远程代码执行-CVE-2019-7609&quot; class=&quot;headerlink&quot; title=&quot;Kibana 原型污染导致远程代码执行 (CVE-2019-7609)&quot;&gt;&lt;/a&gt;Kibana 原型污染导致远程代码执行 (CVE-2019-7609)&lt;/h1&gt;&lt;p&gt;Kibana 是一个用于 Elasticsearch 的开源数据可视化仪表板。&lt;/p&gt;
+&lt;p&gt;5.6.15 和 6.6.1 之前的 Kibana 版本在 Timelion 可视化器中包含任意代码执行缺陷。有权访问 Timelion 应用程序的攻击者可以发送尝试执行 javascript 代码的请求。这可能会导致攻击者在主机系统上使用 Kibana 进程的权限执行任意命令。&lt;/p&gt;
+&lt;p&gt;参考：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://nvd.nist.gov/vuln/detail/CVE-2019-7609&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://nvd.nist.gov/vuln/detail/CVE-2019-7609&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://research.securitum.com/prototype-pollution-rce-kibana-cve-2019-7609/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://research.securitum.com/prototype-pollution-rce-kibana-cve-2019-7609/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://slides.com/securitymb/prototype-pollution-in-kibana/#/4&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://slides.com/securitymb/prototype-pollution-in-kibana/#/4&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+    
+    </summary>
+    
+    
+      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
+    
+    
+      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
+    
+      <category term="Kibana" scheme="http://joker-vip.github.io/tags/Kibana/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Kibana 本地文件包含 (CVE-2018-17246)</title>
+    <link href="http://joker-vip.github.io/2021/10/28/Kibana%20%E6%9C%AC%E5%9C%B0%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%20(CVE-2018-17246)/"/>
+    <id>http://joker-vip.github.io/2021/10/28/Kibana%20%E6%9C%AC%E5%9C%B0%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%20(CVE-2018-17246)/</id>
+    <published>2021-10-28T04:30:35.000Z</published>
+    <updated>2021-10-28T05:55:36.914Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;Kibana-本地文件包含-CVE-2018-17246&quot;&gt;&lt;a href=&quot;#Kibana-本地文件包含-CVE-2018-17246&quot; class=&quot;headerlink&quot; title=&quot;Kibana 本地文件包含 (CVE-2018-17246)&quot;&gt;&lt;/a&gt;Kibana 本地文件包含 (CVE-2018-17246)&lt;/h1&gt;&lt;p&gt;Kibana 是一个用于 Elasticsearch 的开源数据可视化仪表板。&lt;/p&gt;
+&lt;p&gt;6.4.3 和 5.6.13 之前的 Kibana 版本在控制台插件中包含任意文件包含缺陷。有权访问 Kibana 控制台 API 的攻击者可以发送尝试执行 javascript 代码的请求。这可能会导致攻击者在主机系统上使用 Kibana 进程的权限执行任意命令。&lt;/p&gt;
+&lt;p&gt;参考：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://nvd.nist.gov/vuln/detail/CVE-2018-17246&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://nvd.nist.gov/vuln/detail/CVE-2018-17246&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.cyberark.com/threat-research-blog/execute-this-i-know-you-have-it/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://www.cyberark.com/threat-research-blog/execute-this-i-know-you-have-it/&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+    
+    </summary>
+    
+    
+      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
+    
+    
+      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
+    
+      <category term="Kibana" scheme="http://joker-vip.github.io/tags/Kibana/"/>
+    
+  </entry>
   
   <entry>
     <title>Jupyter Notebook 未授权访问漏洞</title>
@@ -233,337 +574,6 @@
       <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
     
       <category term="JBoss" scheme="http://joker-vip.github.io/tags/JBoss/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Jackson-databind 反序列化漏洞（CVE-2017-7525）</title>
-    <link href="http://joker-vip.github.io/2021/08/16/Jackson-databind%20%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2017-7525%EF%BC%89/"/>
-    <id>http://joker-vip.github.io/2021/08/16/Jackson-databind%20%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2017-7525%EF%BC%89/</id>
-    <published>2021-08-16T05:30:35.000Z</published>
-    <updated>2021-08-16T09:26:45.349Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;h1 id=&quot;Jackson-databind-反序列化漏洞（CVE-2017-7525）&quot;&gt;&lt;a href=&quot;#Jackson-databind-反序列化漏洞（CVE-2017-7525）&quot; class=&quot;headerlink&quot;
-        
-      
-    
-    </summary>
-    
-    
-      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    
-    
-      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
-    
-      <category term="Jackson" scheme="http://joker-vip.github.io/tags/Jackson/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>influxdb未授权访问漏洞</title>
-    <link href="http://joker-vip.github.io/2021/08/16/influxdb%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E/"/>
-    <id>http://joker-vip.github.io/2021/08/16/influxdb%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E/</id>
-    <published>2021-08-16T04:30:35.000Z</published>
-    <updated>2021-08-16T03:40:58.941Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;influxdb未授权访问漏洞&quot;&gt;&lt;a href=&quot;#influxdb未授权访问漏洞&quot; class=&quot;headerlink&quot; title=&quot;influxdb未授权访问漏洞&quot;&gt;&lt;/a&gt;influxdb未授权访问漏洞&lt;/h1&gt;&lt;p&gt;influxdb是一款著名的时序数据库，其使用jwt作为鉴权方式。在用户开启了认证，但未设置参数&lt;code&gt;shared-secret&lt;/code&gt;的情况下，jwt的认证密钥为空字符串，此时攻击者可以伪造任意用户身份在influxdb中执行SQL语句。&lt;/p&gt;
-&lt;p&gt;参考链接：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://www.komodosec.com/post/when-all-else-fails-find-a-0-day&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://www.komodosec.com/post/when-all-else-fails-find-a-0-day&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://docs.influxdata.com/influxdb/v1.7/administration/config/#http-endpoints-settings&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://docs.influxdata.com/influxdb/v1.7/administration/config/#http-endpoints-settings&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-    
-    </summary>
-    
-    
-      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    
-    
-      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
-    
-      <category term="influxdb" scheme="http://joker-vip.github.io/tags/influxdb/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Imagemagick 命令注入漏洞 (CVE-2016–3714)</title>
-    <link href="http://joker-vip.github.io/2021/08/13/Imagemagick%20%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E%20(CVE-2016%E2%80%933714)/"/>
-    <id>http://joker-vip.github.io/2021/08/13/Imagemagick%20%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E%20(CVE-2016%E2%80%933714)/</id>
-    <published>2021-08-13T06:30:35.000Z</published>
-    <updated>2021-08-13T09:26:53.169Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;Imagemagick-命令注入漏洞-CVE-2016–3714&quot;&gt;&lt;a href=&quot;#Imagemagick-命令注入漏洞-CVE-2016–3714&quot; class=&quot;headerlink&quot; title=&quot;Imagemagick 命令注入漏洞 (CVE-2016–3714)&quot;&gt;&lt;/a&gt;Imagemagick 命令注入漏洞 (CVE-2016–3714)&lt;/h1&gt;&lt;p&gt;ImageMagick 是一个免费的开源跨平台软件套件，用于显示、创建、转换、修改和编辑光栅图像。&lt;/p&gt;
-&lt;p&gt;推荐人：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://imagetragick.com/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://imagetragick.com&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://www.leavesongs.com/PENETRATION/CVE-2016-3714-ImageMagick.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://www.leavesongs.com/PENETRATION/CVE-2016-3714-ImageMagick.html&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://github.com/ImageTragick/PoCs&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://github.com/ImageTragick/PoCs&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-    
-    </summary>
-    
-    
-      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    
-    
-      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
-    
-      <category term="ImageMagick" scheme="http://joker-vip.github.io/tags/ImageMagick/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>通过 PDF 密码进行 ImageMagick Shell 注入 (CVE-2020-29599)</title>
-    <link href="http://joker-vip.github.io/2021/08/13/%E9%80%9A%E8%BF%87%20PDF%20%E5%AF%86%E7%A0%81%E8%BF%9B%E8%A1%8C%20ImageMagick%20Shell%20%E6%B3%A8%E5%85%A5%20(CVE-2020-29599)/"/>
-    <id>http://joker-vip.github.io/2021/08/13/%E9%80%9A%E8%BF%87%20PDF%20%E5%AF%86%E7%A0%81%E8%BF%9B%E8%A1%8C%20ImageMagick%20Shell%20%E6%B3%A8%E5%85%A5%20(CVE-2020-29599)/</id>
-    <published>2021-08-13T05:30:35.000Z</published>
-    <updated>2021-08-13T09:26:36.178Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;通过-PDF-密码进行-ImageMagick-Shell-注入-CVE-2020-29599&quot;&gt;&lt;a href=&quot;#通过-PDF-密码进行-ImageMagick-Shell-注入-CVE-2020-29599&quot; class=&quot;headerlink&quot; title=&quot;通过 PDF 密码进行 ImageMagick Shell 注入 (CVE-2020-29599)&quot;&gt;&lt;/a&gt;通过 PDF 密码进行 ImageMagick Shell 注入 (CVE-2020-29599)&lt;/h1&gt;&lt;p&gt;ImageMagick 是一个免费的开源跨平台软件套件，用于显示、创建、转换、修改和编辑光栅图像。&lt;/p&gt;
-&lt;p&gt;参考：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://insert-script.blogspot.com/2020/11/imagemagick-shell-injection-via-pdf.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://insert-script.blogspot.com/2020/11/imagemagick-shell-injection-via-pdf.html&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-    
-    </summary>
-    
-    
-      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    
-    
-      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
-    
-      <category term="ImageMagick" scheme="http://joker-vip.github.io/tags/ImageMagick/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>OpenSSL Heartbleed心脏滴血漏洞 (CVE-2014-0160)</title>
-    <link href="http://joker-vip.github.io/2021/08/13/OpenSSL%20Heartbleed%E5%BF%83%E8%84%8F%E6%BB%B4%E8%A1%80%E6%BC%8F%E6%B4%9E%20(CVE-2014-0160)/"/>
-    <id>http://joker-vip.github.io/2021/08/13/OpenSSL%20Heartbleed%E5%BF%83%E8%84%8F%E6%BB%B4%E8%A1%80%E6%BC%8F%E6%B4%9E%20(CVE-2014-0160)/</id>
-    <published>2021-08-13T04:30:35.000Z</published>
-    <updated>2021-08-13T07:04:30.601Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;OpenSSL-Heartbleed心脏滴血漏洞-CVE-2014-0160&quot;&gt;&lt;a href=&quot;#OpenSSL-Heartbleed心脏滴血漏洞-CVE-2014-0160&quot; class=&quot;headerlink&quot; title=&quot;OpenSSL Heartbleed心脏滴血漏洞 (CVE-2014-0160)&quot;&gt;&lt;/a&gt;OpenSSL Heartbleed心脏滴血漏洞 (CVE-2014-0160)&lt;/h1&gt;&lt;p&gt;Heartbleed Bug 是流行的 OpenSSL 加密软件库中的一个严重漏洞。这个弱点允许窃取在正常情况下由用于保护 Internet 的 SSL/TLS 加密保护的信息。SSL/TLS 为 Web、电子邮件、即时消息 (IM) 和某些虚拟专用网络 (VPN) 等应用程序提供 Internet 上的通信安全和隐私。&lt;/p&gt;
-&lt;p&gt;Heartbleed 漏洞允许 Internet 上的任何人读取受 OpenSSL 软件易受攻击版本保护的系统的内存。这会破坏用于识别服务提供商和加密流量、用户名称和密码以及实际内容的密钥。这允许攻击者窃听通信、直接从服务和用户窃取数据并冒充服务和用户。&lt;/p&gt;
-&lt;p&gt;参考：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://heartbleed.com/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://heartbleed.com/&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://filippo.io/Heartbleed&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://filippo.io/Heartbleed&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-    
-    </summary>
-    
-    
-      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    
-    
-      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
-    
-      <category term="OpenSSL" scheme="http://joker-vip.github.io/tags/OpenSSL/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>OpenSSH 用户名枚举漏洞（CVE-2018-15473）</title>
-    <link href="http://joker-vip.github.io/2021/08/11/OpenSSH%20%E7%94%A8%E6%88%B7%E5%90%8D%E6%9E%9A%E4%B8%BE%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2018-15473%EF%BC%89/"/>
-    <id>http://joker-vip.github.io/2021/08/11/OpenSSH%20%E7%94%A8%E6%88%B7%E5%90%8D%E6%9E%9A%E4%B8%BE%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2018-15473%EF%BC%89/</id>
-    <published>2021-08-11T05:30:35.000Z</published>
-    <updated>2021-08-11T09:30:51.212Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;OpenSSH-用户名枚举漏洞（CVE-2018-15473）&quot;&gt;&lt;a href=&quot;#OpenSSH-用户名枚举漏洞（CVE-2018-15473）&quot; class=&quot;headerlink&quot; title=&quot;OpenSSH 用户名枚举漏洞（CVE-2018-15473）&quot;&gt;&lt;/a&gt;OpenSSH 用户名枚举漏洞（CVE-2018-15473）&lt;/h1&gt;&lt;p&gt;OpenSSH 7.7前存在一个用户名枚举漏洞，通过该漏洞，攻击者可以判断某个用户名是否存在于目标主机中。&lt;/p&gt;
-&lt;p&gt;参考链接：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;http://openwall.com/lists/oss-security/2018/08/15/5&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;http://openwall.com/lists/oss-security/2018/08/15/5&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://github.com/Rhynorater/CVE-2018-15473-Exploit&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://github.com/Rhynorater/CVE-2018-15473-Exploit&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://www.anquanke.com/post/id/157607&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://www.anquanke.com/post/id/157607&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-    
-    </summary>
-    
-    
-      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    
-    
-      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
-    
-      <category term="OpenSSH" scheme="http://joker-vip.github.io/tags/OpenSSH/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Hadoop YARN ResourceManager 未授权访问</title>
-    <link href="http://joker-vip.github.io/2021/08/11/Hadoop%20YARN%20ResourceManager%20%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE/"/>
-    <id>http://joker-vip.github.io/2021/08/11/Hadoop%20YARN%20ResourceManager%20%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE/</id>
-    <published>2021-08-11T04:30:35.000Z</published>
-    <updated>2021-08-11T08:33:34.678Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;Hadoop-YARN-ResourceManager-未授权访问&quot;&gt;&lt;a href=&quot;#Hadoop-YARN-ResourceManager-未授权访问&quot; class=&quot;headerlink&quot; title=&quot;Hadoop YARN ResourceManager 未授权访问&quot;&gt;&lt;/a&gt;Hadoop YARN ResourceManager 未授权访问&lt;/h1&gt;&lt;h2 id=&quot;原理&quot;&gt;&lt;a href=&quot;#原理&quot; class=&quot;headerlink&quot; title=&quot;原理&quot;&gt;&lt;/a&gt;原理&lt;/h2&gt;&lt;p&gt;参考 [&lt;a href=&quot;http://archive.hack.lu/2016/Wavestone%20-%20Hack.lu%202016%20-%20Hadoop%20safari%20-%20Hunting%20for%20vulnerabilities%20-%20v1.0.pdf]&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;http://archive.hack.lu/2016/Wavestone%20-%20Hack.lu%202016%20-%20Hadoop%20safari%20-%20Hunting%20for%20vulnerabilities%20-%20v1.0.pdf]&lt;/a&gt;(&lt;a href=&quot;http://archive.hack.lu/2016/Wavestone&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;http://archive.hack.lu/2016/Wavestone&lt;/a&gt; - Hack.lu 2016 - Hadoop safari - Hunting for vulnerabilities - v1.0.pdf)&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    
-    
-      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
-    
-      <category term="Hadoop" scheme="http://joker-vip.github.io/tags/Hadoop/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>H2 数据库 Web 控制台未授权访问</title>
-    <link href="http://joker-vip.github.io/2021/08/10/H2%20%E6%95%B0%E6%8D%AE%E5%BA%93%20Web%20%E6%8E%A7%E5%88%B6%E5%8F%B0%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE/"/>
-    <id>http://joker-vip.github.io/2021/08/10/H2%20%E6%95%B0%E6%8D%AE%E5%BA%93%20Web%20%E6%8E%A7%E5%88%B6%E5%8F%B0%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE/</id>
-    <published>2021-08-10T04:30:35.000Z</published>
-    <updated>2021-08-11T08:32:31.850Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;H2-数据库-Web-控制台未授权访问&quot;&gt;&lt;a href=&quot;#H2-数据库-Web-控制台未授权访问&quot; class=&quot;headerlink&quot; title=&quot;H2 数据库 Web 控制台未授权访问&quot;&gt;&lt;/a&gt;H2 数据库 Web 控制台未授权访问&lt;/h1&gt;&lt;p&gt;H2 数据库是 Java 中的嵌入式内存数据库。带有 h2 数据库的 Springboot 带有一个 web 管理页面，如果您设置以下选项，则该页面没有身份验证：&lt;/p&gt;
-&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;spring.h2.console.enabled&amp;#x3D;true&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;spring.h2.console.settings.web-allow-others&amp;#x3D;true&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-
-&lt;p&gt;该管理页面支持使用JNDI加载JDBC驱动，可以通过远程类加载实现远程代码执行。&lt;/p&gt;
-&lt;p&gt;参考：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://mp.weixin.qq.com/s?__biz=MzI2NTM1MjQ3OA==&amp;amp;mid=2247483658&amp;amp;idx=1&amp;amp;sn=584710da0fbe56c1246755147bcec48e&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://mp.weixin.qq.com/s?__biz=MzI2NTM1MjQ3OA==&amp;amp;mid=2247483658&amp;amp;idx=1&amp;amp;sn=584710da0fbe56c1246755147bcec48e&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-    
-    </summary>
-    
-    
-      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    
-    
-      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
-    
-      <category term="spring" scheme="http://joker-vip.github.io/tags/spring/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Gogs 任意用户登录漏洞（CVE-2018-18925）</title>
-    <link href="http://joker-vip.github.io/2021/08/05/Gogs%20%E4%BB%BB%E6%84%8F%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2018-18925%EF%BC%89/"/>
-    <id>http://joker-vip.github.io/2021/08/05/Gogs%20%E4%BB%BB%E6%84%8F%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2018-18925%EF%BC%89/</id>
-    <published>2021-08-05T06:30:35.000Z</published>
-    <updated>2021-08-09T09:29:40.975Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;Gogs-任意用户登录漏洞（CVE-2018-18925）&quot;&gt;&lt;a href=&quot;#Gogs-任意用户登录漏洞（CVE-2018-18925）&quot; class=&quot;headerlink&quot; title=&quot;Gogs 任意用户登录漏洞（CVE-2018-18925）&quot;&gt;&lt;/a&gt;Gogs 任意用户登录漏洞（CVE-2018-18925）&lt;/h1&gt;&lt;p&gt;gogs是一款极易搭建的自助Git服务平台，具有易安装、跨平台、轻量级等特点，使用者众多。&lt;/p&gt;
-&lt;p&gt;其0.11.66及以前版本中，（go-macaron/session库）没有对sessionid进行校验，攻击者利用恶意sessionid即可读取任意文件，通过控制文件内容来控制session内容，进而登录任意账户。&lt;/p&gt;
-&lt;p&gt;参考链接：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://github.com/gogs/gogs/issues/5469&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://github.com/gogs/gogs/issues/5469&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://xz.aliyun.com/t/3168&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://xz.aliyun.com/t/3168&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://www.anquanke.com/post/id/163575&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://www.anquanke.com/post/id/163575&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-    
-    </summary>
-    
-    
-      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    
-    
-      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
-    
-      <category term="Gogs" scheme="http://joker-vip.github.io/tags/Gogs/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>GoAhead Web 服务器 HTTPd &#39;LD_PRELOAD&#39; 远程代码执行 (CVE-2017-17562)</title>
-    <link href="http://joker-vip.github.io/2021/08/05/GoAhead%20Web%20%E6%9C%8D%E5%8A%A1%E5%99%A8%20HTTPd%20&#39;LD_PRELOAD&#39;%20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%20(CVE-2017-17562)/"/>
-    <id>http://joker-vip.github.io/2021/08/05/GoAhead%20Web%20%E6%9C%8D%E5%8A%A1%E5%99%A8%20HTTPd%20&#39;LD_PRELOAD&#39;%20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%20(CVE-2017-17562)/</id>
-    <published>2021-08-05T05:30:35.000Z</published>
-    <updated>2021-08-09T06:50:00.060Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;GoAhead-Web-服务器-HTTPd-‘LD-PRELOAD’-远程代码执行-CVE-2017-17562&quot;&gt;&lt;a href=&quot;#GoAhead-Web-服务器-HTTPd-‘LD-PRELOAD’-远程代码执行-CVE-2017-17562&quot; class=&quot;headerlink&quot; title=&quot;GoAhead Web 服务器 HTTPd ‘LD_PRELOAD’ 远程代码执行 (CVE-2017-17562)&quot;&gt;&lt;/a&gt;GoAhead Web 服务器 HTTPd ‘LD_PRELOAD’ 远程代码执行 (CVE-2017-17562)&lt;/h1&gt;&lt;p&gt;Embedthis GoAhead 是世界上最流行的微型嵌入式 Web 服务器，部署在数亿台设备中，是最小嵌入式设备的理想选择。&lt;/p&gt;
-&lt;p&gt;如果启用 CGI 并且动态链接 CGI 程序，则 3.6.5 之前的 GoAhead 允许远程代码执行。这是在&lt;code&gt;cgi.c&lt;/code&gt;. 当与 glibc 动态链接器结合使用时，这种行为可能会被滥用用于使用特殊参数名称的远程代码执行，例如&lt;code&gt;LD_PRELOAD&lt;/code&gt;. 攻击者可以在请求正文中发布他们的共享对象负载，并使用 /proc/self/fd/0 引用它。&lt;/p&gt;
-&lt;p&gt;参考：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://www.elttam.com.au/blog/goahead/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://www.elttam.com.au/blog/goahead/&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://www.exploit-db.com/exploits/43360&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://www.exploit-db.com/exploits/43360&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://github.com/rapid7/metasploit-framework/blob/master/modules/exploits/linux/http/goahead_ldpreload.rb&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://github.com/rapid7/metasploit-framework/blob/master/modules/exploits/linux/http/goahead_ldpreload.rb&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-    
-    </summary>
-    
-    
-      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    
-    
-      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
-    
-      <category term="GoAhead" scheme="http://joker-vip.github.io/tags/GoAhead/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>GlassFish 任意文件读取漏洞</title>
-    <link href="http://joker-vip.github.io/2021/08/05/GlassFish%20%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E8%AF%BB%E5%8F%96%E6%BC%8F%E6%B4%9E/"/>
-    <id>http://joker-vip.github.io/2021/08/05/GlassFish%20%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E8%AF%BB%E5%8F%96%E6%BC%8F%E6%B4%9E/</id>
-    <published>2021-08-05T04:30:35.000Z</published>
-    <updated>2021-08-09T06:47:07.241Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;GlassFish-任意文件读取漏洞&quot;&gt;&lt;a href=&quot;#GlassFish-任意文件读取漏洞&quot; class=&quot;headerlink&quot; title=&quot;GlassFish 任意文件读取漏洞&quot;&gt;&lt;/a&gt;GlassFish 任意文件读取漏洞&lt;/h1&gt;&lt;p&gt;java语言中会把&lt;code&gt;%c0%ae&lt;/code&gt;解析为&lt;code&gt;\uC0AE&lt;/code&gt;，最后转义为ASCCII字符的&lt;code&gt;.&lt;/code&gt;（点）。利用&lt;code&gt;%c0%ae%c0%ae/%c0%ae%c0%ae/%c0%ae%c0%ae/&lt;/code&gt;来向上跳转，达到目录穿越、任意文件读取的效果。&lt;/p&gt;
-&lt;p&gt;参考文章：&lt;a href=&quot;https://www.trustwave.com/Resources/Security-Advisories/Advisories/TWSL2015-016/?fid=6904&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://www.trustwave.com/Resources/Security-Advisories/Advisories/TWSL2015-016/?fid=6904&lt;/a&gt;&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    
-    
-      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
-    
-      <category term="GlassFish" scheme="http://joker-vip.github.io/tags/GlassFish/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>gitlist 0.6.0 远程命令执行漏洞（CVE-2018-1000533）</title>
-    <link href="http://joker-vip.github.io/2021/08/04/gitlist%200.6.0%20%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2018-1000533%EF%BC%89/"/>
-    <id>http://joker-vip.github.io/2021/08/04/gitlist%200.6.0%20%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2018-1000533%EF%BC%89/</id>
-    <published>2021-08-04T06:30:35.000Z</published>
-    <updated>2021-08-05T03:06:58.839Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;gitlist-0-6-0-远程命令执行漏洞（CVE-2018-1000533）&quot;&gt;&lt;a href=&quot;#gitlist-0-6-0-远程命令执行漏洞（CVE-2018-1000533）&quot; class=&quot;headerlink&quot; title=&quot;gitlist 0.6.0 远程命令执行漏洞（CVE-2018-1000533）&quot;&gt;&lt;/a&gt;gitlist 0.6.0 远程命令执行漏洞（CVE-2018-1000533）&lt;/h1&gt;&lt;p&gt;gitlist是一款使用PHP开发的图形化git仓库查看工具。在其0.6.0版本及以前，存在一处命令参数注入问题，可以导致远程命令执行漏洞。&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    
-    
-      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
-    
-      <category term="gitlist" scheme="http://joker-vip.github.io/tags/gitlist/"/>
     
   </entry>
   

