@@ -445,7 +445,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://joker-vip.github.io/2021/11/11/ntopng%20%E8%BA%AB%E4%BB%BD%E9%AA%8C%E8%AF%81%E7%BB%95%E8%BF%87%20(CVE-2021-28073)/">
+    <link itemprop="mainEntityOfPage" href="http://joker-vip.github.io/2021/12/06/XDebug%20%E8%BF%9C%E7%A8%8B%E8%B0%83%E8%AF%95%E6%BC%8F%E6%B4%9E%EF%BC%88%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%EF%BC%89/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="joker0xxx3">
@@ -464,7 +464,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2021/11/11/ntopng%20%E8%BA%AB%E4%BB%BD%E9%AA%8C%E8%AF%81%E7%BB%95%E8%BF%87%20(CVE-2021-28073)/" itemprop="url">ntopng 身份验证绕过 (CVE-2021-28073)</a></h1>
+                <a class="post-title-link" href="/2021/12/06/XDebug%20%E8%BF%9C%E7%A8%8B%E8%B0%83%E8%AF%95%E6%BC%8F%E6%B4%9E%EF%BC%88%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%EF%BC%89/" itemprop="url">XDebug 远程调试漏洞（代码执行）</a></h1>
         
 
         <div class="post-meta">
@@ -477,8 +477,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-11-11T14:30:35+08:00">
-                2021-11-11
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-12-06T13:30:35+08:00">
+                2021-12-06
               </time>
             
 
@@ -538,15 +538,18 @@
 
       
         
-          <h1 id="ntopng-身份验证绕过-CVE-2021-28073"><a href="#ntopng-身份验证绕过-CVE-2021-28073" class="headerlink" title="ntopng 身份验证绕过 (CVE-2021-28073)"></a>ntopng 身份验证绕过 (CVE-2021-28073)</h1><p>Ntopng 是一个被动的网络监控工具，专注于可以从服务器捕获的流量中获取的流量和统计信息。</p>
-<p>ntopng 4.2 及之前的版本中存在身份验证绕过漏洞。</p>
-<p>参考链接：</p>
+          <h1 id="XDebug-远程调试漏洞（代码执行）"><a href="#XDebug-远程调试漏洞（代码执行）" class="headerlink" title="XDebug 远程调试漏洞（代码执行）"></a>XDebug 远程调试漏洞（代码执行）</h1><p>XDebug是PHP的一个扩展，用于调试PHP代码。如果目标开启了远程调试模式，并设置<code>remote_connect_back = 1</code>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">xdebug.remote_connect_back &#x3D; 1</span><br><span class="line">xdebug.remote_enable &#x3D; 1</span><br></pre></td></tr></table></figure>
+
+<p>这个配置下，我们访问<code>http://target/index.php?XDEBUG_SESSION_START=phpstorm</code>，目标服务器的XDebug将会连接访问者的IP（或<code>X-Forwarded-For</code>头指定的地址）并通过dbgp协议与其通信，我们通过dbgp中提供的eval方法即可在目标服务器上执行任意PHP代码。</p>
+<p>更多说明可参考：</p>
 <ul>
-<li><a href="http://noahblog.360.cn/ntopng-multiple-vulnerabilities/" target="_blank" rel="noopener">http://noahblog.360.cn/ntopng-multiple-vulnerabilities/</a></li>
+<li>[<a href="https://ricterz.me/posts/Xdebug%3A%20A%20Tiny%20Attack%20Surface]" target="_blank" rel="noopener">https://ricterz.me/posts/Xdebug%3A%20A%20Tiny%20Attack%20Surface]</a>(<a href="https://ricterz.me/posts/Xdebug%3A" target="_blank" rel="noopener">https://ricterz.me/posts/Xdebug%3A</a> A Tiny Attack Surface)</li>
+<li><a href="https://xdebug.org/" target="_blank" rel="noopener">https://xdebug.org</a></li>
 </ul>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2021/11/11/ntopng%20%E8%BA%AB%E4%BB%BD%E9%AA%8C%E8%AF%81%E7%BB%95%E8%BF%87%20(CVE-2021-28073)/#more" rel="contents">
+            <a class="btn" href="/2021/12/06/XDebug%20%E8%BF%9C%E7%A8%8B%E8%B0%83%E8%AF%95%E6%BC%8F%E6%B4%9E%EF%BC%88%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%EF%BC%89/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -597,7 +600,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://joker-vip.github.io/2021/11/11/node-postgres%20%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2017-16082%EF%BC%89/">
+    <link itemprop="mainEntityOfPage" href="http://joker-vip.github.io/2021/12/06/PHP%E7%8E%AF%E5%A2%83%20XML%E5%A4%96%E9%83%A8%E5%AE%9E%E4%BD%93%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E%EF%BC%88XXE%EF%BC%89/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="joker0xxx3">
@@ -616,7 +619,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2021/11/11/node-postgres%20%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2017-16082%EF%BC%89/" itemprop="url">node-postgres 代码执行漏洞（CVE-2017-16082）</a></h1>
+                <a class="post-title-link" href="/2021/12/06/PHP%E7%8E%AF%E5%A2%83%20XML%E5%A4%96%E9%83%A8%E5%AE%9E%E4%BD%93%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E%EF%BC%88XXE%EF%BC%89/" itemprop="url">PHP环境 XML外部实体注入漏洞（XXE）</a></h1>
         
 
         <div class="post-meta">
@@ -629,8 +632,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-11-11T13:30:35+08:00">
-                2021-11-11
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-12-06T12:30:35+08:00">
+                2021-12-06
               </time>
             
 
@@ -690,16 +693,15 @@
 
       
         
-          <h1 id="node-postgres-代码执行漏洞（CVE-2017-16082）"><a href="#node-postgres-代码执行漏洞（CVE-2017-16082）" class="headerlink" title="node-postgres 代码执行漏洞（CVE-2017-16082）"></a>node-postgres 代码执行漏洞（CVE-2017-16082）</h1><h2 id="漏洞原理"><a href="#漏洞原理" class="headerlink" title="漏洞原理"></a>漏洞原理</h2><p>node-postgres在处理类型为<code>Row Description</code>的postgres返回包时，将字段名拼接到代码中。由于没有进行合理转义，导致一个特殊构造的字段名可逃逸出代码单引号限制，造成代码执行漏洞。</p>
-<p>参考链接：</p>
+          <h1 id="PHP环境-XML外部实体注入漏洞（XXE）"><a href="#PHP环境-XML外部实体注入漏洞（XXE）" class="headerlink" title="PHP环境 XML外部实体注入漏洞（XXE）"></a>PHP环境 XML外部实体注入漏洞（XXE）</h1><p>环境介绍：</p>
 <ul>
-<li><a href="https://www.leavesongs.com/PENETRATION/node-postgres-code-execution-vulnerability.html" target="_blank" rel="noopener">https://www.leavesongs.com/PENETRATION/node-postgres-code-execution-vulnerability.html</a></li>
-<li><a href="https://node-postgres.com/announcements#2017-08-12-code-execution-vulnerability" target="_blank" rel="noopener">https://node-postgres.com/announcements#2017-08-12-code-execution-vulnerability</a></li>
-<li><a href="https://zhuanlan.zhihu.com/p/28575189" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/28575189</a></li>
+<li>PHP 7.0.30</li>
+<li>libxml 2.8.0</li>
 </ul>
+<p>libxml2.9.0以后，默认不解析外部实体，导致XXE漏洞逐渐消亡。为了演示PHP环境下的XXE漏洞，本例会将libxml2.8.0版本编译进PHP中。PHP版本并不影响XXE利用。</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2021/11/11/node-postgres%20%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2017-16082%EF%BC%89/#more" rel="contents">
+            <a class="btn" href="/2021/12/06/PHP%E7%8E%AF%E5%A2%83%20XML%E5%A4%96%E9%83%A8%E5%AE%9E%E4%BD%93%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E%EF%BC%88XXE%EF%BC%89/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -750,7 +752,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://joker-vip.github.io/2021/11/11/Node.js%20%E7%9B%AE%E5%BD%95%E7%A9%BF%E8%B6%8A%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2017-14849%EF%BC%89/">
+    <link itemprop="mainEntityOfPage" href="http://joker-vip.github.io/2021/12/05/PHP%20%E6%9C%AC%E5%9C%B0%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%20RCE%20%E4%B8%8E%20PHPINFO/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="joker0xxx3">
@@ -769,7 +771,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2021/11/11/Node.js%20%E7%9B%AE%E5%BD%95%E7%A9%BF%E8%B6%8A%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2017-14849%EF%BC%89/" itemprop="url">Node.js 目录穿越漏洞（CVE-2017-14849）</a></h1>
+                <a class="post-title-link" href="/2021/12/05/PHP%20%E6%9C%AC%E5%9C%B0%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%20RCE%20%E4%B8%8E%20PHPINFO/" itemprop="url">PHP 本地文件包含 RCE 与 PHPINFO</a></h1>
         
 
         <div class="post-meta">
@@ -782,8 +784,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-11-11T12:30:35+08:00">
-                2021-11-11
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-12-05T16:30:35+08:00">
+                2021-12-05
               </time>
             
 
@@ -843,930 +845,938 @@
 
       
         
-          <h1 id="Node-js-目录穿越漏洞（CVE-2017-14849）"><a href="#Node-js-目录穿越漏洞（CVE-2017-14849）" class="headerlink" title="Node.js 目录穿越漏洞（CVE-2017-14849）"></a>Node.js 目录穿越漏洞（CVE-2017-14849）</h1><h2 id="漏洞原理"><a href="#漏洞原理" class="headerlink" title="漏洞原理"></a>漏洞原理</h2><p>参考文档：</p>
-<ul>
-<li><a href="https://nodejs.org/en/blog/vulnerability/september-2017-path-validation/" target="_blank" rel="noopener">https://nodejs.org/en/blog/vulnerability/september-2017-path-validation/</a></li>
-<li><a href="https://security.tencent.com/index.php/blog/msg/121" target="_blank" rel="noopener">https://security.tencent.com/index.php/blog/msg/121</a></li>
-</ul>
-<p>原因是 Node.js 8.5.0 对目录进行<code>normalize</code>操作时出现了逻辑错误，导致向上层跳跃的时候（如<code>../../../../../../etc/passwd</code>），在中间位置增加<code>foo/../</code>（如<code>../../../foo/../../../../etc/passwd</code>），即可使<code>normalize</code>返回<code>/etc/passwd</code>，但实际上正确结果应该是<code>../../../../../../etc/passwd</code>。</p>
-<p>express这类web框架，通常会提供了静态文件服务器的功能，这些功能依赖于<code>normalize</code>函数。比如，express在判断path是否超出静态目录范围时，就用到了<code>normalize</code>函数，上述BUG导致<code>normalize</code>函数返回错误结果导致绕过了检查，造成任意文件读取漏洞。</p>
-<p>当然，<code>normalize</code>的BUG可以影响的绝非仅有express，更有待深入挖掘。不过因为这个BUG是node 8.5.0 中引入的，在 8.6 中就进行了修复，所以影响范围有限。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2021/11/11/Node.js%20%E7%9B%AE%E5%BD%95%E7%A9%BF%E8%B6%8A%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2017-14849%EF%BC%89/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://joker-vip.github.io/2021/11/10/Nginx%20%E8%A7%A3%E6%9E%90%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="joker0xxx3">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/header.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="joker0xxx3's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2021/11/10/Nginx%20%E8%A7%A3%E6%9E%90%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/" itemprop="url">Nginx 解析漏洞复现</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-		    
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-11-10T15:30:35+08:00">
-                2021-11-10
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/" itemprop="url" rel="index">
-                    <span itemprop="name">漏洞复现</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h1 id="Nginx-解析漏洞复现"><a href="#Nginx-解析漏洞复现" class="headerlink" title="Nginx 解析漏洞复现"></a>Nginx 解析漏洞复现</h1><p>Nginx解析漏洞复现。</p>
-<p>版本信息：</p>
-<ul>
-<li>Nginx 1.x 最新版</li>
-<li>PHP 7.x最新版</li>
-</ul>
-<p>由此可知，该漏洞与Nginx、php版本无关，属于用户配置不当造成的解析漏洞。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2021/11/10/Nginx%20%E8%A7%A3%E6%9E%90%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://joker-vip.github.io/2021/11/10/Nginx%20%E9%85%8D%E7%BD%AE%E9%94%99%E8%AF%AF%E5%AF%BC%E8%87%B4%E6%BC%8F%E6%B4%9E/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="joker0xxx3">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/header.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="joker0xxx3's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2021/11/10/Nginx%20%E9%85%8D%E7%BD%AE%E9%94%99%E8%AF%AF%E5%AF%BC%E8%87%B4%E6%BC%8F%E6%B4%9E/" itemprop="url">Nginx 配置错误导致漏洞</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-		    
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-11-10T14:30:35+08:00">
-                2021-11-10
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/" itemprop="url" rel="index">
-                    <span itemprop="name">漏洞复现</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h1 id="Nginx-配置错误导致漏洞"><a href="#Nginx-配置错误导致漏洞" class="headerlink" title="Nginx 配置错误导致漏洞"></a>Nginx 配置错误导致漏洞</h1><p>运行成功后，Nginx将会监听8080/8081/8082三个端口，分别对应三种漏洞。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2021/11/10/Nginx%20%E9%85%8D%E7%BD%AE%E9%94%99%E8%AF%AF%E5%AF%BC%E8%87%B4%E6%BC%8F%E6%B4%9E/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://joker-vip.github.io/2021/11/10/Nginx%E8%B6%8A%E7%95%8C%E8%AF%BB%E5%8F%96%E7%BC%93%E5%AD%98%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2017-7529%EF%BC%89/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="joker0xxx3">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/header.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="joker0xxx3's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2021/11/10/Nginx%E8%B6%8A%E7%95%8C%E8%AF%BB%E5%8F%96%E7%BC%93%E5%AD%98%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2017-7529%EF%BC%89/" itemprop="url">Nginx越界读取缓存漏洞（CVE-2017-7529）</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-		    
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-11-10T13:30:35+08:00">
-                2021-11-10
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/" itemprop="url" rel="index">
-                    <span itemprop="name">漏洞复现</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h1 id="Nginx越界读取缓存漏洞（CVE-2017-7529）"><a href="#Nginx越界读取缓存漏洞（CVE-2017-7529）" class="headerlink" title="Nginx越界读取缓存漏洞（CVE-2017-7529）"></a>Nginx越界读取缓存漏洞（CVE-2017-7529）</h1><h2 id="漏洞原理"><a href="#漏洞原理" class="headerlink" title="漏洞原理"></a>漏洞原理</h2><p>参考阅读：</p>
-<ul>
-<li><a href="https://cert.360.cn/detailnews.html?id=b879782fbad4a7f773b6c18490d67ac7" target="_blank" rel="noopener">https://cert.360.cn/detailnews.html?id=b879782fbad4a7f773b6c18490d67ac7</a></li>
-<li><a href="http://galaxylab.org/cve-2017-7529-nginx整数溢出漏洞分析/" target="_blank" rel="noopener">http://galaxylab.org/cve-2017-7529-nginx%E6%95%B4%E6%95%B0%E6%BA%A2%E5%87%BA%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/</a></li>
-</ul>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2021/11/10/Nginx%E8%B6%8A%E7%95%8C%E8%AF%BB%E5%8F%96%E7%BC%93%E5%AD%98%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2017-7529%EF%BC%89/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://joker-vip.github.io/2021/11/10/Nginx%20%E6%96%87%E4%BB%B6%E5%90%8D%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2013-4547%EF%BC%89/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="joker0xxx3">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/header.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="joker0xxx3's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2021/11/10/Nginx%20%E6%96%87%E4%BB%B6%E5%90%8D%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2013-4547%EF%BC%89/" itemprop="url">Nginx 文件名逻辑漏洞（CVE-2013-4547）</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-		    
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-11-10T12:30:35+08:00">
-                2021-11-10
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/" itemprop="url" rel="index">
-                    <span itemprop="name">漏洞复现</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h1 id="Nginx-文件名逻辑漏洞（CVE-2013-4547）"><a href="#Nginx-文件名逻辑漏洞（CVE-2013-4547）" class="headerlink" title="Nginx 文件名逻辑漏洞（CVE-2013-4547）"></a>Nginx 文件名逻辑漏洞（CVE-2013-4547）</h1><p>影响版本：Nginx 0.8.41 ~ 1.4.3 / 1.5.0 ~ 1.5.7</p>
-<p>参考链接：</p>
-<ul>
-<li><a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2013-4547" target="_blank" rel="noopener">http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2013-4547</a></li>
-<li><a href="https://blog.werner.wiki/file-resolution-vulnerability-nginx/" target="_blank" rel="noopener">https://blog.werner.wiki/file-resolution-vulnerability-nginx/</a></li>
-<li><a href="http://www.91ri.org/9064.html" target="_blank" rel="noopener">http://www.91ri.org/9064.html</a></li>
-</ul>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2021/11/10/Nginx%20%E6%96%87%E4%BB%B6%E5%90%8D%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2013-4547%EF%BC%89/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://joker-vip.github.io/2021/11/01/Mysql%20%E8%BA%AB%E4%BB%BD%E8%AE%A4%E8%AF%81%E7%BB%95%E8%BF%87%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2012-2122%EF%BC%89/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="joker0xxx3">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/header.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="joker0xxx3's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2021/11/01/Mysql%20%E8%BA%AB%E4%BB%BD%E8%AE%A4%E8%AF%81%E7%BB%95%E8%BF%87%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2012-2122%EF%BC%89/" itemprop="url">Mysql 身份认证绕过漏洞（CVE-2012-2122）</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-		    
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-11-01T15:30:35+08:00">
-                2021-11-01
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/" itemprop="url" rel="index">
-                    <span itemprop="name">漏洞复现</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h1 id="Mysql-身份认证绕过漏洞（CVE-2012-2122）"><a href="#Mysql-身份认证绕过漏洞（CVE-2012-2122）" class="headerlink" title="Mysql 身份认证绕过漏洞（CVE-2012-2122）"></a>Mysql 身份认证绕过漏洞（CVE-2012-2122）</h1><p>当连接MariaDB/MySQL时，输入的密码会与期望的正确密码比较，由于不正确的处理，会导致即便是memcmp()返回一个非零值，也会使MySQL认为两个密码是相同的。也就是说只要知道用户名，不断尝试就能够直接登入SQL数据库。</p>
-<p>受影响版本：</p>
-<ul>
-<li>来自 5.1.62、5.2.12、5.3.6、5.5.23 的 MariaDB 版本不是。</li>
-<li>5.1.63、5.5.24、5.6.6 的 MySQL 版本不是。</li>
-</ul>
-<p>参考链接：</p>
-<ul>
-<li><a href="http://www.freebuf.com/vuls/3815.html" target="_blank" rel="noopener">http://www.freebuf.com/vuls/3815.html</a></li>
-<li><a href="https://blog.rapid7.com/2012/06/11/cve-2012-2122-a-tragically-comedic-security-flaw-in-mysql/" target="_blank" rel="noopener">https://blog.rapid7.com/2012/06/11/cve-2012-2122-a-tragically-comedic-security-flaw-in-mysql/</a></li>
-</ul>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2021/11/01/Mysql%20%E8%BA%AB%E4%BB%BD%E8%AE%A4%E8%AF%81%E7%BB%95%E8%BF%87%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2012-2122%EF%BC%89/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://joker-vip.github.io/2021/11/01/libssh%20%E8%BA%AB%E4%BB%BD%E9%AA%8C%E8%AF%81%E7%BB%95%E8%BF%87%E6%BC%8F%E6%B4%9E(CVE-2018-10933)/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="joker0xxx3">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/header.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="joker0xxx3's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2021/11/01/libssh%20%E8%BA%AB%E4%BB%BD%E9%AA%8C%E8%AF%81%E7%BB%95%E8%BF%87%E6%BC%8F%E6%B4%9E(CVE-2018-10933)/" itemprop="url">libssh 身份验证绕过漏洞(CVE-2018-10933)</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-		    
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-11-01T14:30:35+08:00">
-                2021-11-01
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/" itemprop="url" rel="index">
-                    <span itemprop="name">漏洞复现</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h1 id="libssh-身份验证绕过漏洞-CVE-2018-10933"><a href="#libssh-身份验证绕过漏洞-CVE-2018-10933" class="headerlink" title="libssh 身份验证绕过漏洞(CVE-2018-10933)"></a>libssh 身份验证绕过漏洞(CVE-2018-10933)</h1><p>libssh 是一个在客户端和服务器端实现 SSHv2 协议的多平台 C 库。在 libssh 的服务器端状态机中发现了一个逻辑漏洞。攻击者可以<code>MSG_USERAUTH_SUCCESS</code>在认证成功之前发送消息。这可以绕过身份验证并访问目标 SSH 服务器。</p>
+          <h1 id="PHP-本地文件包含-RCE-与-PHPINFO"><a href="#PHP-本地文件包含-RCE-与-PHPINFO" class="headerlink" title="PHP 本地文件包含 RCE 与 PHPINFO"></a>PHP 本地文件包含 RCE 与 PHPINFO</h1><p>在PHP文件包含漏洞中，当我们找不到一个有效的文件来包含触发RCE时，如果存在PHPINFO可以告诉我们临时文件的随机生成的文件名及其位置，我们可能能够包含一个临时文件来利用它.</p>
 <p>参考：</p>
 <ul>
-<li><a href="https://www.libssh.org/security/advisories/CVE-2018-10933.txt" target="_blank" rel="noopener">https://www.libssh.org/security/advisories/CVE-2018-10933.txt</a></li>
-<li><a href="https://www.seebug.org/vuldb/ssvid-97614" target="_blank" rel="noopener">https://www.seebug.org/vuldb/ssvid-97614</a></li>
+<li><a href="https://dl.packetstormsecurity.net/papers/general/LFI_With_PHPInfo_Assitance.pdf" target="_blank" rel="noopener">https://dl.packetstormsecurity.net/papers/general/LFI_With_PHPInfo_Assitance.pdf</a></li>
 </ul>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2021/11/01/libssh%20%E8%BA%AB%E4%BB%BD%E9%AA%8C%E8%AF%81%E7%BB%95%E8%BF%87%E6%BC%8F%E6%B4%9E(CVE-2018-10933)/#more" rel="contents">
+            <a class="btn" href="/2021/12/05/PHP%20%E6%9C%AC%E5%9C%B0%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%20RCE%20%E4%B8%8E%20PHPINFO/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://joker-vip.github.io/2021/12/05/PHP-FPM%20%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%20(CVE-2019-11043)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="joker0xxx3">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/header.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="joker0xxx3's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2021/12/05/PHP-FPM%20%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%20(CVE-2019-11043)/" itemprop="url">PHP-FPM 远程命令执行 (CVE-2019-11043)</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+		    
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-12-05T15:30:35+08:00">
+                2021-12-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/" itemprop="url" rel="index">
+                    <span itemprop="name">漏洞复现</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="PHP-FPM-远程命令执行-CVE-2019-11043"><a href="#PHP-FPM-远程命令执行-CVE-2019-11043" class="headerlink" title="PHP-FPM 远程命令执行 (CVE-2019-11043)"></a>PHP-FPM 远程命令执行 (CVE-2019-11043)</h1><p>在 Real World CTF 2019 Quals 中发现了一个 PHP 远程代码执行 0-Day。</p>
+<blockquote>
+<p>Real World CTF 2019 Quals 是由长亭科技在中国举办的 CTF 挑战赛。</p>
+</blockquote>
+<p>参考：</p>
+<ul>
+<li><a href="https://bugs.php.net/bug.php?id=78599" target="_blank" rel="noopener">https://bugs.php.net/bug.php?id=78599</a></li>
+<li><a href="https://lab.wallarm.com/php-remote-code-execution-0-day-discovered-in-real-world-ctf-exercise/" target="_blank" rel="noopener">https://lab.wallarm.com/php-remote-code-execution-0-day-discovered-in-real-world-ctf-exercise/</a></li>
+<li><a href="https://github.com/neex/phuip-fpizdam" target="_blank" rel="noopener">https://github.com/neex/phuip-fpizdam</a></li>
+</ul>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2021/12/05/PHP-FPM%20%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%20(CVE-2019-11043)/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://joker-vip.github.io/2021/12/05/PHP%20imap%20%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2018-19518%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="joker0xxx3">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/header.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="joker0xxx3's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2021/12/05/PHP%20imap%20%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2018-19518%EF%BC%89/" itemprop="url">PHP imap 远程命令执行漏洞（CVE-2018-19518）</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+		    
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-12-05T14:30:35+08:00">
+                2021-12-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/" itemprop="url" rel="index">
+                    <span itemprop="name">漏洞复现</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="PHP-imap-远程命令执行漏洞（CVE-2018-19518）"><a href="#PHP-imap-远程命令执行漏洞（CVE-2018-19518）" class="headerlink" title="PHP imap 远程命令执行漏洞（CVE-2018-19518）"></a>PHP imap 远程命令执行漏洞（CVE-2018-19518）</h1><p>php imap扩展用于在PHP中执行邮件收发操作。其<code>imap_open</code>函数会调用rsh来连接远程shell，而debian/ubuntu中默认使用ssh来代替rsh的功能（也就是说，在debian系列系统中，执行rsh命令实际执行的是ssh命令）。</p>
+<p>因为ssh命令中可以通过设置<code>-oProxyCommand=</code>来调用第三方命令，攻击者通过注入注入这个参数，最终将导致命令执行漏洞。</p>
+<p>参考链接：</p>
+<ul>
+<li><a href="https://bugs.php.net/bug.php?id=77153" target="_blank" rel="noopener">https://bugs.php.net/bug.php?id=77153</a></li>
+<li><a href="https://github.com/Bo0oM/PHP_imap_open_exploit" target="_blank" rel="noopener">https://github.com/Bo0oM/PHP_imap_open_exploit</a></li>
+<li><a href="https://antichat.com/threads/463395/#post-4254681" target="_blank" rel="noopener">https://antichat.com/threads/463395/#post-4254681</a></li>
+<li><a href="https://nvd.nist.gov/vuln/detail/CVE-2018-19518" target="_blank" rel="noopener">https://nvd.nist.gov/vuln/detail/CVE-2018-19518</a></li>
+</ul>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2021/12/05/PHP%20imap%20%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2018-19518%EF%BC%89/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://joker-vip.github.io/2021/12/05/PHP-CGI%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2012-1823%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="joker0xxx3">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/header.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="joker0xxx3's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2021/12/05/PHP-CGI%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2012-1823%EF%BC%89/" itemprop="url">PHP-CGI远程代码执行漏洞（CVE-2012-1823）</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+		    
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-12-05T13:30:35+08:00">
+                2021-12-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/" itemprop="url" rel="index">
+                    <span itemprop="name">漏洞复现</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="PHP-CGI远程代码执行漏洞（CVE-2012-1823）"><a href="#PHP-CGI远程代码执行漏洞（CVE-2012-1823）" class="headerlink" title="PHP-CGI远程代码执行漏洞（CVE-2012-1823）"></a>PHP-CGI远程代码执行漏洞（CVE-2012-1823）</h1><h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><ul>
+<li>参考文章 <a href="http://eindbazen.net/2012/05/php-cgi-advisory-cve-2012-1823/" target="_blank" rel="noopener">http://eindbazen.net/2012/05/php-cgi-advisory-cve-2012-1823/</a></li>
+<li>影响版本 php &lt; 5.3.12 or php &lt; 5.4.2</li>
+</ul>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2021/12/05/PHP-CGI%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2012-1823%EF%BC%89/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://joker-vip.github.io/2021/12/05/PHP%208.1.0-dev%20User-Agentt%20%E5%90%8E%E9%97%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="joker0xxx3">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/header.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="joker0xxx3's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2021/12/05/PHP%208.1.0-dev%20User-Agentt%20%E5%90%8E%E9%97%A8/" itemprop="url">PHP 8.1.0-dev User-Agentt 后门</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+		    
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-12-05T12:30:35+08:00">
+                2021-12-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/" itemprop="url" rel="index">
+                    <span itemprop="name">漏洞复现</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="PHP-8-1-0-dev-User-Agentt-后门"><a href="#PHP-8-1-0-dev-User-Agentt-后门" class="headerlink" title="PHP 8.1.0-dev User-Agentt 后门"></a>PHP 8.1.0-dev User-Agentt 后门</h1><p>PHP 8.1.0-dev 版本于 2021 年 3 月 28 日被植入后门，但后门很快被发现并移除。当服务器上存在此后门时，攻击者可以通过发送<strong>User-Agentt</strong>标头来执行任意代码。</p>
+<p>参考：</p>
+<ul>
+<li><a href="https://news-web.php.net/php.internals/113838" target="_blank" rel="noopener">https://news-web.php.net/php.internals/113838</a></li>
+<li><a href="https://github.com/php/php-src/commit/c730aa26bd52829a49f2ad284b181b7e82a68d7d" target="_blank" rel="noopener">https://github.com/php/php-src/commit/c730aa26bd52829a49f2ad284b181b7e82a68d7d</a></li>
+<li><a href="https://github.com/php/php-src/commit/2b0f239b211c7544ebc7a4cd2c977a5b7a11ed8a" target="_blank" rel="noopener">https://github.com/php/php-src/commit/2b0f239b211c7544ebc7a4cd2c977a5b7a11ed8a</a></li>
+</ul>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2021/12/05/PHP%208.1.0-dev%20User-Agentt%20%E5%90%8E%E9%97%A8/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://joker-vip.github.io/2021/11/11/OpenSMTPD%20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%20(CVE-2020-7247)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="joker0xxx3">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/header.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="joker0xxx3's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2021/11/11/OpenSMTPD%20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%20(CVE-2020-7247)/" itemprop="url">OpenSMTPD 远程代码执行漏洞 (CVE-2020-7247)</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+		    
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-11-11T16:30:35+08:00">
+                2021-11-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/" itemprop="url" rel="index">
+                    <span itemprop="name">漏洞复现</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="OpenSMTPD-远程代码执行漏洞-CVE-2020-7247"><a href="#OpenSMTPD-远程代码执行漏洞-CVE-2020-7247" class="headerlink" title="OpenSMTPD 远程代码执行漏洞 (CVE-2020-7247)"></a>OpenSMTPD 远程代码执行漏洞 (CVE-2020-7247)</h1><p>OpenSMTPD 是一个适用于 unix 操作系统（BSD、MacOS、GNU/Linux）的 smtp 服务程序，遵循 RFC 5321 SMTP 协议。OpenSMTPD 最初是为 OpenBSD 操作系统开发的，是 OpenBSD 项目的一部分。由于其开源特性，已分发到其他 unix 平台。根据 ISC 许可证，该软件可供所有人免费使用和重复使用。</p>
+<p><code>CVE-2020-7247</code> 是由于 OpenSMTPD 在实施 RFC 5321 的过程中对发件人/收件人的验证不严造成的。</p>
+<p>2020 年 1 月 29 日，OpenSMTPD 小组正式提交了<code>CVE-2020-7247</code>GitHub 存储库中的 修复程序。修复后对应的版本是<code>OpenSMTPD 6.6.2p1</code>.</p>
+<p><strong>参考：</strong></p>
+<ul>
+<li><a href="https://www.qualys.com/2020/01/28/cve-2020-7247/lpe-rce-opensmtpd.txt" target="_blank" rel="noopener">https://www.qualys.com/2020/01/28/cve-2020-7247/lpe-rce-opensmtpd.txt</a></li>
+<li><a href="https://www.exploit-db.com/exploits/47984" target="_blank" rel="noopener">https://www.exploit-db.com/exploits/47984</a></li>
+<li><a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2020-7247" target="_blank" rel="noopener">https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2020-7247</a></li>
+<li><a href="https://www.anquanke.com/post/id/197689" target="_blank" rel="noopener">https://www.anquanke.com/post/id/197689</a></li>
+</ul>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2021/11/11/OpenSMTPD%20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%20(CVE-2020-7247)/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://joker-vip.github.io/2021/11/11/ApacheOfBiz%20%E4%B8%AD%20XMLRPC%20%E5%8F%82%E6%95%B0%E7%9A%84%E4%B8%8D%E5%AE%89%E5%85%A8%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%20(CVE-2020-9496)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="joker0xxx3">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/header.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="joker0xxx3's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2021/11/11/ApacheOfBiz%20%E4%B8%AD%20XMLRPC%20%E5%8F%82%E6%95%B0%E7%9A%84%E4%B8%8D%E5%AE%89%E5%85%A8%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%20(CVE-2020-9496)/" itemprop="url">ApacheOfBiz 中 XMLRPC 参数的不安全反序列化 (CVE-2020-9496)</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+		    
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-11-11T15:30:35+08:00">
+                2021-11-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/" itemprop="url" rel="index">
+                    <span itemprop="name">漏洞复现</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="ApacheOfBiz-中-XMLRPC-参数的不安全反序列化-CVE-2020-9496"><a href="#ApacheOfBiz-中-XMLRPC-参数的不安全反序列化-CVE-2020-9496" class="headerlink" title="ApacheOfBiz 中 XMLRPC 参数的不安全反序列化 (CVE-2020-9496)"></a>ApacheOfBiz 中 XMLRPC 参数的不安全反序列化 (CVE-2020-9496)</h1><p>Apache OFBiz 是一个开源的企业资源规划 (ERP) 系统。它提供了一套企业应用程序，可以集成和自动化企业的许多业务流程。</p>
+<p>OfBiz 在 处公开一个 XMLRPC 端点<code>/webtools/control/xmlrpc</code>。这是一个未经身份验证的端点，因为身份验证是基于每个服务应用的。但是，XMLRPC 请求是在身份验证之前处理的。作为此处理的一部分，远程调用的任何序列化参数都被反序列化，因此如果类路径包含任何可用作实现远程代码执行的小工具的类，攻击者将能够在任何 OfBiz 服务器上运行任意系统命令与运行 OfBiz 的 servlet 容器具有相同的权限。</p>
+<p>参考：</p>
+<ol>
+<li><a href="https://securitylab.github.com/advisories/GHSL-2020-069-apache_ofbiz" target="_blank" rel="noopener">https://securitylab.github.com/advisories/GHSL-2020-069-apache_ofbiz</a></li>
+<li><a href="https://github.com/dwisiswant0/CVE-2020-9496" target="_blank" rel="noopener">https://github.com/dwisiswant0/CVE-2020-9496</a></li>
+<li><a href="https://www.cnblogs.com/ph4nt0mer/p/13576739.html" target="_blank" rel="noopener">https://www.cnblogs.com/ph4nt0mer/p/13576739.html</a></li>
+</ol>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2021/11/11/ApacheOfBiz%20%E4%B8%AD%20XMLRPC%20%E5%8F%82%E6%95%B0%E7%9A%84%E4%B8%8D%E5%AE%89%E5%85%A8%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%20(CVE-2020-9496)/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1808,7 +1818,7 @@
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/2/">&gt;</a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/2/">&gt;</a>
   </nav>
 
 
@@ -1856,7 +1866,7 @@
             
               <div class="site-state-item site-state-posts">
                 <a href="/archives">
-                  <span class="site-state-item-count">88</span>
+                  <span class="site-state-item-count">97</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1878,7 +1888,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">64</span>
+                  <span class="site-state-item-count">67</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

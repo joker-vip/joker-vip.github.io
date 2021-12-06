@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://joker-vip.github.io/"/>
-  <updated>2021-11-15T05:30:25.162Z</updated>
+  <updated>2021-12-06T11:03:39.467Z</updated>
   <id>http://joker-vip.github.io/</id>
   
   <author>
@@ -15,6 +15,272 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>XDebug 远程调试漏洞（代码执行）</title>
+    <link href="http://joker-vip.github.io/2021/12/06/XDebug%20%E8%BF%9C%E7%A8%8B%E8%B0%83%E8%AF%95%E6%BC%8F%E6%B4%9E%EF%BC%88%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%EF%BC%89/"/>
+    <id>http://joker-vip.github.io/2021/12/06/XDebug%20%E8%BF%9C%E7%A8%8B%E8%B0%83%E8%AF%95%E6%BC%8F%E6%B4%9E%EF%BC%88%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%EF%BC%89/</id>
+    <published>2021-12-06T05:30:35.000Z</published>
+    <updated>2021-12-06T11:03:39.467Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;XDebug-远程调试漏洞（代码执行）&quot;&gt;&lt;a href=&quot;#XDebug-远程调试漏洞（代码执行）&quot; class=&quot;headerlink&quot; title=&quot;XDebug 远程调试漏洞（代码执行）&quot;&gt;&lt;/a&gt;XDebug 远程调试漏洞（代码执行）&lt;/h1&gt;&lt;p&gt;XDebug是PHP的一个扩展，用于调试PHP代码。如果目标开启了远程调试模式，并设置&lt;code&gt;remote_connect_back = 1&lt;/code&gt;：&lt;/p&gt;
+&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;xdebug.remote_connect_back &amp;#x3D; 1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;xdebug.remote_enable &amp;#x3D; 1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+
+&lt;p&gt;这个配置下，我们访问&lt;code&gt;http://target/index.php?XDEBUG_SESSION_START=phpstorm&lt;/code&gt;，目标服务器的XDebug将会连接访问者的IP（或&lt;code&gt;X-Forwarded-For&lt;/code&gt;头指定的地址）并通过dbgp协议与其通信，我们通过dbgp中提供的eval方法即可在目标服务器上执行任意PHP代码。&lt;/p&gt;
+&lt;p&gt;更多说明可参考：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;[&lt;a href=&quot;https://ricterz.me/posts/Xdebug%3A%20A%20Tiny%20Attack%20Surface]&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://ricterz.me/posts/Xdebug%3A%20A%20Tiny%20Attack%20Surface]&lt;/a&gt;(&lt;a href=&quot;https://ricterz.me/posts/Xdebug%3A&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://ricterz.me/posts/Xdebug%3A&lt;/a&gt; A Tiny Attack Surface)&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://xdebug.org/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://xdebug.org&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+    
+    </summary>
+    
+    
+      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
+    
+    
+      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
+    
+      <category term="php" scheme="http://joker-vip.github.io/tags/php/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>PHP环境 XML外部实体注入漏洞（XXE）</title>
+    <link href="http://joker-vip.github.io/2021/12/06/PHP%E7%8E%AF%E5%A2%83%20XML%E5%A4%96%E9%83%A8%E5%AE%9E%E4%BD%93%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E%EF%BC%88XXE%EF%BC%89/"/>
+    <id>http://joker-vip.github.io/2021/12/06/PHP%E7%8E%AF%E5%A2%83%20XML%E5%A4%96%E9%83%A8%E5%AE%9E%E4%BD%93%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E%EF%BC%88XXE%EF%BC%89/</id>
+    <published>2021-12-06T04:30:35.000Z</published>
+    <updated>2021-12-06T11:03:01.615Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;PHP环境-XML外部实体注入漏洞（XXE）&quot;&gt;&lt;a href=&quot;#PHP环境-XML外部实体注入漏洞（XXE）&quot; class=&quot;headerlink&quot; title=&quot;PHP环境 XML外部实体注入漏洞（XXE）&quot;&gt;&lt;/a&gt;PHP环境 XML外部实体注入漏洞（XXE）&lt;/h1&gt;&lt;p&gt;环境介绍：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;PHP 7.0.30&lt;/li&gt;
+&lt;li&gt;libxml 2.8.0&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;libxml2.9.0以后，默认不解析外部实体，导致XXE漏洞逐渐消亡。为了演示PHP环境下的XXE漏洞，本例会将libxml2.8.0版本编译进PHP中。PHP版本并不影响XXE利用。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
+    
+    
+      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
+    
+      <category term="php" scheme="http://joker-vip.github.io/tags/php/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>PHP 本地文件包含 RCE 与 PHPINFO</title>
+    <link href="http://joker-vip.github.io/2021/12/05/PHP%20%E6%9C%AC%E5%9C%B0%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%20RCE%20%E4%B8%8E%20PHPINFO/"/>
+    <id>http://joker-vip.github.io/2021/12/05/PHP%20%E6%9C%AC%E5%9C%B0%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%20RCE%20%E4%B8%8E%20PHPINFO/</id>
+    <published>2021-12-05T08:30:35.000Z</published>
+    <updated>2021-12-06T11:02:16.403Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;PHP-本地文件包含-RCE-与-PHPINFO&quot;&gt;&lt;a href=&quot;#PHP-本地文件包含-RCE-与-PHPINFO&quot; class=&quot;headerlink&quot; title=&quot;PHP 本地文件包含 RCE 与 PHPINFO&quot;&gt;&lt;/a&gt;PHP 本地文件包含 RCE 与 PHPINFO&lt;/h1&gt;&lt;p&gt;在PHP文件包含漏洞中，当我们找不到一个有效的文件来包含触发RCE时，如果存在PHPINFO可以告诉我们临时文件的随机生成的文件名及其位置，我们可能能够包含一个临时文件来利用它.&lt;/p&gt;
+&lt;p&gt;参考：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://dl.packetstormsecurity.net/papers/general/LFI_With_PHPInfo_Assitance.pdf&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://dl.packetstormsecurity.net/papers/general/LFI_With_PHPInfo_Assitance.pdf&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+    
+    </summary>
+    
+    
+      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
+    
+    
+      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
+    
+      <category term="php" scheme="http://joker-vip.github.io/tags/php/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>PHP-FPM 远程命令执行 (CVE-2019-11043)</title>
+    <link href="http://joker-vip.github.io/2021/12/05/PHP-FPM%20%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%20(CVE-2019-11043)/"/>
+    <id>http://joker-vip.github.io/2021/12/05/PHP-FPM%20%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%20(CVE-2019-11043)/</id>
+    <published>2021-12-05T07:30:35.000Z</published>
+    <updated>2021-12-06T11:01:27.326Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;PHP-FPM-远程命令执行-CVE-2019-11043&quot;&gt;&lt;a href=&quot;#PHP-FPM-远程命令执行-CVE-2019-11043&quot; class=&quot;headerlink&quot; title=&quot;PHP-FPM 远程命令执行 (CVE-2019-11043)&quot;&gt;&lt;/a&gt;PHP-FPM 远程命令执行 (CVE-2019-11043)&lt;/h1&gt;&lt;p&gt;在 Real World CTF 2019 Quals 中发现了一个 PHP 远程代码执行 0-Day。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Real World CTF 2019 Quals 是由长亭科技在中国举办的 CTF 挑战赛。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;参考：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://bugs.php.net/bug.php?id=78599&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://bugs.php.net/bug.php?id=78599&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://lab.wallarm.com/php-remote-code-execution-0-day-discovered-in-real-world-ctf-exercise/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://lab.wallarm.com/php-remote-code-execution-0-day-discovered-in-real-world-ctf-exercise/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/neex/phuip-fpizdam&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://github.com/neex/phuip-fpizdam&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+    
+    </summary>
+    
+    
+      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
+    
+    
+      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
+    
+      <category term="php" scheme="http://joker-vip.github.io/tags/php/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>PHP imap 远程命令执行漏洞（CVE-2018-19518）</title>
+    <link href="http://joker-vip.github.io/2021/12/05/PHP%20imap%20%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2018-19518%EF%BC%89/"/>
+    <id>http://joker-vip.github.io/2021/12/05/PHP%20imap%20%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2018-19518%EF%BC%89/</id>
+    <published>2021-12-05T06:30:35.000Z</published>
+    <updated>2021-12-06T11:00:48.212Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;PHP-imap-远程命令执行漏洞（CVE-2018-19518）&quot;&gt;&lt;a href=&quot;#PHP-imap-远程命令执行漏洞（CVE-2018-19518）&quot; class=&quot;headerlink&quot; title=&quot;PHP imap 远程命令执行漏洞（CVE-2018-19518）&quot;&gt;&lt;/a&gt;PHP imap 远程命令执行漏洞（CVE-2018-19518）&lt;/h1&gt;&lt;p&gt;php imap扩展用于在PHP中执行邮件收发操作。其&lt;code&gt;imap_open&lt;/code&gt;函数会调用rsh来连接远程shell，而debian/ubuntu中默认使用ssh来代替rsh的功能（也就是说，在debian系列系统中，执行rsh命令实际执行的是ssh命令）。&lt;/p&gt;
+&lt;p&gt;因为ssh命令中可以通过设置&lt;code&gt;-oProxyCommand=&lt;/code&gt;来调用第三方命令，攻击者通过注入注入这个参数，最终将导致命令执行漏洞。&lt;/p&gt;
+&lt;p&gt;参考链接：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://bugs.php.net/bug.php?id=77153&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://bugs.php.net/bug.php?id=77153&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/Bo0oM/PHP_imap_open_exploit&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://github.com/Bo0oM/PHP_imap_open_exploit&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://antichat.com/threads/463395/#post-4254681&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://antichat.com/threads/463395/#post-4254681&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://nvd.nist.gov/vuln/detail/CVE-2018-19518&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://nvd.nist.gov/vuln/detail/CVE-2018-19518&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+    
+    </summary>
+    
+    
+      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
+    
+    
+      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
+    
+      <category term="php" scheme="http://joker-vip.github.io/tags/php/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>PHP-CGI远程代码执行漏洞（CVE-2012-1823）</title>
+    <link href="http://joker-vip.github.io/2021/12/05/PHP-CGI%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2012-1823%EF%BC%89/"/>
+    <id>http://joker-vip.github.io/2021/12/05/PHP-CGI%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2012-1823%EF%BC%89/</id>
+    <published>2021-12-05T05:30:35.000Z</published>
+    <updated>2021-12-06T10:59:59.891Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;PHP-CGI远程代码执行漏洞（CVE-2012-1823）&quot;&gt;&lt;a href=&quot;#PHP-CGI远程代码执行漏洞（CVE-2012-1823）&quot; class=&quot;headerlink&quot; title=&quot;PHP-CGI远程代码执行漏洞（CVE-2012-1823）&quot;&gt;&lt;/a&gt;PHP-CGI远程代码执行漏洞（CVE-2012-1823）&lt;/h1&gt;&lt;h2 id=&quot;原理&quot;&gt;&lt;a href=&quot;#原理&quot; class=&quot;headerlink&quot; title=&quot;原理&quot;&gt;&lt;/a&gt;原理&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;参考文章 &lt;a href=&quot;http://eindbazen.net/2012/05/php-cgi-advisory-cve-2012-1823/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;http://eindbazen.net/2012/05/php-cgi-advisory-cve-2012-1823/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;影响版本 php &amp;lt; 5.3.12 or php &amp;lt; 5.4.2&lt;/li&gt;
+&lt;/ul&gt;
+    
+    </summary>
+    
+    
+      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
+    
+    
+      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
+    
+      <category term="php" scheme="http://joker-vip.github.io/tags/php/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>PHP 8.1.0-dev User-Agentt 后门</title>
+    <link href="http://joker-vip.github.io/2021/12/05/PHP%208.1.0-dev%20User-Agentt%20%E5%90%8E%E9%97%A8/"/>
+    <id>http://joker-vip.github.io/2021/12/05/PHP%208.1.0-dev%20User-Agentt%20%E5%90%8E%E9%97%A8/</id>
+    <published>2021-12-05T04:30:35.000Z</published>
+    <updated>2021-12-06T10:59:03.028Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;PHP-8-1-0-dev-User-Agentt-后门&quot;&gt;&lt;a href=&quot;#PHP-8-1-0-dev-User-Agentt-后门&quot; class=&quot;headerlink&quot; title=&quot;PHP 8.1.0-dev User-Agentt 后门&quot;&gt;&lt;/a&gt;PHP 8.1.0-dev User-Agentt 后门&lt;/h1&gt;&lt;p&gt;PHP 8.1.0-dev 版本于 2021 年 3 月 28 日被植入后门，但后门很快被发现并移除。当服务器上存在此后门时，攻击者可以通过发送&lt;strong&gt;User-Agentt&lt;/strong&gt;标头来执行任意代码。&lt;/p&gt;
+&lt;p&gt;参考：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://news-web.php.net/php.internals/113838&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://news-web.php.net/php.internals/113838&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/php/php-src/commit/c730aa26bd52829a49f2ad284b181b7e82a68d7d&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://github.com/php/php-src/commit/c730aa26bd52829a49f2ad284b181b7e82a68d7d&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/php/php-src/commit/2b0f239b211c7544ebc7a4cd2c977a5b7a11ed8a&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://github.com/php/php-src/commit/2b0f239b211c7544ebc7a4cd2c977a5b7a11ed8a&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+    
+    </summary>
+    
+    
+      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
+    
+    
+      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
+    
+      <category term="php" scheme="http://joker-vip.github.io/tags/php/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>OpenSMTPD 远程代码执行漏洞 (CVE-2020-7247)</title>
+    <link href="http://joker-vip.github.io/2021/11/11/OpenSMTPD%20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%20(CVE-2020-7247)/"/>
+    <id>http://joker-vip.github.io/2021/11/11/OpenSMTPD%20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%20(CVE-2020-7247)/</id>
+    <published>2021-11-11T08:30:35.000Z</published>
+    <updated>2021-11-16T08:26:02.891Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;OpenSMTPD-远程代码执行漏洞-CVE-2020-7247&quot;&gt;&lt;a href=&quot;#OpenSMTPD-远程代码执行漏洞-CVE-2020-7247&quot; class=&quot;headerlink&quot; title=&quot;OpenSMTPD 远程代码执行漏洞 (CVE-2020-7247)&quot;&gt;&lt;/a&gt;OpenSMTPD 远程代码执行漏洞 (CVE-2020-7247)&lt;/h1&gt;&lt;p&gt;OpenSMTPD 是一个适用于 unix 操作系统（BSD、MacOS、GNU/Linux）的 smtp 服务程序，遵循 RFC 5321 SMTP 协议。OpenSMTPD 最初是为 OpenBSD 操作系统开发的，是 OpenBSD 项目的一部分。由于其开源特性，已分发到其他 unix 平台。根据 ISC 许可证，该软件可供所有人免费使用和重复使用。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;CVE-2020-7247&lt;/code&gt; 是由于 OpenSMTPD 在实施 RFC 5321 的过程中对发件人/收件人的验证不严造成的。&lt;/p&gt;
+&lt;p&gt;2020 年 1 月 29 日，OpenSMTPD 小组正式提交了&lt;code&gt;CVE-2020-7247&lt;/code&gt;GitHub 存储库中的 修复程序。修复后对应的版本是&lt;code&gt;OpenSMTPD 6.6.2p1&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;参考：&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.qualys.com/2020/01/28/cve-2020-7247/lpe-rce-opensmtpd.txt&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://www.qualys.com/2020/01/28/cve-2020-7247/lpe-rce-opensmtpd.txt&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.exploit-db.com/exploits/47984&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://www.exploit-db.com/exploits/47984&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2020-7247&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2020-7247&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.anquanke.com/post/id/197689&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://www.anquanke.com/post/id/197689&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+    
+    </summary>
+    
+    
+      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
+    
+    
+      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
+    
+      <category term="OpenSMTPD" scheme="http://joker-vip.github.io/tags/OpenSMTPD/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>ApacheOfBiz 中 XMLRPC 参数的不安全反序列化 (CVE-2020-9496)</title>
+    <link href="http://joker-vip.github.io/2021/11/11/ApacheOfBiz%20%E4%B8%AD%20XMLRPC%20%E5%8F%82%E6%95%B0%E7%9A%84%E4%B8%8D%E5%AE%89%E5%85%A8%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%20(CVE-2020-9496)/"/>
+    <id>http://joker-vip.github.io/2021/11/11/ApacheOfBiz%20%E4%B8%AD%20XMLRPC%20%E5%8F%82%E6%95%B0%E7%9A%84%E4%B8%8D%E5%AE%89%E5%85%A8%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%20(CVE-2020-9496)/</id>
+    <published>2021-11-11T07:30:35.000Z</published>
+    <updated>2021-11-16T07:44:22.659Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;ApacheOfBiz-中-XMLRPC-参数的不安全反序列化-CVE-2020-9496&quot;&gt;&lt;a href=&quot;#ApacheOfBiz-中-XMLRPC-参数的不安全反序列化-CVE-2020-9496&quot; class=&quot;headerlink&quot; title=&quot;ApacheOfBiz 中 XMLRPC 参数的不安全反序列化 (CVE-2020-9496)&quot;&gt;&lt;/a&gt;ApacheOfBiz 中 XMLRPC 参数的不安全反序列化 (CVE-2020-9496)&lt;/h1&gt;&lt;p&gt;Apache OFBiz 是一个开源的企业资源规划 (ERP) 系统。它提供了一套企业应用程序，可以集成和自动化企业的许多业务流程。&lt;/p&gt;
+&lt;p&gt;OfBiz 在 处公开一个 XMLRPC 端点&lt;code&gt;/webtools/control/xmlrpc&lt;/code&gt;。这是一个未经身份验证的端点，因为身份验证是基于每个服务应用的。但是，XMLRPC 请求是在身份验证之前处理的。作为此处理的一部分，远程调用的任何序列化参数都被反序列化，因此如果类路径包含任何可用作实现远程代码执行的小工具的类，攻击者将能够在任何 OfBiz 服务器上运行任意系统命令与运行 OfBiz 的 servlet 容器具有相同的权限。&lt;/p&gt;
+&lt;p&gt;参考：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;a href=&quot;https://securitylab.github.com/advisories/GHSL-2020-069-apache_ofbiz&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://securitylab.github.com/advisories/GHSL-2020-069-apache_ofbiz&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/dwisiswant0/CVE-2020-9496&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://github.com/dwisiswant0/CVE-2020-9496&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.cnblogs.com/ph4nt0mer/p/13576739.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://www.cnblogs.com/ph4nt0mer/p/13576739.html&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+    
+    </summary>
+    
+    
+      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
+    
+    
+      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
+    
+      <category term="Apache OfBiz" scheme="http://joker-vip.github.io/tags/Apache-OfBiz/"/>
+    
+  </entry>
   
   <entry>
     <title>ntopng 身份验证绕过 (CVE-2021-28073)</title>
@@ -325,255 +591,6 @@
       <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
     
       <category term="Kibana" scheme="http://joker-vip.github.io/tags/Kibana/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Kibana 本地文件包含 (CVE-2018-17246)</title>
-    <link href="http://joker-vip.github.io/2021/10/28/Kibana%20%E6%9C%AC%E5%9C%B0%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%20(CVE-2018-17246)/"/>
-    <id>http://joker-vip.github.io/2021/10/28/Kibana%20%E6%9C%AC%E5%9C%B0%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%20(CVE-2018-17246)/</id>
-    <published>2021-10-28T04:30:35.000Z</published>
-    <updated>2021-10-28T05:55:36.914Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;Kibana-本地文件包含-CVE-2018-17246&quot;&gt;&lt;a href=&quot;#Kibana-本地文件包含-CVE-2018-17246&quot; class=&quot;headerlink&quot; title=&quot;Kibana 本地文件包含 (CVE-2018-17246)&quot;&gt;&lt;/a&gt;Kibana 本地文件包含 (CVE-2018-17246)&lt;/h1&gt;&lt;p&gt;Kibana 是一个用于 Elasticsearch 的开源数据可视化仪表板。&lt;/p&gt;
-&lt;p&gt;6.4.3 和 5.6.13 之前的 Kibana 版本在控制台插件中包含任意文件包含缺陷。有权访问 Kibana 控制台 API 的攻击者可以发送尝试执行 javascript 代码的请求。这可能会导致攻击者在主机系统上使用 Kibana 进程的权限执行任意命令。&lt;/p&gt;
-&lt;p&gt;参考：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://nvd.nist.gov/vuln/detail/CVE-2018-17246&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://nvd.nist.gov/vuln/detail/CVE-2018-17246&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://www.cyberark.com/threat-research-blog/execute-this-i-know-you-have-it/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://www.cyberark.com/threat-research-blog/execute-this-i-know-you-have-it/&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-    
-    </summary>
-    
-    
-      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    
-    
-      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
-    
-      <category term="Kibana" scheme="http://joker-vip.github.io/tags/Kibana/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Jupyter Notebook 未授权访问漏洞</title>
-    <link href="http://joker-vip.github.io/2021/08/23/Jupyter%20Notebook%20%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E/"/>
-    <id>http://joker-vip.github.io/2021/08/23/Jupyter%20Notebook%20%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E/</id>
-    <published>2021-08-23T08:30:35.000Z</published>
-    <updated>2021-08-24T11:03:05.970Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;Jupyter-Notebook-未授权访问漏洞&quot;&gt;&lt;a href=&quot;#Jupyter-Notebook-未授权访问漏洞&quot; class=&quot;headerlink&quot; title=&quot;Jupyter Notebook 未授权访问漏洞&quot;&gt;&lt;/a&gt;Jupyter Notebook 未授权访问漏洞&lt;/h1&gt;&lt;p&gt;Jupyter Notebook（此前被称为 IPython notebook）是一个交互式笔记本，支持运行 40 多种编程语言。&lt;/p&gt;
-&lt;p&gt;如果管理员未为Jupyter Notebook配置密码，将导致未授权访问漏洞，游客可在其中创建一个console并执行任意Python代码和命令。&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    
-    
-      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
-    
-      <category term="Jupyter" scheme="http://joker-vip.github.io/tags/Jupyter/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Joomla 3.7.0 (CVE-2017-8917) SQL注入漏洞</title>
-    <link href="http://joker-vip.github.io/2021/08/23/Joomla%203.7.0%20(CVE-2017-8917)%20SQL%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E/"/>
-    <id>http://joker-vip.github.io/2021/08/23/Joomla%203.7.0%20(CVE-2017-8917)%20SQL%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E/</id>
-    <published>2021-08-23T07:30:35.000Z</published>
-    <updated>2021-08-24T09:07:47.303Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;Joomla-3-7-0-CVE-2017-8917-SQL注入漏洞&quot;&gt;&lt;a href=&quot;#Joomla-3-7-0-CVE-2017-8917-SQL注入漏洞&quot; class=&quot;headerlink&quot; title=&quot;Joomla 3.7.0 (CVE-2017-8917) SQL注入漏洞&quot;&gt;&lt;/a&gt;Joomla 3.7.0 (CVE-2017-8917) SQL注入漏洞&lt;/h1&gt;&lt;p&gt;com_fields组件出现漏洞，com_fields组件是在3.7版本添加的，如果你使用此版本，将受到影响，并应尽快更新。这个组件可以公开访问，意味着任何能访问你站点的用户都可以发起攻击。&lt;/p&gt;
-&lt;p&gt;Joomla于5月17日发布了新版本3.7.1,（&lt;a href=&quot;https://www.joomla.org/announcements/release-news/5705-joomla-3-7-1-release.html），本次更新中修复一个高危SQL注入漏洞（https://developer.joomla.org/security-centre/692-20170501-core-sql-injection.html），成功利用该漏洞后攻击者可以在未授权的情况下进行SQL注入。&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://www.joomla.org/announcements/release-news/5705-joomla-3-7-1-release.html），本次更新中修复一个高危SQL注入漏洞（https://developer.joomla.org/security-centre/692-20170501-core-sql-injection.html），成功利用该漏洞后攻击者可以在未授权的情况下进行SQL注入。&lt;/a&gt;&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    
-    
-      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
-    
-      <category term="Joomla" scheme="http://joker-vip.github.io/tags/Joomla/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Joomla 3.4.5 反序列化漏洞（CVE-2015-8562）</title>
-    <link href="http://joker-vip.github.io/2021/08/23/Joomla%203.4.5%20%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2015-8562%EF%BC%89/"/>
-    <id>http://joker-vip.github.io/2021/08/23/Joomla%203.4.5%20%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2015-8562%EF%BC%89/</id>
-    <published>2021-08-23T06:30:35.000Z</published>
-    <updated>2021-08-24T09:07:49.547Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;Joomla-3-4-5-反序列化漏洞（CVE-2015-8562）&quot;&gt;&lt;a href=&quot;#Joomla-3-4-5-反序列化漏洞（CVE-2015-8562）&quot; class=&quot;headerlink&quot; title=&quot;Joomla 3.4.5 反序列化漏洞（CVE-2015-8562）&quot;&gt;&lt;/a&gt;Joomla 3.4.5 反序列化漏洞（CVE-2015-8562）&lt;/h1&gt;&lt;p&gt;本漏洞根源是PHP5.6.13前的版本在读取存储好的session时，如果反序列化出错则会跳过当前一段数据而去反序列化下一段数据。而Joomla将session存储在Mysql数据库中，编码是utf8，当我们插入4字节的utf8数据时则会导致截断。截断后的数据在反序列化时就会失败，最后触发反序列化漏洞。&lt;/p&gt;
-&lt;p&gt;通过Joomla中的Gadget，可造成任意代码执行的结果。&lt;/p&gt;
-&lt;p&gt;详情可参考：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://www.leavesongs.com/PENETRATION/joomla-unserialize-code-execute-vulnerability.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://www.leavesongs.com/PENETRATION/joomla-unserialize-code-execute-vulnerability.html&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;影响版本&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Joomla 1.5.x, 2.x, and 3.x before 3.4.6&lt;/li&gt;
-&lt;li&gt;PHP 5.6 &amp;lt; 5.6.13, PHP 5.5 &amp;lt; 5.5.29 and PHP 5.4 &amp;lt; 5.4.45&lt;/li&gt;
-&lt;/ul&gt;
-    
-    </summary>
-    
-    
-      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    
-    
-      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
-    
-      <category term="Joomla" scheme="http://joker-vip.github.io/tags/Joomla/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Jenkins-CI 远程代码执行漏洞（CVE-2017-1000353）</title>
-    <link href="http://joker-vip.github.io/2021/08/23/Jenkins-CI%20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2017-1000353%EF%BC%89/"/>
-    <id>http://joker-vip.github.io/2021/08/23/Jenkins-CI%20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2017-1000353%EF%BC%89/</id>
-    <published>2021-08-23T05:30:35.000Z</published>
-    <updated>2021-08-24T02:08:01.077Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;Jenkins-CI-远程代码执行漏洞（CVE-2017-1000353）&quot;&gt;&lt;a href=&quot;#Jenkins-CI-远程代码执行漏洞（CVE-2017-1000353）&quot; class=&quot;headerlink&quot; title=&quot;Jenkins-CI 远程代码执行漏洞（CVE-2017-1000353）&quot;&gt;&lt;/a&gt;Jenkins-CI 远程代码执行漏洞（CVE-2017-1000353）&lt;/h1&gt;&lt;h2 id=&quot;原理&quot;&gt;&lt;a href=&quot;#原理&quot; class=&quot;headerlink&quot; title=&quot;原理&quot;&gt;&lt;/a&gt;原理&lt;/h2&gt;&lt;p&gt;参考阅读 &lt;a href=&quot;https://blogs.securiteam.com/index.php/archives/3171&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://blogs.securiteam.com/index.php/archives/3171&lt;/a&gt;&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    
-    
-      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
-    
-      <category term="Jenkins" scheme="http://joker-vip.github.io/tags/Jenkins/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Jenkins远程命令执行漏洞（CVE-2018-1000861）</title>
-    <link href="http://joker-vip.github.io/2021/08/23/Jenkins%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2018-1000861%EF%BC%89/"/>
-    <id>http://joker-vip.github.io/2021/08/23/Jenkins%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2018-1000861%EF%BC%89/</id>
-    <published>2021-08-23T05:30:35.000Z</published>
-    <updated>2021-08-24T02:08:37.033Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;Jenkins远程命令执行漏洞（CVE-2018-1000861）&quot;&gt;&lt;a href=&quot;#Jenkins远程命令执行漏洞（CVE-2018-1000861）&quot; class=&quot;headerlink&quot; title=&quot;Jenkins远程命令执行漏洞（CVE-2018-1000861）&quot;&gt;&lt;/a&gt;Jenkins远程命令执行漏洞（CVE-2018-1000861）&lt;/h1&gt;&lt;p&gt;Jenkins使用Stapler框架开发，其允许用户通过URL PATH来调用一次public方法。由于这个过程没有做限制，攻击者可以构造一些特殊的PATH来执行一些敏感的Java方法。&lt;/p&gt;
-&lt;p&gt;通过这个漏洞，我们可以找到很多可供利用的利用链。其中最严重的就是绕过Groovy沙盒导致未授权用户可执行任意命令：Jenkins在沙盒中执行Groovy前会先检查脚本是否有错误，检查操作是没有沙盒的，攻击者可以通过Meta-Programming的方式，在检查这个步骤时执行任意命令。&lt;/p&gt;
-&lt;p&gt;参考链接：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;http://blog.orange.tw/2019/01/hacking-jenkins-part-1-play-with-dynamic-routing.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;http://blog.orange.tw/2019/01/hacking-jenkins-part-1-play-with-dynamic-routing.html&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;http://blog.orange.tw/2019/02/abusing-meta-programming-for-unauthenticated-rce.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;http://blog.orange.tw/2019/02/abusing-meta-programming-for-unauthenticated-rce.html&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://0xdf.gitlab.io/2019/02/27/playing-with-jenkins-rce-vulnerability.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://0xdf.gitlab.io/2019/02/27/playing-with-jenkins-rce-vulnerability.html&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-    
-    </summary>
-    
-    
-      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    
-    
-      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
-    
-      <category term="Jenkins" scheme="http://joker-vip.github.io/tags/Jenkins/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>JBoss 4.x JBossMQ JMS 反序列化漏洞（CVE-2017-7504）</title>
-    <link href="http://joker-vip.github.io/2021/08/23/JBoss%204.x%20JBossMQ%20JMS%20%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2017-7504%EF%BC%89/"/>
-    <id>http://joker-vip.github.io/2021/08/23/JBoss%204.x%20JBossMQ%20JMS%20%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2017-7504%EF%BC%89/</id>
-    <published>2021-08-23T04:30:35.000Z</published>
-    <updated>2021-08-23T09:02:48.901Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;JBoss-4-x-JBossMQ-JMS-反序列化漏洞（CVE-2017-7504）&quot;&gt;&lt;a href=&quot;#JBoss-4-x-JBossMQ-JMS-反序列化漏洞（CVE-2017-7504）&quot; class=&quot;headerlink&quot; title=&quot;JBoss 4.x JBossMQ JMS 反序列化漏洞（CVE-2017-7504）&quot;&gt;&lt;/a&gt;JBoss 4.x JBossMQ JMS 反序列化漏洞（CVE-2017-7504）&lt;/h1&gt;&lt;p&gt;Red Hat JBoss Application Server 是一款基于JavaEE的开源应用服务器。JBoss AS 4.x及之前版本中，JbossMQ实现过程的JMS over HTTP Invocation Layer的HTTPServerILServlet.java文件存在反序列化漏洞，远程攻击者可借助特制的序列化数据利用该漏洞执行任意代码。&lt;/p&gt;
-&lt;p&gt;参考：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://github.com/joaomatosf/JavaDeserH2HC&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://github.com/joaomatosf/JavaDeserH2HC&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://www.youtube.com/watch?v=jVMr4eeJ2Po&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://www.youtube.com/watch?v=jVMr4eeJ2Po&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-    
-    </summary>
-    
-    
-      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    
-    
-      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
-    
-      <category term="JBoss" scheme="http://joker-vip.github.io/tags/JBoss/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>JBoss 5.x/6.x 反序列化漏洞（CVE-2017-12149）</title>
-    <link href="http://joker-vip.github.io/2021/08/17/JBoss%205.x6.x%20%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2017-12149%EF%BC%89/"/>
-    <id>http://joker-vip.github.io/2021/08/17/JBoss%205.x6.x%20%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2017-12149%EF%BC%89/</id>
-    <published>2021-08-17T06:30:35.000Z</published>
-    <updated>2021-08-18T01:40:02.810Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;JBoss-5-x-6-x-反序列化漏洞（CVE-2017-12149）&quot;&gt;&lt;a href=&quot;#JBoss-5-x-6-x-反序列化漏洞（CVE-2017-12149）&quot; class=&quot;headerlink&quot; title=&quot;JBoss 5.x/6.x 反序列化漏洞（CVE-2017-12149）&quot;&gt;&lt;/a&gt;JBoss 5.x/6.x 反序列化漏洞（CVE-2017-12149）&lt;/h1&gt;&lt;p&gt;该漏洞为 Java反序列化错误类型，存在于 Jboss 的 HttpInvoker 组件中的 ReadOnlyAccessFilter 过滤器中。该过滤器在没有进行任何安全检查的情况下尝试将来自客户端的数据流进行反序列化，从而导致了漏洞。&lt;/p&gt;
-&lt;p&gt;参考：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://mp.weixin.qq.com/s/zUJMt9hdGoz1TEOKy2Cgdg&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://mp.weixin.qq.com/s/zUJMt9hdGoz1TEOKy2Cgdg&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://access.redhat.com/security/cve/cve-2017-12149&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://access.redhat.com/security/cve/cve-2017-12149&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-    
-    </summary>
-    
-    
-      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    
-    
-      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
-    
-      <category term="JBoss" scheme="http://joker-vip.github.io/tags/JBoss/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>JBoss JMXInvokerServlet 反序列化漏洞</title>
-    <link href="http://joker-vip.github.io/2021/08/17/JBoss%20JMXInvokerServlet%20%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E/"/>
-    <id>http://joker-vip.github.io/2021/08/17/JBoss%20JMXInvokerServlet%20%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E/</id>
-    <published>2021-08-17T04:30:35.000Z</published>
-    <updated>2021-08-18T01:39:19.938Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;JBoss-JMXInvokerServlet-反序列化漏洞&quot;&gt;&lt;a href=&quot;#JBoss-JMXInvokerServlet-反序列化漏洞&quot; class=&quot;headerlink&quot; title=&quot;JBoss JMXInvokerServlet 反序列化漏洞&quot;&gt;&lt;/a&gt;JBoss JMXInvokerServlet 反序列化漏洞&lt;/h1&gt;&lt;p&gt;这是经典的JBoss反序列化漏洞，JBoss在&lt;code&gt;/invoker/JMXInvokerServlet&lt;/code&gt;请求中读取了用户传入的对象，然后我们利用Apache Commons Collections中的Gadget执行任意代码。&lt;/p&gt;
-&lt;p&gt;参考文档：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://foxglovesecurity.com/2015/11/06/what-do-weblogic-websphere-jboss-jenkins-opennms-and-your-application-have-in-common-this-vulnerability/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://foxglovesecurity.com/2015/11/06/what-do-weblogic-websphere-jboss-jenkins-opennms-and-your-application-have-in-common-this-vulnerability/&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://www.seebug.org/vuldb/ssvid-89723&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://www.seebug.org/vuldb/ssvid-89723&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;http://www.freebuf.com/sectool/88908.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;http://www.freebuf.com/sectool/88908.html&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://paper.seebug.org/312/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://paper.seebug.org/312/&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-    
-    </summary>
-    
-    
-      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    
-    
-      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
-    
-      <category term="JBoss" scheme="http://joker-vip.github.io/tags/JBoss/"/>
     
   </entry>
   

