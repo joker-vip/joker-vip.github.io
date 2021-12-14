@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://joker-vip.github.io/"/>
-  <updated>2021-12-06T11:03:39.467Z</updated>
+  <updated>2021-12-13T06:44:29.138Z</updated>
   <id>http://joker-vip.github.io/</id>
   
   <author>
@@ -15,6 +15,87 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>phpmyadmin Scripts/setup.php 反序列化漏洞 (WooYun-2016-199433)</title>
+    <link href="http://joker-vip.github.io/2021/12/13/phpmyadmin%20Scripts-setup.php%20%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%20(WooYun-2016-199433)/"/>
+    <id>http://joker-vip.github.io/2021/12/13/phpmyadmin%20Scripts-setup.php%20%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%20(WooYun-2016-199433)/</id>
+    <published>2021-12-13T06:30:35.000Z</published>
+    <updated>2021-12-13T06:44:29.138Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;phpmyadmin-Scripts-setup-php-反序列化漏洞-WooYun-2016-199433&quot;&gt;&lt;a href=&quot;#phpmyadmin-Scripts-setup-php-反序列化漏洞-WooYun-2016-199433&quot; class=&quot;headerlink&quot; title=&quot;phpmyadmin Scripts/setup.php 反序列化漏洞 (WooYun-2016-199433)&quot;&gt;&lt;/a&gt;phpmyadmin Scripts/setup.php 反序列化漏洞 (WooYun-2016-199433)&lt;/h1&gt;&lt;p&gt;受影响的版本：2.x&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
+    
+    
+      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
+    
+      <category term="phpmyadmin" scheme="http://joker-vip.github.io/tags/phpmyadmin/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>phpMyAdmin 4.0.x—4.6.2 远程代码执行漏洞 (CVE-2016-5734)</title>
+    <link href="http://joker-vip.github.io/2021/12/13/PhpMyAdmin%204.0.x%E2%80%944.6.2%20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%20(CVE-2016-5734)/"/>
+    <id>http://joker-vip.github.io/2021/12/13/PhpMyAdmin%204.0.x%E2%80%944.6.2%20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%20(CVE-2016-5734)/</id>
+    <published>2021-12-13T05:30:35.000Z</published>
+    <updated>2021-12-13T06:39:40.423Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;phpMyAdmin-4-0-x—4-6-2-远程代码执行漏洞-CVE-2016-5734&quot;&gt;&lt;a href=&quot;#phpMyAdmin-4-0-x—4-6-2-远程代码执行漏洞-CVE-2016-5734&quot; class=&quot;headerlink&quot; title=&quot;phpMyAdmin 4.0.x—4.6.2 远程代码执行漏洞 (CVE-2016-5734)&quot;&gt;&lt;/a&gt;phpMyAdmin 4.0.x—4.6.2 远程代码执行漏洞 (CVE-2016-5734)&lt;/h1&gt;&lt;p&gt;phpMyAdmin 是一个用 PHP 编写的免费软件工具，旨在通过 Web 处理 MySQL 的管理。漏洞在&lt;code&gt;preg_replace&lt;/code&gt;函数中，因为用户提交的信息可以拼接到第一个参数中。&lt;/p&gt;
+&lt;p&gt;在 PHP 5.4.7 之前，&lt;code&gt;preg_replace&lt;/code&gt;可以将的第一个参数截断，&lt;code&gt;\0&lt;/code&gt;并将搜索模式更改为&lt;code&gt;\e&lt;/code&gt;。它可能导致远程代码执行漏洞。&lt;/p&gt;
+&lt;p&gt;受影响的版本：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;4.0.10.16 之前的 4.0.x 版本&lt;/li&gt;
+&lt;li&gt;4.4.15.7 之前的 4.4.x 版本&lt;/li&gt;
+&lt;li&gt;4.6.3之前的4.6.x版本（其实因为这个版本需要PHP5.5+，这个漏洞无法复现）&lt;/li&gt;
+&lt;/ul&gt;
+    
+    </summary>
+    
+    
+      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
+    
+    
+      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
+    
+      <category term="phpmyadmin" scheme="http://joker-vip.github.io/tags/phpmyadmin/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>phpmyadmin 4.8.1 远程文件包含漏洞 (CVE-2018-12613)</title>
+    <link href="http://joker-vip.github.io/2021/12/13/phpmyadmin%204.8.1%20%E8%BF%9C%E7%A8%8B%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%20(CVE-2018-12613)/"/>
+    <id>http://joker-vip.github.io/2021/12/13/phpmyadmin%204.8.1%20%E8%BF%9C%E7%A8%8B%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%20(CVE-2018-12613)/</id>
+    <published>2021-12-13T04:30:35.000Z</published>
+    <updated>2021-12-13T06:39:00.277Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;phpmyadmin-4-8-1-远程文件包含漏洞-CVE-2018-12613&quot;&gt;&lt;a href=&quot;#phpmyadmin-4-8-1-远程文件包含漏洞-CVE-2018-12613&quot; class=&quot;headerlink&quot; title=&quot;phpmyadmin 4.8.1 远程文件包含漏洞 (CVE-2018-12613)&quot;&gt;&lt;/a&gt;phpmyadmin 4.8.1 远程文件包含漏洞 (CVE-2018-12613)&lt;/h1&gt;&lt;p&gt;PhpMyAdmin 是一个用 PHP 编写的免费软件工具，旨在通过 Web 处理 MySQL 的管理。该漏洞位于&lt;code&gt;index.php&lt;/code&gt;，导致文件包含漏洞。&lt;/p&gt;
+&lt;p&gt;参考链接：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://mp.weixin.qq.com/s/HZcS2HdUtqz10jUEN57aog&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://mp.weixin.qq.com/s/HZcS2HdUtqz10jUEN57aog&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.phpmyadmin.net/security/PMASA-2018-4/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://www.phpmyadmin.net/security/PMASA-2018-4/&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+    
+    </summary>
+    
+    
+      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
+    
+    
+      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
+    
+      <category term="phpmyadmin" scheme="http://joker-vip.github.io/tags/phpmyadmin/"/>
+    
+  </entry>
   
   <entry>
     <title>XDebug 远程调试漏洞（代码执行）</title>
@@ -507,90 +588,6 @@
       <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
     
       <category term="Mysql" scheme="http://joker-vip.github.io/tags/Mysql/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>libssh 身份验证绕过漏洞(CVE-2018-10933)</title>
-    <link href="http://joker-vip.github.io/2021/11/01/libssh%20%E8%BA%AB%E4%BB%BD%E9%AA%8C%E8%AF%81%E7%BB%95%E8%BF%87%E6%BC%8F%E6%B4%9E(CVE-2018-10933)/"/>
-    <id>http://joker-vip.github.io/2021/11/01/libssh%20%E8%BA%AB%E4%BB%BD%E9%AA%8C%E8%AF%81%E7%BB%95%E8%BF%87%E6%BC%8F%E6%B4%9E(CVE-2018-10933)/</id>
-    <published>2021-11-01T06:30:35.000Z</published>
-    <updated>2021-11-01T06:50:50.520Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;libssh-身份验证绕过漏洞-CVE-2018-10933&quot;&gt;&lt;a href=&quot;#libssh-身份验证绕过漏洞-CVE-2018-10933&quot; class=&quot;headerlink&quot; title=&quot;libssh 身份验证绕过漏洞(CVE-2018-10933)&quot;&gt;&lt;/a&gt;libssh 身份验证绕过漏洞(CVE-2018-10933)&lt;/h1&gt;&lt;p&gt;libssh 是一个在客户端和服务器端实现 SSHv2 协议的多平台 C 库。在 libssh 的服务器端状态机中发现了一个逻辑漏洞。攻击者可以&lt;code&gt;MSG_USERAUTH_SUCCESS&lt;/code&gt;在认证成功之前发送消息。这可以绕过身份验证并访问目标 SSH 服务器。&lt;/p&gt;
-&lt;p&gt;参考：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://www.libssh.org/security/advisories/CVE-2018-10933.txt&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://www.libssh.org/security/advisories/CVE-2018-10933.txt&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://www.seebug.org/vuldb/ssvid-97614&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://www.seebug.org/vuldb/ssvid-97614&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-    
-    </summary>
-    
-    
-      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    
-    
-      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
-    
-      <category term="libssh" scheme="http://joker-vip.github.io/tags/libssh/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Laravel Ignition 2.5.1 代码执行漏洞（CVE-2021-3129）</title>
-    <link href="http://joker-vip.github.io/2021/11/01/Laravel%20Ignition%202.5.1%20%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2021-3129%EF%BC%89/"/>
-    <id>http://joker-vip.github.io/2021/11/01/Laravel%20Ignition%202.5.1%20%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2021-3129%EF%BC%89/</id>
-    <published>2021-11-01T05:30:35.000Z</published>
-    <updated>2021-11-01T06:49:20.296Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;Laravel-Ignition-2-5-1-代码执行漏洞（CVE-2021-3129）&quot;&gt;&lt;a href=&quot;#Laravel-Ignition-2-5-1-代码执行漏洞（CVE-2021-3129）&quot; class=&quot;headerlink&quot; title=&quot;Laravel Ignition 2.5.1 代码执行漏洞（CVE-2021-3129）&quot;&gt;&lt;/a&gt;Laravel Ignition 2.5.1 代码执行漏洞（CVE-2021-3129）&lt;/h1&gt;&lt;p&gt;Laravel是一个由Taylor Otwell所创建，免费的开源 PHP Web 框架。在开发模式下，Laravel使用了Ignition提供的错误页面，在Ignition 2.5.1及之前的版本中，有类似这样的代码：&lt;/p&gt;
-&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;$contents &amp;#x3D; file_get_contents($parameters[&amp;#39;viewFile&amp;#39;]);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;file_put_contents($parameters[&amp;#39;viewFile&amp;#39;], $contents);&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-
-&lt;p&gt;攻击者可以通过phar://协议来执行反序列化操作，进而执行任意代码。&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    
-    
-      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
-    
-      <category term="Laravel" scheme="http://joker-vip.github.io/tags/Laravel/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Kibana 原型污染导致远程代码执行 (CVE-2019-7609)</title>
-    <link href="http://joker-vip.github.io/2021/10/28/Kibana%20%E5%8E%9F%E5%9E%8B%E6%B1%A1%E6%9F%93%E5%AF%BC%E8%87%B4%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%20(CVE-2019-7609)/"/>
-    <id>http://joker-vip.github.io/2021/10/28/Kibana%20%E5%8E%9F%E5%9E%8B%E6%B1%A1%E6%9F%93%E5%AF%BC%E8%87%B4%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%20(CVE-2019-7609)/</id>
-    <published>2021-10-28T05:30:35.000Z</published>
-    <updated>2021-10-28T05:57:04.497Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;Kibana-原型污染导致远程代码执行-CVE-2019-7609&quot;&gt;&lt;a href=&quot;#Kibana-原型污染导致远程代码执行-CVE-2019-7609&quot; class=&quot;headerlink&quot; title=&quot;Kibana 原型污染导致远程代码执行 (CVE-2019-7609)&quot;&gt;&lt;/a&gt;Kibana 原型污染导致远程代码执行 (CVE-2019-7609)&lt;/h1&gt;&lt;p&gt;Kibana 是一个用于 Elasticsearch 的开源数据可视化仪表板。&lt;/p&gt;
-&lt;p&gt;5.6.15 和 6.6.1 之前的 Kibana 版本在 Timelion 可视化器中包含任意代码执行缺陷。有权访问 Timelion 应用程序的攻击者可以发送尝试执行 javascript 代码的请求。这可能会导致攻击者在主机系统上使用 Kibana 进程的权限执行任意命令。&lt;/p&gt;
-&lt;p&gt;参考：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://nvd.nist.gov/vuln/detail/CVE-2019-7609&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://nvd.nist.gov/vuln/detail/CVE-2019-7609&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://research.securitum.com/prototype-pollution-rce-kibana-cve-2019-7609/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://research.securitum.com/prototype-pollution-rce-kibana-cve-2019-7609/&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://slides.com/securitymb/prototype-pollution-in-kibana/#/4&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://slides.com/securitymb/prototype-pollution-in-kibana/#/4&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-    
-    </summary>
-    
-    
-      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    
-    
-      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
-    
-      <category term="Kibana" scheme="http://joker-vip.github.io/tags/Kibana/"/>
     
   </entry>
   
