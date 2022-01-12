@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://joker-vip.github.io/"/>
-  <updated>2021-12-16T08:54:32.545Z</updated>
+  <updated>2022-01-12T09:38:54.658Z</updated>
   <id>http://joker-vip.github.io/</id>
   
   <author>
@@ -15,6 +15,247 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>通过 Velocity 自定义模板执行 Apache Solr 远程代码 (CVE-2019-17558)</title>
+    <link href="http://joker-vip.github.io/2022/01/12/%E9%80%9A%E8%BF%87%20Velocity%20%E8%87%AA%E5%AE%9A%E4%B9%89%E6%A8%A1%E6%9D%BF%E6%89%A7%E8%A1%8C%20Apache%20Solr%20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%20(CVE-2019-17558)/"/>
+    <id>http://joker-vip.github.io/2022/01/12/%E9%80%9A%E8%BF%87%20Velocity%20%E8%87%AA%E5%AE%9A%E4%B9%89%E6%A8%A1%E6%9D%BF%E6%89%A7%E8%A1%8C%20Apache%20Solr%20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%20(CVE-2019-17558)/</id>
+    <published>2022-01-12T09:30:35.000Z</published>
+    <updated>2022-01-12T09:38:54.658Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;通过-Velocity-自定义模板执行-Apache-Solr-远程代码-CVE-2019-17558&quot;&gt;&lt;a href=&quot;#通过-Velocity-自定义模板执行-Apache-Solr-远程代码-CVE-2019-17558&quot; class=&quot;headerlink&quot; title=&quot;通过 Velocity 自定义模板执行 Apache Solr 远程代码 (CVE-2019-17558)&quot;&gt;&lt;/a&gt;通过 Velocity 自定义模板执行 Apache Solr 远程代码 (CVE-2019-17558)&lt;/h1&gt;&lt;p&gt;Solr 是流行的、速度极快的开源企业搜索平台，它建立在 Apache Lucene(TM) 之上。&lt;/p&gt;
+&lt;p&gt;Apache Solr 5.0.0 到 Apache Solr 8.3.1 容易受到通过 VelocityResponseWriter 的远程代码执行的攻击。可以通过 configset&lt;code&gt;velocity/&lt;/code&gt;目录中的Velocity 模板或作为参数提供 Velocity 模板。用户定义的配置集可能包含可渲染的、潜在的恶意模板。默认情况下禁用参数提供的模板，但可以&lt;code&gt;params.resource.loader.enabled&lt;/code&gt;通过定义一个设置为 的响应编写器来启用&lt;code&gt;true&lt;/code&gt;。定义响应编写器需要配置 API 访问权限。Solr 8.4 完全移除了 params 资源加载器，并且仅在 configset 为&lt;code&gt;trusted&lt;/code&gt;（已由经过身份验证的用户上传）时启用 configset 提供的模板渲染。&lt;/p&gt;
+&lt;p&gt;参考：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://nvd.nist.gov/vuln/detail/CVE-2019-17558&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://nvd.nist.gov/vuln/detail/CVE-2019-17558&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://issues.apache.org/jira/browse/SOLR-13971&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://issues.apache.org/jira/browse/SOLR-13971&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://gist.github.com/s00py/a1ba36a3689fa13759ff910e179fc133&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://gist.github.com/s00py/a1ba36a3689fa13759ff910e179fc133&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/jas502n/solr_rce&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://github.com/jas502n/solr_rce&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+    
+    </summary>
+    
+    
+      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
+    
+    
+      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
+    
+      <category term="Apache solr" scheme="http://joker-vip.github.io/tags/Apache-solr/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Apache Solr RemoteStreaming 任意文件读取和 SSRF</title>
+    <link href="http://joker-vip.github.io/2022/01/12/Apache%20Solr%20RemoteStreaming%20%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E8%AF%BB%E5%8F%96%E5%92%8C%20SSRF/"/>
+    <id>http://joker-vip.github.io/2022/01/12/Apache%20Solr%20RemoteStreaming%20%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E8%AF%BB%E5%8F%96%E5%92%8C%20SSRF/</id>
+    <published>2022-01-12T09:24:27.319Z</published>
+    <updated>2022-01-12T07:27:11.500Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h1 id=&quot;Apache-Solr-RemoteStreaming-任意文件读取和-SSRF&quot;&gt;&lt;a href=&quot;#Apache-Solr-RemoteStreaming-任意文件读取和-SSRF&quot; class=&quot;headerlink&quot; title=&quot;Apache Solr
+        
+      
+    
+    </summary>
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Apache Solr 远程命令执行漏洞（CVE-2019-0193）</title>
+    <link href="http://joker-vip.github.io/2022/01/12/Apache%20Solr%20%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2019-0193%EF%BC%89/"/>
+    <id>http://joker-vip.github.io/2022/01/12/Apache%20Solr%20%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2019-0193%EF%BC%89/</id>
+    <published>2022-01-12T08:30:35.000Z</published>
+    <updated>2022-01-12T09:37:50.873Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;Apache-Solr-远程命令执行漏洞（CVE-2019-0193）&quot;&gt;&lt;a href=&quot;#Apache-Solr-远程命令执行漏洞（CVE-2019-0193）&quot; class=&quot;headerlink&quot; title=&quot;Apache Solr 远程命令执行漏洞（CVE-2019-0193）&quot;&gt;&lt;/a&gt;Apache Solr 远程命令执行漏洞（CVE-2019-0193）&lt;/h1&gt;&lt;p&gt;漏洞原理与分析可以参考：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://mp.weixin.qq.com/s/typLOXZCev_9WH_Ux0s6oA&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://mp.weixin.qq.com/s/typLOXZCev_9WH_Ux0s6oA&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://paper.seebug.org/1009/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://paper.seebug.org/1009/&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Apache Solr 是一个开源的搜索服务器。Solr 使用 Java 语言开发，主要基于 HTTP 和 Apache Lucene 实现。此次漏洞出现在Apache Solr的DataImportHandler，该模块是一个可选但常用的模块，用于从数据库和其他源中提取数据。它具有一个功能，其中所有的DIH配置都可以通过外部请求的dataConfig参数来设置。由于DIH配置可以包含脚本，因此攻击者可以通过构造危险的请求，从而造成远程命令执行。&lt;/p&gt;
+&lt;p&gt;本环境测试RCE漏洞。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
+    
+    
+      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
+    
+      <category term="Apache solr" scheme="http://joker-vip.github.io/tags/Apache-solr/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Apache Solr 远程命令执行漏洞（CVE-2017-12629）</title>
+    <link href="http://joker-vip.github.io/2022/01/12/Apache%20Solr%20%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2017-12629%EF%BC%89/"/>
+    <id>http://joker-vip.github.io/2022/01/12/Apache%20Solr%20%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2017-12629%EF%BC%89/</id>
+    <published>2022-01-12T07:30:35.000Z</published>
+    <updated>2022-01-12T09:36:40.998Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;Apache-Solr-远程命令执行漏洞（CVE-2017-12629）&quot;&gt;&lt;a href=&quot;#Apache-Solr-远程命令执行漏洞（CVE-2017-12629）&quot; class=&quot;headerlink&quot; title=&quot;Apache Solr 远程命令执行漏洞（CVE-2017-12629）&quot;&gt;&lt;/a&gt;Apache Solr 远程命令执行漏洞（CVE-2017-12629）&lt;/h1&gt;&lt;p&gt;漏洞原理与分析可以参考：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.exploit-db.com/exploits/43009/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://www.exploit-db.com/exploits/43009/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://paper.seebug.org/425/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://paper.seebug.org/425/&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Apache Solr 是一个开源的搜索服务器。Solr 使用 Java 语言开发，主要基于 HTTP 和 Apache Lucene 实现。原理大致是文档通过Http利用XML加到一个搜索集合中。查询该集合也是通过 http收到一个XML/JSON响应来实现。此次7.1.0之前版本总共爆出两个漏洞：&lt;a href=&quot;https://github.com/vulhub/vulhub/tree/master/solr/CVE-2017-12629-XXE&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;XML实体扩展漏洞（XXE）&lt;/a&gt;和远程命令执行漏洞（RCE），二者可以连接成利用链，编号均为CVE-2017-12629。&lt;/p&gt;
+&lt;p&gt;本环境测试RCE漏洞。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
+    
+    
+      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
+    
+      <category term="Apache solr" scheme="http://joker-vip.github.io/tags/Apache-solr/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Apache solr XML 实体注入漏洞（CVE-2017-12629）</title>
+    <link href="http://joker-vip.github.io/2022/01/12/Apache%20solr%20XML%20%E5%AE%9E%E4%BD%93%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2017-12629%EF%BC%89/"/>
+    <id>http://joker-vip.github.io/2022/01/12/Apache%20solr%20XML%20%E5%AE%9E%E4%BD%93%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2017-12629%EF%BC%89/</id>
+    <published>2022-01-12T06:30:35.000Z</published>
+    <updated>2022-01-12T09:25:21.190Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;Apache-solr-XML-实体注入漏洞（CVE-2017-12629）&quot;&gt;&lt;a href=&quot;#Apache-solr-XML-实体注入漏洞（CVE-2017-12629）&quot; class=&quot;headerlink&quot; title=&quot;Apache solr XML 实体注入漏洞（CVE-2017-12629）&quot;&gt;&lt;/a&gt;Apache solr XML 实体注入漏洞（CVE-2017-12629）&lt;/h1&gt;&lt;p&gt;漏洞原理与分析可以参考：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.exploit-db.com/exploits/43009/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://www.exploit-db.com/exploits/43009/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://paper.seebug.org/425/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://paper.seebug.org/425/&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Apache Solr 是一个开源的搜索服务器。Solr 使用 Java 语言开发，主要基于 HTTP 和 Apache Lucene 实现。原理大致是文档通过Http利用XML加到一个搜索集合中。查询该集合也是通过 http收到一个XML/JSON响应来实现。此次7.1.0之前版本总共爆出两个漏洞：XML实体扩展漏洞（XXE）和远程命令执行漏洞（RCE），二者可以连接成利用链，编号均为CVE-2017-12629。&lt;/p&gt;
+&lt;p&gt;本环境仅测试XXE漏洞，RCE和利用链，可以在 &lt;a href=&quot;https://github.com/vulhub/vulhub/tree/master/solr/CVE-2017-12629-RCE&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://github.com/vulhub/vulhub/tree/master/solr/CVE-2017-12629-RCE&lt;/a&gt; 中查看。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
+    
+    
+      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
+    
+      <category term="Apache solr" scheme="http://joker-vip.github.io/tags/Apache-solr/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Apache Shiro 身份验证绕过漏洞 (CVE-2020-1957)</title>
+    <link href="http://joker-vip.github.io/2022/01/10/Apache%20Shiro%20%E8%BA%AB%E4%BB%BD%E9%AA%8C%E8%AF%81%E7%BB%95%E8%BF%87%E6%BC%8F%E6%B4%9E%20(CVE-2020-1957)/"/>
+    <id>http://joker-vip.github.io/2022/01/10/Apache%20Shiro%20%E8%BA%AB%E4%BB%BD%E9%AA%8C%E8%AF%81%E7%BB%95%E8%BF%87%E6%BC%8F%E6%B4%9E%20(CVE-2020-1957)/</id>
+    <published>2022-01-10T06:30:35.000Z</published>
+    <updated>2022-01-10T07:42:19.576Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;Apache-Shiro-身份验证绕过漏洞-CVE-2020-1957&quot;&gt;&lt;a href=&quot;#Apache-Shiro-身份验证绕过漏洞-CVE-2020-1957&quot; class=&quot;headerlink&quot; title=&quot;Apache Shiro 身份验证绕过漏洞 (CVE-2020-1957)&quot;&gt;&lt;/a&gt;Apache Shiro 身份验证绕过漏洞 (CVE-2020-1957)&lt;/h1&gt;&lt;p&gt;Apache Shiro 是一个功能强大且易于使用的 Java 安全框架，它执行身份验证、授权、加密和会话管理。&lt;/p&gt;
+&lt;p&gt;在具有 Spring 动态控制器的 1.5.2 之前的 Apache Shiro 版本中，攻击者可以构造恶意请求&lt;code&gt;..;&lt;/code&gt;以绕过目录身份验证。&lt;/p&gt;
+&lt;p&gt;参考链接：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/apache/shiro/commit/3708d7907016bf2fa12691dff6ff0def1249b8ce#diff-98f7bc5c0391389e56531f8b3754081aL139&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://github.com/apache/shiro/commit/3708d7907016bf2fa12691dff6ff0def1249b8ce#diff-98f7bc5c0391389e56531f8b3754081aL139&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://xz.aliyun.com/t/8281&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://xz.aliyun.com/t/8281&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://blog.spoock.com/2020/05/09/cve-2020-1957/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://blog.spoock.com/2020/05/09/cve-2020-1957/&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+    
+    </summary>
+    
+    
+      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
+    
+    
+      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
+    
+      <category term="Apache Shiro" scheme="http://joker-vip.github.io/tags/Apache-Shiro/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Apache Shiro 1.2.4反序列化漏洞（CVE-2016-4437）</title>
+    <link href="http://joker-vip.github.io/2022/01/10/Apache%20Shiro%201.2.4%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2016-4437%EF%BC%89/"/>
+    <id>http://joker-vip.github.io/2022/01/10/Apache%20Shiro%201.2.4%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2016-4437%EF%BC%89/</id>
+    <published>2022-01-10T05:30:35.000Z</published>
+    <updated>2022-01-10T07:41:30.297Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;Apache-Shiro-1-2-4反序列化漏洞（CVE-2016-4437）&quot;&gt;&lt;a href=&quot;#Apache-Shiro-1-2-4反序列化漏洞（CVE-2016-4437）&quot; class=&quot;headerlink&quot; title=&quot;Apache Shiro 1.2.4反序列化漏洞（CVE-2016-4437）&quot;&gt;&lt;/a&gt;Apache Shiro 1.2.4反序列化漏洞（CVE-2016-4437）&lt;/h1&gt;&lt;p&gt;Apache Shiro是一款开源安全框架，提供身份验证、授权、密码学和会话管理。Shiro框架直观、易用，同时也能提供健壮的安全性。&lt;/p&gt;
+&lt;p&gt;Apache Shiro 1.2.4及以前版本中，加密的用户信息序列化后存储在名为remember-me的Cookie中。攻击者可以使用Shiro的默认密钥伪造用户Cookie，触发Java反序列化漏洞，进而在目标机器上执行任意命令。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
+    
+    
+      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
+    
+      <category term="Apache Shiro" scheme="http://joker-vip.github.io/tags/Apache-Shiro/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>rsync 未授权访问漏洞</title>
+    <link href="http://joker-vip.github.io/2022/01/10/rsync%20%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E/"/>
+    <id>http://joker-vip.github.io/2022/01/10/rsync%20%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E/</id>
+    <published>2022-01-10T04:30:35.000Z</published>
+    <updated>2022-01-10T05:38:51.903Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;rsync-未授权访问漏洞&quot;&gt;&lt;a href=&quot;#rsync-未授权访问漏洞&quot; class=&quot;headerlink&quot; title=&quot;rsync 未授权访问漏洞&quot;&gt;&lt;/a&gt;rsync 未授权访问漏洞&lt;/h1&gt;&lt;p&gt;rsync是Linux下一款数据备份工具，支持通过rsync协议、ssh协议进行远程文件传输。其中rsync协议默认监听873端口，如果目标开启了rsync服务，并且没有配置ACL或访问密码，我们将可以读写目标服务器文件。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
+    
+    
+      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
+    
+      <category term="rsync" scheme="http://joker-vip.github.io/tags/rsync/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Redis 4.x/5.x 未授权访问漏洞</title>
+    <link href="http://joker-vip.github.io/2022/01/01/Redis%204.x5.x%20%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E/"/>
+    <id>http://joker-vip.github.io/2022/01/01/Redis%204.x5.x%20%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E/</id>
+    <published>2022-01-01T04:30:35.000Z</published>
+    <updated>2022-01-10T02:33:28.654Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;Redis-4-x-5-x-未授权访问漏洞&quot;&gt;&lt;a href=&quot;#Redis-4-x-5-x-未授权访问漏洞&quot; class=&quot;headerlink&quot; title=&quot;Redis 4.x/5.x 未授权访问漏洞&quot;&gt;&lt;/a&gt;Redis 4.x/5.x 未授权访问漏洞&lt;/h1&gt;&lt;p&gt;Redis未授权访问在4.x/5.0.5以前版本下，我们可以使用master/slave模式加载远程模块，通过动态链接库的方式执行任意命令。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
+    
+    
+      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
+    
+      <category term="Redis" scheme="http://joker-vip.github.io/tags/Redis/"/>
+    
+  </entry>
   
   <entry>
     <title>SaltStack Shell 注入 (CVE-2020-16846)</title>
@@ -326,270 +567,6 @@
       <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
     
       <category term="php" scheme="http://joker-vip.github.io/tags/php/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>PHP imap 远程命令执行漏洞（CVE-2018-19518）</title>
-    <link href="http://joker-vip.github.io/2021/12/05/PHP%20imap%20%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2018-19518%EF%BC%89/"/>
-    <id>http://joker-vip.github.io/2021/12/05/PHP%20imap%20%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2018-19518%EF%BC%89/</id>
-    <published>2021-12-05T06:30:35.000Z</published>
-    <updated>2021-12-06T11:00:48.212Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;PHP-imap-远程命令执行漏洞（CVE-2018-19518）&quot;&gt;&lt;a href=&quot;#PHP-imap-远程命令执行漏洞（CVE-2018-19518）&quot; class=&quot;headerlink&quot; title=&quot;PHP imap 远程命令执行漏洞（CVE-2018-19518）&quot;&gt;&lt;/a&gt;PHP imap 远程命令执行漏洞（CVE-2018-19518）&lt;/h1&gt;&lt;p&gt;php imap扩展用于在PHP中执行邮件收发操作。其&lt;code&gt;imap_open&lt;/code&gt;函数会调用rsh来连接远程shell，而debian/ubuntu中默认使用ssh来代替rsh的功能（也就是说，在debian系列系统中，执行rsh命令实际执行的是ssh命令）。&lt;/p&gt;
-&lt;p&gt;因为ssh命令中可以通过设置&lt;code&gt;-oProxyCommand=&lt;/code&gt;来调用第三方命令，攻击者通过注入注入这个参数，最终将导致命令执行漏洞。&lt;/p&gt;
-&lt;p&gt;参考链接：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://bugs.php.net/bug.php?id=77153&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://bugs.php.net/bug.php?id=77153&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://github.com/Bo0oM/PHP_imap_open_exploit&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://github.com/Bo0oM/PHP_imap_open_exploit&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://antichat.com/threads/463395/#post-4254681&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://antichat.com/threads/463395/#post-4254681&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://nvd.nist.gov/vuln/detail/CVE-2018-19518&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://nvd.nist.gov/vuln/detail/CVE-2018-19518&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-    
-    </summary>
-    
-    
-      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    
-    
-      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
-    
-      <category term="php" scheme="http://joker-vip.github.io/tags/php/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>PHP-CGI远程代码执行漏洞（CVE-2012-1823）</title>
-    <link href="http://joker-vip.github.io/2021/12/05/PHP-CGI%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2012-1823%EF%BC%89/"/>
-    <id>http://joker-vip.github.io/2021/12/05/PHP-CGI%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2012-1823%EF%BC%89/</id>
-    <published>2021-12-05T05:30:35.000Z</published>
-    <updated>2021-12-06T10:59:59.891Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;PHP-CGI远程代码执行漏洞（CVE-2012-1823）&quot;&gt;&lt;a href=&quot;#PHP-CGI远程代码执行漏洞（CVE-2012-1823）&quot; class=&quot;headerlink&quot; title=&quot;PHP-CGI远程代码执行漏洞（CVE-2012-1823）&quot;&gt;&lt;/a&gt;PHP-CGI远程代码执行漏洞（CVE-2012-1823）&lt;/h1&gt;&lt;h2 id=&quot;原理&quot;&gt;&lt;a href=&quot;#原理&quot; class=&quot;headerlink&quot; title=&quot;原理&quot;&gt;&lt;/a&gt;原理&lt;/h2&gt;&lt;ul&gt;
-&lt;li&gt;参考文章 &lt;a href=&quot;http://eindbazen.net/2012/05/php-cgi-advisory-cve-2012-1823/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;http://eindbazen.net/2012/05/php-cgi-advisory-cve-2012-1823/&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;影响版本 php &amp;lt; 5.3.12 or php &amp;lt; 5.4.2&lt;/li&gt;
-&lt;/ul&gt;
-    
-    </summary>
-    
-    
-      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    
-    
-      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
-    
-      <category term="php" scheme="http://joker-vip.github.io/tags/php/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>PHP 8.1.0-dev User-Agentt 后门</title>
-    <link href="http://joker-vip.github.io/2021/12/05/PHP%208.1.0-dev%20User-Agentt%20%E5%90%8E%E9%97%A8/"/>
-    <id>http://joker-vip.github.io/2021/12/05/PHP%208.1.0-dev%20User-Agentt%20%E5%90%8E%E9%97%A8/</id>
-    <published>2021-12-05T04:30:35.000Z</published>
-    <updated>2021-12-06T10:59:03.028Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;PHP-8-1-0-dev-User-Agentt-后门&quot;&gt;&lt;a href=&quot;#PHP-8-1-0-dev-User-Agentt-后门&quot; class=&quot;headerlink&quot; title=&quot;PHP 8.1.0-dev User-Agentt 后门&quot;&gt;&lt;/a&gt;PHP 8.1.0-dev User-Agentt 后门&lt;/h1&gt;&lt;p&gt;PHP 8.1.0-dev 版本于 2021 年 3 月 28 日被植入后门，但后门很快被发现并移除。当服务器上存在此后门时，攻击者可以通过发送&lt;strong&gt;User-Agentt&lt;/strong&gt;标头来执行任意代码。&lt;/p&gt;
-&lt;p&gt;参考：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://news-web.php.net/php.internals/113838&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://news-web.php.net/php.internals/113838&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://github.com/php/php-src/commit/c730aa26bd52829a49f2ad284b181b7e82a68d7d&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://github.com/php/php-src/commit/c730aa26bd52829a49f2ad284b181b7e82a68d7d&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://github.com/php/php-src/commit/2b0f239b211c7544ebc7a4cd2c977a5b7a11ed8a&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://github.com/php/php-src/commit/2b0f239b211c7544ebc7a4cd2c977a5b7a11ed8a&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-    
-    </summary>
-    
-    
-      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    
-    
-      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
-    
-      <category term="php" scheme="http://joker-vip.github.io/tags/php/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>OpenSMTPD 远程代码执行漏洞 (CVE-2020-7247)</title>
-    <link href="http://joker-vip.github.io/2021/11/11/OpenSMTPD%20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%20(CVE-2020-7247)/"/>
-    <id>http://joker-vip.github.io/2021/11/11/OpenSMTPD%20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%20(CVE-2020-7247)/</id>
-    <published>2021-11-11T08:30:35.000Z</published>
-    <updated>2021-11-16T08:26:02.891Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;OpenSMTPD-远程代码执行漏洞-CVE-2020-7247&quot;&gt;&lt;a href=&quot;#OpenSMTPD-远程代码执行漏洞-CVE-2020-7247&quot; class=&quot;headerlink&quot; title=&quot;OpenSMTPD 远程代码执行漏洞 (CVE-2020-7247)&quot;&gt;&lt;/a&gt;OpenSMTPD 远程代码执行漏洞 (CVE-2020-7247)&lt;/h1&gt;&lt;p&gt;OpenSMTPD 是一个适用于 unix 操作系统（BSD、MacOS、GNU/Linux）的 smtp 服务程序，遵循 RFC 5321 SMTP 协议。OpenSMTPD 最初是为 OpenBSD 操作系统开发的，是 OpenBSD 项目的一部分。由于其开源特性，已分发到其他 unix 平台。根据 ISC 许可证，该软件可供所有人免费使用和重复使用。&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;CVE-2020-7247&lt;/code&gt; 是由于 OpenSMTPD 在实施 RFC 5321 的过程中对发件人/收件人的验证不严造成的。&lt;/p&gt;
-&lt;p&gt;2020 年 1 月 29 日，OpenSMTPD 小组正式提交了&lt;code&gt;CVE-2020-7247&lt;/code&gt;GitHub 存储库中的 修复程序。修复后对应的版本是&lt;code&gt;OpenSMTPD 6.6.2p1&lt;/code&gt;.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;参考：&lt;/strong&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://www.qualys.com/2020/01/28/cve-2020-7247/lpe-rce-opensmtpd.txt&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://www.qualys.com/2020/01/28/cve-2020-7247/lpe-rce-opensmtpd.txt&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://www.exploit-db.com/exploits/47984&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://www.exploit-db.com/exploits/47984&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2020-7247&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2020-7247&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://www.anquanke.com/post/id/197689&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://www.anquanke.com/post/id/197689&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-    
-    </summary>
-    
-    
-      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    
-    
-      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
-    
-      <category term="OpenSMTPD" scheme="http://joker-vip.github.io/tags/OpenSMTPD/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>ApacheOfBiz 中 XMLRPC 参数的不安全反序列化 (CVE-2020-9496)</title>
-    <link href="http://joker-vip.github.io/2021/11/11/ApacheOfBiz%20%E4%B8%AD%20XMLRPC%20%E5%8F%82%E6%95%B0%E7%9A%84%E4%B8%8D%E5%AE%89%E5%85%A8%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%20(CVE-2020-9496)/"/>
-    <id>http://joker-vip.github.io/2021/11/11/ApacheOfBiz%20%E4%B8%AD%20XMLRPC%20%E5%8F%82%E6%95%B0%E7%9A%84%E4%B8%8D%E5%AE%89%E5%85%A8%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%20(CVE-2020-9496)/</id>
-    <published>2021-11-11T07:30:35.000Z</published>
-    <updated>2021-11-16T07:44:22.659Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;ApacheOfBiz-中-XMLRPC-参数的不安全反序列化-CVE-2020-9496&quot;&gt;&lt;a href=&quot;#ApacheOfBiz-中-XMLRPC-参数的不安全反序列化-CVE-2020-9496&quot; class=&quot;headerlink&quot; title=&quot;ApacheOfBiz 中 XMLRPC 参数的不安全反序列化 (CVE-2020-9496)&quot;&gt;&lt;/a&gt;ApacheOfBiz 中 XMLRPC 参数的不安全反序列化 (CVE-2020-9496)&lt;/h1&gt;&lt;p&gt;Apache OFBiz 是一个开源的企业资源规划 (ERP) 系统。它提供了一套企业应用程序，可以集成和自动化企业的许多业务流程。&lt;/p&gt;
-&lt;p&gt;OfBiz 在 处公开一个 XMLRPC 端点&lt;code&gt;/webtools/control/xmlrpc&lt;/code&gt;。这是一个未经身份验证的端点，因为身份验证是基于每个服务应用的。但是，XMLRPC 请求是在身份验证之前处理的。作为此处理的一部分，远程调用的任何序列化参数都被反序列化，因此如果类路径包含任何可用作实现远程代码执行的小工具的类，攻击者将能够在任何 OfBiz 服务器上运行任意系统命令与运行 OfBiz 的 servlet 容器具有相同的权限。&lt;/p&gt;
-&lt;p&gt;参考：&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;&lt;a href=&quot;https://securitylab.github.com/advisories/GHSL-2020-069-apache_ofbiz&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://securitylab.github.com/advisories/GHSL-2020-069-apache_ofbiz&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://github.com/dwisiswant0/CVE-2020-9496&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://github.com/dwisiswant0/CVE-2020-9496&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://www.cnblogs.com/ph4nt0mer/p/13576739.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://www.cnblogs.com/ph4nt0mer/p/13576739.html&lt;/a&gt;&lt;/li&gt;
-&lt;/ol&gt;
-    
-    </summary>
-    
-    
-      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    
-    
-      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
-    
-      <category term="Apache OfBiz" scheme="http://joker-vip.github.io/tags/Apache-OfBiz/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>ntopng 身份验证绕过 (CVE-2021-28073)</title>
-    <link href="http://joker-vip.github.io/2021/11/11/ntopng%20%E8%BA%AB%E4%BB%BD%E9%AA%8C%E8%AF%81%E7%BB%95%E8%BF%87%20(CVE-2021-28073)/"/>
-    <id>http://joker-vip.github.io/2021/11/11/ntopng%20%E8%BA%AB%E4%BB%BD%E9%AA%8C%E8%AF%81%E7%BB%95%E8%BF%87%20(CVE-2021-28073)/</id>
-    <published>2021-11-11T06:30:35.000Z</published>
-    <updated>2021-11-15T05:30:25.162Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;ntopng-身份验证绕过-CVE-2021-28073&quot;&gt;&lt;a href=&quot;#ntopng-身份验证绕过-CVE-2021-28073&quot; class=&quot;headerlink&quot; title=&quot;ntopng 身份验证绕过 (CVE-2021-28073)&quot;&gt;&lt;/a&gt;ntopng 身份验证绕过 (CVE-2021-28073)&lt;/h1&gt;&lt;p&gt;Ntopng 是一个被动的网络监控工具，专注于可以从服务器捕获的流量中获取的流量和统计信息。&lt;/p&gt;
-&lt;p&gt;ntopng 4.2 及之前的版本中存在身份验证绕过漏洞。&lt;/p&gt;
-&lt;p&gt;参考链接：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;http://noahblog.360.cn/ntopng-multiple-vulnerabilities/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;http://noahblog.360.cn/ntopng-multiple-vulnerabilities/&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-    
-    </summary>
-    
-    
-      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    
-    
-      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
-    
-      <category term="ntopng" scheme="http://joker-vip.github.io/tags/ntopng/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>node-postgres 代码执行漏洞（CVE-2017-16082）</title>
-    <link href="http://joker-vip.github.io/2021/11/11/node-postgres%20%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2017-16082%EF%BC%89/"/>
-    <id>http://joker-vip.github.io/2021/11/11/node-postgres%20%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2017-16082%EF%BC%89/</id>
-    <published>2021-11-11T05:30:35.000Z</published>
-    <updated>2021-11-15T05:14:44.001Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;node-postgres-代码执行漏洞（CVE-2017-16082）&quot;&gt;&lt;a href=&quot;#node-postgres-代码执行漏洞（CVE-2017-16082）&quot; class=&quot;headerlink&quot; title=&quot;node-postgres 代码执行漏洞（CVE-2017-16082）&quot;&gt;&lt;/a&gt;node-postgres 代码执行漏洞（CVE-2017-16082）&lt;/h1&gt;&lt;h2 id=&quot;漏洞原理&quot;&gt;&lt;a href=&quot;#漏洞原理&quot; class=&quot;headerlink&quot; title=&quot;漏洞原理&quot;&gt;&lt;/a&gt;漏洞原理&lt;/h2&gt;&lt;p&gt;node-postgres在处理类型为&lt;code&gt;Row Description&lt;/code&gt;的postgres返回包时，将字段名拼接到代码中。由于没有进行合理转义，导致一个特殊构造的字段名可逃逸出代码单引号限制，造成代码执行漏洞。&lt;/p&gt;
-&lt;p&gt;参考链接：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://www.leavesongs.com/PENETRATION/node-postgres-code-execution-vulnerability.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://www.leavesongs.com/PENETRATION/node-postgres-code-execution-vulnerability.html&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://node-postgres.com/announcements#2017-08-12-code-execution-vulnerability&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://node-postgres.com/announcements#2017-08-12-code-execution-vulnerability&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://zhuanlan.zhihu.com/p/28575189&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://zhuanlan.zhihu.com/p/28575189&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-    
-    </summary>
-    
-    
-      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    
-    
-      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
-    
-      <category term="Node.js" scheme="http://joker-vip.github.io/tags/Node-js/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Node.js 目录穿越漏洞（CVE-2017-14849）</title>
-    <link href="http://joker-vip.github.io/2021/11/11/Node.js%20%E7%9B%AE%E5%BD%95%E7%A9%BF%E8%B6%8A%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2017-14849%EF%BC%89/"/>
-    <id>http://joker-vip.github.io/2021/11/11/Node.js%20%E7%9B%AE%E5%BD%95%E7%A9%BF%E8%B6%8A%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2017-14849%EF%BC%89/</id>
-    <published>2021-11-11T04:30:35.000Z</published>
-    <updated>2021-11-15T05:13:59.333Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;Node-js-目录穿越漏洞（CVE-2017-14849）&quot;&gt;&lt;a href=&quot;#Node-js-目录穿越漏洞（CVE-2017-14849）&quot; class=&quot;headerlink&quot; title=&quot;Node.js 目录穿越漏洞（CVE-2017-14849）&quot;&gt;&lt;/a&gt;Node.js 目录穿越漏洞（CVE-2017-14849）&lt;/h1&gt;&lt;h2 id=&quot;漏洞原理&quot;&gt;&lt;a href=&quot;#漏洞原理&quot; class=&quot;headerlink&quot; title=&quot;漏洞原理&quot;&gt;&lt;/a&gt;漏洞原理&lt;/h2&gt;&lt;p&gt;参考文档：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://nodejs.org/en/blog/vulnerability/september-2017-path-validation/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://nodejs.org/en/blog/vulnerability/september-2017-path-validation/&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://security.tencent.com/index.php/blog/msg/121&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://security.tencent.com/index.php/blog/msg/121&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;原因是 Node.js 8.5.0 对目录进行&lt;code&gt;normalize&lt;/code&gt;操作时出现了逻辑错误，导致向上层跳跃的时候（如&lt;code&gt;../../../../../../etc/passwd&lt;/code&gt;），在中间位置增加&lt;code&gt;foo/../&lt;/code&gt;（如&lt;code&gt;../../../foo/../../../../etc/passwd&lt;/code&gt;），即可使&lt;code&gt;normalize&lt;/code&gt;返回&lt;code&gt;/etc/passwd&lt;/code&gt;，但实际上正确结果应该是&lt;code&gt;../../../../../../etc/passwd&lt;/code&gt;。&lt;/p&gt;
-&lt;p&gt;express这类web框架，通常会提供了静态文件服务器的功能，这些功能依赖于&lt;code&gt;normalize&lt;/code&gt;函数。比如，express在判断path是否超出静态目录范围时，就用到了&lt;code&gt;normalize&lt;/code&gt;函数，上述BUG导致&lt;code&gt;normalize&lt;/code&gt;函数返回错误结果导致绕过了检查，造成任意文件读取漏洞。&lt;/p&gt;
-&lt;p&gt;当然，&lt;code&gt;normalize&lt;/code&gt;的BUG可以影响的绝非仅有express，更有待深入挖掘。不过因为这个BUG是node 8.5.0 中引入的，在 8.6 中就进行了修复，所以影响范围有限。&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    
-    
-      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
-    
-      <category term="Node.js" scheme="http://joker-vip.github.io/tags/Node-js/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Nginx 解析漏洞复现</title>
-    <link href="http://joker-vip.github.io/2021/11/10/Nginx%20%E8%A7%A3%E6%9E%90%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    <id>http://joker-vip.github.io/2021/11/10/Nginx%20%E8%A7%A3%E6%9E%90%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/</id>
-    <published>2021-11-10T07:30:35.000Z</published>
-    <updated>2021-11-15T01:29:17.453Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;Nginx-解析漏洞复现&quot;&gt;&lt;a href=&quot;#Nginx-解析漏洞复现&quot; class=&quot;headerlink&quot; title=&quot;Nginx 解析漏洞复现&quot;&gt;&lt;/a&gt;Nginx 解析漏洞复现&lt;/h1&gt;&lt;p&gt;Nginx解析漏洞复现。&lt;/p&gt;
-&lt;p&gt;版本信息：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Nginx 1.x 最新版&lt;/li&gt;
-&lt;li&gt;PHP 7.x最新版&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;由此可知，该漏洞与Nginx、php版本无关，属于用户配置不当造成的解析漏洞。&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    
-    
-      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
-    
-      <category term="Nginx" scheme="http://joker-vip.github.io/tags/Nginx/"/>
     
   </entry>
   
