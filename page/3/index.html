@@ -293,7 +293,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://joker-vip.github.io/2021/12/05/PHP-FPM%20%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%20(CVE-2019-11043)/">
+    <link itemprop="mainEntityOfPage" href="http://joker-vip.github.io/2022/01/12/Apache%20Solr%20RemoteStreaming%20%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E8%AF%BB%E5%8F%96%E5%92%8C%20SSRF/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="joker0xxx3">
@@ -312,7 +312,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2021/12/05/PHP-FPM%20%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%20(CVE-2019-11043)/" itemprop="url">PHP-FPM 远程命令执行 (CVE-2019-11043)</a></h1>
+                <a class="post-title-link" href="/2022/01/12/Apache%20Solr%20RemoteStreaming%20%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E8%AF%BB%E5%8F%96%E5%92%8C%20SSRF/" itemprop="url">Apache Solr RemoteStreaming 任意文件读取和 SSRF</a></h1>
         
 
         <div class="post-meta">
@@ -325,8 +325,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-12-05T15:30:35+08:00">
-                2021-12-05
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2022-01-12T17:24:27+08:00">
+                2022-01-12
               </time>
             
 
@@ -335,28 +335,6 @@
             
           </span>
 
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/" itemprop="url" rel="index">
-                    <span itemprop="name">漏洞复现</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
           
 
           
@@ -386,23 +364,23 @@
 
       
         
-          <h1 id="PHP-FPM-远程命令执行-CVE-2019-11043"><a href="#PHP-FPM-远程命令执行-CVE-2019-11043" class="headerlink" title="PHP-FPM 远程命令执行 (CVE-2019-11043)"></a>PHP-FPM 远程命令执行 (CVE-2019-11043)</h1><p>在 Real World CTF 2019 Quals 中发现了一个 PHP 远程代码执行 0-Day。</p>
-<blockquote>
-<p>Real World CTF 2019 Quals 是由长亭科技在中国举办的 CTF 挑战赛。</p>
-</blockquote>
+          
+            <h1 id="Apache-Solr-RemoteStreaming-任意文件读取和-SSRF"><a href="#Apache-Solr-RemoteStreaming-任意文件读取和-SSRF" class="headerlink" title="Apache Solr RemoteStreaming 任意文件读取和 SSRF"></a>Apache Solr RemoteStreaming 任意文件读取和 SSRF</h1><p>Apache Solr 是一个开源搜索服务器。当 Apache Solr 不启用身份验证时，攻击者可以直接制造请求以启用特定配置，最终导致 SSRF 或任意文件读取。</p>
 <p>参考：</p>
 <ul>
-<li><a href="https://bugs.php.net/bug.php?id=78599" target="_blank" rel="noopener">https://bugs.php.net/bug.php?id=78599</a></li>
-<li><a href="https://lab.wallarm.com/php-remote-code-execution-0-day-discovered-in-real-world-ctf-exercise/" target="_blank" rel="noopener">https://lab.wallarm.com/php-remote-code-execution-0-day-discovered-in-real-world-ctf-exercise/</a></li>
-<li><a href="https://github.com/neex/phuip-fpizdam" target="_blank" rel="noopener">https://github.com/neex/phuip-fpizdam</a></li>
+<li><a href="https://mp.weixin.qq.com/s/3WuWUGO61gM0dBpwqTfenQ" target="_blank" rel="noopener">https://mp.weixin.qq.com/s/3WuWUGO61gM0dBpwqTfenQ</a></li>
 </ul>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2021/12/05/PHP-FPM%20%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%20(CVE-2019-11043)/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>环境启动后，浏览器<code>http://192.168.44.132:8983</code>查看Apache Solr。</p>
+<p>首先，访问<code>http://192.168.44.132:8983/solr/admin/cores?indexInfo=false&amp;wt=json</code>提取数据库名称：</p>
+<p>![image-20220112151942073](Apache Solr RemoteStreaming 任意文件读取和 SSRF/image-20220112151942073.png)</p>
+<p>发送如下请求，修改数据库配置<code>demo</code>启用<code>RemoteStreaming</code>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">curl -i -s -k -X $&#39;POST&#39; \</span><br><span class="line">     -H $&#39;Content-Type: application&#x2F;json&#39; --data-binary $&#39;&#123;\&quot;set-property\&quot;:&#123;\&quot;requestDispatcher.requestParsers.enableRemoteStreaming\&quot;:true&#125;&#125;&#39; \</span><br><span class="line">     $&#39;http:&#x2F;&#x2F;192.168.44.132:8983&#x2F;solr&#x2F;demo&#x2F;config&#39;</span><br></pre></td></tr></table></figure>
+
+<p>![image-20220112152051635](Apache Solr RemoteStreaming 任意文件读取和 SSRF/image-20220112152051635.png)</p>
+<p>然后通过<code>stream.url</code>以下方式读取任意文件：</p>
+<p>![image-20220112152404255](Apache Solr RemoteStreaming 任意文件读取和 SSRF/image-20220112152404255.png)</p>
+
+          
         
       
     </div>
@@ -449,7 +427,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://joker-vip.github.io/2021/12/05/PHP%20imap%20%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2018-19518%EF%BC%89/">
+    <link itemprop="mainEntityOfPage" href="http://joker-vip.github.io/2022/01/12/Apache%20Solr%20%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2019-0193%EF%BC%89/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="joker0xxx3">
@@ -468,7 +446,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2021/12/05/PHP%20imap%20%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2018-19518%EF%BC%89/" itemprop="url">PHP imap 远程命令执行漏洞（CVE-2018-19518）</a></h1>
+                <a class="post-title-link" href="/2022/01/12/Apache%20Solr%20%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2019-0193%EF%BC%89/" itemprop="url">Apache Solr 远程命令执行漏洞（CVE-2019-0193）</a></h1>
         
 
         <div class="post-meta">
@@ -481,8 +459,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-12-05T14:30:35+08:00">
-                2021-12-05
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2022-01-12T16:30:35+08:00">
+                2022-01-12
               </time>
             
 
@@ -542,18 +520,476 @@
 
       
         
-          <h1 id="PHP-imap-远程命令执行漏洞（CVE-2018-19518）"><a href="#PHP-imap-远程命令执行漏洞（CVE-2018-19518）" class="headerlink" title="PHP imap 远程命令执行漏洞（CVE-2018-19518）"></a>PHP imap 远程命令执行漏洞（CVE-2018-19518）</h1><p>php imap扩展用于在PHP中执行邮件收发操作。其<code>imap_open</code>函数会调用rsh来连接远程shell，而debian/ubuntu中默认使用ssh来代替rsh的功能（也就是说，在debian系列系统中，执行rsh命令实际执行的是ssh命令）。</p>
-<p>因为ssh命令中可以通过设置<code>-oProxyCommand=</code>来调用第三方命令，攻击者通过注入注入这个参数，最终将导致命令执行漏洞。</p>
+          <h1 id="Apache-Solr-远程命令执行漏洞（CVE-2019-0193）"><a href="#Apache-Solr-远程命令执行漏洞（CVE-2019-0193）" class="headerlink" title="Apache Solr 远程命令执行漏洞（CVE-2019-0193）"></a>Apache Solr 远程命令执行漏洞（CVE-2019-0193）</h1><p>漏洞原理与分析可以参考：</p>
+<ul>
+<li><a href="https://mp.weixin.qq.com/s/typLOXZCev_9WH_Ux0s6oA" target="_blank" rel="noopener">https://mp.weixin.qq.com/s/typLOXZCev_9WH_Ux0s6oA</a></li>
+<li><a href="https://paper.seebug.org/1009/" target="_blank" rel="noopener">https://paper.seebug.org/1009/</a></li>
+</ul>
+<p>Apache Solr 是一个开源的搜索服务器。Solr 使用 Java 语言开发，主要基于 HTTP 和 Apache Lucene 实现。此次漏洞出现在Apache Solr的DataImportHandler，该模块是一个可选但常用的模块，用于从数据库和其他源中提取数据。它具有一个功能，其中所有的DIH配置都可以通过外部请求的dataConfig参数来设置。由于DIH配置可以包含脚本，因此攻击者可以通过构造危险的请求，从而造成远程命令执行。</p>
+<p>本环境测试RCE漏洞。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2022/01/12/Apache%20Solr%20%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2019-0193%EF%BC%89/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://joker-vip.github.io/2022/01/12/Apache%20Solr%20%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2017-12629%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="joker0xxx3">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/header.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="joker0xxx3's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2022/01/12/Apache%20Solr%20%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2017-12629%EF%BC%89/" itemprop="url">Apache Solr 远程命令执行漏洞（CVE-2017-12629）</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+		    
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2022-01-12T15:30:35+08:00">
+                2022-01-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/" itemprop="url" rel="index">
+                    <span itemprop="name">漏洞复现</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="Apache-Solr-远程命令执行漏洞（CVE-2017-12629）"><a href="#Apache-Solr-远程命令执行漏洞（CVE-2017-12629）" class="headerlink" title="Apache Solr 远程命令执行漏洞（CVE-2017-12629）"></a>Apache Solr 远程命令执行漏洞（CVE-2017-12629）</h1><p>漏洞原理与分析可以参考：</p>
+<ul>
+<li><a href="https://www.exploit-db.com/exploits/43009/" target="_blank" rel="noopener">https://www.exploit-db.com/exploits/43009/</a></li>
+<li><a href="https://paper.seebug.org/425/" target="_blank" rel="noopener">https://paper.seebug.org/425/</a></li>
+</ul>
+<p>Apache Solr 是一个开源的搜索服务器。Solr 使用 Java 语言开发，主要基于 HTTP 和 Apache Lucene 实现。原理大致是文档通过Http利用XML加到一个搜索集合中。查询该集合也是通过 http收到一个XML/JSON响应来实现。此次7.1.0之前版本总共爆出两个漏洞：<a href="https://github.com/vulhub/vulhub/tree/master/solr/CVE-2017-12629-XXE" target="_blank" rel="noopener">XML实体扩展漏洞（XXE）</a>和远程命令执行漏洞（RCE），二者可以连接成利用链，编号均为CVE-2017-12629。</p>
+<p>本环境测试RCE漏洞。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2022/01/12/Apache%20Solr%20%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2017-12629%EF%BC%89/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://joker-vip.github.io/2022/01/12/Apache%20solr%20XML%20%E5%AE%9E%E4%BD%93%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2017-12629%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="joker0xxx3">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/header.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="joker0xxx3's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2022/01/12/Apache%20solr%20XML%20%E5%AE%9E%E4%BD%93%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2017-12629%EF%BC%89/" itemprop="url">Apache solr XML 实体注入漏洞（CVE-2017-12629）</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+		    
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2022-01-12T14:30:35+08:00">
+                2022-01-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/" itemprop="url" rel="index">
+                    <span itemprop="name">漏洞复现</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="Apache-solr-XML-实体注入漏洞（CVE-2017-12629）"><a href="#Apache-solr-XML-实体注入漏洞（CVE-2017-12629）" class="headerlink" title="Apache solr XML 实体注入漏洞（CVE-2017-12629）"></a>Apache solr XML 实体注入漏洞（CVE-2017-12629）</h1><p>漏洞原理与分析可以参考：</p>
+<ul>
+<li><a href="https://www.exploit-db.com/exploits/43009/" target="_blank" rel="noopener">https://www.exploit-db.com/exploits/43009/</a></li>
+<li><a href="https://paper.seebug.org/425/" target="_blank" rel="noopener">https://paper.seebug.org/425/</a></li>
+</ul>
+<p>Apache Solr 是一个开源的搜索服务器。Solr 使用 Java 语言开发，主要基于 HTTP 和 Apache Lucene 实现。原理大致是文档通过Http利用XML加到一个搜索集合中。查询该集合也是通过 http收到一个XML/JSON响应来实现。此次7.1.0之前版本总共爆出两个漏洞：XML实体扩展漏洞（XXE）和远程命令执行漏洞（RCE），二者可以连接成利用链，编号均为CVE-2017-12629。</p>
+<p>本环境仅测试XXE漏洞，RCE和利用链，可以在 <a href="https://github.com/vulhub/vulhub/tree/master/solr/CVE-2017-12629-RCE" target="_blank" rel="noopener">https://github.com/vulhub/vulhub/tree/master/solr/CVE-2017-12629-RCE</a> 中查看。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2022/01/12/Apache%20solr%20XML%20%E5%AE%9E%E4%BD%93%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2017-12629%EF%BC%89/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://joker-vip.github.io/2022/01/10/Apache%20Shiro%20%E8%BA%AB%E4%BB%BD%E9%AA%8C%E8%AF%81%E7%BB%95%E8%BF%87%E6%BC%8F%E6%B4%9E%20(CVE-2020-1957)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="joker0xxx3">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/header.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="joker0xxx3's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2022/01/10/Apache%20Shiro%20%E8%BA%AB%E4%BB%BD%E9%AA%8C%E8%AF%81%E7%BB%95%E8%BF%87%E6%BC%8F%E6%B4%9E%20(CVE-2020-1957)/" itemprop="url">Apache Shiro 身份验证绕过漏洞 (CVE-2020-1957)</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+		    
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2022-01-10T14:30:35+08:00">
+                2022-01-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/" itemprop="url" rel="index">
+                    <span itemprop="name">漏洞复现</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="Apache-Shiro-身份验证绕过漏洞-CVE-2020-1957"><a href="#Apache-Shiro-身份验证绕过漏洞-CVE-2020-1957" class="headerlink" title="Apache Shiro 身份验证绕过漏洞 (CVE-2020-1957)"></a>Apache Shiro 身份验证绕过漏洞 (CVE-2020-1957)</h1><p>Apache Shiro 是一个功能强大且易于使用的 Java 安全框架，它执行身份验证、授权、加密和会话管理。</p>
+<p>在具有 Spring 动态控制器的 1.5.2 之前的 Apache Shiro 版本中，攻击者可以构造恶意请求<code>..;</code>以绕过目录身份验证。</p>
 <p>参考链接：</p>
 <ul>
-<li><a href="https://bugs.php.net/bug.php?id=77153" target="_blank" rel="noopener">https://bugs.php.net/bug.php?id=77153</a></li>
-<li><a href="https://github.com/Bo0oM/PHP_imap_open_exploit" target="_blank" rel="noopener">https://github.com/Bo0oM/PHP_imap_open_exploit</a></li>
-<li><a href="https://antichat.com/threads/463395/#post-4254681" target="_blank" rel="noopener">https://antichat.com/threads/463395/#post-4254681</a></li>
-<li><a href="https://nvd.nist.gov/vuln/detail/CVE-2018-19518" target="_blank" rel="noopener">https://nvd.nist.gov/vuln/detail/CVE-2018-19518</a></li>
+<li><a href="https://github.com/apache/shiro/commit/3708d7907016bf2fa12691dff6ff0def1249b8ce#diff-98f7bc5c0391389e56531f8b3754081aL139" target="_blank" rel="noopener">https://github.com/apache/shiro/commit/3708d7907016bf2fa12691dff6ff0def1249b8ce#diff-98f7bc5c0391389e56531f8b3754081aL139</a></li>
+<li><a href="https://xz.aliyun.com/t/8281" target="_blank" rel="noopener">https://xz.aliyun.com/t/8281</a></li>
+<li><a href="https://blog.spoock.com/2020/05/09/cve-2020-1957/" target="_blank" rel="noopener">https://blog.spoock.com/2020/05/09/cve-2020-1957/</a></li>
 </ul>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2021/12/05/PHP%20imap%20%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2018-19518%EF%BC%89/#more" rel="contents">
+            <a class="btn" href="/2022/01/10/Apache%20Shiro%20%E8%BA%AB%E4%BB%BD%E9%AA%8C%E8%AF%81%E7%BB%95%E8%BF%87%E6%BC%8F%E6%B4%9E%20(CVE-2020-1957)/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -604,7 +1040,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://joker-vip.github.io/2021/12/05/PHP-CGI%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2012-1823%EF%BC%89/">
+    <link itemprop="mainEntityOfPage" href="http://joker-vip.github.io/2022/01/10/Apache%20Shiro%201.2.4%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2016-4437%EF%BC%89/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="joker0xxx3">
@@ -623,7 +1059,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2021/12/05/PHP-CGI%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2012-1823%EF%BC%89/" itemprop="url">PHP-CGI远程代码执行漏洞（CVE-2012-1823）</a></h1>
+                <a class="post-title-link" href="/2022/01/10/Apache%20Shiro%201.2.4%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2016-4437%EF%BC%89/" itemprop="url">Apache Shiro 1.2.4反序列化漏洞（CVE-2016-4437）</a></h1>
         
 
         <div class="post-meta">
@@ -636,8 +1072,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-12-05T13:30:35+08:00">
-                2021-12-05
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2022-01-10T13:30:35+08:00">
+                2022-01-10
               </time>
             
 
@@ -697,13 +1133,11 @@
 
       
         
-          <h1 id="PHP-CGI远程代码执行漏洞（CVE-2012-1823）"><a href="#PHP-CGI远程代码执行漏洞（CVE-2012-1823）" class="headerlink" title="PHP-CGI远程代码执行漏洞（CVE-2012-1823）"></a>PHP-CGI远程代码执行漏洞（CVE-2012-1823）</h1><h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><ul>
-<li>参考文章 <a href="http://eindbazen.net/2012/05/php-cgi-advisory-cve-2012-1823/" target="_blank" rel="noopener">http://eindbazen.net/2012/05/php-cgi-advisory-cve-2012-1823/</a></li>
-<li>影响版本 php &lt; 5.3.12 or php &lt; 5.4.2</li>
-</ul>
+          <h1 id="Apache-Shiro-1-2-4反序列化漏洞（CVE-2016-4437）"><a href="#Apache-Shiro-1-2-4反序列化漏洞（CVE-2016-4437）" class="headerlink" title="Apache Shiro 1.2.4反序列化漏洞（CVE-2016-4437）"></a>Apache Shiro 1.2.4反序列化漏洞（CVE-2016-4437）</h1><p>Apache Shiro是一款开源安全框架，提供身份验证、授权、密码学和会话管理。Shiro框架直观、易用，同时也能提供健壮的安全性。</p>
+<p>Apache Shiro 1.2.4及以前版本中，加密的用户信息序列化后存储在名为remember-me的Cookie中。攻击者可以使用Shiro的默认密钥伪造用户Cookie，触发Java反序列化漏洞，进而在目标机器上执行任意命令。</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2021/12/05/PHP-CGI%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2012-1823%EF%BC%89/#more" rel="contents">
+            <a class="btn" href="/2022/01/10/Apache%20Shiro%201.2.4%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2016-4437%EF%BC%89/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -754,7 +1188,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://joker-vip.github.io/2021/12/05/PHP%208.1.0-dev%20User-Agentt%20%E5%90%8E%E9%97%A8/">
+    <link itemprop="mainEntityOfPage" href="http://joker-vip.github.io/2022/01/10/rsync%20%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="joker0xxx3">
@@ -773,7 +1207,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2021/12/05/PHP%208.1.0-dev%20User-Agentt%20%E5%90%8E%E9%97%A8/" itemprop="url">PHP 8.1.0-dev User-Agentt 后门</a></h1>
+                <a class="post-title-link" href="/2022/01/10/rsync%20%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E/" itemprop="url">rsync 未授权访问漏洞</a></h1>
         
 
         <div class="post-meta">
@@ -786,8 +1220,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-12-05T12:30:35+08:00">
-                2021-12-05
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2022-01-10T12:30:35+08:00">
+                2022-01-10
               </time>
             
 
@@ -847,16 +1281,310 @@
 
       
         
-          <h1 id="PHP-8-1-0-dev-User-Agentt-后门"><a href="#PHP-8-1-0-dev-User-Agentt-后门" class="headerlink" title="PHP 8.1.0-dev User-Agentt 后门"></a>PHP 8.1.0-dev User-Agentt 后门</h1><p>PHP 8.1.0-dev 版本于 2021 年 3 月 28 日被植入后门，但后门很快被发现并移除。当服务器上存在此后门时，攻击者可以通过发送<strong>User-Agentt</strong>标头来执行任意代码。</p>
+          <h1 id="rsync-未授权访问漏洞"><a href="#rsync-未授权访问漏洞" class="headerlink" title="rsync 未授权访问漏洞"></a>rsync 未授权访问漏洞</h1><p>rsync是Linux下一款数据备份工具，支持通过rsync协议、ssh协议进行远程文件传输。其中rsync协议默认监听873端口，如果目标开启了rsync服务，并且没有配置ACL或访问密码，我们将可以读写目标服务器文件。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2022/01/10/rsync%20%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://joker-vip.github.io/2022/01/01/Redis%204.x5.x%20%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="joker0xxx3">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/header.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="joker0xxx3's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2022/01/01/Redis%204.x5.x%20%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E/" itemprop="url">Redis 4.x/5.x 未授权访问漏洞</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+		    
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2022-01-01T12:30:35+08:00">
+                2022-01-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/" itemprop="url" rel="index">
+                    <span itemprop="name">漏洞复现</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="Redis-4-x-5-x-未授权访问漏洞"><a href="#Redis-4-x-5-x-未授权访问漏洞" class="headerlink" title="Redis 4.x/5.x 未授权访问漏洞"></a>Redis 4.x/5.x 未授权访问漏洞</h1><p>Redis未授权访问在4.x/5.0.5以前版本下，我们可以使用master/slave模式加载远程模块，通过动态链接库的方式执行任意命令。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2022/01/01/Redis%204.x5.x%20%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://joker-vip.github.io/2021/12/16/SaltStack%20Shell%20%E6%B3%A8%E5%85%A5%20(CVE-2020-16846)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="joker0xxx3">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/header.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="joker0xxx3's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2021/12/16/SaltStack%20Shell%20%E6%B3%A8%E5%85%A5%20(CVE-2020-16846)/" itemprop="url">SaltStack Shell 注入 (CVE-2020-16846)</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+		    
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-12-16T13:30:35+08:00">
+                2021-12-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/" itemprop="url" rel="index">
+                    <span itemprop="name">漏洞复现</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="SaltStack-Shell-注入-CVE-2020-16846"><a href="#SaltStack-Shell-注入-CVE-2020-16846" class="headerlink" title="SaltStack Shell 注入 (CVE-2020-16846)"></a>SaltStack Shell 注入 (CVE-2020-16846)</h1><p>Salt 是一种建立在动态通信总线上的基础设施管理新方法。Salt 可用于数据驱动的编排、任何基础设施的远程执行、任何应用程序堆栈的配置管理等等。</p>
+<p>2020 年 11 月，SaltStack 正式披露了两个漏洞，CVE-2020-16846 和 CVE-2020-25592。CVE-2020-25592 允许任意用户使用 SSH 模块，CVE-2020-16846 允许用户执行任意命令。Chain 这两个漏洞将允许未经授权的攻击者通过 Salt API 执行任意命令。</p>
 <p>参考：</p>
 <ul>
-<li><a href="https://news-web.php.net/php.internals/113838" target="_blank" rel="noopener">https://news-web.php.net/php.internals/113838</a></li>
-<li><a href="https://github.com/php/php-src/commit/c730aa26bd52829a49f2ad284b181b7e82a68d7d" target="_blank" rel="noopener">https://github.com/php/php-src/commit/c730aa26bd52829a49f2ad284b181b7e82a68d7d</a></li>
-<li><a href="https://github.com/php/php-src/commit/2b0f239b211c7544ebc7a4cd2c977a5b7a11ed8a" target="_blank" rel="noopener">https://github.com/php/php-src/commit/2b0f239b211c7544ebc7a4cd2c977a5b7a11ed8a</a></li>
+<li><a href="https://mp.weixin.qq.com/s/R8qw_lWizGyeJS0jOcYXag" target="_blank" rel="noopener">https://mp.weixin.qq.com/s/R8qw_lWizGyeJS0jOcYXag</a></li>
+<li><a href="https://docs.saltstack.com/en/latest/ref/netapi/all/salt.netapi.rest_cherrypy.html" target="_blank" rel="noopener">https://docs.saltstack.com/en/latest/ref/netapi/all/salt.netapi.rest_cherrypy.html</a></li>
 </ul>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2021/12/05/PHP%208.1.0-dev%20User-Agentt%20%E5%90%8E%E9%97%A8/#more" rel="contents">
+            <a class="btn" href="/2021/12/16/SaltStack%20Shell%20%E6%B3%A8%E5%85%A5%20(CVE-2020-16846)/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -907,7 +1635,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://joker-vip.github.io/2021/11/11/OpenSMTPD%20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%20(CVE-2020-7247)/">
+    <link itemprop="mainEntityOfPage" href="http://joker-vip.github.io/2021/12/16/SaltStack%20%E6%B0%B4%E5%B9%B3%E6%9D%83%E9%99%90%E7%BB%95%E8%BF%87%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2020-11651%EF%BC%89/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="joker0xxx3">
@@ -926,7 +1654,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2021/11/11/OpenSMTPD%20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%20(CVE-2020-7247)/" itemprop="url">OpenSMTPD 远程代码执行漏洞 (CVE-2020-7247)</a></h1>
+                <a class="post-title-link" href="/2021/12/16/SaltStack%20%E6%B0%B4%E5%B9%B3%E6%9D%83%E9%99%90%E7%BB%95%E8%BF%87%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2020-11651%EF%BC%89/" itemprop="url">SaltStack 水平权限绕过漏洞（CVE-2020-11651）</a></h1>
         
 
         <div class="post-meta">
@@ -939,8 +1667,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-11-11T16:30:35+08:00">
-                2021-11-11
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-12-16T12:30:35+08:00">
+                2021-12-16
               </time>
             
 
@@ -1000,785 +1728,17 @@
 
       
         
-          <h1 id="OpenSMTPD-远程代码执行漏洞-CVE-2020-7247"><a href="#OpenSMTPD-远程代码执行漏洞-CVE-2020-7247" class="headerlink" title="OpenSMTPD 远程代码执行漏洞 (CVE-2020-7247)"></a>OpenSMTPD 远程代码执行漏洞 (CVE-2020-7247)</h1><p>OpenSMTPD 是一个适用于 unix 操作系统（BSD、MacOS、GNU/Linux）的 smtp 服务程序，遵循 RFC 5321 SMTP 协议。OpenSMTPD 最初是为 OpenBSD 操作系统开发的，是 OpenBSD 项目的一部分。由于其开源特性，已分发到其他 unix 平台。根据 ISC 许可证，该软件可供所有人免费使用和重复使用。</p>
-<p><code>CVE-2020-7247</code> 是由于 OpenSMTPD 在实施 RFC 5321 的过程中对发件人/收件人的验证不严造成的。</p>
-<p>2020 年 1 月 29 日，OpenSMTPD 小组正式提交了<code>CVE-2020-7247</code>GitHub 存储库中的 修复程序。修复后对应的版本是<code>OpenSMTPD 6.6.2p1</code>.</p>
-<p><strong>参考：</strong></p>
-<ul>
-<li><a href="https://www.qualys.com/2020/01/28/cve-2020-7247/lpe-rce-opensmtpd.txt" target="_blank" rel="noopener">https://www.qualys.com/2020/01/28/cve-2020-7247/lpe-rce-opensmtpd.txt</a></li>
-<li><a href="https://www.exploit-db.com/exploits/47984" target="_blank" rel="noopener">https://www.exploit-db.com/exploits/47984</a></li>
-<li><a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2020-7247" target="_blank" rel="noopener">https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2020-7247</a></li>
-<li><a href="https://www.anquanke.com/post/id/197689" target="_blank" rel="noopener">https://www.anquanke.com/post/id/197689</a></li>
-</ul>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2021/11/11/OpenSMTPD%20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%20(CVE-2020-7247)/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://joker-vip.github.io/2021/11/11/ApacheOfBiz%20%E4%B8%AD%20XMLRPC%20%E5%8F%82%E6%95%B0%E7%9A%84%E4%B8%8D%E5%AE%89%E5%85%A8%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%20(CVE-2020-9496)/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="joker0xxx3">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/header.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="joker0xxx3's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2021/11/11/ApacheOfBiz%20%E4%B8%AD%20XMLRPC%20%E5%8F%82%E6%95%B0%E7%9A%84%E4%B8%8D%E5%AE%89%E5%85%A8%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%20(CVE-2020-9496)/" itemprop="url">ApacheOfBiz 中 XMLRPC 参数的不安全反序列化 (CVE-2020-9496)</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-		    
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-11-11T15:30:35+08:00">
-                2021-11-11
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/" itemprop="url" rel="index">
-                    <span itemprop="name">漏洞复现</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h1 id="ApacheOfBiz-中-XMLRPC-参数的不安全反序列化-CVE-2020-9496"><a href="#ApacheOfBiz-中-XMLRPC-参数的不安全反序列化-CVE-2020-9496" class="headerlink" title="ApacheOfBiz 中 XMLRPC 参数的不安全反序列化 (CVE-2020-9496)"></a>ApacheOfBiz 中 XMLRPC 参数的不安全反序列化 (CVE-2020-9496)</h1><p>Apache OFBiz 是一个开源的企业资源规划 (ERP) 系统。它提供了一套企业应用程序，可以集成和自动化企业的许多业务流程。</p>
-<p>OfBiz 在 处公开一个 XMLRPC 端点<code>/webtools/control/xmlrpc</code>。这是一个未经身份验证的端点，因为身份验证是基于每个服务应用的。但是，XMLRPC 请求是在身份验证之前处理的。作为此处理的一部分，远程调用的任何序列化参数都被反序列化，因此如果类路径包含任何可用作实现远程代码执行的小工具的类，攻击者将能够在任何 OfBiz 服务器上运行任意系统命令与运行 OfBiz 的 servlet 容器具有相同的权限。</p>
-<p>参考：</p>
-<ol>
-<li><a href="https://securitylab.github.com/advisories/GHSL-2020-069-apache_ofbiz" target="_blank" rel="noopener">https://securitylab.github.com/advisories/GHSL-2020-069-apache_ofbiz</a></li>
-<li><a href="https://github.com/dwisiswant0/CVE-2020-9496" target="_blank" rel="noopener">https://github.com/dwisiswant0/CVE-2020-9496</a></li>
-<li><a href="https://www.cnblogs.com/ph4nt0mer/p/13576739.html" target="_blank" rel="noopener">https://www.cnblogs.com/ph4nt0mer/p/13576739.html</a></li>
-</ol>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2021/11/11/ApacheOfBiz%20%E4%B8%AD%20XMLRPC%20%E5%8F%82%E6%95%B0%E7%9A%84%E4%B8%8D%E5%AE%89%E5%85%A8%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%20(CVE-2020-9496)/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://joker-vip.github.io/2021/11/11/ntopng%20%E8%BA%AB%E4%BB%BD%E9%AA%8C%E8%AF%81%E7%BB%95%E8%BF%87%20(CVE-2021-28073)/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="joker0xxx3">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/header.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="joker0xxx3's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2021/11/11/ntopng%20%E8%BA%AB%E4%BB%BD%E9%AA%8C%E8%AF%81%E7%BB%95%E8%BF%87%20(CVE-2021-28073)/" itemprop="url">ntopng 身份验证绕过 (CVE-2021-28073)</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-		    
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-11-11T14:30:35+08:00">
-                2021-11-11
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/" itemprop="url" rel="index">
-                    <span itemprop="name">漏洞复现</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h1 id="ntopng-身份验证绕过-CVE-2021-28073"><a href="#ntopng-身份验证绕过-CVE-2021-28073" class="headerlink" title="ntopng 身份验证绕过 (CVE-2021-28073)"></a>ntopng 身份验证绕过 (CVE-2021-28073)</h1><p>Ntopng 是一个被动的网络监控工具，专注于可以从服务器捕获的流量中获取的流量和统计信息。</p>
-<p>ntopng 4.2 及之前的版本中存在身份验证绕过漏洞。</p>
+          <h1 id="SaltStack-水平权限绕过漏洞（CVE-2020-11651）"><a href="#SaltStack-水平权限绕过漏洞（CVE-2020-11651）" class="headerlink" title="SaltStack 水平权限绕过漏洞（CVE-2020-11651）"></a>SaltStack 水平权限绕过漏洞（CVE-2020-11651）</h1><p>SaltStack 是基于 Python 开发的一套C/S架构配置管理工具。国外某安全团队披露了 SaltStack 存在认证绕过漏洞（CVE-2020-11651）和目录遍历漏洞（CVE-2020-11652）。</p>
+<p>在 CVE-2020-11651 认证绕过漏洞中，攻击者通过构造恶意请求，可以绕过 Salt Master 的验证逻辑，调用相关未授权函数功能，从而可以造成远程命令执行漏洞。</p>
 <p>参考链接：</p>
 <ul>
-<li><a href="http://noahblog.360.cn/ntopng-multiple-vulnerabilities/" target="_blank" rel="noopener">http://noahblog.360.cn/ntopng-multiple-vulnerabilities/</a></li>
+<li><a href="https://labs.f-secure.com/advisories/saltstack-authorization-bypass" target="_blank" rel="noopener">https://labs.f-secure.com/advisories/saltstack-authorization-bypass</a></li>
+<li><a href="https://github.com/rossengeorgiev/salt-security-backports" target="_blank" rel="noopener">https://github.com/rossengeorgiev/salt-security-backports</a></li>
+<li><a href="https://github.com/saltstack/salt/blob/a67d76b15615983d467ed81371b38b4a17e4f3b7/tests/integration/master/test_clear_funcs.py" target="_blank" rel="noopener">https://github.com/saltstack/salt/blob/a67d76b15615983d467ed81371b38b4a17e4f3b7/tests/integration/master/test_clear_funcs.py</a></li>
 </ul>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2021/11/11/ntopng%20%E8%BA%AB%E4%BB%BD%E9%AA%8C%E8%AF%81%E7%BB%95%E8%BF%87%20(CVE-2021-28073)/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://joker-vip.github.io/2021/11/11/node-postgres%20%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2017-16082%EF%BC%89/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="joker0xxx3">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/header.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="joker0xxx3's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2021/11/11/node-postgres%20%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2017-16082%EF%BC%89/" itemprop="url">node-postgres 代码执行漏洞（CVE-2017-16082）</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-		    
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-11-11T13:30:35+08:00">
-                2021-11-11
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/" itemprop="url" rel="index">
-                    <span itemprop="name">漏洞复现</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h1 id="node-postgres-代码执行漏洞（CVE-2017-16082）"><a href="#node-postgres-代码执行漏洞（CVE-2017-16082）" class="headerlink" title="node-postgres 代码执行漏洞（CVE-2017-16082）"></a>node-postgres 代码执行漏洞（CVE-2017-16082）</h1><h2 id="漏洞原理"><a href="#漏洞原理" class="headerlink" title="漏洞原理"></a>漏洞原理</h2><p>node-postgres在处理类型为<code>Row Description</code>的postgres返回包时，将字段名拼接到代码中。由于没有进行合理转义，导致一个特殊构造的字段名可逃逸出代码单引号限制，造成代码执行漏洞。</p>
-<p>参考链接：</p>
-<ul>
-<li><a href="https://www.leavesongs.com/PENETRATION/node-postgres-code-execution-vulnerability.html" target="_blank" rel="noopener">https://www.leavesongs.com/PENETRATION/node-postgres-code-execution-vulnerability.html</a></li>
-<li><a href="https://node-postgres.com/announcements#2017-08-12-code-execution-vulnerability" target="_blank" rel="noopener">https://node-postgres.com/announcements#2017-08-12-code-execution-vulnerability</a></li>
-<li><a href="https://zhuanlan.zhihu.com/p/28575189" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/28575189</a></li>
-</ul>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2021/11/11/node-postgres%20%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2017-16082%EF%BC%89/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://joker-vip.github.io/2021/11/11/Node.js%20%E7%9B%AE%E5%BD%95%E7%A9%BF%E8%B6%8A%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2017-14849%EF%BC%89/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="joker0xxx3">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/header.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="joker0xxx3's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2021/11/11/Node.js%20%E7%9B%AE%E5%BD%95%E7%A9%BF%E8%B6%8A%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2017-14849%EF%BC%89/" itemprop="url">Node.js 目录穿越漏洞（CVE-2017-14849）</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-		    
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-11-11T12:30:35+08:00">
-                2021-11-11
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/" itemprop="url" rel="index">
-                    <span itemprop="name">漏洞复现</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h1 id="Node-js-目录穿越漏洞（CVE-2017-14849）"><a href="#Node-js-目录穿越漏洞（CVE-2017-14849）" class="headerlink" title="Node.js 目录穿越漏洞（CVE-2017-14849）"></a>Node.js 目录穿越漏洞（CVE-2017-14849）</h1><h2 id="漏洞原理"><a href="#漏洞原理" class="headerlink" title="漏洞原理"></a>漏洞原理</h2><p>参考文档：</p>
-<ul>
-<li><a href="https://nodejs.org/en/blog/vulnerability/september-2017-path-validation/" target="_blank" rel="noopener">https://nodejs.org/en/blog/vulnerability/september-2017-path-validation/</a></li>
-<li><a href="https://security.tencent.com/index.php/blog/msg/121" target="_blank" rel="noopener">https://security.tencent.com/index.php/blog/msg/121</a></li>
-</ul>
-<p>原因是 Node.js 8.5.0 对目录进行<code>normalize</code>操作时出现了逻辑错误，导致向上层跳跃的时候（如<code>../../../../../../etc/passwd</code>），在中间位置增加<code>foo/../</code>（如<code>../../../foo/../../../../etc/passwd</code>），即可使<code>normalize</code>返回<code>/etc/passwd</code>，但实际上正确结果应该是<code>../../../../../../etc/passwd</code>。</p>
-<p>express这类web框架，通常会提供了静态文件服务器的功能，这些功能依赖于<code>normalize</code>函数。比如，express在判断path是否超出静态目录范围时，就用到了<code>normalize</code>函数，上述BUG导致<code>normalize</code>函数返回错误结果导致绕过了检查，造成任意文件读取漏洞。</p>
-<p>当然，<code>normalize</code>的BUG可以影响的绝非仅有express，更有待深入挖掘。不过因为这个BUG是node 8.5.0 中引入的，在 8.6 中就进行了修复，所以影响范围有限。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2021/11/11/Node.js%20%E7%9B%AE%E5%BD%95%E7%A9%BF%E8%B6%8A%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2017-14849%EF%BC%89/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://joker-vip.github.io/2021/11/10/Nginx%20%E8%A7%A3%E6%9E%90%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="joker0xxx3">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/header.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="joker0xxx3's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2021/11/10/Nginx%20%E8%A7%A3%E6%9E%90%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/" itemprop="url">Nginx 解析漏洞复现</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-		    
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-11-10T15:30:35+08:00">
-                2021-11-10
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/" itemprop="url" rel="index">
-                    <span itemprop="name">漏洞复现</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h1 id="Nginx-解析漏洞复现"><a href="#Nginx-解析漏洞复现" class="headerlink" title="Nginx 解析漏洞复现"></a>Nginx 解析漏洞复现</h1><p>Nginx解析漏洞复现。</p>
-<p>版本信息：</p>
-<ul>
-<li>Nginx 1.x 最新版</li>
-<li>PHP 7.x最新版</li>
-</ul>
-<p>由此可知，该漏洞与Nginx、php版本无关，属于用户配置不当造成的解析漏洞。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2021/11/10/Nginx%20%E8%A7%A3%E6%9E%90%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/#more" rel="contents">
+            <a class="btn" href="/2021/12/16/SaltStack%20%E6%B0%B4%E5%B9%B3%E6%9D%83%E9%99%90%E7%BB%95%E8%BF%87%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2020-11651%EF%BC%89/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1820,7 +1780,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/2/">&lt;</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><a class="extend next" rel="next" href="/page/4/">&gt;</a>
+    <a class="extend prev" rel="prev" href="/page/2/">&lt;</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/">14</a><a class="extend next" rel="next" href="/page/4/">&gt;</a>
   </nav>
 
 
@@ -1868,7 +1828,7 @@
             
               <div class="site-state-item site-state-posts">
                 <a href="/archives">
-                  <span class="site-state-item-count">113</span>
+                  <span class="site-state-item-count">131</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1890,7 +1850,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">74</span>
+                  <span class="site-state-item-count">76</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -1948,6 +1908,10 @@
                 
                   <span class="links-of-blogroll-item">
                     <a href="https://www.cnblogs.com/sakura521/" title="sakura" target="_blank">sakura</a>
+                  </span>
+                
+                  <span class="links-of-blogroll-item">
+                    <a href="https://www.haoyun.fit/" title="小透的少年江湖" target="_blank">小透的少年江湖</a>
                   </span>
                 
             </div>
