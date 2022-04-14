@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://joker-vip.github.io/"/>
-  <updated>2022-03-16T07:05:08.410Z</updated>
+  <updated>2022-04-14T03:00:45.754Z</updated>
   <id>http://joker-vip.github.io/</id>
   
   <author>
@@ -17,16 +17,139 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>内网信息收集</title>
+    <link href="http://joker-vip.github.io/2022/04/10/2%20%E5%86%85%E7%BD%91%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/"/>
+    <id>http://joker-vip.github.io/2022/04/10/2%20%E5%86%85%E7%BD%91%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/</id>
+    <published>2022-04-10T07:35:35.000Z</published>
+    <updated>2022-04-14T03:00:45.754Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;内网信息收集&quot;&gt;&lt;a href=&quot;#内网信息收集&quot; class=&quot;headerlink&quot; title=&quot;内网信息收集&quot;&gt;&lt;/a&gt;内网信息收集&lt;/h1&gt;&lt;h2 id=&quot;1-收集本机信息&quot;&gt;&lt;a href=&quot;#1-收集本机信息&quot; class=&quot;headerlink&quot; title=&quot;1 收集本机信息&quot;&gt;&lt;/a&gt;1 收集本机信息&lt;/h2&gt;&lt;h3 id=&quot;1-1-手动收集信息&quot;&gt;&lt;a href=&quot;#1-1-手动收集信息&quot; class=&quot;headerlink&quot; title=&quot;1.1 手动收集信息&quot;&gt;&lt;/a&gt;1.1 手动收集信息&lt;/h3&gt;&lt;p&gt;查询网络配置信息&lt;/p&gt;
+&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;ipconfig &amp;#x2F;all&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+
+&lt;p&gt;查询操作系统和版本信息&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="内网" scheme="http://joker-vip.github.io/categories/%E5%86%85%E7%BD%91/"/>
+    
+    
+      <category term="内网" scheme="http://joker-vip.github.io/tags/%E5%86%85%E7%BD%91/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>构建内网环境</title>
+    <link href="http://joker-vip.github.io/2022/04/10/1.3%20%E6%9E%84%E5%BB%BA%E5%86%85%E7%BD%91%E7%8E%AF%E5%A2%83/"/>
+    <id>http://joker-vip.github.io/2022/04/10/1.3%20%E6%9E%84%E5%BB%BA%E5%86%85%E7%BD%91%E7%8E%AF%E5%A2%83/</id>
+    <published>2022-04-10T06:35:35.000Z</published>
+    <updated>2022-04-14T03:00:33.745Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;构建内网环境&quot;&gt;&lt;a href=&quot;#构建内网环境&quot; class=&quot;headerlink&quot; title=&quot;构建内网环境&quot;&gt;&lt;/a&gt;构建内网环境&lt;/h1&gt;&lt;p&gt;Windows Server 2012 R2 ：192.168.1.1（DC）&lt;/p&gt;
+&lt;p&gt;Windows Server 2008 R2 ：192.168.1.2&lt;/p&gt;
+&lt;p&gt;Windows 7：192.168.1.3&lt;/p&gt;
+&lt;p&gt;（仅主机模式）&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="内网" scheme="http://joker-vip.github.io/categories/%E5%86%85%E7%BD%91/"/>
+    
+    
+      <category term="内网" scheme="http://joker-vip.github.io/tags/%E5%86%85%E7%BD%91/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>windows powershell 基础</title>
+    <link href="http://joker-vip.github.io/2022/04/10/1.2%20windows%20powershell%20%E5%9F%BA%E7%A1%80/"/>
+    <id>http://joker-vip.github.io/2022/04/10/1.2%20windows%20powershell%20%E5%9F%BA%E7%A1%80/</id>
+    <published>2022-04-10T05:35:35.000Z</published>
+    <updated>2022-04-14T02:59:35.302Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;windows-powershell-基础&quot;&gt;&lt;a href=&quot;#windows-powershell-基础&quot; class=&quot;headerlink&quot; title=&quot;windows powershell 基础&quot;&gt;&lt;/a&gt;windows powershell 基础&lt;/h1&gt;&lt;h2 id=&quot;1-powershell-基础&quot;&gt;&lt;a href=&quot;#1-powershell-基础&quot; class=&quot;headerlink&quot; title=&quot;1.powershell 基础&quot;&gt;&lt;/a&gt;1.powershell 基础&lt;/h2&gt;&lt;p&gt;PowerShell 内置在 Windows 7、Windows Server 2008 R2 及更高版本的 Windows 系统中，同时 PowerShell 是构建在 .NET 平台上的，所有命令传递的都是 .NET 对象。&lt;/p&gt;
+&lt;p&gt;PowerShell 有如下特点：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Windows 7 以上的操作系统默认安装&lt;/li&gt;
+&lt;li&gt;PowerShell 脚本可以运行在内存中，不需要写入磁盘&lt;/li&gt;
+&lt;li&gt;可以从另一个系统中下载 PowerShell 脚本并执行&lt;/li&gt;
+&lt;li&gt;目前很多工具都是基于 PowerShell 开发的&lt;/li&gt;
+&lt;li&gt;很多安全软件检测不到 PowerShell 的活动&lt;/li&gt;
+&lt;li&gt;cmd 通常会被阻止运行，但是 PowerShell 不会&lt;/li&gt;
+&lt;li&gt;可以用来管理活动目录&lt;/li&gt;
+&lt;/ul&gt;
+    
+    </summary>
+    
+    
+      <category term="内网" scheme="http://joker-vip.github.io/categories/%E5%86%85%E7%BD%91/"/>
+    
+    
+      <category term="内网" scheme="http://joker-vip.github.io/tags/%E5%86%85%E7%BD%91/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>内网基础知识</title>
+    <link href="http://joker-vip.github.io/2022/04/10/1.1%E5%86%85%E7%BD%91%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/"/>
+    <id>http://joker-vip.github.io/2022/04/10/1.1%E5%86%85%E7%BD%91%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/</id>
+    <published>2022-04-10T04:35:35.000Z</published>
+    <updated>2022-04-14T02:59:15.553Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;内网基础知识&quot;&gt;&lt;a href=&quot;#内网基础知识&quot; class=&quot;headerlink&quot; title=&quot;内网基础知识&quot;&gt;&lt;/a&gt;内网基础知识&lt;/h1&gt;&lt;h2 id=&quot;工作组&quot;&gt;&lt;a href=&quot;#工作组&quot; class=&quot;headerlink&quot; title=&quot;工作组&quot;&gt;&lt;/a&gt;工作组&lt;/h2&gt;&lt;p&gt;将不同的计算机按功能或者部门进行分类，同一网络中的工作组可以随意加入退出，可以互相访问，没有集中管理的作用，所有计算机权限对等。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="内网" scheme="http://joker-vip.github.io/categories/%E5%86%85%E7%BD%91/"/>
+    
+    
+      <category term="内网" scheme="http://joker-vip.github.io/tags/%E5%86%85%E7%BD%91/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>如何利用DNSlog进行更高效率的无回显渗透</title>
+    <link href="http://joker-vip.github.io/2022/03/20/DNSlog/"/>
+    <id>http://joker-vip.github.io/2022/03/20/DNSlog/</id>
+    <published>2022-03-20T06:35:35.000Z</published>
+    <updated>2022-04-13T11:58:44.734Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;如何利用DNSlog进行更高效率的无回显渗透&quot;&gt;&lt;a href=&quot;#如何利用DNSlog进行更高效率的无回显渗透&quot; class=&quot;headerlink&quot; title=&quot;如何利用DNSlog进行更高效率的无回显渗透&quot;&gt;&lt;/a&gt;如何利用DNSlog进行更高效率的无回显渗透&lt;/h1&gt;&lt;h2 id=&quot;0-说在前面&quot;&gt;&lt;a href=&quot;#0-说在前面&quot; class=&quot;headerlink&quot; title=&quot;0.说在前面&quot;&gt;&lt;/a&gt;0.说在前面&lt;/h2&gt;&lt;h3 id=&quot;0-1-DNSlog工具&quot;&gt;&lt;a href=&quot;#0-1-DNSlog工具&quot; class=&quot;headerlink&quot; title=&quot;0.1.DNSlog工具&quot;&gt;&lt;/a&gt;0.1.DNSlog工具&lt;/h3&gt;&lt;p&gt;如果有自己的服务器和域名，可以自建一个这样的平台，直接使用BugScan团队开源的工具搭建即可：&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://github.com/BugScanTeam/DNSLog&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://github.com/BugScanTeam/DNSLog&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;另外我们也可以使用在线平台：&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="工具" scheme="http://joker-vip.github.io/categories/%E5%B7%A5%E5%85%B7/"/>
+    
+    
+      <category term="DNSlog" scheme="http://joker-vip.github.io/tags/DNSlog/"/>
+    
+  </entry>
+  
+  <entry>
     <title>浅析Burpsuite作战工具</title>
-    <link href="http://joker-vip.github.io/2022/03/15/burpSuite%E6%8A%80%E5%B7%A7/"/>
-    <id>http://joker-vip.github.io/2022/03/15/burpSuite%E6%8A%80%E5%B7%A7/</id>
-    <published>2022-03-15T14:35:35.000Z</published>
-    <updated>2022-03-16T07:05:08.410Z</updated>
+    <link href="http://joker-vip.github.io/2022/03/20/burpSuite%E6%8A%80%E5%B7%A7/"/>
+    <id>http://joker-vip.github.io/2022/03/20/burpSuite%E6%8A%80%E5%B7%A7/</id>
+    <published>2022-03-20T05:35:35.000Z</published>
+    <updated>2022-04-13T11:58:54.773Z</updated>
     
     <summary type="html">
     
       &lt;h2 id=&quot;浅析Burpsuite作战工具&quot;&gt;&lt;a href=&quot;#浅析Burpsuite作战工具&quot; class=&quot;headerlink&quot; title=&quot;浅析Burpsuite作战工具&quot;&gt;&lt;/a&gt;浅析Burpsuite作战工具&lt;/h2&gt;&lt;p&gt;直入burp右键菜单中的Engagement tools，中文翻译为作战工具。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;https://image.3001.net/images/20220316/16474135901411.png&quot; alt=&quot;BurpSuite系列  基础技巧（一）&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://image.3001.net/images/20220413/16498506097226.png&quot; alt=&quot;BurpSuite系列  基础技巧（一）&quot;&gt;&lt;/p&gt;
 &lt;p&gt;从上往下依次为&lt;/p&gt;
     
     </summary>
@@ -35,41 +158,16 @@
       <category term="工具" scheme="http://joker-vip.github.io/categories/%E5%B7%A5%E5%85%B7/"/>
     
     
-      <category term="burpsuite" scheme="http://joker-vip.github.io/tags/burpsuite/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>如何利用DNSlog进行更高效率的无回显渗透</title>
-    <link href="http://joker-vip.github.io/2022/03/15/DNSlog/"/>
-    <id>http://joker-vip.github.io/2022/03/15/DNSlog/</id>
-    <published>2022-03-15T13:35:35.000Z</published>
-    <updated>2022-03-16T07:04:31.103Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;如何利用DNSlog进行更高效率的无回显渗透&quot;&gt;&lt;a href=&quot;#如何利用DNSlog进行更高效率的无回显渗透&quot; class=&quot;headerlink&quot; title=&quot;如何利用DNSlog进行更高效率的无回显渗透&quot;&gt;&lt;/a&gt;如何利用DNSlog进行更高效率的无回显渗透&lt;/h1&gt;&lt;h2 id=&quot;0-说在前面&quot;&gt;&lt;a href=&quot;#0-说在前面&quot; class=&quot;headerlink&quot; title=&quot;0.说在前面&quot;&gt;&lt;/a&gt;0.说在前面&lt;/h2&gt;&lt;h3 id=&quot;0-1-DNSlog工具&quot;&gt;&lt;a href=&quot;#0-1-DNSlog工具&quot; class=&quot;headerlink&quot; title=&quot;0.1.DNSlog工具&quot;&gt;&lt;/a&gt;0.1.DNSlog工具&lt;/h3&gt;&lt;p&gt;如果有自己的服务器和域名，可以自建一个这样的平台，直接使用BugScan团队开源的工具搭建即可：&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;https://github.com/BugScanTeam/DNSLog&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://github.com/BugScanTeam/DNSLog&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;另外我们也可以使用在线平台：&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://ceye.io/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;http://ceye.io&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.dnslog.cn/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;http://www.dnslog.cn&lt;/a&gt;&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="工具" scheme="http://joker-vip.github.io/categories/%E5%B7%A5%E5%85%B7/"/>
-    
-    
-      <category term="dnslog" scheme="http://joker-vip.github.io/tags/dnslog/"/>
+      <category term="Burpsuite" scheme="http://joker-vip.github.io/tags/Burpsuite/"/>
     
   </entry>
   
   <entry>
     <title>burpsuite 配置xray代理</title>
-    <link href="http://joker-vip.github.io/2022/03/15/burp%E4%B8%8Exray%E8%81%94%E5%8A%A8/"/>
-    <id>http://joker-vip.github.io/2022/03/15/burp%E4%B8%8Exray%E8%81%94%E5%8A%A8/</id>
-    <published>2022-03-15T12:35:35.000Z</published>
-    <updated>2022-03-16T07:03:50.479Z</updated>
+    <link href="http://joker-vip.github.io/2022/03/20/burp%E4%B8%8Exray%E8%81%94%E5%8A%A8/"/>
+    <id>http://joker-vip.github.io/2022/03/20/burp%E4%B8%8Exray%E8%81%94%E5%8A%A8/</id>
+    <published>2022-03-20T04:35:35.000Z</published>
+    <updated>2022-04-13T11:58:23.822Z</updated>
     
     <summary type="html">
     
@@ -84,9 +182,9 @@
       <category term="工具" scheme="http://joker-vip.github.io/categories/%E5%B7%A5%E5%85%B7/"/>
     
     
-      <category term="代理" scheme="http://joker-vip.github.io/tags/%E4%BB%A3%E7%90%86/"/>
-    
       <category term="burpsuite" scheme="http://joker-vip.github.io/tags/burpsuite/"/>
+    
+      <category term="xray" scheme="http://joker-vip.github.io/tags/xray/"/>
     
   </entry>
   
@@ -426,120 +524,6 @@
       <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
     
       <category term="ThinkPHP" scheme="http://joker-vip.github.io/tags/ThinkPHP/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>ThinkPHP5 5.0.23 远程代码执行漏洞</title>
-    <link href="http://joker-vip.github.io/2022/03/01/ThinkPHP5%205.0.23%20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/"/>
-    <id>http://joker-vip.github.io/2022/03/01/ThinkPHP5%205.0.23%20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/</id>
-    <published>2022-03-01T07:35:35.000Z</published>
-    <updated>2022-03-03T01:36:08.950Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;ThinkPHP5-5-0-23-远程代码执行漏洞&quot;&gt;&lt;a href=&quot;#ThinkPHP5-5-0-23-远程代码执行漏洞&quot; class=&quot;headerlink&quot; title=&quot;ThinkPHP5 5.0.23 远程代码执行漏洞&quot;&gt;&lt;/a&gt;ThinkPHP5 5.0.23 远程代码执行漏洞&lt;/h1&gt;&lt;p&gt;ThinkPHP是国内使用极为广泛的PHP开发框架。在其 5.0(&amp;lt;5.0.24) 版本中，框架在获取请求方法时，对其进行了错误的处理，使得攻击者可以调用 Request 类的任意方法，从而通过特定的利用链导致 RCE 漏洞。&lt;/p&gt;
-&lt;p&gt;参考：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://github.com/top-think/framework/commit/4a4b5e64fa4c46f851b4004005bff5f3196de003&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://github.com/top-think/framework/commit/4a4b5e64fa4c46f851b4004005bff5f3196de003&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-    
-    </summary>
-    
-    
-      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    
-    
-      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
-    
-      <category term="ThinkPHP" scheme="http://joker-vip.github.io/tags/ThinkPHP/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Thinkphp5 5.0.22/5.1.29 远程代码执行漏洞</title>
-    <link href="http://joker-vip.github.io/2022/03/01/Thinkphp5%205.0.22%E3%80%815.1.29%20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/"/>
-    <id>http://joker-vip.github.io/2022/03/01/Thinkphp5%205.0.22%E3%80%815.1.29%20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/</id>
-    <published>2022-03-01T05:35:35.000Z</published>
-    <updated>2022-03-03T01:34:48.595Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;Thinkphp5-5-0-22-5-1-29-远程代码执行漏洞&quot;&gt;&lt;a href=&quot;#Thinkphp5-5-0-22-5-1-29-远程代码执行漏洞&quot; class=&quot;headerlink&quot; title=&quot;Thinkphp5 5.0.22/5.1.29 远程代码执行漏洞&quot;&gt;&lt;/a&gt;Thinkphp5 5.0.22/5.1.29 远程代码执行漏洞&lt;/h1&gt;&lt;p&gt;ThinkPHP是国内使用极为广泛的PHP开发框架。在其版本 5 中，由于框架处理控制器名称不正确，如果网站没有启用强制路由（这是默认设置），它可以执行任何方法，从而导致 RCE 漏洞。&lt;/p&gt;
-&lt;p&gt;参考链接：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;http://www.thinkphp.cn/topic/60400.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;http://www.thinkphp.cn/topic/60400.html&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;http://www.thinkphp.cn/topic/60390.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;http://www.thinkphp.cn/topic/60390.html&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://xz.aliyun.com/t/3570&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://xz.aliyun.com/t/3570&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-    
-    </summary>
-    
-    
-      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    
-    
-      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
-    
-      <category term="ThinkPHP" scheme="http://joker-vip.github.io/tags/ThinkPHP/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>ThinkPHP 2.x 任意代码执行漏洞</title>
-    <link href="http://joker-vip.github.io/2022/03/01/ThinkPHP%202.x%20%E4%BB%BB%E6%84%8F%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/"/>
-    <id>http://joker-vip.github.io/2022/03/01/ThinkPHP%202.x%20%E4%BB%BB%E6%84%8F%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/</id>
-    <published>2022-03-01T04:35:35.000Z</published>
-    <updated>2022-03-03T01:34:09.399Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;ThinkPHP-2-x-任意代码执行漏洞&quot;&gt;&lt;a href=&quot;#ThinkPHP-2-x-任意代码执行漏洞&quot; class=&quot;headerlink&quot; title=&quot;ThinkPHP 2.x 任意代码执行漏洞&quot;&gt;&lt;/a&gt;ThinkPHP 2.x 任意代码执行漏洞&lt;/h1&gt;&lt;p&gt;ThinkPHP 2.x版本中，使用&lt;code&gt;preg_replace&lt;/code&gt;的&lt;code&gt;/e&lt;/code&gt;模式匹配路由：&lt;/p&gt;
-&lt;figure class=&quot;highlight php&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;$res = preg_replace(&lt;span class=&quot;string&quot;&gt;&#39;@(\w+)&#39;&lt;/span&gt;.$depr.&lt;span class=&quot;string&quot;&gt;&#39;([^&#39;&lt;/span&gt;.$depr.&lt;span class=&quot;string&quot;&gt;&#39;\/]+)@e&#39;&lt;/span&gt;, &lt;span class=&quot;string&quot;&gt;&#39;$var[\&#39;\\1\&#39;]=&quot;\\2&quot;;&#39;&lt;/span&gt;, implode($depr,$paths));&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-
-&lt;p&gt;导致用户的输入参数被插入双引号中执行，造成任意代码执行漏洞。&lt;/p&gt;
-&lt;p&gt;ThinkPHP 3.0版本因为Lite模式下没有修复该漏洞，也存在这个漏洞。&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    
-    
-      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
-    
-      <category term="ThinkPHP" scheme="http://joker-vip.github.io/tags/ThinkPHP/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Struts2 S2-061 远程代码执行漏洞 (CVE-2020-17530)</title>
-    <link href="http://joker-vip.github.io/2022/02/18/S2-061/"/>
-    <id>http://joker-vip.github.io/2022/02/18/S2-061/</id>
-    <published>2022-02-18T15:35:35.000Z</published>
-    <updated>2022-02-18T06:25:19.743Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;Struts2-S2-061-远程代码执行漏洞-CVE-2020-17530&quot;&gt;&lt;a href=&quot;#Struts2-S2-061-远程代码执行漏洞-CVE-2020-17530&quot; class=&quot;headerlink&quot; title=&quot;Struts2 S2-061 远程代码执行漏洞 (CVE-2020-17530)&quot;&gt;&lt;/a&gt;Struts2 S2-061 远程代码执行漏洞 (CVE-2020-17530)&lt;/h1&gt;&lt;p&gt;在 Struts 2.5.25 之前的版本中，当对标签属性中的原始用户输入进行评估时，可能会导致远程代码执行。&lt;/p&gt;
-&lt;p&gt;此漏洞是绕过 OGNL 沙箱，在 S2-059 之后增强。&lt;/p&gt;
-&lt;p&gt;参考：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://cwiki.apache.org/confluence/display/WW/S2-061&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://cwiki.apache.org/confluence/display/WW/S2-061&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://github.com/ka1n4t/CVE-2020-17530&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://github.com/ka1n4t/CVE-2020-17530&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://www.anquanke.com/post/id/225252&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://www.anquanke.com/post/id/225252&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://mp.weixin.qq.com/s/RD2HTMn-jFxDIs4-X95u6g&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://mp.weixin.qq.com/s/RD2HTMn-jFxDIs4-X95u6g&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-    
-    </summary>
-    
-    
-      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    
-    
-      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
-    
-      <category term="Struts2" scheme="http://joker-vip.github.io/tags/Struts2/"/>
     
   </entry>
   
