@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://joker-vip.github.io/"/>
-  <updated>2022-04-14T03:00:45.754Z</updated>
+  <updated>2022-05-09T11:49:57.807Z</updated>
   <id>http://joker-vip.github.io/</id>
   
   <author>
@@ -15,6 +15,78 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>传输层隧道技术</title>
+    <link href="http://joker-vip.github.io/2022/05/04/3.3%20%E4%BC%A0%E8%BE%93%E5%B1%82%E9%9A%A7%E9%81%93%E6%8A%80%E6%9C%AF/"/>
+    <id>http://joker-vip.github.io/2022/05/04/3.3%20%E4%BC%A0%E8%BE%93%E5%B1%82%E9%9A%A7%E9%81%93%E6%8A%80%E6%9C%AF/</id>
+    <published>2022-05-04T06:35:35.000Z</published>
+    <updated>2022-05-09T11:49:57.807Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;传输层隧道技术&quot;&gt;&lt;a href=&quot;#传输层隧道技术&quot; class=&quot;headerlink&quot; title=&quot;传输层隧道技术&quot;&gt;&lt;/a&gt;传输层隧道技术&lt;/h1&gt;&lt;p&gt;传输层技术包括tcp隧道、udp隧道和常规端口转发。在渗透测试中，如果内网防火墙阻止了对指定端口的访问，在获得目标机器的权限后，可以使用IPTABles打开指定端口。&lt;/p&gt;
+&lt;h2 id=&quot;1-lcx端口转发&quot;&gt;&lt;a href=&quot;#1-lcx端口转发&quot; class=&quot;headerlink&quot; title=&quot;1 lcx端口转发&quot;&gt;&lt;/a&gt;1 lcx端口转发&lt;/h2&gt;&lt;p&gt;下载地址：&lt;a href=&quot;https://github.com/UndefinedIdentifier/LCX&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://github.com/UndefinedIdentifier/LCX&lt;/a&gt;&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="内网" scheme="http://joker-vip.github.io/categories/%E5%86%85%E7%BD%91/"/>
+    
+    
+      <category term="内网" scheme="http://joker-vip.github.io/tags/%E5%86%85%E7%BD%91/"/>
+    
+      <category term="隧道" scheme="http://joker-vip.github.io/tags/%E9%9A%A7%E9%81%93/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>网络层隧道技术</title>
+    <link href="http://joker-vip.github.io/2022/05/04/3.2%20%E7%BD%91%E7%BB%9C%E5%B1%82%E9%9A%A7%E9%81%93%E6%8A%80%E6%9C%AF/"/>
+    <id>http://joker-vip.github.io/2022/05/04/3.2%20%E7%BD%91%E7%BB%9C%E5%B1%82%E9%9A%A7%E9%81%93%E6%8A%80%E6%9C%AF/</id>
+    <published>2022-05-04T05:35:35.000Z</published>
+    <updated>2022-05-09T11:49:27.258Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;网络层隧道技术&quot;&gt;&lt;a href=&quot;#网络层隧道技术&quot; class=&quot;headerlink&quot; title=&quot;网络层隧道技术&quot;&gt;&lt;/a&gt;网络层隧道技术&lt;/h1&gt;&lt;h2 id=&quot;1-IPv6隧道&quot;&gt;&lt;a href=&quot;#1-IPv6隧道&quot; class=&quot;headerlink&quot; title=&quot;1 IPv6隧道&quot;&gt;&lt;/a&gt;1 IPv6隧道&lt;/h2&gt;&lt;h3 id=&quot;1-1-技术简介&quot;&gt;&lt;a href=&quot;#1-1-技术简介&quot; class=&quot;headerlink&quot; title=&quot;1.1 技术简介&quot;&gt;&lt;/a&gt;1.1 技术简介&lt;/h3&gt;&lt;p&gt;IPv6隧道技术指的是通过IPv4隧道传送IPv6数据报文的技术，为了在IPv4的海洋中传输IPv6信息，可以将IPv4作为隧道载体，将IPv6报文整体封装在IPv4数据报文中，使IPv6能够穿越IPv4的海洋，到达另一个IPv6小岛。&lt;/p&gt;
+&lt;p&gt;ipv6隧道技术是指通过ipv4隧道传送ipv6数据报文的技术。攻击者有时会通过恶意软件来配置允许运行ipv6通信的设备，以避开防火墙和入侵检测系统。有一点需要指出：即使设备支持ipv6，也可能无法正确地分析封装了ipv6报文的ipv4数据包。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="内网" scheme="http://joker-vip.github.io/categories/%E5%86%85%E7%BD%91/"/>
+    
+    
+      <category term="内网" scheme="http://joker-vip.github.io/tags/%E5%86%85%E7%BD%91/"/>
+    
+      <category term="隧道" scheme="http://joker-vip.github.io/tags/%E9%9A%A7%E9%81%93/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>隐藏通信隧道基础知识</title>
+    <link href="http://joker-vip.github.io/2022/05/04/3.1%20%E9%9A%90%E8%97%8F%E9%80%9A%E4%BF%A1%E9%9A%A7%E9%81%93%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/"/>
+    <id>http://joker-vip.github.io/2022/05/04/3.1%20%E9%9A%90%E8%97%8F%E9%80%9A%E4%BF%A1%E9%9A%A7%E9%81%93%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/</id>
+    <published>2022-05-04T04:35:35.000Z</published>
+    <updated>2022-05-09T11:48:41.698Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;隐藏通信隧道基础知识&quot;&gt;&lt;a href=&quot;#隐藏通信隧道基础知识&quot; class=&quot;headerlink&quot; title=&quot;隐藏通信隧道基础知识&quot;&gt;&lt;/a&gt;隐藏通信隧道基础知识&lt;/h1&gt;&lt;h2 id=&quot;1-隐藏通信隧道概述&quot;&gt;&lt;a href=&quot;#1-隐藏通信隧道概述&quot; class=&quot;headerlink&quot; title=&quot;1 隐藏通信隧道概述&quot;&gt;&lt;/a&gt;1 隐藏通信隧道概述&lt;/h2&gt;&lt;p&gt;这里的隧道，就是一种绕过端口屏蔽的通信方式。&lt;/p&gt;
+&lt;p&gt;常用的隧道列举：&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="内网" scheme="http://joker-vip.github.io/categories/%E5%86%85%E7%BD%91/"/>
+    
+    
+      <category term="内网" scheme="http://joker-vip.github.io/tags/%E5%86%85%E7%BD%91/"/>
+    
+      <category term="隧道" scheme="http://joker-vip.github.io/tags/%E9%9A%A7%E9%81%93/"/>
+    
+  </entry>
   
   <entry>
     <title>内网信息收集</title>
@@ -445,85 +517,6 @@
       <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
     
       <category term="Tomcat" scheme="http://joker-vip.github.io/tags/Tomcat/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Tomcat7+弱密码&amp;&amp;后端Getshell漏洞</title>
-    <link href="http://joker-vip.github.io/2022/03/07/Tomcat7+%E5%BC%B1%E5%AF%86%E7%A0%81&amp;&amp;%E5%90%8E%E7%AB%AFGetshell%E6%BC%8F%E6%B4%9E/"/>
-    <id>http://joker-vip.github.io/2022/03/07/Tomcat7+%E5%BC%B1%E5%AF%86%E7%A0%81&amp;&amp;%E5%90%8E%E7%AB%AFGetshell%E6%BC%8F%E6%B4%9E/</id>
-    <published>2022-03-07T05:35:35.000Z</published>
-    <updated>2022-03-08T03:02:24.389Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;Tomcat7-弱密码-amp-amp-后端Getshell漏洞&quot;&gt;&lt;a href=&quot;#Tomcat7-弱密码-amp-amp-后端Getshell漏洞&quot; class=&quot;headerlink&quot; title=&quot;Tomcat7+弱密码&amp;amp;&amp;amp;后端Getshell漏洞&quot;&gt;&lt;/a&gt;Tomcat7+弱密码&amp;amp;&amp;amp;后端Getshell漏洞&lt;/h1&gt;&lt;h2 id=&quot;介绍&quot;&gt;&lt;a href=&quot;#介绍&quot; class=&quot;headerlink&quot; title=&quot;介绍&quot;&gt;&lt;/a&gt;介绍&lt;/h2&gt;&lt;p&gt;Tomcat支持通过后端部署war文件，所以我们可以直接把webshell放到web目录下。为了访问后端，需要权限。&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    
-    
-      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
-    
-      <category term="Tomcat" scheme="http://joker-vip.github.io/tags/Tomcat/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>通过 PUT 方法的 Tomcat 任意写入文件漏洞 (CVE-2017-12615)</title>
-    <link href="http://joker-vip.github.io/2022/03/07/%E9%80%9A%E8%BF%87%20PUT%20%E6%96%B9%E6%B3%95%E7%9A%84%20Tomcat%20%E4%BB%BB%E6%84%8F%E5%86%99%E5%85%A5%E6%96%87%E4%BB%B6%E6%BC%8F%E6%B4%9E%20(CVE-2017-12615)/"/>
-    <id>http://joker-vip.github.io/2022/03/07/%E9%80%9A%E8%BF%87%20PUT%20%E6%96%B9%E6%B3%95%E7%9A%84%20Tomcat%20%E4%BB%BB%E6%84%8F%E5%86%99%E5%85%A5%E6%96%87%E4%BB%B6%E6%BC%8F%E6%B4%9E%20(CVE-2017-12615)/</id>
-    <published>2022-03-07T04:35:35.000Z</published>
-    <updated>2022-03-08T02:55:54.037Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;通过-PUT-方法的-Tomcat-任意写入文件漏洞-CVE-2017-12615&quot;&gt;&lt;a href=&quot;#通过-PUT-方法的-Tomcat-任意写入文件漏洞-CVE-2017-12615&quot; class=&quot;headerlink&quot; title=&quot;通过 PUT 方法的 Tomcat 任意写入文件漏洞 (CVE-2017-12615)&quot;&gt;&lt;/a&gt;通过 PUT 方法的 Tomcat 任意写入文件漏洞 (CVE-2017-12615)&lt;/h1&gt;&lt;p&gt;Tomcat版本：8.5.19&lt;/p&gt;
-&lt;p&gt;参考链接：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;http://wooyun.jozxing.cc/static/bugs/wooyun-2015-0107097.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;http://wooyun.jozxing.cc/static/bugs/wooyun-2015-0107097.html&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://mp.weixin.qq.com/s?__biz=MzI1NDg4MTIxMw==&amp;amp;mid=2247483659&amp;amp;idx=1&amp;amp;sn=c23b3a3b3b43d70999bdbe644e79f7e5&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://mp.weixin.qq.com/s?__biz=MzI1NDg4MTIxMw==&amp;amp;mid=2247483659&amp;amp;idx=1&amp;amp;sn=c23b3a3b3b43d70999bdbe644e79f7e5&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://mp.weixin.qq.com/s?__biz=MzU3ODAyMjg4OQ==&amp;amp;mid=2247483805&amp;amp;idx=1&amp;amp;sn=503a3e29165d57d3c20ced671761bb5e&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://mp.weixin.qq.com/s?__biz=MzU3ODAyMjg4OQ==&amp;amp;mid=2247483805&amp;amp;idx=1&amp;amp;sn=503a3e29165d57d3c20ced671761bb5e&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-    
-    </summary>
-    
-    
-      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    
-    
-      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
-    
-      <category term="Tomcat" scheme="http://joker-vip.github.io/tags/Tomcat/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>ThinkPHP5 SQL注入漏洞&amp;&amp;敏感信息泄露漏洞</title>
-    <link href="http://joker-vip.github.io/2022/03/01/ThinkPHP5%20SQL%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E&amp;&amp;%E6%95%8F%E6%84%9F%E4%BF%A1%E6%81%AF%E6%B3%84%E9%9C%B2%E6%BC%8F%E6%B4%9E/"/>
-    <id>http://joker-vip.github.io/2022/03/01/ThinkPHP5%20SQL%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E&amp;&amp;%E6%95%8F%E6%84%9F%E4%BF%A1%E6%81%AF%E6%B3%84%E9%9C%B2%E6%BC%8F%E6%B4%9E/</id>
-    <published>2022-03-01T08:35:35.000Z</published>
-    <updated>2022-03-03T01:37:23.159Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;ThinkPHP5-SQL注入漏洞-amp-amp-敏感信息泄露漏洞&quot;&gt;&lt;a href=&quot;#ThinkPHP5-SQL注入漏洞-amp-amp-敏感信息泄露漏洞&quot; class=&quot;headerlink&quot; title=&quot;ThinkPHP5 SQL注入漏洞&amp;amp;&amp;amp;敏感信息泄露漏洞&quot;&gt;&lt;/a&gt;ThinkPHP5 SQL注入漏洞&amp;amp;&amp;amp;敏感信息泄露漏洞&lt;/h1&gt;&lt;h2 id=&quot;基本原理&quot;&gt;&lt;a href=&quot;#基本原理&quot; class=&quot;headerlink&quot; title=&quot;基本原理&quot;&gt;&lt;/a&gt;基本原理&lt;/h2&gt;&lt;p&gt;详细阅读参考资料：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://www.leavesongs.com/PENETRATION/thinkphp5-in-sqlinjection.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://www.leavesongs.com/PENETRATION/thinkphp5-in-sqlinjection.html&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://xz.aliyun.com/t/125&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://xz.aliyun.com/t/125&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-    
-    </summary>
-    
-    
-      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    
-    
-      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
-    
-      <category term="ThinkPHP" scheme="http://joker-vip.github.io/tags/ThinkPHP/"/>
     
   </entry>
   

