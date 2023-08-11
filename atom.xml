@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://joker-vip.github.io/"/>
-  <updated>2022-05-09T11:49:57.807Z</updated>
+  <updated>2023-05-25T02:56:16.572Z</updated>
   <id>http://joker-vip.github.io/</id>
   
   <author>
@@ -15,6 +15,150 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>流量解密并挖掘任意密码重置</title>
+    <link href="http://joker-vip.github.io/2023/05/25/%E6%B5%81%E9%87%8F%E8%A7%A3%E5%AF%86%E5%B9%B6%E6%8C%96%E6%8E%98%E4%BB%BB%E6%84%8F%E5%AF%86%E7%A0%81%E9%87%8D%E7%BD%AE/"/>
+    <id>http://joker-vip.github.io/2023/05/25/%E6%B5%81%E9%87%8F%E8%A7%A3%E5%AF%86%E5%B9%B6%E6%8C%96%E6%8E%98%E4%BB%BB%E6%84%8F%E5%AF%86%E7%A0%81%E9%87%8D%E7%BD%AE/</id>
+    <published>2023-05-25T02:54:27.086Z</published>
+    <updated>2023-05-25T02:56:16.572Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h1 id=&quot;流量解密并挖掘任意密码重置&quot;&gt;&lt;a href=&quot;#流量解密并挖掘任意密码重置&quot; class=&quot;headerlink&quot;
+        
+      
+    
+    </summary>
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>DNS隐藏隧道检测的新思路</title>
+    <link href="http://joker-vip.github.io/2023/05/25/DNS%E9%9A%90%E8%97%8F%E9%9A%A7%E9%81%93%E6%A3%80%E6%B5%8B%E7%9A%84%E6%96%B0%E6%80%9D%E8%B7%AF/"/>
+    <id>http://joker-vip.github.io/2023/05/25/DNS%E9%9A%90%E8%97%8F%E9%9A%A7%E9%81%93%E6%A3%80%E6%B5%8B%E7%9A%84%E6%96%B0%E6%80%9D%E8%B7%AF/</id>
+    <published>2023-05-25T02:47:19.410Z</published>
+    <updated>2023-05-25T02:47:42.304Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h1 id=&quot;DNS隐藏隧道检测的新思路&quot;&gt;&lt;a href=&quot;#DNS隐藏隧道检测的新思路&quot; class=&quot;headerlink&quot; title=&quot;DNS隐藏隧道检测的新思路&quot;&gt;&lt;/a&gt;DNS隐藏隧道检测的新思路&lt;/h1&gt;&lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot;
+        
+      
+    
+    </summary>
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>JNDI注入</title>
+    <link href="http://joker-vip.github.io/2023/05/12/JNDI%E6%B3%A8%E5%85%A5/"/>
+    <id>http://joker-vip.github.io/2023/05/12/JNDI%E6%B3%A8%E5%85%A5/</id>
+    <published>2023-05-12T09:33:35.835Z</published>
+    <updated>2023-05-12T11:29:31.619Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h1 id=&quot;1-JDNI注入&quot;&gt;&lt;a href=&quot;#1-JDNI注入&quot; class=&quot;headerlink&quot; title=&quot;1. JDNI注入&quot;&gt;&lt;/a&gt;1.
+        
+      
+    
+    </summary>
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>SOCKS代理</title>
+    <link href="http://joker-vip.github.io/2022/05/30/3.6%20%E4%B8%8A%E4%BC%A0%E5%92%8C%E4%B8%8B%E8%BD%BD/"/>
+    <id>http://joker-vip.github.io/2022/05/30/3.6%20%E4%B8%8A%E4%BC%A0%E5%92%8C%E4%B8%8B%E8%BD%BD/</id>
+    <published>2022-05-30T06:35:35.000Z</published>
+    <updated>2022-05-30T01:28:20.218Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;内网中的上传和下载&quot;&gt;&lt;a href=&quot;#内网中的上传和下载&quot; class=&quot;headerlink&quot; title=&quot;内网中的上传和下载&quot;&gt;&lt;/a&gt;内网中的上传和下载&lt;/h1&gt;
+    
+    </summary>
+    
+    
+      <category term="内网" scheme="http://joker-vip.github.io/categories/%E5%86%85%E7%BD%91/"/>
+    
+    
+      <category term="内网" scheme="http://joker-vip.github.io/tags/%E5%86%85%E7%BD%91/"/>
+    
+      <category term="隧道" scheme="http://joker-vip.github.io/tags/%E9%9A%A7%E9%81%93/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>SOCKS代理</title>
+    <link href="http://joker-vip.github.io/2022/05/30/3.5%20SOCKS%E4%BB%A3%E7%90%86/"/>
+    <id>http://joker-vip.github.io/2022/05/30/3.5%20SOCKS%E4%BB%A3%E7%90%86/</id>
+    <published>2022-05-30T05:35:35.000Z</published>
+    <updated>2022-05-30T01:27:42.143Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;SOCKS代理&quot;&gt;&lt;a href=&quot;#SOCKS代理&quot; class=&quot;headerlink&quot; title=&quot;SOCKS代理&quot;&gt;&lt;/a&gt;SOCKS代理&lt;/h1&gt;&lt;p&gt;常见的网络场景有如下三类。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;服务器在内网中，可以任意访问外部网络。&lt;/li&gt;
+&lt;li&gt;服务器在内网中，可以访问外部网络，但服务器安装了防火墙来拒绝敏感端口的连接。&lt;/li&gt;
+&lt;li&gt;服务器在内网中，对外只开放了部分端口(例如80端口),且服务器不能访问外部网络。&lt;/li&gt;
+&lt;/ul&gt;
+    
+    </summary>
+    
+    
+      <category term="内网" scheme="http://joker-vip.github.io/categories/%E5%86%85%E7%BD%91/"/>
+    
+    
+      <category term="内网" scheme="http://joker-vip.github.io/tags/%E5%86%85%E7%BD%91/"/>
+    
+      <category term="隧道" scheme="http://joker-vip.github.io/tags/%E9%9A%A7%E9%81%93/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>应用层隧道传输技术</title>
+    <link href="http://joker-vip.github.io/2022/05/30/3.4%20%E5%BA%94%E7%94%A8%E5%B1%82%E9%9A%A7%E9%81%93%E6%8A%80%E6%9C%AF/"/>
+    <id>http://joker-vip.github.io/2022/05/30/3.4%20%E5%BA%94%E7%94%A8%E5%B1%82%E9%9A%A7%E9%81%93%E6%8A%80%E6%9C%AF/</id>
+    <published>2022-05-30T04:35:35.000Z</published>
+    <updated>2022-05-30T01:26:42.871Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;应用层隧道传输技术&quot;&gt;&lt;a href=&quot;#应用层隧道传输技术&quot; class=&quot;headerlink&quot; title=&quot;应用层隧道传输技术&quot;&gt;&lt;/a&gt;应用层隧道传输技术&lt;/h1&gt;&lt;p&gt;应用层的隧道通信技术主要利用应用软件提供的端口来发送数据。常用的隧道协议有SSH、HTTP/HTTPS和DNS。&lt;/p&gt;
+&lt;h2 id=&quot;1-SSH-协议&quot;&gt;&lt;a href=&quot;#1-SSH-协议&quot; class=&quot;headerlink&quot; title=&quot;1 SSH 协议&quot;&gt;&lt;/a&gt;1 SSH 协议&lt;/h2&gt;&lt;p&gt;在内网中，几乎所有的Linux/UNIX服务器和网络设备都支持SSH协议。在一般情况下，SSH协议是被允许通过防火墙和边界设备的，所以经常被攻击者利用。同时，SSH协议的传输过程是加密的，所以我们很难区分合法的SSH会话和攻击者利用其他网络建立的隧道。攻击者使用SSH端口隧道突破防火墙的限制后，能够建立一些之前无法建立的TCP连接。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="内网" scheme="http://joker-vip.github.io/categories/%E5%86%85%E7%BD%91/"/>
+    
+    
+      <category term="内网" scheme="http://joker-vip.github.io/tags/%E5%86%85%E7%BD%91/"/>
+    
+      <category term="隧道" scheme="http://joker-vip.github.io/tags/%E9%9A%A7%E9%81%93/"/>
+    
+  </entry>
   
   <entry>
     <title>传输层隧道技术</title>
@@ -172,7 +316,7 @@
     <link href="http://joker-vip.github.io/2022/04/10/1.1%E5%86%85%E7%BD%91%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/"/>
     <id>http://joker-vip.github.io/2022/04/10/1.1%E5%86%85%E7%BD%91%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/</id>
     <published>2022-04-10T04:35:35.000Z</published>
-    <updated>2022-04-14T02:59:15.553Z</updated>
+    <updated>2022-05-30T06:01:25.370Z</updated>
     
     <summary type="html">
     
@@ -349,174 +493,6 @@
       <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
     
       <category term="Weblogic" scheme="http://joker-vip.github.io/tags/Weblogic/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Weblogic SSRF漏洞</title>
-    <link href="http://joker-vip.github.io/2022/03/15/Weblogic%20SSRF%E6%BC%8F%E6%B4%9E/"/>
-    <id>http://joker-vip.github.io/2022/03/15/Weblogic%20SSRF%E6%BC%8F%E6%B4%9E/</id>
-    <published>2022-03-15T08:35:35.000Z</published>
-    <updated>2022-03-16T02:37:02.538Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;Weblogic-SSRF漏洞&quot;&gt;&lt;a href=&quot;#Weblogic-SSRF漏洞&quot; class=&quot;headerlink&quot; title=&quot;Weblogic SSRF漏洞&quot;&gt;&lt;/a&gt;Weblogic SSRF漏洞&lt;/h1&gt;&lt;p&gt;Weblogic中存在一个SSRF漏洞，利用该漏洞可以发送任意HTTP请求，进而攻击内网中redis、fastcgi等脆弱组件。&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    
-    
-      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
-    
-      <category term="Weblogic" scheme="http://joker-vip.github.io/tags/Weblogic/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Weblogic 未认证远程命令执行（CVE-2020-14882、CVE-2020-14883）</title>
-    <link href="http://joker-vip.github.io/2022/03/15/Weblogic%20%E6%9C%AA%E8%AE%A4%E8%AF%81%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%EF%BC%88CVE-2020-14882%E3%80%81CVE-2020-14883%EF%BC%89/"/>
-    <id>http://joker-vip.github.io/2022/03/15/Weblogic%20%E6%9C%AA%E8%AE%A4%E8%AF%81%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%EF%BC%88CVE-2020-14882%E3%80%81CVE-2020-14883%EF%BC%89/</id>
-    <published>2022-03-15T07:35:35.000Z</published>
-    <updated>2022-03-16T02:35:42.046Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;Weblogic-未认证远程命令执行（CVE-2020-14882、CVE-2020-14883）&quot;&gt;&lt;a href=&quot;#Weblogic-未认证远程命令执行（CVE-2020-14882、CVE-2020-14883）&quot; class=&quot;headerlink&quot; title=&quot;Weblogic 未认证远程命令执行（CVE-2020-14882、CVE-2020-14883）&quot;&gt;&lt;/a&gt;Weblogic 未认证远程命令执行（CVE-2020-14882、CVE-2020-14883）&lt;/h1&gt;&lt;p&gt;Oracle WebLogic Server 是行业领先的应用服务器，用于使用 Java EE 标准构建企业应用程序，并将它们部署在可靠、可扩展的运行时上，并且拥有成本低。&lt;/p&gt;
-&lt;p&gt;在&lt;a href=&quot;https://www.oracle.com/security-alerts/cpuoct2020traditional.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Oracle 重要补丁更新公告 - 2020 年 10 月中&lt;/a&gt;，Oracle 修复了 CVE-2020-14882 和 CVE-2020-14883 来自 Chaitin Tech 的安全研究员 @Voidfyoo 提交的两个安全漏洞。&lt;/p&gt;
-&lt;p&gt;CVE-2020-14882 允许远程用户绕过管理员控制台组件中的身份验证，CVE-2020-14883 允许经过身份验证的用户在管理员控制台组件上执行任何命令。使用这两个漏洞链，未经身份验证的远程攻击者可以通过 HTTP 在 Oracle WebLogic 服务器上执行任意命令并完全控制主机。&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    
-    
-      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
-    
-      <category term="Weblogic" scheme="http://joker-vip.github.io/tags/Weblogic/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Weblogic 任意文件上传漏洞（CVE-2018-2894）</title>
-    <link href="http://joker-vip.github.io/2022/03/15/Weblogic%20%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2018-2894%EF%BC%89/"/>
-    <id>http://joker-vip.github.io/2022/03/15/Weblogic%20%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2018-2894%EF%BC%89/</id>
-    <published>2022-03-15T06:35:35.000Z</published>
-    <updated>2022-03-16T02:34:40.770Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;Weblogic-任意文件上传漏洞（CVE-2018-2894）&quot;&gt;&lt;a href=&quot;#Weblogic-任意文件上传漏洞（CVE-2018-2894）&quot; class=&quot;headerlink&quot; title=&quot;Weblogic 任意文件上传漏洞（CVE-2018-2894）&quot;&gt;&lt;/a&gt;Weblogic 任意文件上传漏洞（CVE-2018-2894）&lt;/h1&gt;&lt;p&gt;Oracle 7月更新中，修复了Weblogic Web Service Test Page中一处任意文件上传漏洞，Web Service Test Page 在“生产模式”下默认不开启，所以该漏洞有一定限制。&lt;/p&gt;
-&lt;p&gt;利用该漏洞，可以上传任意jsp文件，进而获取服务器权限。&lt;/p&gt;
-&lt;p&gt;参考链接：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;http://www.oracle.com/technetwork/security-advisory/cpujul2018-4258247.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;http://www.oracle.com/technetwork/security-advisory/cpujul2018-4258247.html&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://mp.weixin.qq.com/s/y5JGmM-aNaHcs_6P9a-gRQ&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://mp.weixin.qq.com/s/y5JGmM-aNaHcs_6P9a-gRQ&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://xz.aliyun.com/t/2458&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://xz.aliyun.com/t/2458&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-    
-    </summary>
-    
-    
-      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    
-    
-      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
-    
-      <category term="Weblogic" scheme="http://joker-vip.github.io/tags/Weblogic/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Weblogic WLS Core Components 反序列化命令执行漏洞（CVE-2018-2628）</title>
-    <link href="http://joker-vip.github.io/2022/03/15/Weblogic%20WLS%20Core%20Components%20%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2018-2628%EF%BC%89/"/>
-    <id>http://joker-vip.github.io/2022/03/15/Weblogic%20WLS%20Core%20Components%20%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2018-2628%EF%BC%89/</id>
-    <published>2022-03-15T05:35:35.000Z</published>
-    <updated>2022-03-16T02:30:59.098Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;Weblogic-WLS-Core-Components-反序列化命令执行漏洞（CVE-2018-2628）&quot;&gt;&lt;a href=&quot;#Weblogic-WLS-Core-Components-反序列化命令执行漏洞（CVE-2018-2628）&quot; class=&quot;headerlink&quot; title=&quot;Weblogic WLS Core Components 反序列化命令执行漏洞（CVE-2018-2628）&quot;&gt;&lt;/a&gt;Weblogic WLS Core Components 反序列化命令执行漏洞（CVE-2018-2628）&lt;/h1&gt;&lt;p&gt;Oracle 2018年4月补丁中，修复了Weblogic Server WLS Core Components中出现的一个反序列化漏洞（CVE-2018-2628），该漏洞通过t3协议触发，可导致未授权的用户在远程服务器执行任意命令。&lt;/p&gt;
-&lt;p&gt;参考链接：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;http://www.oracle.com/technetwork/security-advisory/cpuapr2018-3678067.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;http://www.oracle.com/technetwork/security-advisory/cpuapr2018-3678067.html&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;http://mp.weixin.qq.com/s/nYY4zg2m2xsqT0GXa9pMGA&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;http://mp.weixin.qq.com/s/nYY4zg2m2xsqT0GXa9pMGA&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://github.com/tdy218/ysoserial-cve-2018-2628&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://github.com/tdy218/ysoserial-cve-2018-2628&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-    
-    </summary>
-    
-    
-      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    
-    
-      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
-    
-      <category term="Weblogic" scheme="http://joker-vip.github.io/tags/Weblogic/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Weblogic &lt; 10.3.6 &#39;wls-wsat&#39; XMLDecoder 反序列化漏洞（CVE-2017-10271）</title>
-    <link href="http://joker-vip.github.io/2022/03/15/Weblogic%E3%80%8A%2010.3.6%20&#39;wls-wsat&#39;%20XMLDecoder%20%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2017-10271%EF%BC%89/"/>
-    <id>http://joker-vip.github.io/2022/03/15/Weblogic%E3%80%8A%2010.3.6%20&#39;wls-wsat&#39;%20XMLDecoder%20%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2017-10271%EF%BC%89/</id>
-    <published>2022-03-15T04:35:35.000Z</published>
-    <updated>2022-03-16T02:29:50.319Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;Weblogic-lt-10-3-6-‘wls-wsat’-XMLDecoder-反序列化漏洞（CVE-2017-10271）&quot;&gt;&lt;a href=&quot;#Weblogic-lt-10-3-6-‘wls-wsat’-XMLDecoder-反序列化漏洞（CVE-2017-10271）&quot; class=&quot;headerlink&quot; title=&quot;Weblogic &amp;lt; 10.3.6 ‘wls-wsat’ XMLDecoder 反序列化漏洞（CVE-2017-10271）&quot;&gt;&lt;/a&gt;Weblogic &amp;lt; 10.3.6 ‘wls-wsat’ XMLDecoder 反序列化漏洞（CVE-2017-10271）&lt;/h1&gt;&lt;p&gt;Weblogic的WLS Security组件对外提供webservice服务，其中使用了XMLDecoder来解析用户传入的XML数据，在解析的过程中出现反序列化漏洞，导致可执行任意命令。&lt;/p&gt;
-&lt;p&gt;参考链接：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://www.exploit-db.com/exploits/43458/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://www.exploit-db.com/exploits/43458/&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://paper.seebug.org/487/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://paper.seebug.org/487/&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;[&lt;a href=&quot;https://github.com/Tom4t0/Tom4t0.github.io/blob/master/_posts/2017-12-22-WebLogic%20WLS-WebServices组件反序列化漏洞分析.md]&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://github.com/Tom4t0/Tom4t0.github.io/blob/master/_posts/2017-12-22-WebLogic%20WLS-WebServices组件反序列化漏洞分析.md]&lt;/a&gt;(&lt;a href=&quot;https://github.com/Tom4t0/Tom4t0.github.io/blob/master/_posts/2017-12-22-WebLogic&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://github.com/Tom4t0/Tom4t0.github.io/blob/master/_posts/2017-12-22-WebLogic&lt;/a&gt; WLS-WebServices组件反序列化漏洞分析.md)&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;http://blog.diniscruz.com/2013/08/using-xmldecoder-to-execute-server-side.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;http://blog.diniscruz.com/2013/08/using-xmldecoder-to-execute-server-side.html&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-    
-    </summary>
-    
-    
-      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    
-    
-      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
-    
-      <category term="Weblogic" scheme="http://joker-vip.github.io/tags/Weblogic/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Aapache Tomcat AJP 任意文件读取/包含漏洞（CVE-2020-1938）</title>
-    <link href="http://joker-vip.github.io/2022/03/07/Aapache%20Tomcat%20AJP%20%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E3%80%81%E8%AF%BB%E5%8F%96%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2020-1938%EF%BC%89/"/>
-    <id>http://joker-vip.github.io/2022/03/07/Aapache%20Tomcat%20AJP%20%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E3%80%81%E8%AF%BB%E5%8F%96%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2020-1938%EF%BC%89/</id>
-    <published>2022-03-07T05:35:35.000Z</published>
-    <updated>2022-03-08T02:56:46.409Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;Aapache-Tomcat-AJP-任意文件读取-包含漏洞（CVE-2020-1938）&quot;&gt;&lt;a href=&quot;#Aapache-Tomcat-AJP-任意文件读取-包含漏洞（CVE-2020-1938）&quot; class=&quot;headerlink&quot; title=&quot;Aapache Tomcat AJP 任意文件读取/包含漏洞（CVE-2020-1938）&quot;&gt;&lt;/a&gt;Aapache Tomcat AJP 任意文件读取/包含漏洞（CVE-2020-1938）&lt;/h1&gt;&lt;p&gt;Java是目前Web开发中最流行的编程语言，Tomcat是最流行的Java中间件服务器之一。自首次发布以来，它已经使用了 20 多年。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;https://www.chaitin.cn/en/ghostcat&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Ghostcat&lt;/a&gt;是长亭科技安全研究员发现的 Tomcat 中的一个严重漏洞。由于 Tomcat AJP 协议中的缺陷，攻击者可以读取或包含 Tomcat 的 webapp 目录中的任何文件。例如，攻击者可以读取 webapp 配置文件或源代码。此外，如果目标Web应用程序具有文件上传功能，攻击者可能通过Ghostcat漏洞利用文件包含在目标主机上执行恶意代码。&lt;/p&gt;
-&lt;p&gt;参考：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://www.chaitin.cn/en/ghostcat&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://www.chaitin.cn/en/ghostcat&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://www.cnvd.org.cn/webinfo/show/5415&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://www.cnvd.org.cn/webinfo/show/5415&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://mp.weixin.qq.com/s/D1hiKJpah3NhEBLwtTodsg&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://mp.weixin.qq.com/s/D1hiKJpah3NhEBLwtTodsg&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://mp.weixin.qq.com/s/GzqLkwlIQi_i3AVIXn59FQ&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://mp.weixin.qq.com/s/GzqLkwlIQi_i3AVIXn59FQ&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-    
-    </summary>
-    
-    
-      <category term="漏洞复现" scheme="http://joker-vip.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    
-    
-      <category term="Vulhub复现" scheme="http://joker-vip.github.io/tags/Vulhub%E5%A4%8D%E7%8E%B0/"/>
-    
-      <category term="Tomcat" scheme="http://joker-vip.github.io/tags/Tomcat/"/>
     
   </entry>
   

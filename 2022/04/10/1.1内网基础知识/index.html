@@ -90,7 +90,7 @@
 <meta property="og:image" content="https://image.3001.net/images/20220414/16499051534906.png">
 <meta property="og:image" content="https://image.3001.net/images/20220414/16499051577396.png">
 <meta property="article:published_time" content="2022-04-10T04:35:35.000Z">
-<meta property="article:modified_time" content="2022-04-14T02:59:15.553Z">
+<meta property="article:modified_time" content="2022-05-30T06:01:25.370Z">
 <meta property="article:author" content="joker0xxx3">
 <meta property="article:tag" content="内网">
 <meta name="twitter:card" content="summary">
@@ -368,6 +368,17 @@
 
           
             
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2022/04/10/1.1%E5%86%85%E7%BD%91%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2022/04/10/1.1内网基础知识/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
           
 
           
@@ -397,7 +408,7 @@
 
 <h2 id="域"><a href="#域" class="headerlink" title="域"></a>域</h2><h3 id="域-1"><a href="#域-1" class="headerlink" title="域"></a>域</h3><p>一个有安全边界的计算机集合（升级版的工作组），不同域不可互访，想要访问域内的资源必须以合法的身份访问，并且有响应的权限。</p>
 <h3 id="域控制器"><a href="#域控制器" class="headerlink" title="域控制器"></a>域控制器</h3><p>类似于域的门禁，负责所有计算机用户的身份权限验证工作，域内的计算机如果想互相访问就需要经过域控制器的审核。</p>
-<h3 id="单域"><a href="#单域" class="headerlink" title="单域"></a>单域</h3><p>就是一个域。一般至少有两台服务器，一台为域控，另一台做为备份域控，一般活动目录的数据库是存在域控中的。一旦使用过程中其中一台挂掉了，可以使用另一台恢复。否侧域内的其他用户就不能登录域了。</p>
+<h3 id="单域"><a href="#单域" class="headerlink" title="单域"></a>单域</h3><p>就是一个域。一般至少有两台服务器，一台为域控，另一台做为备份域控，一般活动目录的数据库是存在域控中的。一旦使用过程中其中一台挂掉了，可以使用另一台恢复。否则域内的其他用户就不能登录域了。</p>
 <h3 id="父域和子域"><a href="#父域和子域" class="headerlink" title="父域和子域"></a>父域和子域</h3><p>由于管理的特殊需求，需要在网络中划分多个域，第一个域就是父域，之后划分出的域就是该域的子域。比如公司的一些保密部门需要一些特殊的策略，那么可以将这些部门单独作为一个子域来管理，并且这个子域可以自己管理自己的资源。</p>
 <h3 id="域树"><a href="#域树" class="headerlink" title="域树"></a>域树</h3><p>是多个域建立信任关系的集合。一个域管理员只能管理本域，不能访问或者管理其他的域，如果两个域之间需要互相访问，则需要建立信任关系。</p>
 <p><img src="https://image.3001.net/images/20220414/16499051466543.png" alt="image-20220121141743939"></p>
@@ -562,6 +573,16 @@
           
 
   
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript" target="_blank" rel="noopener">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
 
 
 
@@ -611,7 +632,7 @@
             
               <div class="site-state-item site-state-posts">
                 <a href="/archives">
-                  <span class="site-state-item-count">157</span>
+                  <span class="site-state-item-count">163</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -741,7 +762,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2023</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
@@ -895,6 +916,26 @@
 
   
 
+    
+      <script id="dsq-count-scr" src="https://joker0xxx3s-blog.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://joker-vip.github.io/2022/04/10/1.1%E5%86%85%E7%BD%91%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/';
+          this.page.identifier = '2022/04/10/1.1内网基础知识/';
+          this.page.title = '内网基础知识';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://joker0xxx3s-blog.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
 
 
 
@@ -907,10 +948,6 @@
   
 
 
-
-
-
-  
 
 
 

@@ -1,0 +1,1260 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/header.jpg?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/header.jpg?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/header.jpg?v=5.1.4">
+
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="joker0xxx3's Blog" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="DNS隐藏隧道检测的新思路前言假设你是一名网络安全专家，正在企业的安全监控中心观察着一系列网络流量的数据包。突然，你的目光被一条看起来非常奇怪的流量所吸引：长长的一串域名，每个域名都充满了无意义的字符。你感到十分不寻常，因为这样的域名不像是一般的合法域名，而更像是一种隐藏信息的通道。  随着深入的调查和分析，你意识到这就是DNS隐藏隧道的典型表现。这种通道利用DNS协议来隐藏和传递信息，可以通过各">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DNS隐藏隧道检测的新思路">
+<meta property="og:url" content="http://joker-vip.github.io/2023/05/25/DNS%E9%9A%90%E8%97%8F%E9%9A%A7%E9%81%93%E6%A3%80%E6%B5%8B%E7%9A%84%E6%96%B0%E6%80%9D%E8%B7%AF/index.html">
+<meta property="og:site_name" content="joker0xxx3&#39;s Blog">
+<meta property="og:description" content="DNS隐藏隧道检测的新思路前言假设你是一名网络安全专家，正在企业的安全监控中心观察着一系列网络流量的数据包。突然，你的目光被一条看起来非常奇怪的流量所吸引：长长的一串域名，每个域名都充满了无意义的字符。你感到十分不寻常，因为这样的域名不像是一般的合法域名，而更像是一种隐藏信息的通道。  随着深入的调查和分析，你意识到这就是DNS隐藏隧道的典型表现。这种通道利用DNS协议来隐藏和传递信息，可以通过各">
+<meta property="og:image" content="https://image.3001.net/images/20230525/16849828524890.jpg">
+<meta property="og:image" content="https://image.3001.net/images/20230525/16849828556260.jpg">
+<meta property="og:image" content="https://image.3001.net/images/20230525/16849828599959.png">
+<meta property="article:published_time" content="2023-05-25T02:47:19.410Z">
+<meta property="article:modified_time" content="2023-05-25T02:47:42.304Z">
+<meta property="article:author" content="joker0xxx3">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://image.3001.net/images/20230525/16849828524890.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://joker-vip.github.io/2023/05/25/DNS隐藏隧道检测的新思路/"/>
+
+
+
+
+
+  <title>DNS隐藏隧道检测的新思路 | joker0xxx3's Blog</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+	<a href="https://github.com/joker-vip" target="_blank" rel="noopener" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+	
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">joker0xxx3's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">现实告诉我： 保持好奇心，享受孤独</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://joker-vip.github.io/2023/05/25/DNS%E9%9A%90%E8%97%8F%E9%9A%A7%E9%81%93%E6%A3%80%E6%B5%8B%E7%9A%84%E6%96%B0%E6%80%9D%E8%B7%AF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="joker0xxx3">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/header.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="joker0xxx3's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">DNS隐藏隧道检测的新思路</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+		    
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2023-05-25T10:47:19+08:00">
+                2023-05-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2023/05/25/DNS%E9%9A%90%E8%97%8F%E9%9A%A7%E9%81%93%E6%A3%80%E6%B5%8B%E7%9A%84%E6%96%B0%E6%80%9D%E8%B7%AF/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2023/05/25/DNS隐藏隧道检测的新思路/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="DNS隐藏隧道检测的新思路"><a href="#DNS隐藏隧道检测的新思路" class="headerlink" title="DNS隐藏隧道检测的新思路"></a>DNS隐藏隧道检测的新思路</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>假设你是一名网络安全专家，正在企业的安全监控中心观察着一系列网络流量的数据包。突然，你的目光被一条看起来非常奇怪的流量所吸引：长长的一串域名，每个域名都充满了无意义的字符。你感到十分不寻常，因为这样的域名不像是一般的合法域名，而更像是一种隐藏信息的通道。 </p>
+<p>随着深入的调查和分析，你意识到这就是DNS隐藏隧道的典型表现。这种通道利用DNS协议来隐藏和传递信息，可以通过各种方法来规避常规安全检测。你开始思考如何更有效地检测和拦截这种隐藏在DNS流量中的威胁。</p>
+<p>在本文中，我们将深入探讨DNS隐藏隧道的工作原理和搭建方式，以及现有的检测方法。我们还将介绍一种新的、创造性的方法——利用AI大模型来检测DNS隐藏隧道。通过这种先进的技术手段，或许我们可以更加准确、快速地发现和应对这种具有潜在危险的网络威胁。</p>
+<h2 id="DNS隐藏隧道"><a href="#DNS隐藏隧道" class="headerlink" title="DNS隐藏隧道"></a>DNS隐藏隧道</h2><p>DNS隐藏隧道是一种利用域名系统 (DNS) 协议传输数据的技术。它通过将数据片段嵌入 DNS 查询或响应的域名字段中，从而在 DNS 通信流量中隐藏数据，从而达到传输数据的目的。DNS隐藏隧道的优点包括可以穿过网络过滤设备、防火墙和代理服务器等限制网络流量的设备，从而实现通信的隐蔽性和灵活性。</p>
+<p>DNS隐藏隧道的实现方法通常包括在 DNS 查询中使用不常用的 DNS RR（Resource Record）类型，例如 TXT、AAAA、MX 等，以及在查询/响应中使用不常用的域名字段。由于数据片段被嵌入到 DNS 通信中，因此需要在数据传输的两端实现自定义的编码和解码算法以确保数据的正确性和完整性。</p>
+<p>虽然 DNS隐藏隧道在某些场景下可以是一种有效的通信方式，但它也容易被用于恶意目的，例如在网络攻击中传输命令和控制数据。因此，安全专家需要密切关注 DNS 通信中的异常活动，以检测和防范潜在的安全威胁。</p>
+<p>DNS隐藏隧道程序通常有两种模式：中继模式和直连模式。</p>
+<blockquote>
+<ol>
+<li>中继模式</li>
+</ol>
+<p>中继模式的DNS隐藏隧道程序通常会在本地机器和C&amp;C服务器之间建立一条隐藏通道，通过本地域名服务器（例如公司内部DNS服务器）来中继转发隧道流量，以避免被网络防火墙等安全设备检测和拦截。</p>
+<p>在中继模式中，DNS隧道程序会向本地域名服务器发送DNS请求，通过DNS请求和响应的负载部分来传输数据，从而达到隐蔽通信的目的。在DNS请求中，DNS隧道程序通常会使用特殊的查询类型（例如TXT、SRV、MX等），并将数据以base64等方式进行编码。</p>
+<ol start="2">
+<li>直连模式</li>
+</ol>
+<p>直连模式的DNS隐藏隧道程序通常会在本地机器和C&amp;C服务器之间建立一条直接连接的隐藏通道，通过DNS协议来传输数据。</p>
+<p>在直连模式中，DNS隧道程序会直接与C&amp;C服务器建立连接，并将数据以特定的格式（例如DNS-over-HTTP）进行封装和传输。由于直接连接没有经过域名服务器的中转，因此直连模式相对中继模式来说更加难以被检测和拦截。</p>
+</blockquote>
+<p>需要注意的是，随着安全设备和检测技术的不断发展，DNS隐藏隧道程序的中继模式和直连模式也在不断演变和升级，以适应各种网络环境和安全威胁。</p>
+<h2 id="常见的DNS隐藏隧道程序"><a href="#常见的DNS隐藏隧道程序" class="headerlink" title="常见的DNS隐藏隧道程序"></a>常见的DNS隐藏隧道程序</h2><blockquote>
+<ol>
+<li>Dnscat2：一种基于DNS的命令和控制通道，可以通过DNS隐藏隧道传输数据和命令，同时支持前向和反向模式。</li>
+</ol>
+<ol start="2">
+<li>Iodine：一种IPv4-over-DNS隧道工具，可以在不支持IPv6的网络上使用DNS隧道实现IPv6通信。</li>
+</ol>
+<ol start="3">
+<li>Dns2tcp：一种基于DNS的TCP隧道工具，可以将TCP数据流转换为DNS流量，并通过DNS隧道传输数据。</li>
+</ol>
+<ol start="4">
+<li>Dnstunnel：一种基于DNS的TCP隧道工具，可以通过DNS隧道传输TCP数据流量。</li>
+</ol>
+<ol start="5">
+<li>Dnscapy：一个基于Python编写的DNS处理工具包，可以用于自定义DNS隧道的实现和调试。</li>
+</ol>
+</blockquote>
+<h2 id="DNS隐藏隧道的特征"><a href="#DNS隐藏隧道的特征" class="headerlink" title="DNS隐藏隧道的特征"></a>DNS隐藏隧道的特征</h2><p>目前对DNS隐藏隧道的检测方式可以分为基于规则的硬匹配，与通过使用机器学习甚至是深度学习的方式，通过学习已知的DNS隐藏隧道中潜藏的数学规律，去识别已知类型甚至未知的隐藏隧道，基于规则的方式容易被攻击者绕过而产生漏报，而基于机器学习的方式除了漏报外还可能产生误报，尽管存在着一定的不准确性，它们的检测方式还是值得我们学习并尝试改进的。</p>
+<p>信源输出的信息量均值即为信息熵。信息熵的 大小能体现信号的复杂度以及平均不确定性。DNS隐藏隧道的作用通常是用于窃取文件或者传递控制命令等，因此DNS隐藏隧道流量中的数据通常是经过加密和压缩的因此其信息熵相对较高。</p>
+<p>信息熵计算式：</p>
+<p><img src="https://image.3001.net/images/20230525/16849828524890.jpg" alt="img"></p>
+<p>正常域名则通常包含有意义的单词、短语和标点符号等如包含描述性单词和品牌名称，而恶意域名通常是编码过后的信息，因此它们的重合指数也可能存在显著的差异。</p>
+<p>重合指数计算式：</p>
+<p><img src="https://image.3001.net/images/20230525/16849828556260.jpg" alt="img"></p>
+<p>DNS隐藏隧道域名通常包含多个子域名，每个子域名可能包含不同的随机字符和数字，而正常域名则通常只有一个或少量子域名，因此可以选择子域名数作为判断的依据。</p>
+<p>DNS隐藏隧道域名通常采用非常短的TTL（Time-to-live）时间，即DNS服务器缓存该域名信息的时间非常短，以便频繁更新域名映射关系。</p>
+<p>由于DNS隐藏隧道技术通常使用TXT记录进行数据传输，因此可以通过对DNS响应包的类型进行分析来判断是否为DNS隐藏隧道。</p>
+<p>一般情况下，DNS隐藏隧道流量的域名比较长，包含大量的数字和非法字符，同时唯一字符数相对较低，这些特点和正常的域名有很大的不同。</p>
+<p>需要注意的是，DNS隐藏隧道攻击具有隐蔽性和灵活性，攻击者可以通过不断改变攻击方式、加密方式、数据格式等手段来规避检测。</p>
+<h2 id="用ChatGPT检测DNS隐藏隧道"><a href="#用ChatGPT检测DNS隐藏隧道" class="headerlink" title="用ChatGPT检测DNS隐藏隧道"></a>用ChatGPT检测DNS隐藏隧道</h2><p>至此我们已经了解到可以尝试通过信息熵、重合指数、子域名数、TTL、DNS响应包的类型、域名中的数字、非法字符数、唯一字符数这几个维度去尝试分析一个域名是否为恶意域名，通常情况下我们可以采集训练集、测试集，用机器学习甚至是深度学习来进行检测，但是我们可以发现检测DNS隐藏隧道其实质为文本分类问题，而ChatGPT作为一款著名的文本AI大模型，其在语义理解、翻译等都有着惊人的表现，因此我们可以尝试将我们之前了解到的几个分析维度都灌输给它，由它来给我们做判断，从中窥探一些AI大模型在DNS隐藏隧道检测中是否具有可行性。</p>
+<p>那本次实验我们将适当降低难度，仅提供几条域名给ChatGPT让它从我们之前了解到的一些分析维度进行识别，因为筛选的域名非常有限，不代表其在实际场景中运用的真实效果。</p>
+<blockquote>
+<p>0c495011391d4e40054d495a4368.yafgcy.ceye.io（2023红明谷初赛hacker流量包出现的恶意域名）</p>
+<p>59115a4b465044695a5a56015c4252065e501c130e416f5c5647556b510044.yafgcy.ceye.io（2023红明谷初赛hacker流量包出现的恶意域名）</p>
+<p>05b0e5d4b5f5b5b69505c57074f18430c423f5b0c0852105a521d4409476b5.yafgcy.ceye.io（2023红明谷初赛hacker流量包出现的恶意域名）</p>
+<p>119acddc-cc9a-4ed3-b52a-a5d896481715.node4.buuoj.cn（buuctf创建的web题练习靶机，正常域名）</p>
+<p>a04667aa-e340-4571-86fe-6ab6e5520d3b.node4.buuoj.cn（buuctf创建的web题练习靶机，正常域名）</p>
+<p>c14ce4cf-764f-4319-a1d2-3835ab96b1cf.node4.buuoj.cn（buuctf创建的web题练习靶机，正常域名）</p>
+<p><a href="http://www.baidu.com（正常域名）" target="_blank" rel="noopener">www.baidu.com（正常域名）</a></p>
+<p><a href="http://www.bilibili.com（正常域名）" target="_blank" rel="noopener">www.bilibili.com（正常域名）</a></p>
+<p>535yx.cn（正常域名）</p>
+<p>64a.life/rW82l（正常域名进行短链接处理后的干扰项）</p>
+</blockquote>
+<p><img src="https://image.3001.net/images/20230525/16849828599959.png" alt="image-20230525101452031"></p>
+<p>可以看到ChatGPT准确的识别了其中存在的恶意域名。</p>
+<h2 id="结尾"><a href="#结尾" class="headerlink" title="结尾"></a>结尾</h2><p>本文通过深入探究DNS隐藏隧道的搭建方式和原理，以及现有的DNS隐藏隧道检测技术，我们发现利用AI大模型进行DNS隐藏隧道检测具有很大的潜力。在我们的实验中，ChatGPT能够精准地识别DNS隐藏隧道，这为我们提供了非常有价值的参考，虽然我们的实验只针对少量的dns域名，无法完全反映真实场景，但这项尝试表明利用AI大模型检测DNS隐藏隧道的可能性，并且这种方法有望在未来成为解决各种隐藏隧道问题的有效手段。通过这种方法，我们或许可以为未来的网络安全防御提供一种更加高效、更加全面的方式。相比于开发针对特定问题的安全产品，利用AI大模型可以解决各种类型的隐蔽通信问题，而且无需进行专项训练。我们相信，这将是网络安全防御领域的一个重大突破，带来更加安全、稳定的网络环境。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    joker0xxx3
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://joker-vip.github.io/2023/05/25/DNS%E9%9A%90%E8%97%8F%E9%9A%A7%E9%81%93%E6%A3%80%E6%B5%8B%E7%9A%84%E6%96%B0%E6%80%9D%E8%B7%AF/" title="DNS隐藏隧道检测的新思路">http://joker-vip.github.io/2023/05/25/DNS%E9%9A%90%E8%97%8F%E9%9A%A7%E9%81%93%E6%A3%80%E6%B5%8B%E7%9A%84%E6%96%B0%E6%80%9D%E8%B7%AF/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2023/05/12/JNDI%E6%B3%A8%E5%85%A5/" rel="next" title="JNDI注入">
+                <i class="fa fa-chevron-left"></i> JNDI注入
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2023/05/25/%E6%B5%81%E9%87%8F%E8%A7%A3%E5%AF%86%E5%B9%B6%E6%8C%96%E6%8E%98%E4%BB%BB%E6%84%8F%E5%AF%86%E7%A0%81%E9%87%8D%E7%BD%AE/" rel="prev" title="流量解密并挖掘任意密码重置">
+                流量解密并挖掘任意密码重置 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript" target="_blank" rel="noopener">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/header.jpg"
+                alt="joker0xxx3" />
+            
+              <p class="site-author-name" itemprop="name">joker0xxx3</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+                <a href="/archives">
+                  <span class="site-state-item-count">163</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">89</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/joker-vip" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:2544684257@qq.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.cnblogs.com/joker-vip/" target="_blank" title="博客园">
+                      
+                        <i class="fa fa-fw fa-refresh"></i>博客园</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://space.bilibili.com/247897008" target="_blank" title="BiliBili">
+                      
+                        <i class="fa fa-fw fa-refresh"></i>BiliBili</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                友情链接
+              </div>
+                
+                  <span class="links-of-blogroll-item">
+                    <a href="https://scholar10.github.io/" title="Sch0lar" target="_blank">Sch0lar</a>
+                  </span>
+                
+                  <span class="links-of-blogroll-item">
+                    <a href="https://www.cnblogs.com/sakura521/" title="sakura" target="_blank">sakura</a>
+                  </span>
+                
+                  <span class="links-of-blogroll-item">
+                    <a href="https://www.haoyun.fit/" title="小透的少年江湖" target="_blank">小透的少年江湖</a>
+                  </span>
+                
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#DNS隐藏隧道检测的新思路"><span class="nav-text">DNS隐藏隧道检测的新思路</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DNS隐藏隧道"><span class="nav-text">DNS隐藏隧道</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#常见的DNS隐藏隧道程序"><span class="nav-text">常见的DNS隐藏隧道程序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DNS隐藏隧道的特征"><span class="nav-text">DNS隐藏隧道的特征</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#用ChatGPT检测DNS隐藏隧道"><span class="nav-text">用ChatGPT检测DNS隐藏隧道</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结尾"><span class="nav-text">结尾</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">joker0xxx3</span>
+
+  
+</div>
+
+<!-- 
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+-->
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://joker0xxx3s-blog.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://joker-vip.github.io/2023/05/25/DNS%E9%9A%90%E8%97%8F%E9%9A%A7%E9%81%93%E6%A3%80%E6%B5%8B%E7%9A%84%E6%96%B0%E6%80%9D%E8%B7%AF/';
+          this.page.identifier = '2023/05/25/DNS隐藏隧道检测的新思路/';
+          this.page.title = 'DNS隐藏隧道检测的新思路';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://joker0xxx3s-blog.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
