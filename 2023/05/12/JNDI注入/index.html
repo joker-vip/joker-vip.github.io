@@ -91,7 +91,7 @@
 <meta property="og:image" content="https://image.3001.net/images/20230512/16838840476588.png">
 <meta property="og:image" content="https://image.3001.net/images/20230512/16838840534409.png">
 <meta property="article:published_time" content="2023-05-12T09:33:35.835Z">
-<meta property="article:modified_time" content="2023-05-12T11:29:31.619Z">
+<meta property="article:modified_time" content="2023-08-11T14:20:43.654Z">
 <meta property="article:author" content="joker0xxx3">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://image.3001.net/images/20230512/16838840292644.png">
@@ -383,6 +383,8 @@
       
         <h1 id="1-JDNI注入"><a href="#1-JDNI注入" class="headerlink" title="1. JDNI注入"></a>1. JDNI注入</h1><p>本篇文章作者jok3r0x，本文属i春秋原创奖励计划，未经许可禁止转载。</p>
 <h2 id="1-1-背景知识"><a href="#1-1-背景知识" class="headerlink" title="1.1. 背景知识"></a>1.1. 背景知识</h2><h3 id="1-1-1-JNDI-Service-Provider"><a href="#1-1-1-JNDI-Service-Provider" class="headerlink" title="1.1.1. JNDI Service Provider"></a>1.1.1. JNDI Service Provider</h3><p>JNDI 与 <code>JNDI Service Provider</code> 的关系类似于 Windows 中 SSPI 与 SSP 的关系。前者是统一抽象出来的接口，而后者是对接口的具体实现。如默认的 <code>JNDI Service Provider</code> 有 <code>RMI/LDAP</code> 等等。</p>
+<a id="more"></a>
+
 <h3 id="1-1-2-ObjectFactory"><a href="#1-1-2-ObjectFactory" class="headerlink" title="1.1.2. ObjectFactory"></a>1.1.2. ObjectFactory</h3><p>每一个 <code>Service Provider</code> 可能配有多个 <code>Object Factory</code>。<code>Object Factory</code> 用于将 Naming Service（如 RMI/LDAP）中存储的数据转换为 Java 中可表达的数据，如 Java 中的对象或 Java 中的基本数据类型。 <strong>JNDI 的注入的问题就出在了可远程下载自定义的 ObjectFactory 类上</strong>。你如果有兴趣的话可以完整看一下 Service Provider 是如何与多个 ObjectFactory 进行交互的。</p>
 <h2 id="1-2-JNDI概述"><a href="#1-2-JNDI概述" class="headerlink" title="1.2. JNDI概述"></a>1.2. JNDI概述</h2><p>JNDI（Java Naming and Directory Interface，<strong>Java命名和目录接口</strong>）是SUN公司提供的一种标准的Java命名系统接口，JNDI提供统一的客户端API，通过不同的访问提供者接口JNDI服务供应接口(SPI)的实现，由管理者将JNDI API映射为特定的命名服务和目录系统，使得Java应用程序可以和这些命名服务和目录服务之间进行交互。目录服务是命名服务的一种自然扩展。</p>
 <p>JNDI是一个应用程序设计的API，为开发人员提供了查找和访问各种命名和目录服务的通用、统一的接口，<strong>类似JDBC都是构建在抽象层上</strong>。允许客户端通过名称发现和查找数据、对象。这些对象可以存储在不同的命名或目录服务中，就像人的名字或DNS中的域名与IP的关系。</p>

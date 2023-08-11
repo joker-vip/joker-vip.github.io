@@ -89,7 +89,7 @@
 <meta property="og:image" content="https://image.3001.net/images/20230525/16849828556260.jpg">
 <meta property="og:image" content="https://image.3001.net/images/20230525/16849828599959.png">
 <meta property="article:published_time" content="2023-05-25T02:47:19.410Z">
-<meta property="article:modified_time" content="2023-05-25T02:47:42.304Z">
+<meta property="article:modified_time" content="2023-08-11T14:20:53.859Z">
 <meta property="article:author" content="joker0xxx3">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://image.3001.net/images/20230525/16849828524890.jpg">
@@ -382,6 +382,8 @@
         <h1 id="DNS隐藏隧道检测的新思路"><a href="#DNS隐藏隧道检测的新思路" class="headerlink" title="DNS隐藏隧道检测的新思路"></a>DNS隐藏隧道检测的新思路</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>假设你是一名网络安全专家，正在企业的安全监控中心观察着一系列网络流量的数据包。突然，你的目光被一条看起来非常奇怪的流量所吸引：长长的一串域名，每个域名都充满了无意义的字符。你感到十分不寻常，因为这样的域名不像是一般的合法域名，而更像是一种隐藏信息的通道。 </p>
 <p>随着深入的调查和分析，你意识到这就是DNS隐藏隧道的典型表现。这种通道利用DNS协议来隐藏和传递信息，可以通过各种方法来规避常规安全检测。你开始思考如何更有效地检测和拦截这种隐藏在DNS流量中的威胁。</p>
 <p>在本文中，我们将深入探讨DNS隐藏隧道的工作原理和搭建方式，以及现有的检测方法。我们还将介绍一种新的、创造性的方法——利用AI大模型来检测DNS隐藏隧道。通过这种先进的技术手段，或许我们可以更加准确、快速地发现和应对这种具有潜在危险的网络威胁。</p>
+<a id="more"></a>
+
 <h2 id="DNS隐藏隧道"><a href="#DNS隐藏隧道" class="headerlink" title="DNS隐藏隧道"></a>DNS隐藏隧道</h2><p>DNS隐藏隧道是一种利用域名系统 (DNS) 协议传输数据的技术。它通过将数据片段嵌入 DNS 查询或响应的域名字段中，从而在 DNS 通信流量中隐藏数据，从而达到传输数据的目的。DNS隐藏隧道的优点包括可以穿过网络过滤设备、防火墙和代理服务器等限制网络流量的设备，从而实现通信的隐蔽性和灵活性。</p>
 <p>DNS隐藏隧道的实现方法通常包括在 DNS 查询中使用不常用的 DNS RR（Resource Record）类型，例如 TXT、AAAA、MX 等，以及在查询/响应中使用不常用的域名字段。由于数据片段被嵌入到 DNS 通信中，因此需要在数据传输的两端实现自定义的编码和解码算法以确保数据的正确性和完整性。</p>
 <p>虽然 DNS隐藏隧道在某些场景下可以是一种有效的通信方式，但它也容易被用于恶意目的，例如在网络攻击中传输命令和控制数据。因此，安全专家需要密切关注 DNS 通信中的异常活动，以检测和防范潜在的安全威胁。</p>

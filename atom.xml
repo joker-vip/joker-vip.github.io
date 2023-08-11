@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://joker-vip.github.io/"/>
-  <updated>2023-05-25T02:56:16.572Z</updated>
+  <updated>2023-08-11T14:21:04.509Z</updated>
   <id>http://joker-vip.github.io/</id>
   
   <author>
@@ -21,17 +21,12 @@
     <link href="http://joker-vip.github.io/2023/05/25/%E6%B5%81%E9%87%8F%E8%A7%A3%E5%AF%86%E5%B9%B6%E6%8C%96%E6%8E%98%E4%BB%BB%E6%84%8F%E5%AF%86%E7%A0%81%E9%87%8D%E7%BD%AE/"/>
     <id>http://joker-vip.github.io/2023/05/25/%E6%B5%81%E9%87%8F%E8%A7%A3%E5%AF%86%E5%B9%B6%E6%8C%96%E6%8E%98%E4%BB%BB%E6%84%8F%E5%AF%86%E7%A0%81%E9%87%8D%E7%BD%AE/</id>
     <published>2023-05-25T02:54:27.086Z</published>
-    <updated>2023-05-25T02:56:16.572Z</updated>
+    <updated>2023-08-11T14:21:04.509Z</updated>
     
     <summary type="html">
     
-      
-      
-        
-        
-          &lt;h1 id=&quot;流量解密并挖掘任意密码重置&quot;&gt;&lt;a href=&quot;#流量解密并挖掘任意密码重置&quot; class=&quot;headerlink&quot;
-        
-      
+      &lt;h1 id=&quot;流量解密并挖掘任意密码重置&quot;&gt;&lt;a href=&quot;#流量解密并挖掘任意密码重置&quot; class=&quot;headerlink&quot; title=&quot;流量解密并挖掘任意密码重置&quot;&gt;&lt;/a&gt;流量解密并挖掘任意密码重置&lt;/h1&gt;&lt;p&gt;先随便找一处功能点在下断点前我先抓个包给你们看看&lt;br&gt;&lt;img src=&quot;https://image.3001.net/images/20230525/1684983280759.png&quot; alt=&quot;68281-mji3rducb5.png&quot;&gt;&lt;/p&gt;
+&lt;p&gt;平常遇到了是不是就想放弃了？莫慌，待我操作一番。&lt;/p&gt;
     
     </summary>
     
@@ -44,17 +39,13 @@
     <link href="http://joker-vip.github.io/2023/05/25/DNS%E9%9A%90%E8%97%8F%E9%9A%A7%E9%81%93%E6%A3%80%E6%B5%8B%E7%9A%84%E6%96%B0%E6%80%9D%E8%B7%AF/"/>
     <id>http://joker-vip.github.io/2023/05/25/DNS%E9%9A%90%E8%97%8F%E9%9A%A7%E9%81%93%E6%A3%80%E6%B5%8B%E7%9A%84%E6%96%B0%E6%80%9D%E8%B7%AF/</id>
     <published>2023-05-25T02:47:19.410Z</published>
-    <updated>2023-05-25T02:47:42.304Z</updated>
+    <updated>2023-08-11T14:20:53.859Z</updated>
     
     <summary type="html">
     
-      
-      
-        
-        
-          &lt;h1 id=&quot;DNS隐藏隧道检测的新思路&quot;&gt;&lt;a href=&quot;#DNS隐藏隧道检测的新思路&quot; class=&quot;headerlink&quot; title=&quot;DNS隐藏隧道检测的新思路&quot;&gt;&lt;/a&gt;DNS隐藏隧道检测的新思路&lt;/h1&gt;&lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot;
-        
-      
+      &lt;h1 id=&quot;DNS隐藏隧道检测的新思路&quot;&gt;&lt;a href=&quot;#DNS隐藏隧道检测的新思路&quot; class=&quot;headerlink&quot; title=&quot;DNS隐藏隧道检测的新思路&quot;&gt;&lt;/a&gt;DNS隐藏隧道检测的新思路&lt;/h1&gt;&lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;假设你是一名网络安全专家，正在企业的安全监控中心观察着一系列网络流量的数据包。突然，你的目光被一条看起来非常奇怪的流量所吸引：长长的一串域名，每个域名都充满了无意义的字符。你感到十分不寻常，因为这样的域名不像是一般的合法域名，而更像是一种隐藏信息的通道。 &lt;/p&gt;
+&lt;p&gt;随着深入的调查和分析，你意识到这就是DNS隐藏隧道的典型表现。这种通道利用DNS协议来隐藏和传递信息，可以通过各种方法来规避常规安全检测。你开始思考如何更有效地检测和拦截这种隐藏在DNS流量中的威胁。&lt;/p&gt;
+&lt;p&gt;在本文中，我们将深入探讨DNS隐藏隧道的工作原理和搭建方式，以及现有的检测方法。我们还将介绍一种新的、创造性的方法——利用AI大模型来检测DNS隐藏隧道。通过这种先进的技术手段，或许我们可以更加准确、快速地发现和应对这种具有潜在危险的网络威胁。&lt;/p&gt;
     
     </summary>
     
@@ -67,17 +58,12 @@
     <link href="http://joker-vip.github.io/2023/05/12/JNDI%E6%B3%A8%E5%85%A5/"/>
     <id>http://joker-vip.github.io/2023/05/12/JNDI%E6%B3%A8%E5%85%A5/</id>
     <published>2023-05-12T09:33:35.835Z</published>
-    <updated>2023-05-12T11:29:31.619Z</updated>
+    <updated>2023-08-11T14:20:43.654Z</updated>
     
     <summary type="html">
     
-      
-      
-        
-        
-          &lt;h1 id=&quot;1-JDNI注入&quot;&gt;&lt;a href=&quot;#1-JDNI注入&quot; class=&quot;headerlink&quot; title=&quot;1. JDNI注入&quot;&gt;&lt;/a&gt;1.
-        
-      
+      &lt;h1 id=&quot;1-JDNI注入&quot;&gt;&lt;a href=&quot;#1-JDNI注入&quot; class=&quot;headerlink&quot; title=&quot;1. JDNI注入&quot;&gt;&lt;/a&gt;1. JDNI注入&lt;/h1&gt;&lt;p&gt;本篇文章作者jok3r0x，本文属i春秋原创奖励计划，未经许可禁止转载。&lt;/p&gt;
+&lt;h2 id=&quot;1-1-背景知识&quot;&gt;&lt;a href=&quot;#1-1-背景知识&quot; class=&quot;headerlink&quot; title=&quot;1.1. 背景知识&quot;&gt;&lt;/a&gt;1.1. 背景知识&lt;/h2&gt;&lt;h3 id=&quot;1-1-1-JNDI-Service-Provider&quot;&gt;&lt;a href=&quot;#1-1-1-JNDI-Service-Provider&quot; class=&quot;headerlink&quot; title=&quot;1.1.1. JNDI Service Provider&quot;&gt;&lt;/a&gt;1.1.1. JNDI Service Provider&lt;/h3&gt;&lt;p&gt;JNDI 与 &lt;code&gt;JNDI Service Provider&lt;/code&gt; 的关系类似于 Windows 中 SSPI 与 SSP 的关系。前者是统一抽象出来的接口，而后者是对接口的具体实现。如默认的 &lt;code&gt;JNDI Service Provider&lt;/code&gt; 有 &lt;code&gt;RMI/LDAP&lt;/code&gt; 等等。&lt;/p&gt;
     
     </summary>
     
